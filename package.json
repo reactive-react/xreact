@@ -1,0 +1,64 @@
+{
+  "name": "mostux",
+  "version": "0.1.1",
+  "description": "",
+  "main": "transdux.js",
+  "scripts": {
+    "build": "cat LICENSE.txt > transdux.js && ./node_modules/.bin/babel lib/transdux.js >> transdux.js",
+    "test": "jest",
+    "prepublish": "npm run build"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testPathDirs": [
+      "lib"
+    ],
+    "testFileExtensions": [
+      "es6",
+      "js",
+      "jsx"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6",
+      "jsx"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/*"
+    ]
+  },
+  "dependencies": {
+    "con.js": "^0.5.3",
+    "most": "^0.16.0",
+    "react": "^0.14.3",
+    "uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel": "^6.1.18",
+    "babel-cli": "^6.2.0",
+    "babel-jest": "^6.0.0",
+    "babel-plugin-transform-react-jsx": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "ecstatic": "^1.3.1",
+    "immutable": "^3.7.5",
+    "jest-cli": "^0.7.0",
+    "react-addons-test-utils": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "redux": "^3.0.4",
+    "uglify-js": "^2.6.1",
+    "watchify": "^3.6.1"
+  },
+  "author": "Jichao Ouyang",
+  "license": "MIT",
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-react-jsx"
+    ]
+  }
+}

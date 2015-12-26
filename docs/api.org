@@ -1,0 +1,71 @@
+* API
+** mixin
+#+BEGIN_QUOTE
+this is for ES6 class
+#+END_QUOTE
+
+=mixin(ComponentClass:class, actions:object, JsToImmutableFunction:function, ImmutableToJsFunction:function):object=
+
+=JsToImmutableFunction= and =ImmutableToJsFunction= are *optional*
+
+example:
+#+BEGIN_SRC js
+    import {mixin} from 'transdux'
+    let actions = {
+      ...
+    }
+    class TodoItem extends React.Component {
+      ...
+    }
+    export default mixin(TodoItem, actions)
+#+END_SRC
+** dispatch
+=dispatch(TargetComponentClass:class, actionName:string, value:any)=
+
+example:
+
+when component =TodoItem= want to send message to component =MainSection= 's =complete= action.
+#+BEGIN_SRC js
+  import MainSection from './MainSection'
+  class TodoItem extends React.Component {
+   ...
+      render(){
+          <input className="toggle"
+          onChange={() => this.dispatch(MainSection, 'complete',{id:todo.id})} />
+
+      }
+   ...
+  }
+#+END_SRC
+
+#+BEGIN_QUOTE
+One thing you may need to notice is that message between component is *Class* level, not *Instance* level. For example, if you have multiple =MainSection= components, they will all reveive the same massage from =TodoItem=.
+#+END_QUOTE
+
+** actions
+action is no more than just a normal javascript object, which contains all the action functions.
+
+but you have to pay a little attention to make all function in it. All functions should return object, which normally just like what you wanna put in the parameter of function =this.setState=.
+
+** bindActions
+#+BEGIN_QUOTE
+for react mixin
+#+END_QUOTE
+
+=bindActions(actions:object, JsToImmutableFunction:function, ImmutableToJsFunction:function)=
+
+=JsToImmutableFunction= and =ImmutableToJsFunction= are *optional*
+
+example:
+#+BEGIN_SRC js
+  import {TxMixin} from 'transdux'
+  let MainSection = React.createClass({
+    mixins: [TxMixin],
+    componentDidMount(){
+      this.bindActions(actions)
+    },
+    ...
+  })
+#+END_SRC
+
+for mixin, you have to maually call =bindActions= some where, it's recommended to put it in =componentDidMount()= where not blocking your component's render.
