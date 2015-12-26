@@ -1,18 +1,18 @@
-* Transdux
+* Mostdux
 
-I'm trying to documenting in more detail, but if you have any question, feel free to 
-  #+ATTR_HTML: title="Join the chat at https://gitter.im/jcouyang/transdux"
-  [[https://gitter.im/jcouyang/transdux?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge][file:https://badges.gitter.im/Join%20Chat.svg]]
+I'm trying to documenting in more detail, but if you have any question, feel free to
+  #+ATTR_HTML: title="Join the chat at https://gitter.im/jcouyang/mostux"
+  [[https://gitter.im/jcouyang/mostux?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge][file:https://badges.gitter.im/Join%20Chat.svg]]
 
-Circle CI [[https://circleci.com/gh/jcouyang/transdux][https://circleci.com/gh/jcouyang/transdux.svg?style=svg]]
+Circle CI [[https://circleci.com/gh/jcouyang/mostux][https://circleci.com/gh/jcouyang/mostux.svg?style=svg]]
 
-[[http://blog.oyanglul.us/javascript/react-transdux-the-clojure-approach-of-flux.html][>中文<]]
+[[http://blog.oyanglul.us/javascript/react-mostux-the-clojure-approach-of-flux.html][>中文<]]
 
 #+BEGIN_QUOTE
 Finnally a flux like framework don't even need a tutorial, our [[./examples/todomvc][TodoMVC]] will tell you all.
 #+END_QUOTE
 
-Managing React Component state in *Elegant & Functional* way with transducers and channels from ClojureScript
+Managing React Component state in *Functional Reactive* way wit most.js
 
 ** Rationale
 flux and redux are great and solve state management and communication pretty well.
@@ -44,11 +44,11 @@ so, whenever a message is dispatch to input channel, you'll get new state from t
 ** Install
 In your React project
 #+BEGIN_SRC sh
-npm install transdux --save
+npm install mostux --save
 #+END_SRC
 
 ** Usage
-to wire in transdux, only 4 place you have to pay attention to.
+to wire in mostux, only 4 place you have to pay attention to.
 *** 1. wrap you app with Transdux
 #+BEGIN_SRC html
   <Transdux>
@@ -79,7 +79,7 @@ let actions = {
 **** 3. mixin Transdux Mixin and Bind Actions
 #+BEGIN_SRC js
 // MainSection.jsx
-  import {TxMixin} from 'transdux'
+  import {TxMixin} from 'mostux'
   let MainSection = React.createClass({
     mixins: [TxMixin],
     componentDidMount(){
@@ -107,10 +107,10 @@ let actions = {
 #+END_SRC
 
 *** for ES6 class lover
-**** 3. mixin transdux into Class
+**** 3. mixin mostux into Class
 #+BEGIN_SRC js
     // TodoItem.jsx
-    import {mixin} from 'transdux'
+    import {mixin} from 'mostux'
     let actions = {
       ...
     }
@@ -143,9 +143,9 @@ let actions = {
   export default mixin(TodoItem)
 #+END_SRC
 ** Examples
-- [[http://oyanglul.us/transdux/todomvc/][todomvc]]
+- [[http://oyanglul.us/mostux/todomvc/][todomvc]]
   - source: [[./examples]]
-  
+
 ** API
 [[./docs/api.org]]
 
@@ -154,11 +154,11 @@ for dispatching *1023 messages* at the same time, here is the Memory Usage and T
 
 tested on /Macbook Pro 13, CPU 2.9GHz Intel Core i5, Mem 16GB 1867MHz DDR3/
 
-*** transdux
+*** mostux
 #+BEGIN_EXAMPLE
-Memory Usage Before: { rss: 43307008, heapTotal: 18550784, heapUsed: 11889192 }
-Memory Usage After: { rss: 46444544, heapTotal: 30921984, heapUsed: 15307800 }
-Elapsed 51ms
+Memory Usage Before: { rss: 31404032, heapTotal: 17518848, heapUsed: 9915280 }
+Memory Usage After: { rss: 32436224, heapTotal: 17518848, heapUsed: 10930184 }
+Elapsed 5ms
 #+END_EXAMPLE
 
 *** setTimeout
@@ -174,9 +174,6 @@ Memory Usage Before: { rss: 21647360, heapTotal: 9275392, heapUsed: 4559616 }
 Memory Usage After: { rss: 22638592, heapTotal: 9275392, heapUsed: 5472112 }
 Elapsed 4ms
 #+END_EXAMPLE
-
-Yeah, I know, it's slower then redux, and I'm working on it.
-But, it's not bad, it's totally reasonable trade-off a little performance to get writing code which is more composable, reusable, testable and easy to reason about.
 
 ** TODOS
 [[./ROADMAP.org]]

@@ -1,9 +1,3 @@
 * RoadMap [33%]
 
-- [X] using Atom managing state
-- [-] smoke testing
-  - [X] benchmark
-  - [ ] smoke
 - [ ] unsubscribe when component unmount
-- [ ] improve performance
-
