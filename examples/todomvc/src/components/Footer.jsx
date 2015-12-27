@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
-import {TxMixin} from 'transdux'
+import {TxMixin} from 'mostux'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
   'SHOW_ACTIVE': 'Active',

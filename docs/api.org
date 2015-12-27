@@ -10,7 +10,7 @@ this is for ES6 class
 
 example:
 #+BEGIN_SRC js
-    import {mixin} from 'transdux'
+    import {mixin} from 'mostux'
     let actions = {
       ...
     }
@@ -58,7 +58,7 @@ for react mixin
 
 example:
 #+BEGIN_SRC js
-  import {TxMixin} from 'transdux'
+  import {TxMixin} from 'mostux'
   let MainSection = React.createClass({
     mixins: [TxMixin],
     componentDidMount(){

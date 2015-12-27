@@ -2,9 +2,9 @@
   "name": "mostux",
   "version": "0.1.1",
   "description": "",
-  "main": "transdux.js",
+  "main": "mostux.js",
   "scripts": {
-    "build": "cat LICENSE.txt > transdux.js && ./node_modules/.bin/babel lib/transdux.js >> transdux.js",
+    "build": "cat LICENSE.txt > mostux.js && ./node_modules/.bin/babel lib/mostux.js >> mostux.js",
     "test": "jest",
     "prepublish": "npm run build"
   },

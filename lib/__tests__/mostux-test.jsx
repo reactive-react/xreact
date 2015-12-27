@@ -1,12 +1,12 @@
-jest.dontMock('../transdux.js');
+jest.dontMock('../mostux.js');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import uuid from 'uuid';
 
-const {default:Transdux, TxMixin} = require('../transdux');
+const {default:Mostux, TxMixin} = require('../mostux');
 
-describe('transdux', () => {
+describe('mostux', () => {
   describe('todo dispatch', ()=>{
     let todolist;
     let Todo = React.createClass({
@@ -58,10 +58,10 @@ describe('transdux', () => {
 
       beforeEach(()=>{
         todolist = TestUtils.renderIntoDocument(
-          <Transdux>
+          <Mostux>
             <TodoList />
             <Buttons />
-          </Transdux>
+          </Mostux>
         )
       });
 

@@ -1,16 +1,14 @@
 var conjs = require('con.js');
-var tx = require('../transdux.js')
+var EventEmitter = require('events').EventEmitter
+var tx = require('../mostux.js')
 var txmixin = tx.TxMixin
 var timer = require('./timer')
 var time = timer.time
 var CYCLE = timer.CYCLE
 var toJs = conjs.toJs
 var toClj = conjs.toClj
-var inputChan = conjs.async.chan()
-var outputChan = conjs.async.chan()
 var context = {
-  transduxChannel: inputChan,
-  transduxPublication: conjs.async.pub(inputChan, function(_){return _['action']}),
+  mostuxChannel: new EventEmitter,
 }
 
 var initState = [0]
@@ -33,7 +31,7 @@ time(function(done){
   var target = new Target()
   txmixin.bindActions.call(target, {
     increment: function(msg,state){
-      return conjs.map(function(m){return msg+1}, state)
+      return state.map(function(m){return msg+1})
     }
   }, toClj, toJs)
 

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Header from './components/Header';
 import MainSection from './components/MainSection';
 import {render} from 'react-dom';
-import Transdux from 'transdux'
+import Mostux from 'mostux'
 class App extends Component {
   render(){
     return (
@@ -15,7 +15,7 @@ class App extends Component {
 }
 
 render(
-  <Transdux>
+  <Mostux>
       <App/>
-  </Transdux>
+  </Mostux>
   , document.getElementById('app'));

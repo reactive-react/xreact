@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
-import {TxMixin} from 'transdux'
+import {TxMixin} from 'mostux'
 import actions from './MainSection.action'
 const todos = [{
   text: 'Dont Use Redux',
   completed: false,
   id: 0
 },{
-  text: 'Use transdux',
+  text: 'Use mostux',
   completed: false,
   id: 1
 }];

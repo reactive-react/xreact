@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import TodoTextInput from './TodoTextInput'
 import MainSection from './MainSection'
-const {mixin} = require('../../../../transdux')
+const {mixin} = require('../../../../mostux')
 let actions = {
   save(msg, state,props) {
     if(msg.id!=props.todo.id) return

@@ -1,5 +1,5 @@
 {
-  "name": "transdux-todomvc",
+  "name": "mostux-todomvc",
   "version": "0.0.1",
   "description": "",
   "browserify": {
@@ -39,7 +39,7 @@
     "classnames": "^2.2.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
-    "transdux": "^0.1.0"
+    "mostux": "^0.1.0"
   },
   "devDependencies": {
     "babel": "^6.1.18",

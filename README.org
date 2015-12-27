@@ -49,11 +49,11 @@ npm install mostux --save
 
 ** Usage
 to wire in mostux, only 4 place you have to pay attention to.
-*** 1. wrap you app with Transdux
+*** 1. wrap you app with Mostux
 #+BEGIN_SRC html
-  <Transdux>
+  <Mostux>
     <App/>
-  </Transdux>
+  </Mostux>
 #+END_SRC
 *** 2. define what your component can do
 #+BEGIN_SRC js
@@ -76,7 +76,7 @@ let actions = {
 }
 #+END_SRC
 *** for Mixin lover
-**** 3. mixin Transdux Mixin and Bind Actions
+**** 3. mixin Mostux Mixin and Bind Actions
 #+BEGIN_SRC js
 // MainSection.jsx
   import {TxMixin} from 'mostux'
