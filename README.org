@@ -17,9 +17,9 @@ Managing React Component state in *Functional Reactive* way wit most.js
 ** Rationale
 flux and redux are great and solve state management and communication pretty well.
 
-*But* they are too complicated, users have to know toomany things about store, dispatcher, actions which they *shouldn't*
+*But* they are too complicated, users have to know too many things about store, dispatcher, actions which they *shouldn't*
 
-In reality what we have to do is actually just need to *talk* to *whatever* component I like and get my state from one *source of truth*, so the simplest way to do this is:
+In reality what we have to do is actually just need to *talk* to *whatever* component I like and get my state from only one *source of truth*, so the simplest way to do this is:
 
 For component who has *actions*, only thing it have to define is what can it do.
 
@@ -29,15 +29,10 @@ SO, all user have to know is to
 - define *actions* for your component
 - *dispatch* messages to *any component* you want to talk to
 
-and leave all the other *dirty works* (stores, states) to our functional transducers, channels and pubsub that user don't really need to care about.
-
-*The Big Picture*
-[[https://www.evernote.com/l/ABe_8eE6o2dGlZMCmNnBap_fXy83GvJe6gcB/image.jpg]]
-
-We're using Channels/Actors Model from Clojure -- core.async, It's compile to JS by [[http://github.com/jcouyang/conjs][conjs]]
+and leave all the other *dirty works* (stores, states) to our functional reactive mostux
 
 *Basic Idea*
-we composed channels, subs, pubs, and transducers together like tunnels, every message goes through the tunnel will got process by the transducer with action function user provided.
+we create two a action stream for each react component.composed channels, subs, pubs, and transducers together like tunnels, every message goes through the tunnel will got process by the transducer with action function user provided.
 
 so, whenever a message is dispatch to input channel, you'll get new state from the corresponding output channel. you don't need to care about how the dispatching really happen in the framework.
 
