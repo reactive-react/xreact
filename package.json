@@ -30,10 +30,8 @@
     ]
   },
   "dependencies": {
-    "con.js": "^0.5.3",
     "most": "^0.16.0",
-    "react": "^0.14.3",
-    "uuid": "^2.0.1"
+    "react": "^0.14.3"
   },
   "devDependencies": {
     "babel": "^6.1.18",
