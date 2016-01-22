@@ -45,45 +45,58 @@ describe('mostux', () => {
     let RxTodoList = connect(TodoList, function(prevState$, intent$){
       let done$ = intent$.filter(x=>x.type=='done');
       let delete$ = intent$.filter(x=>x.type=='remove');
-      let newState$ = intent$.zip((intent,{todos})=>{
-        switch(intent.type){
-          case 'done': return todos.map(todo=>{
-            if(todo.id==intent.id){
-              todo.done =! todo.done;
-              return todo;
-            }
+      let minus$ = intent$.filter(x=>x.type=='minus');
+      let add$ = intent$.filter(x=>x.type=='add')
+      let doneState$ = done$.sample((done, {todos})=>{
+        return todos.map(todo=>{
+          if(todo.id==done.id){
+            todo.done =! todo.done;
             return todo;
-          });
-          case 'remove': return todos.filter(todo=>todo.id!=intent.id);
-          case 'minus': return todos.map(todo=>{
-            if(todo.id==intent.id){
-              todo.text--
-              return todo
-            }
-            return todo;
-          });
-          case 'add': return todos.map(todo=>{
-            if(todo.id==intent.id){
-              todo.text++
-              return todo
-            }
-            return todo;
-          })
-        }
+          }
+          return todo;
+        });
+      }, done$, prevState$)
+                            .map(todos=>({todos}));
+      let deleteState$ = delete$.sample((deleted,{todos})=>{
+        return todos.filter(todo=>todo.id!=deleted.id);
+      }, delete$, prevState$)
+                               .map(todos=>({todos}))
+                               .startWith({
+                                 todos: [
+                                   {id:1, text:5, done:false},
+                                   {id:2, text:'heheda', done:false},
+                                 ]
+                               });
+      let minusState$ = minus$.zip((minus,{todos})=>{
+        return todos.map(todo=>{
+          if(todo.id==minus.id){
+            todo.text--
+            return todo
+          }
+          return todo;
+        })
+      }, prevState$)
+                              .map(todos=>({todos}));;
+      let addState$ = add$.zip((add,{todos})=>{
+        return todos.map(todo=>{
+          if(todo.id==add.id){
+            todo.text++
+            return todo
+          }
+          return todo;
+        })
       },prevState$)
-                             .map(todos=>({todos}))
-                             .startWith({
-                               todos: [
-                                 {id:1, text:5, done:false},
-                                 {id:2, text:'heheda', done:false},
-                               ]
-                             });
+                          .map(todos=>({todos}));;
+
       return {
         done: (id)=>({type:'done', id}),
         remove: (id)=>({type:'remove', id}),
         add: (id)=>({type:'add', id}),
         minus: (id)=>({type:'minus', id}),
-        state$: newState$,
+        deleteState$,
+        doneState$,
+        addState$,
+        minusState$,
 
       }
     });
