@@ -23,126 +23,133 @@ SOFTWARE.
 */
 'use strict';
 
+var _childContextTypes;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TxMixin = undefined;
-exports.mixin = mixin;
+exports.connect = connect;
 
 var _events = require('events');
-
-var _most = require('most');
-
-var _most2 = _interopRequireDefault(_most);
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _uuid = require('uuid');
+var _most = require('most');
 
-var _uuid2 = _interopRequireDefault(_uuid);
-
-var _when = require('when');
-
-var _when2 = _interopRequireDefault(_when);
+var _most2 = _interopRequireDefault(_most);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function genUuid(reactClass) {
-  reactClass.uuid = reactClass.uuid || _uuid2.default.v4();
-  return reactClass.uuid;
-}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var id = function id(_) {
   return _;
 };
-var unmount = 'mostux.unmount';
-var unmountSymbol = Symbol(unmount);
+// unfortunately React doesn't support symbol as context key yet.
+var stateStream = Symbol('state stream').toString();
+var intentStream = Symbol('intent stream').toString();
+var addToStateStream = Symbol('add state to state stream').toString();
+var addToIntentStream = Symbol('add intent to intent stream').toString();
+function connect(ReactClass, main) {
+  var _Connect$contextTypes;
 
-var TxMixin = exports.TxMixin = {
-  contextTypes: {
-    mostuxChannel: _react2.default.PropTypes.object
-  },
-  bindActions: function bindActions(actions) {
-    var _this = this;
+  var Connect = (function (_React$Component) {
+    _inherits(Connect, _React$Component);
 
-    var imm = arguments.length <= 1 || arguments[1] === undefined ? id : arguments[1];
-    var unimm = arguments.length <= 2 || arguments[2] === undefined ? id : arguments[2];
+    function Connect(props, context) {
+      _classCallCheck(this, Connect);
 
-    var addToActionStream = id;
-    var actionStream = _most2.default.create(function (add) {
-      addToActionStream = add;
-      return function dispose(e) {
-        console.log('heheda', e);
-      };
-    });
-    var unmountEvent = new _events.EventEmitter();
-    this[unmountSymbol] = unmountEvent.emit.bind(null, unmount);
-    var unmountStream = _most2.default.fromEvent(unmount, unmountEvent);
+      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Connect).call(this, props, context));
 
-    var _loop = function _loop(name) {
-      _this.context.mostuxChannel.on(genUuid(_this.constructor) + name, function (e) {
-        return unimm(addToActionStream(function (prevState, props) {
-          return actions[name].call(_this, e, imm(prevState), imm(props), actionStream, stateStream);
-        }));
+      _this.actions = {};
+      console.log(context[stateStream], stateStream);
+      var sinks = main(context[stateStream], context[intentStream]);
+      context[stateStream].timestamp().observe(function (stamp) {
+        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + ']: ' + JSON.stringify(stamp.value));
       });
-    };
+      context[intentStream].timestamp().observe(function (stamp) {
+        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + ']: ' + JSON.stringify(stamp.value.type));
+      });
 
-    for (var name in actions) {
-      _loop(name);
+      var _loop = function _loop(name) {
+        if (!name.match(/.*\$$/)) _this.actions[name] = function () {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return _this.context[addToIntentStream](sinks[name].apply(null, args));
+        };else sinks[name].observe(function (state) {
+          context[addToStateStream](state);
+          _this.setState(state);
+        });
+      };
+
+      for (var name in sinks) {
+        _loop(name);
+      }
+      return _this;
     }
-    var stateStream = actionStream.until(unmountStream).tap(function (action) {
-      return _this.setState(action);
-    }).map(function (_) {
-      return _this.state;
-    }).timestamp().observe(function (state) {
-      console.debug(new Date(state.time).toLocaleTimeString() + ': state is ' + JSON.stringify(state.value));
-    }).catch(function (e) {
-      return console.error('mostux ERROR:' + e);
-    });
-    return stateStream;
-  },
-  unbindActions: function unbindActions() {
-    this[unmountSymbol] && this[unmountSymbol]('unbind action');
-  },
-  componentWillUnmount: function componentWillUnmount() {
-    this.unbindActions();
-  },
-  dispatch: function dispatch(where, how, what) {
-    this.context.mostuxChannel.emit(genUuid(where) + how, what);
-  }
-};
 
-function mixin(reactClass) {
-  for (var _len = arguments.length, actions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    actions[_key - 1] = arguments[_key];
-  }
+    _createClass(Connect, [{
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+        this.context[stateStream].end();
+        this.context[intentStream].end();
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(ReactClass, _extends({}, this.props, this.state, { actions: this.actions }));
+      }
+    }]);
 
-  reactClass.contextTypes = TxMixin.contextTypes;
-  for (var name in TxMixin) {
-    if (name != 'contextTypes') reactClass.prototype[name] = TxMixin[name];
-  }
-  var oldMountFunc = reactClass.prototype.componentDidMount;
-  var oldUnmountFunc = reactClass.prototype.componentWillUnmount;
-  reactClass.prototype.componentDidMount = function () {
-    oldMountFunc && oldMountFunc.call(this);
-    this.bindActions.apply(this, actions);
-  };
-  reactClass.prototype.componentWillUnmount = function () {
-    oldUnmountFunc && oldUnmountFunc.call(this);
-    this.unbindActions();
-  };
-  return reactClass;
+    return Connect;
+  })(_react2.default.Component);
+
+  Connect.contextTypes = (_Connect$contextTypes = {}, _defineProperty(_Connect$contextTypes, stateStream, _react2.default.PropTypes.object), _defineProperty(_Connect$contextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_Connect$contextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_Connect$contextTypes, addToStateStream, _react2.default.PropTypes.func), _Connect$contextTypes);
+  return Connect;
 }
 
 var Mostux = _react2.default.createClass({
-  childContextTypes: {
-    mostuxChannel: _react2.default.PropTypes.object
-  },
+  childContextTypes: (_childContextTypes = {}, _defineProperty(_childContextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_childContextTypes, stateStream, _react2.default.PropTypes.object), _defineProperty(_childContextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_childContextTypes, addToStateStream, _react2.default.PropTypes.func), _childContextTypes),
   getChildContext: function getChildContext() {
-    return {
-      mostuxChannel: new _events.EventEmitter()
+    var _ref;
+
+    var _addToIntentStream = function _addToIntentStream() {
+      console.error('intent stream not binded');
     };
+    var _addToStateStream = function _addToStateStream() {
+      console.error('state stream not binded');
+    };
+    var _actionStream = _most2.default.create(function (add) {
+      _addToIntentStream = add;
+      return function dispose(e) {
+        _addToIntentStream = id;
+        console.log('action stream disposed');
+      };
+    });
+    var _stateStream = _most2.default.create(function (add) {
+      _addToStateStream = add;
+      return function dispose(e) {
+        _addToIntentStream = id;
+        console.log('state stream disposed');
+      };
+    });
+    _actionStream.drain();
+    _stateStream.drain();
+    return _ref = {}, _defineProperty(_ref, stateStream, _stateStream), _defineProperty(_ref, intentStream, _actionStream), _defineProperty(_ref, addToIntentStream, _addToIntentStream), _defineProperty(_ref, addToStateStream, _addToStateStream), _ref;
   },
   render: function render() {
     return _react2.default.createElement(
