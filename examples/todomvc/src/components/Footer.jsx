@@ -1,7 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
-import {TxMixin} from 'mostux'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
   'SHOW_ACTIVE': 'Active',
@@ -9,7 +8,6 @@ const FILTER_TITLES = {
 }
 
 let Footer = React.createClass({
-  mixins: [TxMixin],
   renderTodoCount() {
     const { activeCount } = this.props
     const itemWord = activeCount === 1 ? 'item' : 'items'

@@ -2,16 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import TodoTextInput from './TodoTextInput'
 import MainSection from './MainSection'
-const {mixin} = require('../../../../mostux')
-let actions = {
-  save(msg, state,props) {
-    if(msg.id!=props.todo.id) return
-    return {
-      editing: false
-    }
-  }
-}
-
 
 class TodoItem extends React.Component {
   constructor(props){
@@ -35,7 +25,7 @@ class TodoItem extends React.Component {
           <input className="toggle"
                  type="checkbox"
                  checked={todo.completed}
-                 onChange={() => this.dispatch(MainSection, 'complete',{id:todo.id})} />
+                 onChange={this.props.actions.done} />
           <label onDoubleClick={()=> this.setState({editing:true})}>
             {todo.text}
           </label>
@@ -56,4 +46,4 @@ class TodoItem extends React.Component {
   }
 }
 
-export default mixin(TodoItem, actions)
+export default TodoItem
