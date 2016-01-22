@@ -1,10 +1,9 @@
-jest.dontMock('../mostux.js');
+jest.dontMock('../react-most.js');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import most from 'most';
-let {default: Mostux} = require('../mostux');
-let {connect} = require('../mostux');
+let {default: Most, connect} = require('../react-most');
 
 describe('mostux', () => {
   describe('todo reactive', ()=>{
@@ -102,9 +101,9 @@ describe('mostux', () => {
     });
     beforeEach(()=>{
       todolist = TestUtils.renderIntoDocument(
-        <Mostux>
+        <Most>
           <RxTodoList />
-        </Mostux>
+        </Most>
       )
     });
 

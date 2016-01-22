@@ -1,10 +1,10 @@
 {
-  "name": "mostux",
-  "version": "0.1.1",
-  "description": "",
-  "main": "mostux.js",
+  "name": "react-most",
+  "version": "0.1.0",
+  "description": "High Prefomance Monadic Reactive State Container for React",
+  "main": "react-most.js",
   "scripts": {
-    "build": "cat LICENSE.txt > mostux.js && ./node_modules/.bin/babel lib/mostux.js >> mostux.js",
+    "build": "cat LICENSE.txt > react-most.js && ./node_modules/.bin/babel lib/react-most.js >> react-most.js",
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
