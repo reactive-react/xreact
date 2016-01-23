@@ -6,7 +6,9 @@ let Header = React.createClass({
       <header className="header">
           <h1>todos</h1>
           <TodoTextInput newTodo={true}
-                         placeholder="What needs to be done?" />
+                         placeholder="What needs to be done?"
+                         {...this.props}
+          />
       </header>
     )
   },

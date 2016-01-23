@@ -9,13 +9,12 @@ class TodoItem extends React.Component {
     this.state = {editing:false};
   }
   render() {
-    const { todo } = this.props
+    const { todo,actions } = this.props
 
     let element
     if (this.state.editing) {
       element = (
         <TodoTextInput text={todo.text}
-                       itemid={todo.id}
                        editing={this.state.editing}
                        />
       )
@@ -24,20 +23,20 @@ class TodoItem extends React.Component {
         <div className="view">
           <input className="toggle"
                  type="checkbox"
-                 checked={todo.completed}
-                 onChange={this.props.actions.done} />
+                 checked={todo.done}
+                 onChange={()=>actions.done(todo.id)} />
           <label onDoubleClick={()=> this.setState({editing:true})}>
             {todo.text}
           </label>
           <button className="destroy"
-                  onClick={() => this.dispatch(MainSection, 'delete', {id:todo.id})} />
+                  onClick={() => actions.remove(todo.id)} />
         </div>
       )
     }
 
     return (
       <li className={classnames({
-        completed: todo.completed,
+        completed: todo.done,
         editing: this.state.editing
       })}>
         {element}

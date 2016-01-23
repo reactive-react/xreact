@@ -31,14 +31,14 @@ let MainSection = React.createClass({
   },
 
   render() {
-    const {todos} = this.props
+    const {todos,filter} = this.props
     if(!todos) return <div/>
     const completedCount = todos.reduce((count, todo) =>
       todo.completed ? count + 1 : count,
                                         0
     );
 
-    const filteredTodos = todos;
+    const filteredTodos = filter(todos);
     return (
       <section className="main">
         <ul className="todo-list">

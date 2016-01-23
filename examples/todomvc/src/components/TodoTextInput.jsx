@@ -22,19 +22,12 @@ let TodoTextInput = React.createClass({
   },
 
   handleChange(e) {
+    this.props.actions.search(e.target.value);
     this.setState({ text: e.target.value })
   },
 
   handleBlur(e) {
-    if (!this.props.newTodo) {
-      let msg = {id:this.props.itemid,text:e.target.value}
-      if (msg.text.length === 0) {
-        this.dispatch(MainSection, 'delete', msg)
-      } else {
-        this.dispatch(MainSection, 'edit', msg)
-      }
-      this.dispatch(TodoItem, 'save', msg)
-    }
+    this.props.actions.unfocus()
   },
 
   render() {
