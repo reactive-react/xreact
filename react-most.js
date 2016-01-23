@@ -73,40 +73,41 @@ function connect(ReactClass, main) {
       var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Connect).call(this, props, context));
 
       _this.actions = {};
-      var sinks = main(context[stateStream], context[intentStream]);
+      var sinks = main(context[intentStream]);
       context[stateStream].timestamp().observe(function (stamp) {
-        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + ']: ' + JSON.stringify(stamp.value));
+        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + '][STATE]: ' + JSON.stringify(stamp.value));
       });
       context[intentStream].timestamp().observe(function (stamp) {
-        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + ']: ' + JSON.stringify(stamp.value.type));
+        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + '][INTENT]: ' + JSON.stringify(stamp.value));
       });
+      var actionsSinks = [];
 
       var _loop = function _loop(name) {
-        if (!name.match(/.*\$$/)) _this.actions[name] = function () {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
+        if (sinks[name] instanceof _most2.default.Stream) actionsSinks.push(sinks[name]);else if (sinks[name] instanceof Function) {
+          _this.actions[name] = function () {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
 
-          return _this.context[addToIntentStream](sinks[name].apply(null, args));
-        };else sinks[name].observe(function (state) {
-          context[addToStateStream](state);
-          _this.setState(state);
-        });
+            return _this.context[addToIntentStream](sinks[name].apply(null, args));
+          };
+        }
       };
 
       for (var name in sinks) {
         _loop(name);
       }
+      _most2.default.from(actionsSinks).join().observe(function (action) {
+        if (action instanceof Function) _this.setState(function (prevState, props) {
+          var newState = action.call(_this, prevState, props);
+          context[addToStateStream](newState);
+          return newState;
+        });else console.warn('action', action, 'need to be a Functioin map from state to new state');
+      });
       return _this;
     }
 
     _createClass(Connect, [{
-      key: 'componentWillUnmount',
-      value: function componentWillUnmount() {
-        this.context[stateStream].end();
-        this.context[intentStream].end();
-      }
-    }, {
       key: 'render',
       value: function render() {
         return _react2.default.createElement(ReactClass, _extends({}, this.props, this.state, { actions: this.actions }));
@@ -116,12 +117,12 @@ function connect(ReactClass, main) {
     return Connect;
   }(_react2.default.Component);
 
-  Connect.contextTypes = (_Connect$contextTypes = {}, _defineProperty(_Connect$contextTypes, stateStream, _react2.default.PropTypes.object), _defineProperty(_Connect$contextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_Connect$contextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_Connect$contextTypes, addToStateStream, _react2.default.PropTypes.func), _Connect$contextTypes);
+  Connect.contextTypes = (_Connect$contextTypes = {}, _defineProperty(_Connect$contextTypes, stateStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_Connect$contextTypes, intentStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_Connect$contextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_Connect$contextTypes, addToStateStream, _react2.default.PropTypes.func), _Connect$contextTypes);
   return Connect;
 }
 
 var Most = _react2.default.createClass({
-  childContextTypes: (_childContextTypes = {}, _defineProperty(_childContextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_childContextTypes, stateStream, _react2.default.PropTypes.object), _defineProperty(_childContextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_childContextTypes, addToStateStream, _react2.default.PropTypes.func), _childContextTypes),
+  childContextTypes: (_childContextTypes = {}, _defineProperty(_childContextTypes, intentStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_childContextTypes, stateStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_childContextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_childContextTypes, addToStateStream, _react2.default.PropTypes.func), _childContextTypes),
   getChildContext: function getChildContext() {
     var _ref;
 
@@ -150,11 +151,7 @@ var Most = _react2.default.createClass({
     return _ref = {}, _defineProperty(_ref, stateStream, _stateStream), _defineProperty(_ref, intentStream, _actionStream), _defineProperty(_ref, addToIntentStream, _addToIntentStream), _defineProperty(_ref, addToStateStream, _addToStateStream), _ref;
   },
   render: function render() {
-    return _react2.default.createElement(
-      'div',
-      null,
-      this.props.children
-    );
+    return _react2.default.Children.only(this.props.children);
   }
 });
 

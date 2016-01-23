@@ -18,9 +18,7 @@ describe('mostux', () => {
         return (
           <div>
             <button className="btn-complete" onClick={e=>this.props.actions.done(1)} >complete</button>
-            <button className="btn-add" onClick={e=>this.props.actions.add(1)} >add</button>
-            <button className="btn-minus" onClick={e=>this.props.actions.minus(1)} >minus</button>
-            <button className="btn-delete" onClick={e=>this.props.actions.remove(2)}>delete</button>
+            <button className="btn-remove" onClick={e=>this.props.actions.remove(1)} >add</button>
           </div>)
       }
     });
@@ -41,62 +39,39 @@ describe('mostux', () => {
       }
     });
 
-    let RxTodoList = connect(TodoList, function(prevState$, intent$){
+    let RxTodoList = connect(TodoList, function(intent$){
       let done$ = intent$.filter(x=>x.type=='done');
       let delete$ = intent$.filter(x=>x.type=='remove');
-      let minus$ = intent$.filter(x=>x.type=='minus');
-      let add$ = intent$.filter(x=>x.type=='add')
-      let doneState$ = done$.sample((done, {todos})=>{
-        return todos.map(todo=>{
-          if(todo.id==done.id){
-            todo.done =! todo.done;
-            return todo;
+      let doneState$ = done$.map((done)=>{
+        return state=>(
+          {
+            todos:state.todos.map(todo=>{
+              if(todo.id==done.id){
+                todo.done =! todo.done;
+                return todo;
+              }
+              return todo;
+            })
           }
-          return todo;
-        });
-      }, done$, prevState$)
-                            .map(todos=>({todos}));
-      let deleteState$ = delete$.sample((deleted,{todos})=>{
-        return todos.filter(todo=>todo.id!=deleted.id);
-      }, delete$, prevState$)
-                               .map(todos=>({todos}))
-                               .startWith({
+        )
+      });
+
+      let deleteState$ = delete$.map((deleted)=>{
+        return state=>(
+          {todos: state.todos.filter(todo=>todo.id!=deleted.id)}
+        )
+      })
+                               .startWith(()=>({
                                  todos: [
                                    {id:1, text:5, done:false},
                                    {id:2, text:'heheda', done:false},
                                  ]
-                               });
-      let minusState$ = minus$.zip((minus,{todos})=>{
-        return todos.map(todo=>{
-          if(todo.id==minus.id){
-            todo.text--
-            return todo
-          }
-          return todo;
-        })
-      }, prevState$)
-                              .map(todos=>({todos}));;
-      let addState$ = add$.zip((add,{todos})=>{
-        return todos.map(todo=>{
-          if(todo.id==add.id){
-            todo.text++
-            return todo
-          }
-          return todo;
-        })
-      },prevState$)
-                          .map(todos=>({todos}));;
-
+                               }));
       return {
         done: (id)=>({type:'done', id}),
         remove: (id)=>({type:'remove', id}),
-        add: (id)=>({type:'add', id}),
-        minus: (id)=>({type:'minus', id}),
         deleteState$,
         doneState$,
-        addState$,
-        minusState$,
-
       }
     });
     beforeEach(()=>{
@@ -117,23 +92,10 @@ describe('mostux', () => {
     });
     it('click remove button will remove item', ()=> {
       jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-delete'));
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-delete'));
+      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-remove'));
+      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-remove'));
       jest.runAllTimers();
       jest.runAllTicks();
       expect(TestUtils.scryRenderedComponentsWithType(todolist, Todo).length).toBe(1);
-    });
-    it('click add and minus', ()=> {
-      jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-minus'));
-      jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-add'));
-      jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-minus'));
-      jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-minus'));
-      jest.runAllTimers();
-      expect(TestUtils.scryRenderedComponentsWithType(todolist, Todo)[0].props.todo.text).toBe(3);
-    });
-  });
+    });  });
 })
