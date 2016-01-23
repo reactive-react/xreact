@@ -38,6 +38,7 @@
   "dependencies": {
     "classnames": "^2.2.0",
     "fetch": "git://github.com/github/fetch",
+    "lodash": "^4.0.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "rest": "^1.3.1"

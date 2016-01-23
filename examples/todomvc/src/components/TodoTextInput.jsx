@@ -14,7 +14,7 @@ let TodoTextInput = React.createClass({
     let msg = {id:this.props.itemid,text:text}
     if (e.which === 13) {
       if (this.props.newTodo) {
-        this.dispatch(MainSection, 'add', text)
+        this.props.actions.add(msg);
         this.setState({ text: '' })
       }
       this.handleBlur(e)
@@ -27,7 +27,7 @@ let TodoTextInput = React.createClass({
   },
 
   handleBlur(e) {
-    this.props.actions.unfocus()
+//    this.props.actions.blur()
   },
 
   render() {
