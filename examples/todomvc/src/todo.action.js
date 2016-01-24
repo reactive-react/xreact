@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 function genAction(name, action, stream){
   return {
@@ -16,7 +16,7 @@ export function addTodo(intent$){
           })),
           filter: _.identity,
         })
-      ).delay(500))
+      ).delay(500));
 };
 export function deleteTodo(intent$){
   return genAction('remove',
@@ -29,7 +29,7 @@ export function deleteTodo(intent$){
                    )))
 }
 export function completeTodo(intent$){
-  return genAction('don',
+  return genAction('done',
     (id)=>({type:'done', id}),
     intent$.filter(x=>x.type=='done')
     .map(intent=>(
