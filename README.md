@@ -59,11 +59,22 @@ let RxApp = connect(App, function(intent$){
 });
 ```
 here are things you may need to pay attention to:
-1. `connect` you `App` to the intent transformer
-2. the transformer accept a Intetent Stream `intent$`(by convention, all Stream type variable name with suffix $), and create and return new Intent Streams(here we call those new stream -- `sinks`)
+
+#### 2.1. `connect` you `App` to the intent transformer
+```html
+import Most from 'react-most'
+<Most>
+  <YourApp />
+</Most>
+```
+#### 2.2. transform intent stream to state mapper stream
+
+the transformer accept a Intetent Stream `intent$`(by convention, all Stream type variable name with suffix $), and create and return new Intent Streams(here we call those new stream -- `sinks`)
+
 ```js
   let search$ = intent$.filter(x=>x.type=='search');
-  ```
+```
+
   here we filter out only search intent and do something about it.
 
 when I mean something, I mean transform intent to be a state transformer. which means
@@ -73,10 +84,12 @@ when I mean something, I mean transform intent to be a state transformer. which 
     state=>({
       ...
       })})))
-      ```
-      if you take a look at the function, what it actually does is transform a search type intent stream contains "search text" into a stream of state transformer, a function `state=>something`.
-      
-3. define action mapper that can be use to added intent to your Intent Stream.
+```
+
+if you take a look at the function, what it actually does is transform a search type intent stream contains "search text" into a stream of state transformer, a function `state=>something`.
+
+#### 2.3. define action mapper that can be use to added intent to your Intent Stream.
+
 ```js
 search: (text)=>({type:'search', text}),
 ```
@@ -92,8 +105,7 @@ like redux, but much simpler, when you wrap your App, your App get a `actions` p
 
 ```
 
-### examples
-<./examples>
+### (examples](./examples)
 
 ## Performance
 `react-most` no more than creating stream from your actions, and bind it to state stream. no any other computations happen in `react-most`. so please refer to [most.js's perf](https://github.com/cujojs/most/tree/master/test/perf)
