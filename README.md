@@ -10,8 +10,14 @@ so, `react-most` will make you React Components Reactive.
 
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
-data flow
+data flow is simple and one way only
 ![](./docs/images/flow.dot.png)
+
+- **Action** will generate value and add it into `Intent Stream`
+- **Sink** create new Stream based on action type in `Intent Stream`
+- **Sink** transform a value Stream into a `oldState=>newState` mapping Stream
+- **State** subscribe to **Sinks** changes
+
 ## Why
 
 Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all state, user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream. How awesome will it be.
