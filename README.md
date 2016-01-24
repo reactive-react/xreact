@@ -102,10 +102,9 @@ like redux, but much simpler, when you wrap your App, your App get a `actions` p
                  type="checkbox"
                  checked={todo.done}
                  onChange={()=>this.props.actions.done(todo.id)} />
-
 ```
 
-### (examples](./examples)
+### [examples](./examples)
 
 ## Performance
 `react-most` no more than creating stream from your actions, and bind it to state stream. no any other computations happen in `react-most`. so please refer to [most.js's perf](https://github.com/cujojs/most/tree/master/test/perf)
