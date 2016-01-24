@@ -1,0 +1,28 @@
+digraph G {
+        rankdir=LR;
+
+        newrank=true;
+        State[shape=ellipse];
+        Action[shape=box];
+        "Intent Stream"[shape=parallelogram];
+        {rank=source;Action}
+        {rank=sink;State}
+        Action -> "Intent Stream"[label="add value to stream"];
+
+        subgraph cluster_user {
+                label="these are what you have to write\nvalue=>state=>newState;"
+                style=dotted
+                node[shape=parallelogram,color=green];
+                "Action Sinks 1";
+                "Action Sinks n";
+                "Action Sinks 2";
+                "Data Sinks";
+        }
+        "Intent Stream" -> "Action Sinks 1";
+        "Intent Stream" -> "Action Sinks 2";
+        "Intent Stream" -> "Action Sinks n";
+        "Data Sinks" -> "State";
+        "Action Sinks 1"-> "State";
+        "Action Sinks 2"-> "State";
+        "Action Sinks n"-> "State"[label="subscribe"];
+}

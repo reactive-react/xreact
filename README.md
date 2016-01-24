@@ -10,6 +10,8 @@ so, `react-most` will make you React Components Reactive.
 
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
+data flow
+![](./docs/images/flow.dot.png)
 ## Why
 
 Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all state, user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream. How awesome will it be.
