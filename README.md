@@ -6,7 +6,7 @@ Most is very high performance Monadic reactive streams lib. Rich User Interactio
 
 React is awesome for writing UI Components.
 
-so, `react-most` will make you React Components Reactive.
+so, what `react-most` does is just making you React Components Reactive.
 
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
@@ -20,7 +20,8 @@ data flow is simple and one way only
 
 ## Why
 
-Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all state, user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream. How awesome will it be.
+Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream.
+
 
 ## How
 there's only 3 things you should notice when using `react-most`
