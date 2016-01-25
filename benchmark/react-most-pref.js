@@ -6,40 +6,42 @@ var CYCLE = timer.CYCLE
 var todolist;
 var context = Most.prototype.getChildContext()
 var most = require('most');
-
-var stateStream = context["Symbol('state stream')"]
-var intentStream = most.of({type:'add'}).cycle().take(CYCLE)
-var addToStateStream =  context["Symbol('add state to state stream')"];
-var counter = 0;
-function genActions(prevState$, intent$){
+var log = _=>console.log(_)
+var addToIntentStream = context["__reactive.react.addToIntentStream__"]
+var intentStream = context["__reactive.react.intentStream__"]
+function genActions(intent$){
   var add$ = intent$.filter(x=>x.type=='add')
   var addState$ = add$.map((add)=>{
-    counter++;
-    return state=>({value:counter})
+    return state=>({value:add.value})
   })
-        .startWith(_=>({value:0}))
+  var defaultState$ = most.of(_=>({value:0}))
 
   return {
-    add: (id)=>({type:'add', id}),
+    add: (value)=>({type:'add', value}),
     addState$,
+    defaultState$,
   }
 }
 
-var actions = genActions(stateStream, intentStream);
+var actions = genActions(intentStream);
+for(var i=0;i<CYCLE;i++){
+  addToIntentStream(actions.add(i))
+}
+var state={value:0}
+actions.addState$.observe(mapper=>{
+  state=mapper(state);
+  if(state.value==0){
+    console.log('Memory Usage Before:', process.memoryUsage())
+    start=new Date;
+  }
+  else if(state.value==CYCLE-1){
+    console.log('Memory Usage After:', process.memoryUsage())
+    console.log("Elapsed "+((new Date()).valueOf()-start.valueOf())+"ms");
+  }
+})
 
-actions.addState$.observe(add=>addToStateStream(add()));
-stateStream.observe(state=>{
-    if(state.value==0){
-          console.log('Memory Usage Before:', process.memoryUsage())
-          start=new Date;
-        }
-    else if(state.value==CYCLE-1){
-          console.log('Memory Usage After:', process.memoryUsage())
-          console.log("Elapsed "+((new Date()).valueOf()-start.valueOf())+"ms");
-        }
-      })
 /**
-Memory Usage Before: { rss: 31404032, heapTotal: 16486912, heapUsed: 10390552 }
-Memory Usage After: { rss: 35303424, heapTotal: 18550784, heapUsed: 10074400 }
-Elapsed 16ms
+Memory Usage Before: { rss: 32501760, heapTotal: 16486912, heapUsed: 11307128 }
+Memory Usage After: { rss: 34418688, heapTotal: 18550784, heapUsed: 11932336 }
+Elapsed 8ms
  */

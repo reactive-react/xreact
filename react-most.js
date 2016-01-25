@@ -52,16 +52,38 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
+var intentStream = "__reactive.react.intentStream__";
+var addToIntentStream = "__reactive.react.addToIntentStream__";
+var flatObserve = "__reactive.react.flatObserve__";
+
+function observable(obj) {
+  return !!obj.observe;
+}
+
 var id = function id(_) {
   return _;
 };
-// unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
-var stateStream = "Symbol('state stream')";
-var intentStream = "Symbol('intent stream')";
-var addToStateStream = "Symbol('add state to state stream')";
-var addToIntentStream = "Symbol('add intent to intent stream')";
+function mostify() {
+  var addToIntentStream = function addToIntentStream() {
+    console.error('intent stream not binded');
+  };
+  var actionStream = _most2.default.create(function (add) {
+    addToIntentStream = add;
+    return function dispose(e) {
+      addToIntentStream = id;
+      console.log('action stream disposed');
+    };
+  });
+  actionStream.drain();
 
-function connect(ReactClass, main) {
+  function flatObserve(actionsSinks, f) {
+    return _most2.default.from(actionsSinks).join().observe(f);
+  }
+  return { actionStream: actionStream, addToIntentStream: addToIntentStream, flatObserve: flatObserve };
+}
+
+function connect(ReactClass, main, props) {
   var _Connect$contextTypes;
 
   var Connect = function (_React$Component) {
@@ -74,16 +96,13 @@ function connect(ReactClass, main) {
 
       _this.actions = {};
       var sinks = main(context[intentStream]);
-      context[stateStream].timestamp().observe(function (stamp) {
-        return console.log('[' + new Date(stamp.time).toLocaleTimeString() + '][STATE]: ' + JSON.stringify(stamp.value));
-      });
       context[intentStream].timestamp().observe(function (stamp) {
         return console.log('[' + new Date(stamp.time).toLocaleTimeString() + '][INTENT]: ' + JSON.stringify(stamp.value));
       });
       var actionsSinks = [];
 
       var _loop = function _loop(name) {
-        if (sinks[name] instanceof _most2.default.Stream) actionsSinks.push(sinks[name]);else if (sinks[name] instanceof Function) {
+        if (observable(sinks[name])) actionsSinks.push(sinks[name]);else if (sinks[name] instanceof Function) {
           _this.actions[name] = function () {
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
               args[_key] = arguments[_key];
@@ -97,10 +116,9 @@ function connect(ReactClass, main) {
       for (var name in sinks) {
         _loop(name);
       }
-      _most2.default.from(actionsSinks).join().observe(function (action) {
+      _this.context[flatObserve](actionsSinks, function (action) {
         if (action instanceof Function) _this.setState(function (prevState, props) {
           var newState = action.call(_this, prevState, props);
-          context[addToStateStream](newState);
           return newState;
         });else console.warn('action', action, 'need to be a Functioin map from state to new state');
       });
@@ -117,38 +135,18 @@ function connect(ReactClass, main) {
     return Connect;
   }(_react2.default.Component);
 
-  Connect.contextTypes = (_Connect$contextTypes = {}, _defineProperty(_Connect$contextTypes, stateStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_Connect$contextTypes, intentStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_Connect$contextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_Connect$contextTypes, addToStateStream, _react2.default.PropTypes.func), _Connect$contextTypes);
+  Connect.contextTypes = (_Connect$contextTypes = {}, _defineProperty(_Connect$contextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_Connect$contextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_Connect$contextTypes, flatObserve, _react2.default.PropTypes.func), _Connect$contextTypes);
   return Connect;
 }
 
 var Most = _react2.default.createClass({
-  childContextTypes: (_childContextTypes = {}, _defineProperty(_childContextTypes, intentStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_childContextTypes, stateStream, _react2.default.PropTypes.instanceOf(_most2.default.Stream)), _defineProperty(_childContextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_childContextTypes, addToStateStream, _react2.default.PropTypes.func), _childContextTypes),
+  childContextTypes: (_childContextTypes = {}, _defineProperty(_childContextTypes, intentStream, _react2.default.PropTypes.object), _defineProperty(_childContextTypes, addToIntentStream, _react2.default.PropTypes.func), _defineProperty(_childContextTypes, flatObserve, _react2.default.PropTypes.func), _childContextTypes),
   getChildContext: function getChildContext() {
     var _ref;
 
-    var _addToIntentStream = function _addToIntentStream() {
-      console.error('intent stream not binded');
-    };
-    var _addToStateStream = function _addToStateStream() {
-      console.error('state stream not binded');
-    };
-    var _actionStream = _most2.default.create(function (add) {
-      _addToIntentStream = add;
-      return function dispose(e) {
-        _addToIntentStream = id;
-        console.log('action stream disposed');
-      };
-    });
-    var _stateStream = _most2.default.create(function (add) {
-      _addToStateStream = add;
-      return function dispose(e) {
-        _addToIntentStream = id;
-        console.log('state stream disposed');
-      };
-    });
-    _actionStream.drain();
-    _stateStream.drain();
-    return _ref = {}, _defineProperty(_ref, stateStream, _stateStream), _defineProperty(_ref, intentStream, _actionStream), _defineProperty(_ref, addToIntentStream, _addToIntentStream), _defineProperty(_ref, addToStateStream, _addToStateStream), _ref;
+    var driverClass = this.props && this.props.driver || mostify;
+    var driver = driverClass();
+    return _ref = {}, _defineProperty(_ref, intentStream, driver.actionStream), _defineProperty(_ref, addToIntentStream, driver.addToIntentStream), _defineProperty(_ref, flatObserve, driver.flatObserve), _ref;
   },
   render: function render() {
     return _react2.default.Children.only(this.props.children);

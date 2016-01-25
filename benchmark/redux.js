@@ -15,14 +15,14 @@ var store = createStore(counter)
 
 time(function(done){
   store.subscribe(() => {
-   done(store.getState()) 
+   done(store.getState())
   })
   for(var i=0;i<CYCLE+1;i++){
     store.dispatch({ type: 'INCREMENT' });
   }
 })
 /**
-Memory Usage Before: { rss: 21942272, heapTotal: 9275392, heapUsed: 4559784 }
-Memory Usage After: { rss: 22929408, heapTotal: 9275392, heapUsed: 5473240 }
-Elapsed 4ms
+Memory Usage Before: { rss: 21708800, heapTotal: 9275392, heapUsed: 4559768 }
+Memory Usage After: { rss: 24592384, heapTotal: 10307328, heapUsed: 6277200 }
+Elapsed 10ms
 */
