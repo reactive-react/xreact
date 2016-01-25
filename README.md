@@ -24,6 +24,7 @@ Redux is awesome, but if you're big fan of Functional Reactive Programming, you 
 
 ### Why not redux
 When I play around with redux, it's awesome but
+
 1. it take little time to make it ready.
 2. it's using too many concept that we probably don't even care, which make it's learning curve a little steep(it take a [gitbook](http://rackt.org/redux/index.html) to document just a state container?)
 3. Reducers (long switch statements which are syntactically ugly but semantically ok) -- Andre
