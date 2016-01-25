@@ -1,71 +1,66 @@
 * API
-** mixin
-#+BEGIN_QUOTE
-this is for ES6 class
-#+END_QUOTE
+** connect
 
-=mixin(ComponentClass:class, actions:object, JsToImmutableFunction:function, ImmutableToJsFunction:function):object=
+=connect(ComponentClass:class, dataFlow:func [, props]):class=
 
-=JsToImmutableFunction= and =ImmutableToJsFunction= are *optional*
+=props= is *optional*, it will become default props of Component `connect` returned
 
 example:
 #+BEGIN_SRC js
-    import {mixin} from 'mostux'
-    let actions = {
-      ...
-    }
+    import {connect} from 'react-most'
+
     class TodoItem extends React.Component {
       ...
     }
-    export default mixin(TodoItem, actions)
+    export default connect(TodoItem, function(intent$){
+ intent$.filter(...).map(....)
+...
+})
 #+END_SRC
-** dispatch
-=dispatch(TargetComponentClass:class, actionName:string, value:any)=
+** data flow
+data flow is user define flow for intent stream, must return a object contains `actions` and `sinks`
 
-example:
-
-when component =TodoItem= want to send message to component =MainSection= 's =complete= action.
 #+BEGIN_SRC js
-  import MainSection from './MainSection'
-  class TodoItem extends React.Component {
-   ...
-      render(){
-          <input className="toggle"
-          onChange={() => this.dispatch(MainSection, 'complete',{id:todo.id})} />
-
-      }
-   ...
+let RxCounter = connect(Counter, function(intent$){
+  let defaultState$ = most.of(_=>({value:0}))
+  let addSink$ = intent$.filter(x=>x.type=='add').map(({increment})=>state=>({value: state.value+increment}))
+  return {
+    add: increment=>({type: 'add', increment}),
+    defaultState$,
+    addSink$,
   }
+});
 #+END_SRC
 
-#+BEGIN_QUOTE
-One thing you may need to notice is that message between component is *Class* level, not *Instance* level. For example, if you have multiple =MainSection= components, they will all reveive the same massage from =TodoItem=.
-#+END_QUOTE
+`sinks` are Stream, `action` will be called whenever you wan to send something into Intent Stream.
 
-** actions
-action is no more than just a normal javascript object, which contains all the action functions.
-
-but you have to pay a little attention to make all function in it. All functions should return object, which normally just like what you wanna put in the parameter of function =this.setState=.
-
-** bindActions
-#+BEGIN_QUOTE
-for react mixin
-#+END_QUOTE
-
-=bindActions(actions:object, JsToImmutableFunction:function, ImmutableToJsFunction:function)=
-
-=JsToImmutableFunction= and =ImmutableToJsFunction= are *optional*
-
-example:
-#+BEGIN_SRC js
-  import {TxMixin} from 'mostux'
-  let MainSection = React.createClass({
-    mixins: [TxMixin],
-    componentDidMount(){
-      this.bindActions(actions)
-    },
-    ...
-  })
+** wrapper
+wrapper wrap you App, so it can provide `actions`, and `setState` for you. new state will pass to you App via props. you don't have to care about state then, only to compose a clean data flow.
+#+BEGIN_SRC html
+import Most from 'react-most'
+<Most>
+  <Counter />
+</Most>
 #+END_SRC
 
-for mixin, you have to maually call =bindActions= some where, it's recommended to put it in =componentDidMount()= where not blocking your component's render.
+*** change reactive engine [experimental]
+if you are Rx user, optionally you can pass a =engine= props into =Most=.
+#+BEGIN_SRC html
+import Most from 'react-most'
+<Most engine={function rxify() {
+  let addToIntentStream = subject.onNext;
+  let intentStream = new Rx.Subject();
+
+  function flatObserve(intentSinks, f){
+    return Rx.Observable.from(intentSinks).mergeAll().observe(f);
+  }
+  return {intentStream, addToIntentStream, flatObserve}
+}}>
+  <Counter />
+</Most>
+#+END_SRC
+
+similarily, other reactive lib user can easily proivde you favor engine by simply provide these 3 things:
+1. intentStream: a Steam contains values
+2. addTodInentStream(value): a function that can add values into intentStream
+3. flatObserve(sinks,func): flat Stream of Stream `sinks`, and observe with `func`.

@@ -2,7 +2,7 @@
 A Monadic Reactive State Container for React Components
 
 ## What
-`most.js` is very high performance Monadic reactive streams lib. Rich User Interaction App is natively fit for Reactive Programming.
+`most.js` is very high performance Monadic reactive streams lib. Rich User Interaction App is natively fit Reactive Programming pretty well.
 
 `React` is awesome for writing UI Components.
 
@@ -11,7 +11,7 @@ so, what `react-most` does is simply making you React Components Reactive.
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
 data flow is simple and one way only
-![](./docs/images/flow.dot.png)
+![](https://raw.githubusercontent.com/jcouyang/react-most/master/docs/images/flow.dot.png)
 
 - **Action** will generate value and add it into `Intent Stream`
 - **Sink** create new Stream based on action type in `Intent Stream`
@@ -70,18 +70,15 @@ the transformer accept a Intetent Stream `intent$`(by convention, all Stream typ
 
 here we filter out only `add` intent and do something about it.
 
-when I mean something, I mean transform intent to be a state transformer. which means
+when I mean something, I mean transform intent to be a state transformer. which means Intent Stream of **values**
 
 --`{value: 1}`--`{value: 2}`--`{value:3}`-->
 
-|
-v
+becomes a Stream of **functions** which tranform old state into new state
 
 --`state=>({value: state.value+1})`--`state=>({value: state.value+2})`--`state=>({value: state.value+3})`-->
 
-a stream of **values** been transform into a stream of state mapping **function**
-
-#### 2.3. define action mapper that can be use to added intent to your Intent Stream.
+#### 2.2. define action mapper that can be use to added intent to your Intent Stream.
 
 ```js
     add: increment=>({type: 'add', increment}),
@@ -111,7 +108,8 @@ basically the same level of performance as redux(which is 10ms in the same testi
 
 ## Thanks to...
 - [most](https://github.com/cujojs/most)
+- [React](http://facebook.github.io/react/)
 - [redux](https://github.com/rackt/redux)
 - [Om](https://github.com/omcljs/om)
 - [Cycle](http://cycle.js.org/)
-- [React](http://facebook.github.io/react/)
+- [transdux](https://github.com/jcouyang/transdux)
