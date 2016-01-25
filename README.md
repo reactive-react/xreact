@@ -2,11 +2,11 @@
 A Monadic Reactive State Container for React Components
 
 ## What
-Most is very high performance Monadic reactive streams lib. Rich User Interaction App is natively fit for Reactive Programming.
+`most.js` is very high performance Monadic reactive streams lib. Rich User Interaction App is natively fit for Reactive Programming.
 
-React is awesome for writing UI Components.
+`React` is awesome for writing UI Components.
 
-so, what `react-most` does is just making you React Components Reactive.
+so, what `react-most` does is simply making you React Components Reactive.
 
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
@@ -22,15 +22,25 @@ data flow is simple and one way only
 
 Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream.
 
+### Why not redux
+When I play around with redux, it's awesome but
+1. it take little time to make it ready.
+2. it's using too many concept that we probably don't even care, which make it's learning curve a little steep(it take a [gitbook](http://rackt.org/redux/index.html) to document just a state container?)
+3. Reducers (long switch statements which are syntactically ugly but semantically ok) -- Andre
+4. switch statement is ugly and hardly composable
+5. again, I couldn't agree more on Andre's [article about react/redux](http://staltz.com/why-react-redux-is-an-inferior-paradigm.html).
+
+Inspired by Reactive Programming, Cycle.js and Redux, we can do something better to reduce the complexity of managing react state, the reactive way, by only introduce a little bit of reactive programming concepts.
+
 
 ## How
-there's only 3 things you should notice when using `react-most`
+there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
 
 ### 1. Component Wrapper
 ```html
 import Most from 'react-most'
 <Most>
-  <YourApp />
+  <Counter />
 </Most>
 ```
 ### 2. Define How to connect Component and Streams
@@ -38,82 +48,55 @@ import Most from 'react-most'
 ```js
 import {connect} from 'react-most'
 import most from 'most'
-let RxApp = connect(App, function(intent$){
-  let search$ = intent$.filter(x=>x.type=='search');
-  let defaultState$ = most.never().startWith({
-    todos: [
-      {id:0, text:'Loading...dadada', done:false},
-    ],
-    filter: id,
-  }).map(defaultState=>(_=>defaultState));
-
-  let dataSink$ = most.fromPromise(rest(remote))
-                              .map(x=>JSON.parse(x.entity))
-                              .map(data=>_=>({todos: data}));
-
-  let searchSink$ = search$.debounce(500).map(x=>x.text.trim()).filter(search=>!!search).map(search=>(
-    state=>({
-      filter: x=>x.filter(todo=>{
-        return !!search.toLowerCase().split(' ').filter((word)=>{
-          return !!todo.text.toLowerCase().split(' ').filter(w=>w==word).length
-        }).length
-      })})))
-
+let RxCounter = connect(Counter, function(intent$){
+  let defaultState$ = most.of(_=>({value:0}))
+  let addSink$ = intent$.filter(x=>x.type=='add').map(({increment})=>state=>({value: state.value+increment}))
   return {
-    search: (text)=>({type:'search', text}),
+    add: increment=>({type: 'add', increment}),
     defaultState$,
-    dataSink$,
-    searchSink$,
+    addSink$,
   }
 });
 ```
 here are things you may need to pay attention to:
 
-#### 2.1. `connect` you `App` to the intent transformer
-```html
-import Most from 'react-most'
-<Most>
-  <YourApp />
-</Most>
-```
-#### 2.2. transform intent stream to state mapper stream
+#### 2.1. transform intent stream to state mapper stream
 
 the transformer accept a Intetent Stream `intent$`(by convention, all Stream type variable name with suffix $), and create and return new Intent Streams(here we call those new stream -- `sinks`)
 
 ```js
-  let search$ = intent$.filter(x=>x.type=='search');
+  let addSink$ = intent$.filter(x=>x.type=='add').map(({increment})=>state=>({value: state.value+increment}))
 ```
 
-  here we filter out only search intent and do something about it.
+here we filter out only `add` intent and do something about it.
 
 when I mean something, I mean transform intent to be a state transformer. which means
 
-```js
-  let searchSink$ = search$.debounce(500).map(x=>x.text.trim()).filter(search=>!!search).map(search=>(
-    state=>({
-      ...
-      })})))
-```
+--`{value: 1}`--`{value: 2}`--`{value:3}`-->
 
-if you take a look at the function, what it actually does is transform a search type intent stream contains "search text" into a stream of state transformer, a function `state=>something`.
+|
+v
+
+--`state=>({value: state.value+1})`--`state=>({value: state.value+2})`--`state=>({value: state.value+3})`-->
+
+a stream of **values** been transform into a stream of state mapping **function**
 
 #### 2.3. define action mapper that can be use to added intent to your Intent Stream.
 
 ```js
-search: (text)=>({type:'search', text}),
+    add: increment=>({type: 'add', increment}),
 ```
-here it define a search action mapper, it define how you can use the search action. it's pretty clear here that the search action will accept only one arg `text`, and `{type:'search', text}` is something will be send to Intent Stream when action is called.
+here it define a `add` action mapper, it define how you can use the action. it's pretty clear here that the search action will accept only one arg `increment`, and `{type: 'add', increment}` is something will be send to Intent Stream when action is called.
 
 ### 3. Use the actions
 like redux, but much simpler, when you wrap your App, your App get a `actions` props, and you can pass it all along to any child Component.
 ```js
-          <input className="toggle"
+          <button className="add1"
                  type="checkbox"
-                 checked={todo.done}
-                 onChange={()=>this.props.actions.done(todo.id)} />
+                 onClick={()=>this.props.actions.add(1)} />
 ```
 
-### [examples](./examples)
+### [More Examples](./examples)
 
 ## Performance
 `react-most` no more than creating stream from your actions, and bind it to state stream. no any other computations happen in `react-most`. so please refer to [most.js's perf](https://github.com/cujojs/most/tree/master/test/perf)
