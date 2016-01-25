@@ -24,12 +24,12 @@ class App extends Component {
 
 let RxApp = connect(App, function(intent$){
   let search$ = intent$.filter(x=>x.type=='search');
-  let defaultState$ = most.never().startWith({
+  let defaultState$ = most.of(_=>({
     todos: [
       {id:0, text:'Loading...dadada', done:false},
     ],
     filter: id,
-  }).map(defaultState=>(_=>defaultState));
+  }));
 
   let dataSink$ = most.fromPromise(rest(remote))
                               .map(x=>JSON.parse(x.entity))
