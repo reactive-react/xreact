@@ -44,8 +44,7 @@ let RxApp = connect(App, function(intent$){
         return !!search.toLowerCase().split(' ').filter((word)=>{
           return !!todo.text.toLowerCase().split(' ').filter(w=>w==word).length
         }).length
-      })})))
-
+      })})));
   return _.assign({
     search: (text)=>({type:'search', text}),
     unfocus: ()=>({type:'unfocus'}),
@@ -54,7 +53,7 @@ let RxApp = connect(App, function(intent$){
     searchSink$,
     blankSearchSink$,
   }, addTodo(intent$), deleteTodo(intent$), completeTodo(intent$))
-});
+}, {history:true});
 
 render(
   <Most>
