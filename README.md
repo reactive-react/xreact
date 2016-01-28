@@ -6,7 +6,7 @@ A Monadic Reactive State Container for React Components
 
 `React` is awesome for writing UI Components.
 
-so, what `react-most` does is simply making you React Components Reactive.
+So, what `react-most` does is simply making you React Components Reactive.
 
 `react-most` is simple and only 90 lines of code. only depends on most and react.
 
@@ -18,11 +18,8 @@ data flow is simple and one way only
 - **Sink** transform a value Stream into a `oldState=>newState` mapping Stream
 - **State** subscribe to **Sinks** changes
 
-## Why
 
-Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter,compose, combine those streams to React state stream.
-
-### Why not redux
+## Why not (just using existing state container e.g.) redux
 When I play around with redux, it's awesome but
 
 1. it take little time to make it ready.
@@ -33,6 +30,15 @@ When I play around with redux, it's awesome but
 
 Inspired by Reactive Programming, Cycle.js and Redux, we can do something better to reduce the complexity of managing react state, the reactive way, by only introduce a little bit of reactive programming concepts.
 
+## Why indeed?
+
+Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter, compose, join those streams to React state.
+
+### Pure Functional, Declarative & Monadic
+### Composable and Reusable Sinks
+### Transducers support
+### Time Travel
+### Modular and Easy to Extend
 
 ## How
 there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
@@ -89,9 +95,9 @@ here it define a `add` action mapper, it define how you can use the action. it's
 ### 3. Use the actions
 like redux, but much simpler, when you wrap your App, your App get a `actions` props, and you can pass it all along to any child Component.
 ```js
-          <button className="add1"
-                 type="checkbox"
-                 onClick={()=>this.props.actions.add(1)} />
+<button className="add1"
+       type="checkbox"
+       onClick={()=>this.props.actions.add(1)} />
 ```
 
 ### [More Examples](./examples)

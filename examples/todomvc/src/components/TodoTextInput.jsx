@@ -22,12 +22,14 @@ let TodoTextInput = React.createClass({
   },
 
   handleChange(e) {
-    this.props.actions.search(e.target.value);
+    if (this.props.newTodo)
+      this.props.actions.search(e.target.value)
     this.setState({ text: e.target.value })
   },
 
   handleBlur(e) {
-//    this.props.actions.blur()
+    this.props.actions.edit({id:this.props.itemid,text:e.target.value});
+    this.props.onBlur&&this.props.onBlur()
   },
 
   render() {

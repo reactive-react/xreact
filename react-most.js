@@ -68,6 +68,7 @@ function observable(obj) {
 var id = function id(_) {
   return _;
 };
+
 function mostify() {
   var addToIntentStream = function addToIntentStream() {
     console.error('intent stream not binded');

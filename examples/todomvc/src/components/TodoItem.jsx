@@ -10,12 +10,15 @@ class TodoItem extends React.Component {
   }
   render() {
     const { todo,actions } = this.props
-
+    const {edit} = actions
     let element
     if (this.state.editing) {
       element = (
         <TodoTextInput text={todo.text}
+                       itemid={todo.id}
                        editing={this.state.editing}
+                       actions={{edit}}
+                       onBlur={()=>this.setState({editing:false})}
                        />
       )
     } else {

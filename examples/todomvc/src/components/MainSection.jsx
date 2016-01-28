@@ -19,22 +19,11 @@ let MainSection = React.createClass({
     }
   },
 
-  renderFooter(completedCount) {
-    const { todos } = this.state
-    const activeCount = todos.length - completedCount;
-
-    if (todos.length) {
-      return (
-        <Footer completedCount={completedCount} activeCount={activeCount} {...this.props}/>
-      )
-    }
-  },
-
   render() {
     const {todos,filter} = this.props
-    if(!todos) return <div/>
+    if(!todos) return <section className="main"/>
     const completedCount = todos.reduce((count, todo) =>
-      todo.completed ? count + 1 : count,
+      todo.done ? count + 1 : count,
                                         0
     );
 
@@ -46,6 +35,7 @@ let MainSection = React.createClass({
             <TodoItem key={todo.id} todo={todo} {...this.props} />
           )}
         </ul>
+        <Footer completedCount={completedCount} activeCount={todos.length-completedCount} {...this.props}/>
       </section>
     )
   },

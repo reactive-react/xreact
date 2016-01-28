@@ -7,6 +7,11 @@ const FILTER_TITLES = {
   'SHOW_COMPLETED': 'Completed'
 }
 
+const FILTER_FUNC = {
+  'SHOW_ALL': _=>_,
+  'SHOW_ACTIVE': todos=>todos.filter(todo=>!todo.done),
+  'SHOW_COMPLETED': todos=>todos.filter(todo=>todo.done),
+}
 let Footer = React.createClass({
   renderTodoCount() {
     const { activeCount } = this.props
@@ -21,23 +26,22 @@ let Footer = React.createClass({
 
   renderFilterLink(filter) {
     const title = FILTER_TITLES[filter]
-    const { filter: selectedFilter, onShow } = this.props
-
+    const { filter: selectedFilter, onShow, actions } = this.props
     return (
       <a className={classnames({ selected: filter === selectedFilter })}
          style={{ cursor: 'pointer' }}
-         onClick={() => this.dispatch(MainSection, 'show', filter)}>
+         onClick={() => actions.filterWith(FILTER_FUNC[filter])}>
         {title}
       </a>
     )
   },
 
   renderClearButton() {
-    const { completedCount } = this.props
+    const { completedCount, actions } = this.props
     if (completedCount > 0) {
       return (
         <button className="clear-completed"
-                onClick={()=>this.dispatch(MainSection, 'clear', null)} >
+                onClick={actions.clear} >
           Clear completed
         </button>
       )
