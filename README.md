@@ -41,10 +41,10 @@ Inspired by Reactive Programming, Cycle.js and Redux, we can do something better
 Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter, compose, join those streams to React state.
 
 ### Pure Functional, Declarative & Monadic
-instead of imperative describe what you do with data at certain time, we simple define data transforms and compose them to data flow.
+finstead of imperative describe what you want to do with data at certain step, we simple define data transforms and compose them to data flow. No variable, no state, no side effort at all while you composing data flow.
 
 ### Composable and Reusable Sinks
-sinks are composable and reusable, not like reducer in redux, switch cases are hard to break and compose.
+sinks are composable and reusable, not like reducer in redux, where switch statement are hard to break and compose.
 
 ### Transducers support
 [transducer](https://github.com/cognitect-labs/transducers-js) is another high perfomance way to compose data flow other then monadic.
@@ -53,6 +53,15 @@ writing actions in transducers improve reusablity.
 
 ### Time Travel
 since we have all action's Stream, we can easyliy reproduce all the action anytime, or get snapshot of state stream and going back in time.
+
+you can pass history as 3rd parameter of `connect`
+```js
+connect(App, intent$=>[awesome flow], {history:true})
+```
+
+connect will populate history stream with all state history
+
+then you get a create action to deal with historyStream.
 
 ### Modular and Easy to Extend
 if you're from Rx.js, it's easy to switch rx engine into react-most, by simply pass a props named `engine` to `Most` component
