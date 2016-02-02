@@ -10,7 +10,7 @@ digraph G {
         Action -> "Intent Stream"[label="add value to stream"];
 
         subgraph cluster_user {
-                label="these are what you have to write\nvalue=>state=>newState;"
+                label="these are what you have to write\nintent=>state=>newState;"
                 style=dotted
                 node[shape=parallelogram,color=green];
                 "Action Sinks 1";
