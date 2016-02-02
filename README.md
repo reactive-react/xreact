@@ -1,6 +1,12 @@
 # React Most
 A Monadic Reactive State Container for React Components
 
+[![Circle CI](https://circleci.com/gh/jcouyang/react-most.svg?style=svg)](https://circleci.com/gh/jcouyang/react-most)
+
+```
+npm install react-most --save
+```
+
 ## What
 `most.js` is very high performance Monadic reactive streams lib. Rich User Interaction App is natively fit Reactive Programming pretty well.
 
