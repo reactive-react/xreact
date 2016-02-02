@@ -1,5 +1,5 @@
 import React from 'react'
-import most from 'most'
+import mostEngine from './engine/most'
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 const intentStream = "__reactive.react.intentStream__";
 const addToIntentStream = "__reactive.react.addToIntentStream__";
@@ -20,37 +20,6 @@ function observable(obj){
 }
 
 const id = _=>_;
-
-function mostify() {
-  let addToIntentStream = function(){
-    console.error('intent stream not binded');
-  };
-  let intentStream = most.create(add => {
-    addToIntentStream = add;
-    return function dispose(e){
-      addToIntentStream = id;
-      console.log('action stream disposed');
-    }
-  });
-  intentStream.drain();
-  let addToHistoryStream = function(){
-    console.error('history stream not binded');
-  };
-  let historyStream = most.create(add => {
-    addToHistoryStream = add;
-    return function dispose(e){
-      addToHistoryStream = id;
-      console.log('history stream disposed');
-    }
-  });
-  historyStream.drain();
-
-  function flatObserve(actionsSinks, f){
-    return most.from(actionsSinks).join().observe(f);
-  }
-
-  return {intentStream, addToIntentStream, flatObserve, historyStream, addToHistoryStream}
-}
 
 export function connect(ReactClass, main, initprops={}) {
   class Connect extends React.Component {
@@ -100,7 +69,8 @@ export function connect(ReactClass, main, initprops={}) {
 let Most = React.createClass({
   childContextTypes: CONTEXT_TYPE,
   getChildContext(){
-    let engineClass = this.props && this.props.engine || mostify
+    console.log(mostEngine);
+    let engineClass = this.props && this.props.engine || mostEngine
     let engine = engineClass();
     return {
       [intentStream]: engine.intentStream,

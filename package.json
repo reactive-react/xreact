@@ -2,9 +2,18 @@
   "name": "react-most",
   "version": "0.1.0",
   "description": "High Prefomance Monadic Reactive State Container for React",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcouyang/react-most.git"
+  },
   "main": "react-most.js",
+  "directories": {
+    "doc": "./docs",
+    "lib": "./lib"
+  },
   "scripts": {
-    "build": "babel lib -d ./ --ignore '__tests__'",
+    "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
+    "build": "babel lib -d ./ --ignore '__tests__' && npm run license",
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
@@ -40,15 +49,10 @@
     "babel-plugin-transform-react-jsx": "^6.1.18",
     "babel-preset-es2015": "^6.1.18",
     "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
-    "ecstatic": "^1.3.1",
-    "immutable": "^3.7.5",
     "jest-cli": "^0.7.0",
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.3",
-    "redux": "^3.0.4",
-    "uglify-js": "^2.6.1",
-    "watchify": "^3.6.1"
+    "redux": "^3.0.4"
   },
   "author": "Jichao Ouyang",
   "license": "MIT"

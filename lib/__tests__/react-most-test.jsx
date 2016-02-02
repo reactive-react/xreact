@@ -1,5 +1,5 @@
-jest.dontMock('../react-most.js');
-jest.dontMock('../mostify.js');
+jest.dontMock('../react-most');
+jest.dontMock('../engine/most');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';

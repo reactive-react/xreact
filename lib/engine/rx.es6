@@ -1,5 +1,5 @@
 import Rx from 'rx'
-export default function rxify() {
+export default function rxEngine() {
   let addToIntentStream = subject.onNext;
   let actionStream = new Rx.Subject();
 

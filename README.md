@@ -35,10 +35,28 @@ Inspired by Reactive Programming, Cycle.js and Redux, we can do something better
 Redux is awesome, but if you're big fan of Functional Reactive Programming, you would've imaged all user events, actions and data are Streams, then we can map,filter, compose, join those streams to React state.
 
 ### Pure Functional, Declarative & Monadic
+instead of imperative describe what you do with data at certain time, we simple define data transforms and compose them to data flow.
+
 ### Composable and Reusable Sinks
+sinks are composable and reusable, not like reducer in redux, switch cases are hard to break and compose.
+
 ### Transducers support
+[transducer](https://github.com/cognitect-labs/transducers-js) is another high perfomance way to compose data flow other then monadic.
+
+writing actions in transducers improve reusablity.
+
 ### Time Travel
+since we have all action's Stream, we can easyliy reproduce all the action anytime, or get snapshot of state stream and going back in time.
+
 ### Modular and Easy to Extend
+if you're from Rx.js, it's easy to switch rx engine into react-most, by simply pass a props named `engine` to `Most` component
+
+```html
+import rxEngine from 'react-most/engine/rx'
+<Most engint={rxEngine}>
+  <App />
+</Most>
+```
 
 ## How
 there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
@@ -94,6 +112,7 @@ here it define a `add` action mapper, it define how you can use the action. it's
 
 ### 3. Use the actions
 like redux, but much simpler, when you wrap your App, your App get a `actions` props, and you can pass it all along to any child Component.
+
 ```js
 <button className="add1"
        type="checkbox"
