@@ -4,7 +4,7 @@
   "description": "High Prefomance Monadic Reactive State Container for React",
   "main": "react-most.js",
   "scripts": {
-    "build": "cat LICENSE.txt > react-most.js && ./node_modules/.bin/babel lib/react-most.js >> react-most.js",
+    "build": "babel lib -d ./ --ignore '__tests__'",
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
@@ -51,13 +51,5 @@
     "watchify": "^3.6.1"
   },
   "author": "Jichao Ouyang",
-  "license": "MIT",
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-react-jsx"
-    ]
-  }
+  "license": "MIT"
 }
