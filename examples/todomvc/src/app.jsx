@@ -11,18 +11,16 @@ import _ from 'lodash'
 const remote = '/todos.json';
 const id = _=>_;
 const log = _=>console.log(_)
-class App extends Component {
-  render(){
-    return (
-      <div>
-          <Header actions={this.props.actions} />
-          <MainSection {...this.props} />
-      </div>
-    )
-  }
+const App = (props) => {
+  return (
+    <div>
+      <Header actions={props.actions} />
+      <MainSection {...props} />
+    </div>
+  )
 }
 
-let RxApp = connect(App, function(intent$){
+let RxApp = connect(function(intent$){
   let search$ = intent$.filter(x=>x.type=='search');
   let defaultState$ = most.of(()=>({
     todos: [
@@ -70,7 +68,7 @@ let RxApp = connect(App, function(intent$){
     clearSink$,
     filterSink$,
   }, addTodo(intent$), deleteTodo(intent$), completeTodo(intent$))
-});
+})(App);
 
 render(
   <Most>

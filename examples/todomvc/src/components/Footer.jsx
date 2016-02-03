@@ -65,5 +65,4 @@ let Footer = React.createClass({
   },
 });
 
-
 export default Footer

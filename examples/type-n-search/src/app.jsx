@@ -17,7 +17,7 @@ const TypeNsearch = (props)=>{
   </div>
 }
 const log = x=>console.log(x)
-const MostTypeNSearch = connect(TypeNsearch, function(intent$){
+const MostTypeNSearch = connect(function(intent$){
   let updateSink$ = intent$.filter(i=>i.type=='search')
                            .debounce(500)
                            .map(intent=>intent.value)
@@ -37,7 +37,7 @@ const MostTypeNSearch = connect(TypeNsearch, function(intent$){
     search: value=>({type:'search',value}),
     updateSink$,
   }
-});
+})(TypeNsearch);
 
 ReactDOM.render(<Most>
     <MostTypeNSearch/>

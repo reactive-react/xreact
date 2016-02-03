@@ -21,55 +21,58 @@ function observable(obj){
 
 const id = _=>_;
 
-export function connect(ReactClass, main, initprops={}) {
-  class Connect extends React.Component {
-    constructor(props, context) {
-      super(props, context);
-      this.actions = {};
-      let sinks = main(context[intentStream]);
-      context[intentStream].timestamp()
-        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
-      if(initprops.history){
-        context[historyStream]
-          .scan((acc,state)=>{
-            acc.push(state)
-            return acc;
-          },[])
-          .timestamp()
-          .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
-        initprops.history = context[historyStream]
-      }
-      let actionsSinks = []
-      for(let name in sinks){
-        if(observable(sinks[name]))
-          actionsSinks.push(sinks[name]);
-        else if(sinks[name] instanceof Function){
-          this.actions[name] = (...args)=>this.context[addToIntentStream](sinks[name].apply(null, args));
+export function connect(main, initprops={}) {
+  return function(ReactClass){
+    class Connect extends React.Component {
+      constructor(props, context) {
+        super(props, context);
+        this.actions = {};
+        let sinks = main(context[intentStream],this.context[addToIntentStream]);
+        if(process.env.NODE_ENV!='production') {
+          context[intentStream].timestamp()
+            .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
+          if(initprops.history){
+            context[historyStream]
+              .scan((acc,state)=>{
+                acc.push(state)
+                return acc;
+              },[])
+              .timestamp()
+              .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
+            initprops.history = context[historyStream]
+          }
         }
+        let actionsSinks = []
+        for(let name in sinks){
+          if(observable(sinks[name]))
+            actionsSinks.push(sinks[name]);
+          else if(sinks[name] instanceof Function){
+            this.actions[name] = (...args)=>this.context[addToIntentStream](sinks[name].apply(null, args));
+          }
+        }
+        this.context[flatObserve](actionsSinks, (action)=>{
+          if(action instanceof Function)
+            this.setState((prevState, props)=>{
+              let newState = action.call(this, prevState,props);
+              this.context[addToHistoryStream](prevState);
+              return newState;
+            });
+          else
+            console.warn('action', action,'need to be a Functioin map from state to new state');
+        });
       }
-      this.context[flatObserve](actionsSinks, (action)=>{
-        if(action instanceof Function)
-          this.setState((prevState, props)=>{
-            let newState = action.call(this, prevState,props);
-            this.context[addToHistoryStream](prevState);
-            return newState;
-          });
-        else
-          console.warn('action', action,'need to be a Functioin map from state to new state');
-      });
+      render() {
+        return <ReactClass {...initprops} {...this.props} {...this.state} actions={this.actions} />
+      }
     }
-    render() {
-      return <ReactClass {...initprops} {...this.props} {...this.state} actions={this.actions} />
-    }
+    Connect.contextTypes = CONTEXT_TYPE;
+    return Connect;
   }
-  Connect.contextTypes = CONTEXT_TYPE;
-  return Connect;
 }
 
 let Most = React.createClass({
   childContextTypes: CONTEXT_TYPE,
   getChildContext(){
-    console.log(mostEngine);
     let engineClass = this.props && this.props.engine || mostEngine
     let engine = engineClass();
     return {
