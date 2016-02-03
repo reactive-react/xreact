@@ -27,22 +27,18 @@ export function connect(main, initprops={}) {
       constructor(props, context) {
         super(props, context);
         this.actions = {};
-        let sinks = main(context[intentStream],this.context[addToIntentStream]);
-        if(process.env.NODE_ENV!='production') {
-          context[intentStream].timestamp()
-            .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
-          if(initprops.history){
-            context[historyStream]
-              .scan((acc,state)=>{
-                acc.push(state)
-                return acc;
-              },[])
-              .timestamp()
-              .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
-            initprops.history = context[historyStream]
-          }
-        }
+        let sinks = main(context[intentStream],props);
         let actionsSinks = []
+        if(process.env.NODE_ENV!='production'&&initprops.history){
+          context[historyStream]
+            .scan((acc,state)=>{
+              acc.push(state)
+              return acc;
+            },[])
+            .timestamp()
+            .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
+          initprops.history = context[historyStream]
+        }
         for(let name in sinks){
           if(observable(sinks[name]))
             actionsSinks.push(sinks[name]);
@@ -75,6 +71,11 @@ let Most = React.createClass({
   getChildContext(){
     let engineClass = this.props && this.props.engine || mostEngine
     let engine = engineClass();
+    if(process.env.NODE_ENV!='production') {
+      engine.intentStream.timestamp()
+        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
+    }
+
     return {
       [intentStream]: engine.intentStream,
       [addToIntentStream]: engine.addToIntentStream,
