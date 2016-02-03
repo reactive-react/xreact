@@ -58,7 +58,7 @@ since we have all action's Stream, we can easyliy reproduce all the action anyti
 
 you can pass history as 3rd parameter of `connect`
 ```js
-connect(App, intent$=>[awesome flow], {history:true})
+connect(intent$=>[awesome flow], {history:true})(App)
 ```
 
 connect will populate history stream with all state history
@@ -82,7 +82,7 @@ there's only 3 things you should notice when using `react-most`, I'll explain by
 ```html
 import Most from 'react-most'
 <Most>
-  <Counter />
+  <RxCounter />
 </Most>
 ```
 ### 2. Define How to connect Component and Streams
@@ -90,7 +90,10 @@ import Most from 'react-most'
 ```js
 import {connect} from 'react-most'
 import most from 'most'
-let RxCounter = connect(Counter, function(intent$){
+const Counter = (props)=>{
+  return <div>{props.value}</div>
+}
+let RxCounter = connect(function(intent$){
   let defaultState$ = most.of(_=>({value:0}))
   let addSink$ = intent$.filter(x=>x.type=='add').map(({increment})=>state=>({value: state.value+increment}))
   return {
@@ -98,7 +101,7 @@ let RxCounter = connect(Counter, function(intent$){
     defaultState$,
     addSink$,
   }
-});
+})(Counter);
 ```
 here are things you may need to pay attention to:
 

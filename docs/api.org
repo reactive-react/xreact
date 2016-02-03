@@ -1,10 +1,11 @@
 * API
 ** connect
 
-=connect(ComponentClass:class, dataFlow:func [, props]):class=
+=connect(dataFlow:func [, props]):function=
 
 =props= is *optional*, it will become default props of Component `connect` returned
 
+connect return a fucntion, which you can apply to Component later.
 example:
 #+BEGIN_SRC js
     import {connect} from 'react-most'
@@ -12,16 +13,16 @@ example:
     class TodoItem extends React.Component {
       ...
     }
-    export default connect(TodoItem, function(intent$){
+    export default connect(function(intent$){
  intent$.filter(...).map(....)
 ...
-})
+})(TodoItem)
 #+END_SRC
 ** data flow
 data flow is user define flow for intent stream, must return a object contains `actions` and `sinks`
 
 #+BEGIN_SRC js
-let RxCounter = connect(Counter, function(intent$){
+let RxCounter = connect(function(intent$){
   let defaultState$ = most.of(_=>({value:0}))
   let addSink$ = intent$.filter(x=>x.type=='add').map(({increment})=>state=>({value: state.value+increment}))
   return {
@@ -29,7 +30,7 @@ let RxCounter = connect(Counter, function(intent$){
     defaultState$,
     addSink$,
   }
-});
+})(Counter);
 #+END_SRC
 
 `sinks` are Stream, `action` will be called whenever you wan to send something into Intent Stream.
