@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import {connect} from '../../../../lib/react-most'
 import MainSection from './MainSection'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
@@ -65,4 +66,9 @@ let Footer = React.createClass({
   },
 });
 
-export default Footer
+export default connect((intent$)=>{
+  return {
+    clear: ()=>({type:'clear'}),
+    filterWith: filter=>({type:'filter', filter}),
+  }
+})(Footer)

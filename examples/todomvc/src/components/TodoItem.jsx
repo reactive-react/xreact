@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import TodoTextInput from './TodoTextInput'
 import MainSection from './MainSection'
+import {connect} from '../../../../lib/react-most'
 
 class TodoItem extends React.Component {
   constructor(props){
@@ -48,4 +49,10 @@ class TodoItem extends React.Component {
   }
 }
 
-export default TodoItem
+export default connect((intent$)=>{
+  return {
+    edit: todo=>({type:'edit', todo}),
+    done: id=>({type:'done',id}),
+    remove: id=>({type:'remove',id}),
+  }
+})(TodoItem)
