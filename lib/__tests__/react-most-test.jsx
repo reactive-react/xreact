@@ -40,7 +40,7 @@ describe('mostux', () => {
       }
     });
 
-    let RxTodoList = connect(TodoList, function(intent$){
+    let RxTodoList = connect(function(intent$){
       let done$ = intent$.filter(x=>x.type=='done');
       let delete$ = intent$.filter(x=>x.type=='remove');
       let doneState$ = done$.map((done)=>{
@@ -74,7 +74,7 @@ describe('mostux', () => {
         deleteState$,
         doneState$,
       }
-    });
+    })(TodoList);
     beforeEach(()=>{
       todolist = TestUtils.renderIntoDocument(
         <Most>
