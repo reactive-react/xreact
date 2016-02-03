@@ -34,7 +34,8 @@ When I play around with redux, it's awesome but
 2. it's using too many concept that we probably don't even care, which make it's learning curve a little steep(it take a [gitbook](http://rackt.org/redux/index.html) to document just a state container?)
 3. Reducers (long switch statements which are syntactically ugly but semantically ok) -- Andre
 4. switch statement is ugly and hardly composable
-5. again, I couldn't agree more on Andre's [article about react/redux](http://staltz.com/why-react-redux-is-an-inferior-paradigm.html).
+
+again, I couldn't agree more on Andre's [article about react/redux](http://staltz.com/why-react-redux-is-an-inferior-paradigm.html).
 
 Inspired by Reactive Programming, Cycle.js and Redux, we can do something better to reduce the complexity of managing react state, the reactive way, by only introduce a little bit of reactive programming concepts.
 
@@ -70,13 +71,17 @@ if you're from Rx.js, it's easy to switch rx engine into react-most, by simply p
 
 ```html
 import rxEngine from 'react-most/engine/rx'
-<Most engint={rxEngine}>
+<Most engine={rxEngine}>
   <App />
 </Most>
 ```
 
 ## How
+
+sorry we don't have a **book** to document how to use `react-most`, but
 there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
+
+also you can refer to [API](./docs/api.md) or [Examples](#more-examples).
 
 ### 1. Component Wrapper
 ```html
@@ -140,6 +145,8 @@ like redux, but much simpler, when you wrap your App, your App get a `actions` p
 ```
 
 ### [More Examples](./examples)
+- [Type N Search](./examples/type-n-search)
+- [TodoMVC](./examples/todomvc)
 
 ## Performance
 `react-most` no more than creating stream from your actions, and bind it to state stream. no any other computations happen in `react-most`. so please refer to [most.js's perf](https://github.com/cujojs/most/tree/master/test/perf) which is realy Great!
