@@ -1,13 +1,13 @@
 general:
   branches:
-    only:
-      - master
+    ignore:
+      - gh-pages
 machine:
   node:
     version: 5.0.0
 dependencies:
   pre:
-    - npm install -g babel-cli    
+    - npm install -g babel-cli
 deployment:
   production:
     tag: /v[0-9]+(\.[0-9]+)*/
