@@ -50,7 +50,7 @@ finstead of imperative describe what you want to do with data at certain step, w
 sinks are composable and reusable, not like reducer in redux, where switch statement are hard to break and compose.
 
 ### Transducers support
-[transducer](https://github.com/cognitect-labs/transducers-js) is another high perfomance way to compose data flow other then monadic.
+[transducer](https://github.com/cognitect-labs/transducers-js) is another high perfomance functional way to compose data flow other than monadic.
 
 writing actions in transducers improve reusablity.
 
