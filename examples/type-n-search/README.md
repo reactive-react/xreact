@@ -12,27 +12,31 @@ npm start
 it's really simple example(only 40 LOC) that reactively search github repo according to your query
 
 0. create normal React Component
+
   ```js
-  const TypeNsearch = (props)=>{
-  let {search} = props.actions
-  return <div>
-    <input onChange={e=>search(e.target.value)}></input>
-    <ul>
-      {props.results&&props.results.map(item=>{
-        return <li key={item.id}><a href={item.html_url}>{item.full_name} ({item.stargazers_count})</a></li>
-  })}
-    </ul>
-  </div>
-}
+    const TypeNsearch = (props)=>{
+      let {search} = props.actions
+      return <div>
+        <input onChange={e=>search(e.target.value)}></input>
+        <ul>
+          {props.results&&props.results.map(item=>{
+            return <li key={item.id}><a href={item.html_url}>{item.full_name} ({item.stargazers_count})</a></li>
+      })}
+        </ul>
+      </div>
+    }
   ```
+
 1. HOC(Higher Order Component)
   using `connect` to create a HOC over TypeNsearch
+
   ```js
   const MostTypeNSearch = connect(DATAFLOW)(TypeNsearch)
   ```
 2. Compose Dataflow
   you see the place holder `DATAFLOW`, now we gonna fill in the real data flow how we enable the reactive action of our Component
   1. filter out stream only with `intent.type` of 'search'
+  
     ```js
     function(intent$){
       let updateSink$ = intent$.filter(i=>i.type=='search')
