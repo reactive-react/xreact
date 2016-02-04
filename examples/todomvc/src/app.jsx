@@ -8,7 +8,7 @@ import {connect} from '../../../lib/react-most'
 import rest from 'rest'
 import {addTodo,deleteTodo,completeTodo} from './todo.action'
 import _ from 'lodash'
-const remote = '/todos.json';
+const remote = 'todos.json';
 const log = _=>console.log(_)
 const App = (props) => {
   return (
