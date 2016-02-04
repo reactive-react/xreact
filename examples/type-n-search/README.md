@@ -36,7 +36,7 @@ it's really simple example(only 40 LOC) that reactively search github repo accor
 2. Compose Dataflow
   you see the place holder `DATAFLOW`, now we gonna fill in the real data flow how we enable the reactive action of our Component
   1. filter out stream only with `intent.type` of 'search'
-  
+
     ```js
     function(intent$){
       let updateSink$ = intent$.filter(i=>i.type=='search')
@@ -50,6 +50,7 @@ it's really simple example(only 40 LOC) that reactively search github repo accor
     --------冷笑话-->
     ```
   2. compose a VALID query URL
+  
     ```js
     ...
     .map(intent=>intent.value)
@@ -78,7 +79,7 @@ it's really simple example(only 40 LOC) that reactively search github repo accor
     ```
     4. model
     now our intent stream become a data stream, let's make it a modle stream.
-    ```js
+    ``` js
     .filter(i=>i.type=='dataUpdate')
     .map(data=>JSON.parse(data.value).items)
     .map(items=>items.slice(0,10))
