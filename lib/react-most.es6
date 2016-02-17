@@ -2,16 +2,12 @@ import React from 'react'
 import mostEngine from './engine/most'
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 const intentStream = "__reactive.react.intentStream__";
-const addToIntentStream = "__reactive.react.addToIntentStream__";
 const historyStream = "__reactive.react.historyStream__";
-const addToHistoryStream = "__reactive.react.addToHistoryStream__";
 const flatObserve = "__reactive.react.flatObserve__";
 
 const CONTEXT_TYPE = {
   [intentStream]: React.PropTypes.object,
-  [addToIntentStream]: React.PropTypes.func,
   [historyStream]: React.PropTypes.object,
-  [addToHistoryStream]: React.PropTypes.func,
   [flatObserve]: React.PropTypes.func,
 }
 
@@ -43,14 +39,15 @@ export function connect(main, initprops={}) {
           if(observable(sinks[name]))
             actionsSinks.push(sinks[name]);
           else if(sinks[name] instanceof Function){
-            this.actions[name] = (...args)=>this.context[addToIntentStream](sinks[name].apply(null, args));
+            this.actions[name] = (...args)=>this.context[intentStream].send(sinks[name].apply(null, args));
           }
         }
         this.context[flatObserve](actionsSinks, (action)=>{
           if(action instanceof Function)
             this.setState((prevState, props)=>{
               let newState = action.call(this, prevState,props);
-              this.context[addToHistoryStream](prevState);
+              if(initprops.history)
+                this.context[historyStream].send(prevState);
               return newState;
             });
           else
@@ -78,10 +75,8 @@ let Most = React.createClass({
 
     return {
       [intentStream]: engine.intentStream,
-      [addToIntentStream]: engine.addToIntentStream,
       [flatObserve]: engine.flatObserve,
       [historyStream]: engine.historyStream,
-      [addToHistoryStream]: engine.addToHistoryStream,
     }
   },
   render(){
