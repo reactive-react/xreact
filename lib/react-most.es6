@@ -22,7 +22,12 @@ export function connect(main, initprops={}) {
     class Connect extends React.Component {
       constructor(props, context) {
         super(props, context);
-        this.actions = {};
+        this.actions = {
+          fromEvent(e){
+            let {type, target} = e;
+            context[intentStream].send({type,target});
+          }
+        };
         let sinks = main(context[intentStream],props);
         let actionsSinks = []
         if(process.env.NODE_ENV!='production'&&initprops.history){
@@ -70,7 +75,7 @@ let Most = React.createClass({
     let engine = engineClass();
     if(process.env.NODE_ENV!='production') {
       engine.intentStream.timestamp()
-        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
+        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
     }
 
     return {
