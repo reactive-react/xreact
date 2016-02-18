@@ -15,8 +15,6 @@ function observable(obj){
   return !!obj.observe
 }
 
-const id = _=>_;
-
 export function connect(main, initprops={}) {
   return function(ReactClass){
     class Connect extends React.Component {
@@ -26,6 +24,9 @@ export function connect(main, initprops={}) {
           fromEvent(e){
             let {type, target} = e;
             context[intentStream].send({type,target});
+          },
+          fromPromise(p){
+            p.then(context[intentStream].send);
           }
         };
         let sinks = main(context[intentStream],props);
