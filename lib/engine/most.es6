@@ -1,7 +1,7 @@
 import most from 'most'
 export default function mostEngine() {
   let addToIntentStream = function(){
-    console.error('intent stream not binded');
+    console.error('intent stream not binded yet');
   };
   let intentStream = most.create(add => {
     addToIntentStream = add;
@@ -13,7 +13,7 @@ export default function mostEngine() {
   intentStream.drain();
   intentStream.send = addToIntentStream;
   let addToHistoryStream = function(){
-    console.error('history stream not binded');
+    console.error('history stream not binded yet');
   };
   let historyStream = most.create(add => {
     addToHistoryStream = add;
