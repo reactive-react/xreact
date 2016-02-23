@@ -8,6 +8,7 @@
   },
   "main": "react-most.js",
   "directories": {
+    "engine": "./engine",
     "doc": "./docs",
     "lib": "./lib"
   },
