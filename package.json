@@ -8,10 +8,10 @@
   },
   "main": "react-most.js",
   "directories": {
-    "engine": "./engine",
     "doc": "./docs",
     "lib": "./lib"
   },
+  "files": ["engine"],
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
     "build": "babel lib -d ./ --ignore '__tests__' && npm run license",
