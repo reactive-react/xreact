@@ -9,24 +9,15 @@ A Monadic Reactive State Container for React Components
 npm install react-most --save
 ```
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [React Most](#react-most)
 	- [What](#what)
 	- [Why not (just using existing state container e.g.) redux](#why-not-just-using-existing-state-container-eg-redux)
 	- [Why indeed?](#why-indeed)
-		- [Pure Functional, Declarative & Monadic](#pure-functional-declarative-monadic)
-		- [Composable and Reusable Sinks](#composable-and-reusable-sinks)
-		- [Transducers support](#transducers-support)
-		- [Time Travel](#time-travel)
-		- [Modular and Easy to Extend](#modular-and-easy-to-extend)
 	- [How](#how)
-		- [1. Component Wrapper](#1-component-wrapper)
-		- [2. Define How to connect Component and Streams](#2-define-how-to-connect-component-and-streams)
-			- [2.1. transform intent stream to state mapper stream](#21-transform-intent-stream-to-state-mapper-stream)
-			- [2.2. define action mapper that can be use to added intent to your Intent Stream.](#22-define-action-mapper-that-can-be-use-to-added-intent-to-your-intent-stream)
-		- [3. Use the actions](#3-use-the-actions)
-		- [[More Examples](./examples)](#more-examplesexamples)
+	- [[API](https://github.com/jcouyang/react-most/wiki/API)](#apihttpsgithubcomjcouyangreact-mostwikiapi)
+	- [[More Examples](./examples)](#more-examplesexamples)
 	- [Performance](#performance)
 	- [Thanks to...](#thanks-to)
 
@@ -174,9 +165,13 @@ like redux, but much simpler, when you wrap your App, your App get a `actions` p
        onClick={()=>this.props.actions.add(1)} />
 ```
 
-### [More Examples](./examples)
+## [API](https://github.com/jcouyang/react-most/wiki/API)
+
+## [More Examples](./examples)
 - [Type N Search](./examples/type-n-search) [(live)](https://oyanglul.us/react-most/examples/type-n-search/public/)
 - [TodoMVC](./examples/todomvc) [(live)](https://oyanglul.us/react-most/examples/todomvc/public/)
+- [Type N Search with Transducers](./examples/transducer-type-n-search) [(live)](https://oyanglul.us/react-most/examples/transducer-type-n-search/public/)
+- [Type N Search with Time Travel](./examples/type-n-search-with-undo) [(live)](https://oyanglul.us/react-most/examples/type-n-search-with-undo/public/)
 
 ## Performance
 `react-most` no more than creating stream from your actions, and bind it to state stream. no any other computations happen in `react-most`. so please refer to [most.js's perf](https://github.com/cujojs/most/tree/master/test/perf) which is realy Great!
