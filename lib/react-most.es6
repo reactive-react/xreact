@@ -1,4 +1,5 @@
 import React from 'react'
+import initHistory from './history'
 import mostEngine from './engine/most'
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 const intentStream = "__reactive.react.intentStream__";
@@ -31,15 +32,11 @@ export function connect(main, initprops={}) {
         };
         let sinks = main(context[intentStream],props);
         let actionsSinks = []
-        if(process.env.NODE_ENV!='production'&&initprops.history){
-          context[historyStream]
-            .scan((acc,state)=>{
-              acc.push(state)
-              return acc;
-            },[])
-            .timestamp()
-            .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]: ${JSON.stringify(stamp.value)}`));
-          initprops.history = context[historyStream]
+        if(initprops.history){
+          initprops.history = initHistory(context[historyStream])
+          initprops.history.travel.observe(state=>{
+            return this.setState(state)
+          })
         }
         for(let name in sinks){
           if(observable(sinks[name]))
@@ -52,8 +49,10 @@ export function connect(main, initprops={}) {
           if(action instanceof Function)
             this.setState((prevState, props)=>{
               let newState = action.call(this, prevState,props);
-              if(initprops.history)
+              if(initprops.history){
+                initprops.history.cursor = -1;
                 this.context[historyStream].send(prevState);
+              }
               return newState;
             });
           else
