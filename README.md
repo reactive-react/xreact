@@ -72,6 +72,13 @@ finstead of imperative describe what you want to do with data at certain step, w
 ### Composable and Reusable Sinks
 sinks are composable and reusable, not like reducer in redux, where switch statement are hard to break and compose.
 
+### Async actions
+when function is not async such as promise, simply convert it to Stream and flatMap it
+```js
+intent$.map(promise=>most.fromPromise)
+	.flatMap(value=>dosomething)
+```
+
 ### Transducers support
 [transducer](https://github.com/cognitect-labs/transducers-js) is another high perfomance functional way to compose data flow other than monadic.
 

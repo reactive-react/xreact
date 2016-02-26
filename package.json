@@ -1,6 +1,6 @@
 {
   "name": "react-most",
-  "version": "0.1.1",
+  "version": "0.2.2",
   "description": "High Prefomance Monadic Reactive State Container for React",
   "repository": {
     "type": "git",
@@ -11,6 +11,9 @@
     "doc": "./docs",
     "lib": "./lib"
   },
+  "files": [
+    "engine"
+  ],
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
     "build": "babel lib -d ./ --ignore '__tests__' && npm run license",

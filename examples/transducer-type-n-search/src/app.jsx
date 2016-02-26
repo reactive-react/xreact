@@ -1,4 +1,5 @@
 import {connect} from '../../../lib/react-most'
+import {map, filter, comp, mapcat} from 'transducers-js'
 import Most from '../../../lib/react-most'
 import ReactDOM from 'react-dom'
 import React from 'react'
@@ -18,22 +19,31 @@ const TypeNsearch = (props)=>{
     </ul>
   </div>
 }
+
+const sendApiRequest = comp(
+  map(i=>i.value),
+  filter(q=>q.length>0),
+  map(q=>GITHUB_SEARCH_API + q),
+  map(url=>rest(url).then(resp=>({
+    type: 'dataUpdate',
+    value: resp.entity
+  })))
+);
+
+const generateStateFromResp = comp(
+  filter(i=>i.type=='dataUpdate'),
+  map(data=>JSON.parse(data.value).items),
+  map(items=>items.slice(0,10)),
+  map(items=>state=>({results: items}))
+)
+
 const log = x=>console.log(x)
 const MostTypeNSearch = connect(function(intent$){
   let updateSink$ = intent$.filter(i=>i.type=='search')
                            .debounce(500)
-                           .map(intent=>intent.value)
-                           .filter(query=>query.length > 0)
-                           .map(query=>GITHUB_SEARCH_API + query)
-                           .map(url=>rest(url).then(resp=>({
-                               type: 'dataUpdate',
-                               value: resp.entity
-                             })))
+                           .transduce(sendApiRequest)
                            .flatMap(most.fromPromise)
-                           .filter(i=>i.type=='dataUpdate')
-                           .map(data=>JSON.parse(data.value).items)
-                           .map(items=>items.slice(0,10))
-                           .map(items=>state=>({results: items}))
+                           .transduce(generateStateFromResp)
                            .flatMapError(error=>{
                              console.log('[ERROR]:', error);
                              return most.of({message:error.error,className:'display'})

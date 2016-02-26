@@ -7,7 +7,6 @@ var todolist;
 var context = Most.prototype.getChildContext()
 var most = require('most');
 var log = _=>console.log(_)
-var addToIntentStream = context["__reactive.react.addToIntentStream__"]
 var intentStream = context["__reactive.react.intentStream__"]
 function genActions(intent$){
   var add$ = intent$.filter(x=>x.type=='add')
@@ -24,9 +23,6 @@ function genActions(intent$){
 }
 
 var actions = genActions(intentStream);
-for(var i=0;i<CYCLE;i++){
-  addToIntentStream(actions.add(i))
-}
 var state={value:0}
 actions.addState$.observe(mapper=>{
   state=mapper(state);
@@ -39,6 +35,10 @@ actions.addState$.observe(mapper=>{
     console.log("Elapsed "+((new Date()).valueOf()-start.valueOf())+"ms");
   }
 })
+
+for(var i=0;i<CYCLE;i++){
+  intentStream.send(actions.add(i))
+}
 
 /**
 Memory Usage Before: { rss: 32501760, heapTotal: 16486912, heapUsed: 11307128 }
