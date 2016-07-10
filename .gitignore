@@ -38,3 +38,5 @@ react-most.js
 /engine
 transdux.js
 public
+deploy
+deploy.pub
