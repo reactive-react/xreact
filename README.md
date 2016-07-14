@@ -5,6 +5,8 @@ A Monadic Reactive State Container for React Components
 
 [![Circle CI](https://circleci.com/gh/jcouyang/react-most.svg?style=svg)](https://circleci.com/gh/jcouyang/react-most)
 
+https://img.shields.io/npm/v/react-most.svg
+
 ```
 npm install react-most --save
 ```
