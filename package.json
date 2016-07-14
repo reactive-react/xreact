@@ -1,6 +1,6 @@
 {
   "name": "react-most",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "High Prefomance Monadic Reactive State Container for React",
   "repository": {
     "type": "git",

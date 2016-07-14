@@ -21,6 +21,7 @@ export function connect(main, initprops={}) {
     class Connect extends React.Component {
       constructor(props, context) {
         super(props, context);
+        if(props.history) initprops.history=true
         this.actions = {
           fromEvent(e){
             let {type, target} = e;
@@ -39,10 +40,14 @@ export function connect(main, initprops={}) {
           })
         }
         for(let name in sinks){
-          if(observable(sinks[name]))
+
+          if(observable(sinks[name])){
             actionsSinks.push(sinks[name]);
+          }
           else if(sinks[name] instanceof Function){
-            this.actions[name] = (...args)=>this.context[intentStream].send(sinks[name].apply(null, args));
+            this.actions[name] = (...args)=>{
+              return this.context[intentStream].send(sinks[name].apply(null, args));
+            }
           }
         }
         this.context[flatObserve](actionsSinks, (action)=>{

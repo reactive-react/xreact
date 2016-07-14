@@ -24,6 +24,9 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/*"
+    ],
     "testFileExtensions": [
       "es6",
       "js",

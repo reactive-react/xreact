@@ -1,5 +1,7 @@
 jest.dontMock('../react-most');
+jest.dontMock('../history');
 jest.dontMock('../engine/most');
+jest.dontMock('most')
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
@@ -14,15 +16,6 @@ describe('mostux', () => {
         return <div className={'todo-'+this.props.todo.id} key={this.props.todo.id} data-complete={this.props.todo.done}>{this.props.todo.text}</div>
       }
     });
-    let Buttons = React.createClass({
-      render(){
-        return (
-          <div>
-            <button className="btn-complete" onClick={e=>this.props.actions.done(1)} >complete</button>
-            <button className="btn-remove" onClick={e=>this.props.actions.remove(1)} >add</button>
-          </div>)
-      }
-    });
 
     let TodoList = React.createClass({
       render(){
@@ -35,12 +28,17 @@ describe('mostux', () => {
         }
         return <div>
             {todoElements}
-            <Buttons actions={this.props.actions} />
         </div>
       }
     });
 
     let RxTodoList = connect(function(intent$){
+      let default$ = most.of(()=>({
+        todos: [
+          {id:1, text:5, done:false},
+          {id:2, text:'heheda', done:false},
+        ]
+      }))
       let done$ = intent$.filter(x=>x.type=='done');
       let delete$ = intent$.filter(x=>x.type=='remove');
       let doneState$ = done$.map((done)=>{
@@ -61,42 +59,51 @@ describe('mostux', () => {
         return state=>(
           {todos: state.todos.filter(todo=>todo.id!=deleted.id)}
         )
-      })
-                               .startWith(()=>({
-                                 todos: [
-                                   {id:1, text:5, done:false},
-                                   {id:2, text:'heheda', done:false},
-                                 ]
-                               }));
+      });
       return {
         done: (id)=>({type:'done', id}),
-        remove: (id)=>({type:'remove', id}),
+        remove: function remove(id){return {type:'remove', id}},
+        default$,
         deleteState$,
         doneState$,
       }
     })(TodoList);
-    beforeEach(()=>{
-      todolist = TestUtils.renderIntoDocument(
-        <Most>
-          <RxTodoList />
+
+    it('render dump Component TodoList UI correctly', () => {
+      let todolist = TestUtils.renderIntoDocument(
+        <TodoList todos={[
+          {id:1, text:5, done:false},
+          {id:2, text:'heheda', done:false},
+        ]}/>
+      )
+      jest.runAllTimers();
+      let todos = TestUtils.scryRenderedComponentsWithType(todolist, Todo)
+      expect(todos.length).toBe(2);
+      expect(todos[0].props.todo.done).toBe(false);
+    });
+
+    it('behavior connected to dump Component works as expected', ()=> {
+      let todolist = TestUtils.renderIntoDocument(
+        <Most >
+          <RxTodoList history={true}>
+          </RxTodoList>
         </Most>
       )
-    });
 
-    it('click complete buttom will complete', () => {
-      jest.runAllTimers();
-      expect(TestUtils.scryRenderedComponentsWithType(todolist, Todo)[0].props.todo.done).toBe(false);
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-complete'));
-      jest.runAllTimers();
-      expect(TestUtils.scryRenderedComponentsWithType(todolist, Todo)[0].props.todo.done).toBe(true);
+      var div = TestUtils.
+findRenderedComponentWithType(todolist, RxTodoList)
 
+      let stream = div.context['__reactive.react.historyStream__']
+      var a = most.from([
+        ()=>div.actions.done(1),
+        ()=>div.actions.done(2),
+        ()=>div.actions.remove(2),
+        ()=>div.actions.done(1)
+      ])
+      a.reduce((acc,x)=>x())
+      return stream.take(5).forEach(_=>_).then(x=>expect(x).toEqual({todos: [
+        {id: 1, text: 5, done: false}
+      ]}))
     });
-    it('click remove button will remove item', ()=> {
-      jest.runAllTimers();
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-remove'));
-      TestUtils.Simulate.click(TestUtils.findRenderedDOMComponentWithClass(todolist, 'btn-remove'));
-      jest.runAllTimers();
-      jest.runAllTicks();
-      expect(TestUtils.scryRenderedComponentsWithType(todolist, Todo).length).toBe(1);
-    });  });
+  });
 })
