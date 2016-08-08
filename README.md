@@ -49,7 +49,7 @@ When I play around with redux, it's awesome but
 1. it take little time to make it ready.
 2. it's using too many concept that we probably don't even care, which make it's learning curve a little steep(it take a [gitbook](http://rackt.org/redux/index.html) to document just a state container?)
 3. Reducers (long switch statements which are syntactically ugly but semantically ok) -- Andre
-4. switch statement is ugly and hardly composable
+4. component is not composable, action is not composable, component and behaviour shouldn't be so tight coupling。
 
 again, I couldn't agree more on Andre's [article about react/redux](http://staltz.com/why-react-redux-is-an-inferior-paradigm.html).
 
@@ -64,6 +64,28 @@ finstead of imperative describe what you want to do with data at certain step, w
 
 ### Composable and Reusable Sinks
 sinks are composable and reusable, not like reducer in redux, where switch statement are hard to break and compose.
+
+### Easy to Test
+since UI and UI behaviour are loose couple, you can simply define a dump react component and test it by passing data. seperatly you can test behaviour by given actions, and verify it's state.
+
+```js
+let {do$, historyStreamOf} = require('../test-utils')
+let todolist = TestUtils.renderIntoDocument(
+  <Most >
+    <RxTodoList history={true}>
+    </RxTodoList>
+  </Most>
+)
+let div = TestUtils.findRenderedComponentWithType(todolist, RxTodoList)
+do$([()=>div.actions.done(1),
+     ()=>div.actions.done(2),
+     ()=>div.actions.remove(2),
+     ()=>div.actions.done(1)])
+return historyStreamOf(div)
+  .take$(4)
+  .then(state=>
+    expect(state).toEqual({todos: [{id: 1, text: 5, done: false}]}))
+```
 
 ### Async actions
 when function is not async such as promise, simply convert it to Stream and flatMap it

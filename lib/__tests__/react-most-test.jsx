@@ -1,4 +1,5 @@
 jest.dontMock('../react-most');
+jest.dontMock('../test-utils');
 jest.dontMock('../history');
 jest.dontMock('../engine/most');
 jest.dontMock('most')
@@ -7,6 +8,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import most from 'most';
 let {default: Most, connect} = require('../react-most');
+let {do$, historyStreamOf} = require('../test-utils')
 
 describe('mostux', () => {
   describe('todo reactive', ()=>{
@@ -82,28 +84,27 @@ describe('mostux', () => {
       expect(todos[0].props.todo.done).toBe(false);
     });
 
-    it('behavior connected to dump Component works as expected', ()=> {
+    it('behaviors connected to dump Component works as expected', ()=> {
       let todolist = TestUtils.renderIntoDocument(
         <Most >
           <RxTodoList history={true}>
           </RxTodoList>
         </Most>
       )
+      let div = TestUtils.findRenderedComponentWithType(todolist, RxTodoList)
 
-      var div = TestUtils.
-findRenderedComponentWithType(todolist, RxTodoList)
+      do$([()=>div.actions.done(1),
+           ()=>div.actions.done(2),
+           ()=>div.actions.remove(2),
+           ()=>div.actions.done(1)])
 
-      let stream = div.context['__reactive.react.historyStream__']
-      var a = most.from([
-        ()=>div.actions.done(1),
-        ()=>div.actions.done(2),
-        ()=>div.actions.remove(2),
-        ()=>div.actions.done(1)
-      ])
-      a.reduce((acc,x)=>x())
-      return stream.take(5).forEach(_=>_).then(x=>expect(x).toEqual({todos: [
-        {id: 1, text: 5, done: false}
-      ]}))
+      return historyStreamOf(div)
+        .take$(4)
+        .then(state=>
+          expect(state).toEqual(
+            {todos: [
+              {id: 1, text: 5, done: false}
+            ]}))
     });
   });
 })
