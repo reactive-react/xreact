@@ -43,7 +43,8 @@
   },
   "dependencies": {
     "most": "^0.19.7",
-    "react": "^15.2.0"
+    "react": "^15.2.0",
+    "rx": "^4.1.0"
   },
   "devDependencies": {
     "babel": "^6.1.18",

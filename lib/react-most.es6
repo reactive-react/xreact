@@ -13,7 +13,7 @@ const CONTEXT_TYPE = {
 }
 
 function observable(obj){
-  return !!obj.observe
+  return !!obj.subscribe
 }
 
 export function connect(main, initprops={}) {
@@ -50,7 +50,10 @@ export function connect(main, initprops={}) {
             }
           }
         }
-        this.context[flatObserve](actionsSinks, (action)=>{
+        this.actionsSinks = actionsSinks;
+      }
+      componentDidMount(){
+        this.context[flatObserve](this.actionsSinks, (action)=>{
           if(action instanceof Function)
             this.setState((prevState, props)=>{
               let newState = action.call(this, prevState,props);
@@ -78,10 +81,11 @@ let Most = React.createClass({
   getChildContext(){
     let engineClass = this.props && this.props.engine || mostEngine
     let engine = engineClass();
-    if(process.env.NODE_ENV!='production') {
-      engine.intentStream.timestamp()
-        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
-    }
+    // TODO: add support for ReactiveX
+    // if(process.env.NODE_ENV!='production') {
+    //   engine.intentStream.timestamp()
+    //     .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
+    // }
 
     return {
       [intentStream]: engine.intentStream,
