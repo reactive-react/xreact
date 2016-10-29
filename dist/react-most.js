@@ -58,7 +58,7 @@ function mostEngine() {
   historyStream.travel = travelStream;
   return { intentStream: intentStream, flatObserve: flatObserve, historyStream: historyStream };
 }
-},{"most":77}],2:[function(require,module,exports){
+},{"most":78}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -94,6 +94,11 @@ function initHistory(contextHistory) {
   return history;
 }
 },{}],3:[function(require,module,exports){
+(function (global){
+global.Most = require('../react-most')
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../react-most":105}],4:[function(require,module,exports){
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define('@most/multicast', ['exports', '@most/prelude'], factory);
@@ -269,7 +274,7 @@ function initHistory(contextHistory) {
   exports.default = multicast;
 });
 
-},{"@most/prelude":4}],4:[function(require,module,exports){
+},{"@most/prelude":5}],5:[function(require,module,exports){
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define('@most/prelude', ['exports'], factory);
@@ -550,7 +555,7 @@ function initHistory(contextHistory) {
   exports.curry3 = curry3;
 });
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 /**
@@ -589,7 +594,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -611,7 +616,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":105}],7:[function(require,module,exports){
+},{"_process":106}],8:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -663,7 +668,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":105}],8:[function(require,module,exports){
+},{"_process":106}],9:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -713,7 +718,7 @@ var keyMirror = function keyMirror(obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":7,"_process":105}],9:[function(require,module,exports){
+},{"./invariant":8,"_process":106}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -748,7 +753,7 @@ var keyOf = function keyOf(oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -799,7 +804,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -858,7 +863,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":5,"_process":105}],12:[function(require,module,exports){
+},{"./emptyFunction":6,"_process":106}],13:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -936,7 +941,7 @@ LinkedList.prototype.dispose = function() {
 	return Promise.all(promises);
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -947,7 +952,7 @@ function isPromise(p) {
 	return p !== null && typeof p === 'object' && typeof p.then === 'function';
 }
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1014,7 +1019,7 @@ function copy(src, srcIndex, dst, dstIndex, len) {
 }
 
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1025,7 +1030,7 @@ function Stream(source) {
 	this.source = source;
 }
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1121,7 +1126,7 @@ ReduceSink.prototype.end = function(t) {
 
 function noop() {}
 
-},{"../Stream":15,"../disposable/dispose":44,"../runSource":54,"../scheduler/PropagateTask":55,"../sink/Pipe":62}],17:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../runSource":55,"../scheduler/PropagateTask":56,"../sink/Pipe":63}],18:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1145,7 +1150,7 @@ function ap(fs, xs) {
 	return combine(apply, fs, xs);
 }
 
-},{"./combine":19,"@most/prelude":4}],18:[function(require,module,exports){
+},{"./combine":20,"@most/prelude":5}],19:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1190,7 +1195,7 @@ function cycle(stream) {
 	}, stream);
 }
 
-},{"../source/core":66,"./continueWith":21}],19:[function(require,module,exports){
+},{"../source/core":67,"./continueWith":22}],20:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1308,7 +1313,7 @@ CombineSink.prototype.end = function(t, indexedValue) {
 	}
 };
 
-},{"../Stream":15,"../disposable/dispose":44,"../invoke":49,"../sink/IndexSink":61,"../sink/Pipe":62,"../source/core":66,"./transform":39,"@most/prelude":4}],20:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../invoke":50,"../sink/IndexSink":62,"../sink/Pipe":63,"../source/core":67,"./transform":40,"@most/prelude":5}],21:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1332,7 +1337,7 @@ function concatMap(f, stream) {
 	return mergeMapConcurrently(f, 1, stream);
 }
 
-},{"./mergeConcurrently":29}],21:[function(require,module,exports){
+},{"./mergeConcurrently":30}],22:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1400,7 +1405,7 @@ ContinueWithSink.prototype.dispose = function() {
 	return this.disposable.dispose();
 };
 
-},{"../Promise":13,"../Stream":15,"../disposable/dispose":44,"../sink/Pipe":62}],22:[function(require,module,exports){
+},{"../Promise":14,"../Stream":16,"../disposable/dispose":45,"../sink/Pipe":63}],23:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1455,7 +1460,7 @@ DelaySink.prototype.end = function(t, x) {
 
 DelaySink.prototype.error = Sink.prototype.error;
 
-},{"../Stream":15,"../disposable/dispose":44,"../scheduler/PropagateTask":55,"../sink/Pipe":62}],23:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../scheduler/PropagateTask":56,"../sink/Pipe":63}],24:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1552,7 +1557,7 @@ RecoverWithSink.prototype.dispose = function() {
 	return this.disposable.dispose();
 };
 
-},{"../Promise":13,"../Stream":15,"../disposable/dispose":44,"../scheduler/PropagateTask":55,"../sink/Pipe":62,"../sink/SafeSink":63,"../source/tryEvent":75}],24:[function(require,module,exports){
+},{"../Promise":14,"../Stream":16,"../disposable/dispose":45,"../scheduler/PropagateTask":56,"../sink/Pipe":63,"../sink/SafeSink":64,"../source/tryEvent":76}],25:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1628,7 +1633,7 @@ function same(a, b) {
 	return a === b;
 }
 
-},{"../Stream":15,"../fusion/Filter":46,"../sink/Pipe":62}],25:[function(require,module,exports){
+},{"../Stream":16,"../fusion/Filter":47,"../sink/Pipe":63}],26:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1660,7 +1665,7 @@ function join(stream) {
 	return mergeConcurrently(Infinity, stream);
 }
 
-},{"./mergeConcurrently":29}],26:[function(require,module,exports){
+},{"./mergeConcurrently":30}],27:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1787,7 +1792,7 @@ DebounceSink.prototype._clearTimer = function() {
 	return true;
 };
 
-},{"../Stream":15,"../disposable/dispose":44,"../fusion/Map":48,"../scheduler/PropagateTask":55,"../sink/Pipe":62}],27:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../fusion/Map":49,"../scheduler/PropagateTask":56,"../sink/Pipe":63}],28:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1840,7 +1845,7 @@ LoopSink.prototype.end = function(t) {
 	this.sink.end(t, this.seed);
 };
 
-},{"../Stream":15,"../sink/Pipe":62}],28:[function(require,module,exports){
+},{"../Stream":16,"../sink/Pipe":63}],29:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -1938,7 +1943,7 @@ MergeSink.prototype.end = function(t, indexedValue) {
 	}
 };
 
-},{"../Stream":15,"../disposable/dispose":44,"../sink/IndexSink":61,"../sink/Pipe":62,"../source/core":66,"@most/prelude":4}],29:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../sink/IndexSink":62,"../sink/Pipe":63,"../source/core":67,"@most/prelude":5}],30:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2068,7 +2073,7 @@ Inner.prototype.dispose = function() {
 	return this.disposable.dispose();
 };
 
-},{"../LinkedList":12,"../Stream":15,"../disposable/dispose":44,"@most/prelude":4}],30:[function(require,module,exports){
+},{"../LinkedList":13,"../Stream":16,"../disposable/dispose":45,"@most/prelude":5}],31:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2104,7 +2109,7 @@ function drain(stream) {
 	return run(stream.source);
 }
 
-},{"../disposable/dispose":44,"../runSource":54,"../scheduler/defaultScheduler":57,"./transform":39}],31:[function(require,module,exports){
+},{"../disposable/dispose":45,"../runSource":55,"../scheduler/defaultScheduler":58,"./transform":40}],32:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2196,7 +2201,7 @@ AwaitSink.prototype._end = function(x) {
 	return Promise.resolve(x).then(this._endBound);
 };
 
-},{"../Stream":15,"../fatalError":45,"../source/core":66}],32:[function(require,module,exports){
+},{"../Stream":16,"../fatalError":46,"../source/core":67}],33:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2309,7 +2314,7 @@ function getValue(hold) {
 	return hold.value;
 }
 
-},{"../Stream":15,"../disposable/dispose":44,"../invoke":49,"../sink/Pipe":62,"@most/prelude":4}],33:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../invoke":50,"../sink/Pipe":63,"@most/prelude":5}],34:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2490,7 +2495,7 @@ SkipWhileSink.prototype.event = function(t, x) {
 	this.sink.event(t, x);
 };
 
-},{"../Stream":15,"../disposable/dispose":44,"../fusion/Map":48,"../sink/Pipe":62,"../source/core":66}],34:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../fusion/Map":49,"../sink/Pipe":63,"../source/core":67}],35:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2602,7 +2607,7 @@ Segment.prototype._dispose = function(t) {
 	dispose.tryDispose(t, this.disposable, this.sink)
 };
 
-},{"../Stream":15,"../disposable/dispose":44}],35:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45}],36:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2611,7 +2616,7 @@ exports.thru = function thru(f, stream) {
 	return f(stream);
 }
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2729,7 +2734,7 @@ UpperBound.prototype.dispose = function() {
 
 function noop() {}
 
-},{"../Stream":15,"../combinator/flatMap":25,"../disposable/dispose":44,"../sink/Pipe":62}],37:[function(require,module,exports){
+},{"../Stream":16,"../combinator/flatMap":26,"../disposable/dispose":45,"../sink/Pipe":63}],38:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2762,7 +2767,7 @@ TimestampSink.prototype.event = function(t, x) {
 	this.sink.event(t, { time: t, value: x });
 };
 
-},{"../Stream":15,"../sink/Pipe":62}],38:[function(require,module,exports){
+},{"../Stream":16,"../sink/Pipe":63}],39:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2887,7 +2892,7 @@ LegacyTxAdapter.prototype.getResult = function(x) {
 	return x.value;
 };
 
-},{"../Stream":15}],39:[function(require,module,exports){
+},{"../Stream":16}],40:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -2956,7 +2961,7 @@ TapSink.prototype.event = function(t, x) {
 	this.sink.event(t, x);
 }
 
-},{"../Stream":15,"../fusion/Map":48,"../sink/Pipe":62}],40:[function(require,module,exports){
+},{"../Stream":16,"../fusion/Map":49,"../sink/Pipe":63}],41:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3091,7 +3096,7 @@ function ready(buffers) {
 	return true;
 }
 
-},{"../Queue":14,"../Stream":15,"../disposable/dispose":44,"../invoke":49,"../sink/IndexSink":61,"../sink/Pipe":62,"../source/core":66,"./transform":39,"@most/prelude":4}],41:[function(require,module,exports){
+},{"../Queue":15,"../Stream":16,"../disposable/dispose":45,"../invoke":50,"../sink/IndexSink":62,"../sink/Pipe":63,"../source/core":67,"./transform":40,"@most/prelude":5}],42:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3110,7 +3115,7 @@ function runTask(task) {
 	}
 }
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3132,7 +3137,7 @@ Disposable.prototype.dispose = function() {
 	return this._dispose(this._data);
 };
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3176,7 +3181,7 @@ SettableDisposable.prototype.dispose = function() {
 	return this.result;
 };
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3305,7 +3310,7 @@ function memoized(disposable) {
 	return { disposed: false, disposable: disposable, value: void 0 };
 }
 
-},{"../Promise":13,"./Disposable":42,"./SettableDisposable":43,"@most/prelude":4}],45:[function(require,module,exports){
+},{"../Promise":14,"./Disposable":43,"./SettableDisposable":44,"@most/prelude":5}],46:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3318,7 +3323,7 @@ function fatalError (e) {
 	}, 0);
 }
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3369,7 +3374,7 @@ function and(p, q) {
 	};
 }
 
-},{"../sink/Pipe":62}],47:[function(require,module,exports){
+},{"../sink/Pipe":63}],48:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3403,7 +3408,7 @@ FilterMapSink.prototype.event = function(t, x) {
 FilterMapSink.prototype.end = Pipe.prototype.end;
 FilterMapSink.prototype.error = Pipe.prototype.error;
 
-},{"../sink/Pipe":62}],48:[function(require,module,exports){
+},{"../sink/Pipe":63}],49:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3456,7 +3461,7 @@ MapSink.prototype.event = function(t, x) {
 	this.sink.event(t, f(x));
 };
 
-},{"../sink/Pipe":62,"./Filter":46,"./FilterMap":47,"@most/prelude":4}],49:[function(require,module,exports){
+},{"../sink/Pipe":63,"./Filter":47,"./FilterMap":48,"@most/prelude":5}],50:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3477,7 +3482,7 @@ function invoke(f, args) {
 	}
 }
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3510,7 +3515,7 @@ function makeIterable(f, o) {
 	return o;
 }
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3562,7 +3567,7 @@ function unsubscribe(subscription) {
 	return subscription.unsubscribe();
 }
 
-},{"../Stream":15,"../disposable/dispose":44}],52:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45}],53:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3586,7 +3591,7 @@ function getObservable(o) {
 	return obs;
 }
 
-},{"symbol-observable":102}],53:[function(require,module,exports){
+},{"symbol-observable":103}],54:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3654,7 +3659,7 @@ function doDispose(fatal, subscriber, complete, error, disposable, x) {
 	}).catch(fatal);
 }
 
-},{"../disposable/dispose":44,"../fatalError":45,"../scheduler/defaultScheduler":57}],54:[function(require,module,exports){
+},{"../disposable/dispose":45,"../fatalError":46,"../scheduler/defaultScheduler":58}],55:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3710,7 +3715,7 @@ function disposeThen(end, error, disposable, x) {
 	}, error);
 }
 
-},{"./disposable/dispose":44,"./scheduler/defaultScheduler":57}],55:[function(require,module,exports){
+},{"./disposable/dispose":45,"./scheduler/defaultScheduler":58}],56:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3768,7 +3773,7 @@ function end(t, x, sink) {
 	sink.end(t, x);
 }
 
-},{"../fatalError":45}],56:[function(require,module,exports){
+},{"../fatalError":46}],57:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -3992,7 +3997,7 @@ function newTimeslot(t, events) {
 	return { time: t, events: events };
 }
 
-},{"@most/prelude":4}],57:[function(require,module,exports){
+},{"@most/prelude":5}],58:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
@@ -4008,7 +4013,7 @@ var isNode = typeof process === 'object'
 module.exports = new Scheduler(isNode ? nodeTimer : setTimeoutTimer);
 
 }).call(this,require('_process'))
-},{"./Scheduler":56,"./nodeTimer":58,"./timeoutTimer":59,"_process":105}],58:[function(require,module,exports){
+},{"./Scheduler":57,"./nodeTimer":59,"./timeoutTimer":60,"_process":106}],59:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4054,7 +4059,7 @@ module.exports = {
 	}
 };
 
-},{"../defer":41}],59:[function(require,module,exports){
+},{"../defer":42}],60:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4071,7 +4076,7 @@ module.exports = {
 	}
 };
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4162,7 +4167,7 @@ ErrorTask.prototype.error = function(e) {
 	throw e;
 };
 
-},{"../defer":41}],61:[function(require,module,exports){
+},{"../defer":42}],62:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4196,7 +4201,7 @@ IndexSink.prototype.end = function(t, x) {
 
 IndexSink.prototype.error = Sink.prototype.error;
 
-},{"./Pipe":62}],62:[function(require,module,exports){
+},{"./Pipe":63}],63:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4225,7 +4230,7 @@ Pipe.prototype.error = function(t, e) {
 	return this.sink.error(t, e);
 };
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4262,7 +4267,7 @@ SafeSink.prototype.disable = function() {
 	return this.sink;
 }
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4309,7 +4314,7 @@ function disposeEventEmitter(info) {
 	target.source.removeListener(target.event, info.addEvent);
 }
 
-},{"../disposable/dispose":44,"../sink/DeferredSink":60,"./tryEvent":75}],65:[function(require,module,exports){
+},{"../disposable/dispose":45,"../sink/DeferredSink":61,"./tryEvent":76}],66:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4341,7 +4346,7 @@ function disposeEventTarget(info) {
 	target.source.removeEventListener(target.event, info.addEvent, target.capture);
 }
 
-},{"../disposable/dispose":44,"./tryEvent":75}],66:[function(require,module,exports){
+},{"../disposable/dispose":45,"./tryEvent":76}],67:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4415,7 +4420,7 @@ NeverSource.prototype.run = function() {
 
 var NEVER = new Stream(new NeverSource());
 
-},{"../Stream":15,"../disposable/dispose":44,"../scheduler/PropagateTask":55}],67:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../scheduler/PropagateTask":56}],68:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4496,7 +4501,7 @@ Subscription.prototype.dispose = function() {
 	}
 };
 
-},{"../Stream":15,"../sink/DeferredSink":60,"./tryEvent":75,"@most/multicast":3}],68:[function(require,module,exports){
+},{"../Stream":16,"../sink/DeferredSink":61,"./tryEvent":76,"@most/multicast":4}],69:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4532,7 +4537,7 @@ function from(a) { // eslint-disable-line complexity
 	throw new TypeError('from(x) must be observable, iterable, or array-like: ' + a);
 }
 
-},{"../Stream":15,"../iterable":50,"../observable/fromObservable":51,"../observable/getObservable":52,"./fromArray":69,"./fromIterable":71,"@most/prelude":4}],69:[function(require,module,exports){
+},{"../Stream":16,"../iterable":51,"../observable/fromObservable":52,"../observable/getObservable":53,"./fromArray":70,"./fromIterable":72,"@most/prelude":5}],70:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4566,7 +4571,7 @@ function runProducer(t, array, sink) {
 	}
 }
 
-},{"../Stream":15,"../scheduler/PropagateTask":55}],70:[function(require,module,exports){
+},{"../Stream":16,"../scheduler/PropagateTask":56}],71:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4602,7 +4607,7 @@ function fromEvent(event, source /*, useCapture = false */) {
 	return new Stream(s);
 }
 
-},{"../Stream":15,"./EventEmitterSource":64,"./EventTargetSource":65,"@most/multicast":3}],71:[function(require,module,exports){
+},{"../Stream":16,"./EventEmitterSource":65,"./EventTargetSource":66,"@most/multicast":4}],72:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4647,7 +4652,7 @@ function runProducer(t, producer, sink) {
 	producer.scheduler.asap(producer.task);
 }
 
-},{"../Stream":15,"../iterable":50,"../scheduler/PropagateTask":55}],72:[function(require,module,exports){
+},{"../Stream":16,"../iterable":51,"../scheduler/PropagateTask":56}],73:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4719,7 +4724,7 @@ Generate.prototype.dispose = function() {
 	this.active = false;
 };
 
-},{"../Stream":15,"@most/prelude":4}],73:[function(require,module,exports){
+},{"../Stream":16,"@most/prelude":5}],74:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4789,7 +4794,7 @@ function continueIterate(iterate, x) {
 	return !iterate.active ? iterate.value : stepIterate(iterate, x);
 }
 
-},{"../Stream":15}],74:[function(require,module,exports){
+},{"../Stream":16}],75:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4824,7 +4829,7 @@ function emit(t, x, sink) {
 	sink.event(t, x);
 }
 
-},{"../Stream":15,"../disposable/dispose":44,"../scheduler/PropagateTask":55,"@most/multicast":3}],75:[function(require,module,exports){
+},{"../Stream":16,"../disposable/dispose":45,"../scheduler/PropagateTask":56,"@most/multicast":4}],76:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4848,7 +4853,7 @@ function tryEnd(t, x, sink) {
 	}
 }
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -4923,7 +4928,7 @@ function continueUnfold(unfold, tuple) {
 	return stepUnfold(unfold, tuple.seed);
 }
 
-},{"../Stream":15}],77:[function(require,module,exports){
+},{"../Stream":16}],78:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2016 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -5637,7 +5642,7 @@ Stream.prototype.multicast = function() {
 	return multicast(this);
 };
 
-},{"./lib/Stream":15,"./lib/combinator/accumulate":16,"./lib/combinator/applicative":17,"./lib/combinator/build":18,"./lib/combinator/combine":19,"./lib/combinator/concatMap":20,"./lib/combinator/continueWith":21,"./lib/combinator/delay":22,"./lib/combinator/errors":23,"./lib/combinator/filter":24,"./lib/combinator/flatMap":25,"./lib/combinator/limit":26,"./lib/combinator/loop":27,"./lib/combinator/merge":28,"./lib/combinator/mergeConcurrently":29,"./lib/combinator/observe":30,"./lib/combinator/promises":31,"./lib/combinator/sample":32,"./lib/combinator/slice":33,"./lib/combinator/switch":34,"./lib/combinator/thru":35,"./lib/combinator/timeslice":36,"./lib/combinator/timestamp":37,"./lib/combinator/transduce":38,"./lib/combinator/transform":39,"./lib/combinator/zip":40,"./lib/observable/subscribe":53,"./lib/source/core":66,"./lib/source/create":67,"./lib/source/from":68,"./lib/source/fromEvent":70,"./lib/source/generate":72,"./lib/source/iterate":73,"./lib/source/periodic":74,"./lib/source/unfold":76,"@most/multicast":3,"@most/prelude":4,"symbol-observable":102}],78:[function(require,module,exports){
+},{"./lib/Stream":16,"./lib/combinator/accumulate":17,"./lib/combinator/applicative":18,"./lib/combinator/build":19,"./lib/combinator/combine":20,"./lib/combinator/concatMap":21,"./lib/combinator/continueWith":22,"./lib/combinator/delay":23,"./lib/combinator/errors":24,"./lib/combinator/filter":25,"./lib/combinator/flatMap":26,"./lib/combinator/limit":27,"./lib/combinator/loop":28,"./lib/combinator/merge":29,"./lib/combinator/mergeConcurrently":30,"./lib/combinator/observe":31,"./lib/combinator/promises":32,"./lib/combinator/sample":33,"./lib/combinator/slice":34,"./lib/combinator/switch":35,"./lib/combinator/thru":36,"./lib/combinator/timeslice":37,"./lib/combinator/timestamp":38,"./lib/combinator/transduce":39,"./lib/combinator/transform":40,"./lib/combinator/zip":41,"./lib/observable/subscribe":54,"./lib/source/core":67,"./lib/source/create":68,"./lib/source/from":69,"./lib/source/fromEvent":71,"./lib/source/generate":73,"./lib/source/iterate":74,"./lib/source/periodic":75,"./lib/source/unfold":77,"@most/multicast":4,"@most/prelude":5,"symbol-observable":103}],79:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -5696,7 +5701,7 @@ var KeyEscapeUtils = {
 };
 
 module.exports = KeyEscapeUtils;
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -5820,7 +5825,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"./reactProdInvariant":98,"_process":105,"fbjs/lib/invariant":7}],80:[function(require,module,exports){
+},{"./reactProdInvariant":99,"_process":106,"fbjs/lib/invariant":8}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -5910,7 +5915,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactChildren":81,"./ReactClass":82,"./ReactComponent":83,"./ReactDOMFactories":86,"./ReactElement":87,"./ReactElementValidator":88,"./ReactPropTypes":92,"./ReactVersion":93,"./onlyChild":97,"_process":105,"fbjs/lib/warning":11,"object-assign":100}],81:[function(require,module,exports){
+},{"./ReactChildren":82,"./ReactClass":83,"./ReactComponent":84,"./ReactDOMFactories":87,"./ReactElement":88,"./ReactElementValidator":89,"./ReactPropTypes":93,"./ReactVersion":94,"./onlyChild":98,"_process":106,"fbjs/lib/warning":12,"object-assign":101}],82:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -6102,7 +6107,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":79,"./ReactElement":87,"./traverseAllChildren":99,"fbjs/lib/emptyFunction":5}],82:[function(require,module,exports){
+},{"./PooledClass":80,"./ReactElement":88,"./traverseAllChildren":100,"fbjs/lib/emptyFunction":6}],83:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -6830,7 +6835,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./ReactComponent":83,"./ReactElement":87,"./ReactNoopUpdateQueue":89,"./ReactPropTypeLocationNames":90,"./ReactPropTypeLocations":91,"./reactProdInvariant":98,"_process":105,"fbjs/lib/emptyObject":6,"fbjs/lib/invariant":7,"fbjs/lib/keyMirror":8,"fbjs/lib/keyOf":9,"fbjs/lib/warning":11,"object-assign":100}],83:[function(require,module,exports){
+},{"./ReactComponent":84,"./ReactElement":88,"./ReactNoopUpdateQueue":90,"./ReactPropTypeLocationNames":91,"./ReactPropTypeLocations":92,"./reactProdInvariant":99,"_process":106,"fbjs/lib/emptyObject":7,"fbjs/lib/invariant":8,"fbjs/lib/keyMirror":9,"fbjs/lib/keyOf":10,"fbjs/lib/warning":12,"object-assign":101}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -6951,7 +6956,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":89,"./canDefineProperty":94,"./reactProdInvariant":98,"_process":105,"fbjs/lib/emptyObject":6,"fbjs/lib/invariant":7,"fbjs/lib/warning":11}],84:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":90,"./canDefineProperty":95,"./reactProdInvariant":99,"_process":106,"fbjs/lib/emptyObject":7,"fbjs/lib/invariant":8,"fbjs/lib/warning":12}],85:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -7177,7 +7182,7 @@ var ReactComponentTreeDevtool = {
 
 module.exports = ReactComponentTreeDevtool;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":85,"./reactProdInvariant":98,"_process":105,"fbjs/lib/invariant":7,"fbjs/lib/warning":11}],85:[function(require,module,exports){
+},{"./ReactCurrentOwner":86,"./reactProdInvariant":99,"_process":106,"fbjs/lib/invariant":8,"fbjs/lib/warning":12}],86:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -7209,7 +7214,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -7388,7 +7393,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":87,"./ReactElementValidator":88,"_process":105,"fbjs/lib/mapObject":10}],87:[function(require,module,exports){
+},{"./ReactElement":88,"./ReactElementValidator":89,"_process":106,"fbjs/lib/mapObject":11}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -7743,7 +7748,7 @@ ReactElement.REACT_ELEMENT_TYPE = REACT_ELEMENT_TYPE;
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":85,"./canDefineProperty":94,"_process":105,"fbjs/lib/warning":11,"object-assign":100}],88:[function(require,module,exports){
+},{"./ReactCurrentOwner":86,"./canDefineProperty":95,"_process":106,"fbjs/lib/warning":12,"object-assign":101}],89:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -7972,7 +7977,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactComponentTreeDevtool":84,"./ReactCurrentOwner":85,"./ReactElement":87,"./ReactPropTypeLocations":91,"./canDefineProperty":94,"./checkReactTypeSpec":95,"./getIteratorFn":96,"_process":105,"fbjs/lib/warning":11}],89:[function(require,module,exports){
+},{"./ReactComponentTreeDevtool":85,"./ReactCurrentOwner":86,"./ReactElement":88,"./ReactPropTypeLocations":92,"./canDefineProperty":95,"./checkReactTypeSpec":96,"./getIteratorFn":97,"_process":106,"fbjs/lib/warning":12}],90:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -8070,7 +8075,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":105,"fbjs/lib/warning":11}],90:[function(require,module,exports){
+},{"_process":106,"fbjs/lib/warning":12}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -8097,7 +8102,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":105}],91:[function(require,module,exports){
+},{"_process":106}],92:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8120,7 +8125,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":8}],92:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":9}],93:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8524,7 +8529,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":87,"./ReactPropTypeLocationNames":90,"./getIteratorFn":96,"fbjs/lib/emptyFunction":5}],93:[function(require,module,exports){
+},{"./ReactElement":88,"./ReactPropTypeLocationNames":91,"./getIteratorFn":97,"fbjs/lib/emptyFunction":6}],94:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8539,7 +8544,7 @@ module.exports = ReactPropTypes;
 'use strict';
 
 module.exports = '15.2.0';
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -8566,7 +8571,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":105}],95:[function(require,module,exports){
+},{"_process":106}],96:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -8640,7 +8645,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
 module.exports = checkReactTypeSpec;
 }).call(this,require('_process'))
-},{"./ReactComponentTreeDevtool":84,"./ReactPropTypeLocationNames":90,"./reactProdInvariant":98,"_process":105,"fbjs/lib/invariant":7,"fbjs/lib/warning":11}],96:[function(require,module,exports){
+},{"./ReactComponentTreeDevtool":85,"./ReactPropTypeLocationNames":91,"./reactProdInvariant":99,"_process":106,"fbjs/lib/invariant":8,"fbjs/lib/warning":12}],97:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8681,7 +8686,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -8722,7 +8727,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":87,"./reactProdInvariant":98,"_process":105,"fbjs/lib/invariant":7}],98:[function(require,module,exports){
+},{"./ReactElement":88,"./reactProdInvariant":99,"_process":106,"fbjs/lib/invariant":8}],99:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -8761,7 +8766,7 @@ function reactProdInvariant(code) {
 }
 
 module.exports = reactProdInvariant;
-},{}],99:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -8924,7 +8929,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./KeyEscapeUtils":78,"./ReactCurrentOwner":85,"./ReactElement":87,"./getIteratorFn":96,"./reactProdInvariant":98,"_process":105,"fbjs/lib/invariant":7,"fbjs/lib/warning":11}],100:[function(require,module,exports){
+},{"./KeyEscapeUtils":79,"./ReactCurrentOwner":86,"./ReactElement":88,"./getIteratorFn":97,"./reactProdInvariant":99,"_process":106,"fbjs/lib/invariant":8,"fbjs/lib/warning":12}],101:[function(require,module,exports){
 'use strict';
 /* eslint-disable no-unused-vars */
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -9009,12 +9014,12 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":80}],102:[function(require,module,exports){
+},{"./lib/React":81}],103:[function(require,module,exports){
 (function (global){
 /* global window */
 'use strict';
@@ -9022,7 +9027,7 @@ module.exports = require('./lib/React');
 module.exports = require('./ponyfill')(global || window || this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ponyfill":103}],103:[function(require,module,exports){
+},{"./ponyfill":104}],104:[function(require,module,exports){
 'use strict';
 
 module.exports = function symbolObservablePonyfill(root) {
@@ -9043,7 +9048,7 @@ module.exports = function symbolObservablePonyfill(root) {
 	return result;
 };
 
-},{}],104:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 /**
 The MIT License (MIT)
 
@@ -9220,7 +9225,7 @@ var Most = _react2.default.createClass({
 });
 
 exports.default = Most;
-},{"./engine/most":1,"./history":2,"react":101}],105:[function(require,module,exports){
+},{"./engine/most":1,"./history":2,"react":102}],106:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -9312,4 +9317,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[104]);
+},{}]},{},[3]);
