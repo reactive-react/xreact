@@ -192,6 +192,7 @@ like redux, but much simpler, when you wrap your App, your App get a `actions` p
 ## [API](https://github.com/jcouyang/react-most/wiki/API)
 
 ## [More Examples](./examples)
+- [BMI Calculator](http://jsbin.com/bojaqiv/edit?js,output)
 - [Type N Search](./examples/type-n-search) [(live)](https://reactive-react.github.io/react-most/examples/type-n-search/public/)
 - [TodoMVC](./examples/todomvc) [(live)](https://reactive-react.github.io/react-most/examples/todomvc/public/)
 - [Type N Search with Transducers](./examples/transducer-type-n-search) [(live)](https://reactive-react.github.io/react-most/examples/transducer-type-n-search/public/)
