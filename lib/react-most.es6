@@ -64,7 +64,7 @@ export function connect(main, initprops={}) {
               return newState;
             });
           else
-            console.warn('action', action,'need to be a Functioin map from state to new state');
+            console.warn('action', action,'need to be a Function which map from current state to new state');
         });
       }
       render() {
@@ -82,10 +82,12 @@ let Most = React.createClass({
     let engineClass = this.props && this.props.engine || mostEngine
     let engine = engineClass();
     // TODO: add support for ReactiveX
-    // if(process.env.NODE_ENV!='production') {
-    //   engine.intentStream.timestamp()
-    //     .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
-    // }
+    if(process.env.NODE_ENV!='production') {
+      if(engineClass == mostEngine) {
+        engine.intentStream.timestamp()
+        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
+      }
+    }
 
     return {
       [intentStream]: engine.intentStream,
