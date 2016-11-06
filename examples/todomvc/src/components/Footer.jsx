@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import {connect} from '../../../../lib/react-most'
+import {connect} from 'react-most'
 import MainSection from './MainSection'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',

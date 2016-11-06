@@ -1,4 +1,15 @@
 import _ from 'lodash'
+import Type from 'union-type'
+export default Type({
+  Add: [Object],
+  Delete: [Number],
+  Edit: [Object],
+  Editing: [Number],
+  Clear: [],
+  Done: [Number],
+  Complete: [Number],
+  Search: [String],
+})
 
 export function addTodo(intent$){
   return  intent$.filter(x=>x.type=='add')
