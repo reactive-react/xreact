@@ -1,9 +1,10 @@
-import most from 'most'
-export default function mostEngine() {
+import {create} from '@most/create'
+import {from,mergeArray} from 'most'
+export default function Engine() {
   let addToIntentStream = function(){
     console.error('intent stream not binded yet');
   };
-  let intentStream = most.create(add => {
+  let intentStream = create(add => {
     addToIntentStream = add;
     return function dispose(e){
       addToIntentStream = null;
@@ -15,7 +16,7 @@ export default function mostEngine() {
   let addToHistoryStream = function(){
     console.error('history stream not binded yet');
   };
-  let historyStream = most.create(add => {
+  let historyStream = create(add => {
     addToHistoryStream = add;
     return function dispose(e){
       addToHistoryStream = null;
@@ -29,7 +30,7 @@ export default function mostEngine() {
     console.error('travel stream not binded yet');
   };
 
-  let travelStream = most.create(add => {
+  let travelStream = create(add => {
     addToTravelStream = add;
     return function dispose(e){
       addToTravelStream = null;
@@ -40,7 +41,7 @@ export default function mostEngine() {
   travelStream.send = addToTravelStream;
 
   function flatObserve(actionsSinks, f){
-    return most.from(actionsSinks).join().observe(f);
+    return mergeArray(actionsSinks).observe(f);
   }
   historyStream.travel = travelStream;
   return {intentStream, flatObserve, historyStream}

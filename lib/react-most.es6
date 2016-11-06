@@ -21,6 +21,7 @@ export function connect(main, initprops={}) {
     class Connect extends React.Component {
       constructor(props, context) {
         super(props, context);
+        this.state = ReactClass.defaultProps
         if(props.history) initprops.history=true
         this.actions = {
           fromEvent(e){
@@ -40,7 +41,6 @@ export function connect(main, initprops={}) {
           })
         }
         for(let name in sinks){
-
           if(observable(sinks[name])){
             actionsSinks.push(sinks[name]);
           }
@@ -57,7 +57,7 @@ export function connect(main, initprops={}) {
           if(action instanceof Function)
             this.setState((prevState, props)=>{
               let newState = action.call(this, prevState,props);
-              if(initprops.history){
+              if(initprops.history && newState != prevState){
                 initprops.history.cursor = -1;
                 this.context[historyStream].send(prevState);
               }
@@ -85,7 +85,9 @@ let Most = React.createClass({
     if(process.env.NODE_ENV!='production') {
       if(engineClass == mostEngine) {
         engine.intentStream.timestamp()
-        .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
+          .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][INTENT]:}`, stamp.value));
+        engine.historyStream.timestamp()
+          .observe(stamp=>console.log(`[${new Date(stamp.time).toLocaleTimeString()}][STATE]:}`, stamp.value));
       }
     }
 

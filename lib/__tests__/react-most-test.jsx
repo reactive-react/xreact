@@ -6,7 +6,7 @@ jest.dontMock('most')
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import most from 'most';
+import * as most from 'most';
 let {default: Most, connect} = require('../react-most');
 let {do$, historyStreamOf} = require('../test-utils')
 
