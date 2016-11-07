@@ -1,6 +1,6 @@
 {
   "name": "react-most",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "High Prefomance Monadic Reactive State Container for React",
   "repository": {
     "type": "git",
@@ -30,7 +30,11 @@
     "rx": "^4.1.0"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "jsx", "es6"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "es6"
+    ],
     "testPathDirs": [
       "lib"
     ]
