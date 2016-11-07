@@ -36,7 +36,7 @@ describe('MainSection', ()=>{
       do$([
         ()=>mainSection.actions.fromPromise(when(Intent.Edit({id:0, text:'hehedayo'}))),
       ])
-      return historyStreamOf(mainSection).take$(2).then(state=>expect(state.todos[0]).toEqual({"id": 0, "text": "hehedayo"}))
+      return historyStreamOf(mainSection).take$(1).then(state=>expect(state.todos[0]).toEqual({"id": 0, "text": "hehedayo"}))
     })
   });
 
@@ -47,9 +47,9 @@ describe('MainSection', ()=>{
         ()=>mainSection.actions.fromPromise(when(Intent.Clear())),
       ])
       return historyStreamOf(mainSection)
-        .take$(3)
+        .take$(2)
         .then(state=>{
-          expect(state.todos).toEqual([{"completed": false, "id": 1, "text": "Give it a Star on Github"}])
+          expect(state.todos).toEqual([])
         })
     })
   })
