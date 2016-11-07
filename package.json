@@ -30,7 +30,10 @@
     "rx": "^4.1.0"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "jsx", "es6"]
+    "moduleFileExtensions": ["js", "jsx", "es6"],
+    "testPathDirs": [
+      "lib"
+    ]
   },
   "devDependencies": {
     "babel": "^6.1.18",
@@ -43,6 +46,7 @@
     "jest-cli": "^16.0.2",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.3.2",
+    "lodash": "^4.0.0",
     "redux": "^3.0.4"
   },
   "author": "Jichao Ouyang",

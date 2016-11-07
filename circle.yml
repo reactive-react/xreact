@@ -4,7 +4,7 @@ general:
       - gh-pages
 machine:
   node:
-    version: 5.0.0
+    version: 6.6.0
 dependencies:
   pre:
     - npm install -g babel-cli

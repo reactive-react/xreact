@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
 import {connect} from 'react-most'
-import _ from 'lodash'
 import TodoItem from './TodoItem'
 let TodoTextInput = React.createClass({
   getInitialState(){

@@ -1,10 +1,9 @@
 import React from 'react'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
-import {connect} from 'react-most'
+import {connect} from '../../../../lib/react-most'
 import rest from 'rest'
 const remote = 'todos.json';
-import _ from 'lodash'
 import * as most from 'most'
 import Intent from '../todo.action'
 const id = _=>_

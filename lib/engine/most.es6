@@ -1,4 +1,3 @@
-import {create} from '@most/create'
 import {from,mergeArray} from 'most'
 import {subject} from 'most-subject'
 export default function Engine() {

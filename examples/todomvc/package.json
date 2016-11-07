@@ -22,6 +22,9 @@
     "watch": "watchify -d src/app.jsx --extension=.jsx --extension=.es6 -o public/app.js -dv",
     "test": "jest"
   },
+  "jest": {
+    "moduleFileExtensions": ["js", "jsx", "es6"]
+  },
   "dependencies": {
     "classnames": "^2.2.0",
     "lodash": "^4.0.0",

@@ -4,8 +4,8 @@ import React from 'react'
 import when from 'when'
 import Intent from '../../todo.action'
 import MainSection from '../MainSection.jsx'
-import Most from 'react-most'
-import {do$, historyStreamOf} from 'react-most/test-utils'
+import Most from '../../../../../lib/react-most'
+import {do$, historyStreamOf} from '../../../../../lib/test-utils'
 import TestUtils from 'react-addons-test-utils'
 describe('MainSection', ()=>{
   let mainSectionWrapper, mainSection
