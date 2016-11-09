@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
-import {connect} from '../../../../lib/react-most'
-import _ from 'lodash'
+import {connect} from 'react-most'
 import TodoItem from './TodoItem'
 let TodoTextInput = React.createClass({
   getInitialState(){
@@ -32,7 +31,7 @@ let TodoTextInput = React.createClass({
   handleBlur(e) {
     if (!this.props.newTodo) {
       this.props.actions.edit({id:this.props.itemid,text:e.target.value});
-      this.props.onBlur&&this.props.onBlur()
+      this.props.actions.editing(-1);
     }
   },
 
@@ -54,9 +53,4 @@ let TodoTextInput = React.createClass({
   },
 });
 
-export default connect((intent$)=>{
-  return{
-    edit: todo=>({type:'edit', todo}),
-    add: todo=>_.assign({type:'add'},todo),
-  }
-})(TodoTextInput)
+export default TodoTextInput

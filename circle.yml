@@ -4,10 +4,13 @@ general:
       - gh-pages
 machine:
   node:
-    version: 5.0.0
+    version: 6.6.0
 dependencies:
   pre:
     - npm install -g babel-cli
+test:
+  post:
+    - cd examples/todomvc && npm install && npm test
 deployment:
   production:
     tag: /v[0-9]+(\.[0-9]+)*/
