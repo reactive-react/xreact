@@ -10,7 +10,6 @@ const id = _=>_
 const anyToId = ()=>id
 
 const MainSection = ({todos,filter}) => {
-  if(!todos||!filter) return <section className="main"/>
   const completedCount = todos.reduce((count, todo) => todo.done ? count + 1 : count, 0);
 
   const filteredTodos = filter(todos);
