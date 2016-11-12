@@ -1,8 +1,3 @@
-jest.dontMock('../react-most');
-jest.dontMock('../test-utils');
-jest.dontMock('../history');
-jest.dontMock('../engine/most');
-jest.dontMock('most')
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
@@ -78,7 +73,6 @@ describe('mostux', () => {
           {id:2, text:'heheda', done:false},
         ]}/>
       )
-      jest.runAllTimers();
       let todos = TestUtils.scryRenderedComponentsWithType(todolist, Todo)
       expect(todos.length).toBe(2);
       expect(todos[0].props.todo.done).toBe(false);
@@ -101,10 +95,10 @@ describe('mostux', () => {
       return historyStreamOf(div)
         .take$(4)
         .then(state=>
-          expect(state).toEqual(
-            {todos: [
+          expect(state.todos).toEqual(
+            [
               {id: 1, text: 5, done: false}
-            ]}))
+            ]))
     });
   });
 })
