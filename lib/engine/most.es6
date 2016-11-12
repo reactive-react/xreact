@@ -1,5 +1,5 @@
 import {from,mergeArray} from 'most'
-import {subject} from 'most-subject'
+import {async as subject} from 'most-subject'
 export default function Engine() {
   const intentStream = subject(),
         historyStream = subject(),
