@@ -26,6 +26,7 @@
   "dependencies": {
     "most": "^1.0.5",
     "most-subject": "^5.2.0",
+    "ramda": "^0.22.1",
     "react": "^15.3.2",
     "rx": "^4.1.0"
   },
@@ -48,9 +49,9 @@
     "babelify": "^7.2.0",
     "jest": "^16.0.2",
     "jest-cli": "^16.0.2",
+    "lodash": "^4.0.0",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.3.2",
-    "lodash": "^4.0.0",
     "redux": "^3.0.4"
   },
   "author": "Jichao Ouyang",

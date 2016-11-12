@@ -1,6 +1,7 @@
 import React from 'react'
 import initHistory from './history'
 import mostEngine from './engine/most'
+import merge from 'ramda/src/merge'
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 const intentStream = "__reactive.react.intentStream__";
 const historyStream = "__reactive.react.historyStream__";
@@ -21,7 +22,7 @@ export function connect(main, initprops={}) {
     class Connect extends React.Component {
       constructor(props, context) {
         super(props, context);
-        this.state = ReactClass.defaultProps
+        this.state = merge(ReactClass.defaultProps, props)
         if(props.history) initprops.history=true
         this.actions = {
           fromEvent(e){
@@ -68,7 +69,7 @@ export function connect(main, initprops={}) {
         });
       }
       render() {
-        return <ReactClass {...initprops} {...this.props} {...this.state} actions={this.actions} />
+        return <ReactClass {...this.state} actions={this.actions} />
       }
     }
     Connect.contextTypes = CONTEXT_TYPE;
