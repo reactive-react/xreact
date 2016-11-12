@@ -40,3 +40,6 @@ transdux.js
 public
 deploy
 deploy.pub
+browser.js
+history.js
+test-utils.js
