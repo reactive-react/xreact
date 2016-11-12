@@ -34,12 +34,11 @@ node_modules
 examples/todomvc/public/*
 !examples/todomvc/public/index.html
 
-react-most.js
+/react-most.js
 /engine
-transdux.js
 public
 deploy
 deploy.pub
-browser.js
-history.js
-test-utils.js
+/browser.js
+/history.js
+/test-utils.js
