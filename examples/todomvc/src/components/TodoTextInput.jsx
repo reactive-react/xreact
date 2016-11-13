@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import MainSection from './MainSection'
 import {connect} from 'react-most'
 import TodoItem from './TodoItem'
+
 let TodoTextInput = React.createClass({
   getInitialState(){
     return {
@@ -30,7 +31,7 @@ let TodoTextInput = React.createClass({
 
   handleBlur(e) {
     if (!this.props.newTodo) {
-      this.props.actions.edit({id:this.props.itemid,text:e.target.value});
+      this.props.actions.edit({id:this.props.itemid,text:e.target.value}, this.props.index);
       this.props.actions.editing(-1);
     }
   },

@@ -13,7 +13,8 @@
             ".js"
           ]
         }
-      ]
+      ],
+      "envify"
     ]
   },
   "scripts": {
@@ -23,7 +24,11 @@
     "test": "jest"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "jsx", "es6"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "es6"
+    ]
   },
   "dependencies": {
     "classnames": "^2.2.0",
@@ -36,8 +41,6 @@
     "union-type": "^0.3.3"
   },
   "devDependencies": {
-    "react-addons-test-utils": "^15.3.2",
-    "jest-cli": "^16.0.2",
     "babel": "^6.5.2",
     "babel-jest": "^16.0.0",
     "babel-plugin-lodash": "^2.0.1",
@@ -46,7 +49,10 @@
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "ecstatic": "^1.3.1",
+    "envify": "^3.4.1",
     "jest-cli": "^0.7.0",
+    "ramda": "^0.22.1",
+    "react-addons-test-utils": "^15.3.2",
     "uglify-js": "^2.6.1",
     "watchify": "^3.6.1"
   },

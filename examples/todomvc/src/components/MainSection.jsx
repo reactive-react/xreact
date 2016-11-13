@@ -6,68 +6,68 @@ import rest from 'rest'
 const remote = 'todos.json';
 import * as most from 'most'
 import Intent from '../todo.action'
-const id = _=>_
-const anyToId = ()=>id
+import r from 'ramda'
+const anyToId = ()=>r.identity
 
 const MainSection = ({todos,filter}) => {
   const completedCount = todos.reduce((count, todo) => todo.done ? count + 1 : count, 0);
-
   const filteredTodos = filter(todos);
   return (
-  <section className="main">
-    <ul className="todo-list">
-      {filteredTodos.map(todo =>
-        <TodoItem key={todo.id} todo={todo} />
-       )}
-    </ul>
-    <Footer completedCount={completedCount} activeCount={todos.length-completedCount} />
-  </section>
+    <section className="main">
+      <ul className="todo-list">
+        {filteredTodos.map((todo,index) =>
+          <TodoItem key={todo.id} index={index} todo={todo} />
+         )}
+      </ul>
+      <Footer completedCount={completedCount} activeCount={todos.length-completedCount} />
+    </section>
   )
 }
 
 MainSection.defaultProps = {
   todos: [
-    {id:0, text:'Loading...dadada', done:false},
+    {id:0, text:'Loading...dadada', completed:false},
   ],
   filter: _=>_
 }
 
 export default connect((intent$)=>{
-  let editSink$ = intent$.map(Intent.case({
-    Edit: todo => state => ({
-      todos: state.todos.map(oldtodo=>todo.id==oldtodo.id?todo:oldtodo)
-    }),
+  let lensTodos = r.lensProp('todos')
+  let lensComplete = r.lensProp('completed')
+  let lensTodo = index => r.compose(lensTodos, r.lensIndex(index))
+  let lensTodoComplete = index => r.compose(lensTodo(index), lensComplete)
+  let sinks$ = intent$.map(Intent.case({
+    Edit: (todo,index) => r.set(lensTodo(index), todo),
+    Clear: () => r.over(lensTodos, r.filter(todo=>todo.completed)),
+    Delete: id => r.over(lensTodos, r.filter(todo=>todo.id!=id)),
+    Filter: filter=>state=>({ filter }),
+    Done: index=>r.over(lensTodoComplete(index), r.not),
     _:anyToId
-  }));
-  let dataSink$ = most.fromPromise(rest(remote))
-                      .map(x=>JSON.parse(x.entity))
-                      .map(data=>()=>({todos: data}));
-
-  let clearSink$ = intent$.map(Intent.case({
-    Clear: () => state=>({
-      todos: state.todos.filter(todo=>{
-        return !todo.completed
-      })
-    }),
-    _: anyToId
   }))
+  let data$ = most.fromPromise(rest(remote))
+                  .map(x=>JSON.parse(x.entity))
+                  .map(data=>()=>({todos: data}));
 
-  /* let searchSource$ = intent$.filter(i=>i.type=='search').debounce(500).map(x=>x.text.trim());
+  let searchSink$ = intent$
+    .filter(Intent.case({
+      Search: x=>!!x,
+      _:()=>false
+    }))
+    .debounce(500)
+    .map(Intent.case({
+      Search: x=>x.text.trim()
+    }))
+    .map(search=>state=>({
+      filter: x=>x.filter(todo=>{
+        return !!search.toLowerCase().split(' ').filter((word)=>{
+          return !!todo.text.toLowerCase().split(' ').filter(w=>w==word).length
+        }).length
+      })
+    }))
 
-   * let blankSearchSink$ = searchSource$.filter(search=>!search).map(_=>_=>({filter:_.identity}));
-   * let searchSink$ = searchSource$.filter(search=>!!search).map(search=>state=>({
-   *   filter: x=>x.filter(todo=>{
-   *     return !!search.toLowerCase().split(' ').filter((word)=>{
-   *       return !!todo.text.toLowerCase().split(' ').filter(w=>w==word).length
-   *     }).length
-   *   })}));
-
-   * let filterSink$ = intent$.filter(x=>x.type=='filter').map(intent=>state=>({
-   *   filter: intent.filter
-   * }));*/
   return {
-    editSink$,
-    dataSink$,
-    clearSink$,
+    sinks$,
+    searchSink$,
+    data$,
   }
 })(MainSection)
