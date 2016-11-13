@@ -42,3 +42,4 @@ deploy.pub
 /browser.js
 /history.js
 /test-utils.js
+public/app.js
