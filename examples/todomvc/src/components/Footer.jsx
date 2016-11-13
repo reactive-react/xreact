@@ -11,8 +11,8 @@ const FILTER_TITLES = {
 
 export const FILTER_FUNC = {
   'SHOW_ALL': _=>_,
-  'SHOW_ACTIVE': todos=>todos.filter(todo=>!todo.completed),
-  'SHOW_COMPLETED': todos=>todos.filter(todo=>todo.completed),
+  'SHOW_ACTIVE': todos=>todos.filter(todo=>!todo.done),
+  'SHOW_COMPLETED': todos=>todos.filter(todo=>todo.done),
 }
 let Footer = React.createClass({
   renderTodoCount() {
@@ -69,7 +69,7 @@ let Footer = React.createClass({
 
 export default connect((intent$)=>{
   return {
-    clear: Intent.Clear,
+    clear: () => Intent.Clear(),
     filterWith: Intent.Filter,
   }
 })(Footer)

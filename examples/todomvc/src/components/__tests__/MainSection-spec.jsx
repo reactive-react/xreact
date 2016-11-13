@@ -4,36 +4,69 @@ import React  from  'react'
 import when  from  'when'
 import Intent  from  '../../todo.action'
 import MainSection  from  '../MainSection.jsx'
-import Footer  from  '../Footer.jsx'
+import Footer, {FILTER_FUNC}  from  '../Footer.jsx'
+import TodoItem  from  '../TodoItem.jsx'
 import Most  from  '../../../../../lib/react-most'
 import {do$, historyStreamOf}  from  '../../../../../lib/test-utils'
 import TestUtils  from  'react-addons-test-utils'
-describe('MainSection', ()=>{
 
-  describe('display', ()=> {
-    it('correct counts on footer', ()=> {
+describe('MainSection', ()=>{
+  const RESPONSE = '[{"text": "Try React Most","done": false,"id": 0},{"text": "Give it a Star on Github","done": false,"id": 1}]'
+  beforeEach(()=>{
+    rest.__return(RESPONSE)
+  })
+  describe('View', ()=> {
+    const defaultTodos = [
+      {id:0, text:'Loading...dadada', done:false},
+      {id:1, text:'dadada', done:false},
+      {id:2, text:'yay', done:true},
+    ]
+    it('should show correct counts on footer', ()=> {
       let mainSection = TestUtils.renderIntoDocument(
         <Most>
           <MainSection
-              todos={[
-                {id:0, text:'Loading...dadada', done:false},
-                {id:1, text:'dadada', done:false},
-              ]}
+              todos={defaultTodos}
               filter={_=>_}
           />
         </Most>
       )
       let footer = TestUtils.findRenderedComponentWithType(mainSection, Footer);
-      expect(footer.props.completedCount).toBe(0)
+      expect(footer.props.completedCount).toBe(1)
       expect(footer.props.activeCount).toBe(2)
+    })
+
+    it('should show only active todos', ()=> {
+      let mainSection = TestUtils.renderIntoDocument(
+        <Most>
+          <MainSection
+              todos={defaultTodos}
+              filter={FILTER_FUNC['SHOW_ACTIVE']}
+          />
+        </Most>
+      )
+      let todoItems = TestUtils.scryRenderedComponentsWithType(mainSection, TodoItem);
+      expect(todoItems.map(item=>item.props.todo.id)).toEqual(
+        [0,1])
+    })
+
+    it('should show only done todos', ()=> {
+      let mainSection = TestUtils.renderIntoDocument(
+        <Most>
+          <MainSection
+              todos={defaultTodos}
+              filter={FILTER_FUNC['SHOW_COMPLETED']}
+          />
+        </Most>
+      )
+      let todoItems = TestUtils.scryRenderedComponentsWithType(mainSection, TodoItem);
+      expect(todoItems.map(item=>item.props.todo.id)).toEqual(
+        [2])
     })
   })
 
-  describe('behavior', ()=> {
+  describe('Behavior', ()=> {
     let mainSectionWrapper, mainSection, send
-    let response = '[{"text": "Try React Most","completed": false,"id": 0},{"text": "Give it a Star on Github","completed": false,"id": 1}]'
     beforeEach(()=>{
-      rest.__return(response)
       mainSectionWrapper = TestUtils.renderIntoDocument(
         <Most>
           <MainSection history={true}/>
@@ -48,30 +81,30 @@ describe('MainSection', ()=>{
           {id:0, text:'Loading...dadada', done:false},
         ])
       })
-      it('should get data  from  rest response to MainSection', ()=>{
-        return historyStreamOf(mainSection).take$(1).then(state=>expect(state.todos).toEqual(JSON.parse(response)))
+      it('should get data from  rest response to MainSection', ()=>{
+        return historyStreamOf(mainSection).take$(1).then(state=>expect(state.todos).toEqual(JSON.parse(RESPONSE)))
       })
     });
 
-    describe('edit sink', ()=>{
-      it('should update todo 0 item text', ()=>{
+    describe('edit', ()=>{
+      it('should update todo id 0 item text', ()=>{
         do$([
-          ()=>send(Intent.Edit({id:0, text:'hehedayo'})),
+          ()=>send(Intent.Edit({id:0, text:'hehedayo'}, 0)),
         ])
         return historyStreamOf(mainSection).take$(2).then(state=>expect(state.todos[0]).toEqual({"id": 0, "text": "hehedayo"}))
       })
     });
 
-    describe('clear sink', ()=> {
+    describe('clear', ()=> {
       it('should remove all done todos', ()=>{
         do$([
-          ()=>send(Intent.Edit({id:0,text:'done',completed:true})),
+          ()=>send(Intent.Edit({id:0,text:'done',done:true}, 0)),
           ()=>send(Intent.Clear()),
         ])
         return historyStreamOf(mainSection)
           .take$(3)
           .then(state=>{
-            expect(state.todos).toEqual([{"completed": false, "id": 1, "text": "Give it a Star on Github"}])
+            expect(state.todos).toEqual([{"done": false, "id": 1, "text": "Give it a Star on Github"}])
           })
       })
     })
