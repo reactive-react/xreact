@@ -108,5 +108,45 @@ describe('MainSection', ()=>{
           })
       })
     })
+
+    describe('delete', ()=> {
+      it('should remove todos id 0', ()=>{
+        do$([
+          ()=>send(Intent.Delete(0)),
+        ])
+        return historyStreamOf(mainSection)
+          .take$(2)
+          .then(state=>{
+            expect(state.todos).toEqual([{"done": false, "id": 1, "text": "Give it a Star on Github"}])
+          })
+      })
+    })
+
+    describe('done', ()=> {
+      it('should complete todo 0', ()=>{
+        do$([
+          ()=>send(Intent.Done(0)),
+        ])
+        return historyStreamOf(mainSection)
+          .take$(2)
+          .then(state=>{
+            expect(state.todos).toEqual([{"done": true, "id": 0, "text": "Try React Most"}, {"done": false, "id": 1, "text": "Give it a Star on Github"}])
+          })
+      })
+    })
+
+    describe('click filter completed', ()=> {
+      it('should only use SHOW_COMPLETED filter', ()=>{
+        do$([
+          ()=>send(Intent.Edit({id:0, done:true}, 0)),
+          ()=>send(Intent.Filter(FILTER_FUNC['SHOW_COMPLETED'])),
+        ])
+        return historyStreamOf(mainSection)
+          .take$(3)
+          .then(state=>{
+            expect(state.filter).toEqual(FILTER_FUNC['SHOW_COMPLETED'])
+          })
+      })
+    })
   })
 });
