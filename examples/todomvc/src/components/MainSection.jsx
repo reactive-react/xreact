@@ -7,7 +7,7 @@ const remote = 'todos.json';
 import * as most from 'most'
 import Intent from '../todo.action'
 import r from 'ramda'
-const anyToId = ()=>r.identity
+const alwaysId = ()=>r.identity
 
 const MainSection = ({todos,filter}) => {
   const completedCount = todos.reduce((count, todo) => todo.done ? count + 1 : count, 0);
@@ -42,7 +42,7 @@ export default connect((intent$)=>{
     Delete: id => r.over(lensTodos, r.filter(todo=>todo.id!=id)),
     Filter: filter=>state=>({ filter }),
     Done: index=>r.over(lensTodoComplete(index), r.not),
-    _:anyToId
+    _: alwaysId
   }))
   let data$ = most.fromPromise(rest(remote))
                   .map(x=>JSON.parse(x.entity))
