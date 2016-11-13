@@ -2,16 +2,17 @@ import React from 'react'
 import classnames from 'classnames'
 import {connect} from 'react-most'
 import MainSection from './MainSection'
+import Intent from '../todo.action.js'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
   'SHOW_ACTIVE': 'Active',
   'SHOW_COMPLETED': 'Completed'
 }
 
-const FILTER_FUNC = {
+export const FILTER_FUNC = {
   'SHOW_ALL': _=>_,
-  'SHOW_ACTIVE': todos=>todos.filter(todo=>!todo.done),
-  'SHOW_COMPLETED': todos=>todos.filter(todo=>todo.done),
+  'SHOW_ACTIVE': todos=>todos.filter(todo=>!todo.completed),
+  'SHOW_COMPLETED': todos=>todos.filter(todo=>todo.completed),
 }
 let Footer = React.createClass({
   renderTodoCount() {
@@ -68,7 +69,7 @@ let Footer = React.createClass({
 
 export default connect((intent$)=>{
   return {
-    clear: ()=>({type:'clear'}),
-    filterWith: filter=>({type:'filter', filter}),
+    clear: Intent.Clear,
+    filterWith: Intent.Filter,
   }
 })(Footer)

@@ -3,9 +3,10 @@ import Type from 'union-type'
 export default Type({
   Add: [Object],
   Delete: [Number],
-  Edit: [Object],
+  Edit: [Object, Number],
   Editing: [Number],
   Clear: [],
+  Filter: [Function],
   Done: [Number],
   Complete: [Number],
   Search: [String],
@@ -29,17 +30,4 @@ export function deleteTodo(intent$){
         todos:state.todos.filter(todo=>todo.id!=intent.id)
       })
     ))
-}
-export function completeTodo(intent$){
-  return intent$.filter(x=>x.type=='done')
-    .map(intent=>(
-      state=>({
-        todos: state.todos.map(todo=>{
-          if(todo.id==intent.id){
-            todo.done =! todo.done;
-            return todo;
-          }
-          return todo;
-        })
-      })))
 }
