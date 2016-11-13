@@ -26,19 +26,19 @@ const MainSection = ({todos,filter}) => {
 
 MainSection.defaultProps = {
   todos: [
-    {id:0, text:'Loading...dadada', completed:false},
+    {id:0, text:'Loading...dadada', done:false},
   ],
   filter: _=>_
 }
 
 export default connect((intent$)=>{
   let lensTodos = r.lensProp('todos')
-  let lensComplete = r.lensProp('completed')
+  let lensComplete = r.lensProp('done')
   let lensTodo = index => r.compose(lensTodos, r.lensIndex(index))
   let lensTodoComplete = index => r.compose(lensTodo(index), lensComplete)
   let sinks$ = intent$.map(Intent.case({
     Edit: (todo,index) => r.set(lensTodo(index), todo),
-    Clear: () => r.over(lensTodos, r.filter(todo=>todo.completed)),
+    Clear: () => r.over(lensTodos, r.filter(todo=>!todo.done)),
     Delete: id => r.over(lensTodos, r.filter(todo=>todo.id!=id)),
     Filter: filter=>state=>({ filter }),
     Done: index=>r.over(lensTodoComplete(index), r.not),

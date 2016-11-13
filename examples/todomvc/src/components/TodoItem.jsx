@@ -8,7 +8,7 @@ const TodoItemView = ({todo, actions, index}) => {
   return <div className="view">
     <input className="toggle"
            type="checkbox"
-           checked={todo.completed}
+           checked={todo.done}
            onChange={()=>actions.done(index)} />
     <label onDoubleClick={()=>actions.editing(todo.id)}>
       {todo.text}
@@ -29,7 +29,7 @@ const TodoItem = props => {
                 />: <TodoItemView index={index} todo={todo} actions={actions}/>
 
   return <li className={classnames({
-    completed: todo.completed,
+    completed: todo.done,
     editing: editing===todo.id
   })}>{element}</li>
 }
