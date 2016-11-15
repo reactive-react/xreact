@@ -1,55 +1,40 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import {render} from 'react-dom';
-import most from 'most';
-import Most from '../../../lib/react-most'
-import {connect} from '../../../lib/react-most'
-const App = React.createClass({
+import Most, {connect} from '../../../lib/react-most'
 
-  getInitialState(){
-    return {show: false}
-  },
-  componentDidMount() {
-    this.props.actions.add();
-    this.props.actions.add();
-    this.props.actions.add();
-    setTimeout(() => this.setState({
-      show: true
-    }, () => {
-      this.props.actions.add();
-      this.props.actions.add();
-      this.props.actions.add();
-    }), 2000);
-  },
-  render(){
-    return (
+const CounterView = props => (
       <div>
-        <RCount />
-        {this.state.show ? <RCount/> : null}
-        <button onClick={this.props.actions.add}>+</button>
+	<button onClick={props.actions.dec}-</button>
+	<span>{props.count}</span>
+        <button onClick={props.actions.inc}>+</button>
       </div>
     )
   }
 })
 
-const Count = (props) => {
-  return <div>{props.count}</div>
-}
-const RCount = connect((intent$)=>{
-  return {
-    countSink$: intent$
-    .filter(x => x.type === 'add')
-    .map(intent => state => ({count: (state.count||0) + 1})),
-  }
-})(Count)
+CounterView.defaultProps = {count: 0};
 
-const RApp = connect((intent$) => {
-  return {
-    add: _=>({type: 'add'}),
-  }
-})(App)
+const reactify = connect((intent$)=>{
+    return {
+	sink$: intent$.map(intent => {
+	    switch(intent.type) {
+	    case 'inc':
+		return state => ({count: state.count+1});
+	    case 'dec':
+		return state => ({count: state.count-1});
+	    default:
+		return _ => _;
+	    }
+	}),
+	inc: () => ({type: 'inc'}),
+	dec: () => ({type: 'dec'}),
+    }
+})
+
+const Counter = reactify(CounterView)
 
 render(
   <Most>
-    <RApp/>
+    <Counter />
   </Most>
   , document.getElementById('app'));
