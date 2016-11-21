@@ -19,7 +19,7 @@
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
     "build": "babel lib -d ./ --ignore '__tests__' && npm run license",
-    "test": "jest",
+    "test": "jest --coverage",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },

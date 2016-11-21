@@ -2,103 +2,136 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
-let {default: Most, connect} = require('../react-most');
-let {do$, historyStreamOf} = require('../test-utils')
+import Most, {connect} from '../react-most';
+import {do$, historyStreamOf, intentStreamOf} from '../test-utils'
 
-describe('mostux', () => {
-  describe('todo reactive', ()=>{
-    let todolist;
-    let Todo = React.createClass({
-      render(){
-        return <div className={'todo-'+this.props.todo.id} key={this.props.todo.id} data-complete={this.props.todo.done}>{this.props.todo.text}</div>
+const CounterView = props=> (
+  <div>
+    <span className="count">{props.count}</span>
+    <span className="wrapperProps">{props.wrapperProps}</span>
+    <span className="overwritedProps">{props.overwritedProps}</span>
+  </div>
+)
+
+CounterView.defaultProps = {count: 0, overwritedProps: 'inner'}
+
+const Counter = connect(intent$=>{
+  return {
+    sink$: intent$.map(intent=>{
+      switch(intent.type) {
+        case 'inc': return state=>({count:state.count+1})
+        case 'dec':
+          intent$.send({type:'dec triggered'})
+          return state=>({count:state.count-1})
+        case 'changeWrapperProps':
+          return state=>({wrapperProps: intent.value,
+                          overwritedProps: intent.value})
+        case 'changeDefaultProps':
+          return state=>({count: intent.value})
+        default:
+          return state=>state
       }
-    });
+    }),
+    inc: ()=>({type:'inc'}),
+    dec: ()=>({type:'dec'}),
+    changeWrapperProps: (value)=>({type:'changeWrapperProps', value}),
+    changeDefaultProps: (value)=>({type:'changeDefaultProps', value}),
+  }
+})(CounterView)
 
-    let TodoList = React.createClass({
-      render(){
-        let {todos} = this.props;
-        let todoElements;
-        if(todos){
-          todoElements = todos.map(todo => {
-            return <Todo key={todo.id} todo={todo} />
-          });
-        }
-        return <div>
-            {todoElements}
-        </div>
-      }
-    });
-
-    let RxTodoList = connect(function(intent$){
-      let default$ = most.of(()=>({
-        todos: [
-          {id:1, text:5, done:false},
-          {id:2, text:'heheda', done:false},
-        ]
-      }))
-      let done$ = intent$.filter(x=>x.type=='done');
-      let delete$ = intent$.filter(x=>x.type=='remove');
-      let doneState$ = done$.map((done)=>{
-        return state=>(
-          {
-            todos:state.todos.map(todo=>{
-              if(todo.id==done.id){
-                todo.done =! todo.done;
-                return todo;
-              }
-              return todo;
-            })
-          }
-        )
-      });
-
-      let deleteState$ = delete$.map((deleted)=>{
-        return state=>(
-          {todos: state.todos.filter(todo=>todo.id!=deleted.id)}
-        )
-      });
-      return {
-        done: (id)=>({type:'done', id}),
-        remove: function remove(id){return {type:'remove', id}},
-        default$,
-        deleteState$,
-        doneState$,
-      }
-    })(TodoList);
-
-    it('render dump Component TodoList UI correctly', () => {
-      let todolist = TestUtils.renderIntoDocument(
-        <TodoList todos={[
-          {id:1, text:5, done:false},
-          {id:2, text:'heheda', done:false},
-        ]}/>
-      )
-      let todos = TestUtils.scryRenderedComponentsWithType(todolist, Todo)
-      expect(todos.length).toBe(2);
-      expect(todos[0].props.todo.done).toBe(false);
-    });
-
-    it('behaviors connected to dump Component works as expected', ()=> {
-      let todolist = TestUtils.renderIntoDocument(
+describe('react-most', () => {
+  describe('actions', ()=>{
+    it('add intent to intent$ and go through sink$', ()=> {
+      let counterWrapper = TestUtils.renderIntoDocument(
         <Most >
-          <RxTodoList history={true}>
-          </RxTodoList>
+          <Counter history={true} />
         </Most>
       )
-      let div = TestUtils.findRenderedComponentWithType(todolist, RxTodoList)
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
-      do$([()=>div.actions.done(1),
-           ()=>div.actions.done(2),
-           ()=>div.actions.remove(2),
-           ()=>div.actions.done(1)])
+      do$([()=>counter.actions.inc(),
+           ()=>counter.actions.inc()])
 
-      return historyStreamOf(div)
-        .take$(4)
-        .then(state=>
-          expect(state.todos).toEqual(
-            [
-              {id: 1, text: 5, done: false}
-            ]))
-    });
+      return historyStreamOf(counter)
+        .take$(2)
+        .then(state=>expect(state.count).toEqual(2))
+    })
+
+    it('sink can also generate intent', ()=> {
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+
+      do$([()=>counter.actions.dec()])
+
+      return intentStreamOf(counter)
+        .take(2).observe(_=>_)
+        .then(intent=>expect(intent.type).toEqual('dec triggered'))
+    })
+
+    it('props will overwirte components default props', ()=>{
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter count={9} history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+
+      do$([()=>counter.actions.inc()])
+      return historyStreamOf(counter)
+        .take$(1)
+        .then(state=>expect(state.count).toBe(10))
+    })
+
+    it('props that not overlap with views defaultProps can not be changed', ()=>{
+      let CounterWrapper = React.createClass({
+        getInitialState(){
+          return {
+            wrapperProps: 'heheda',
+            overwritedProps: 'hoho',
+            count: 0,
+          }
+        },
+        render(){
+          return <Counter
+                     count={this.state.count}
+                     wrapperProps={this.state.wrapperProps}
+                     overwritedProps={this.state.overwritedProps}
+                     history={true} />
+        }
+
+      })
+      let counterMostWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <CounterWrapper />
+        </Most>
+      )
+      let counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+
+      return do$([
+        ()=>counter.actions.changeWrapperProps('miao'),
+        ()=>counter.actions.changeDefaultProps(19)
+      ]).then(()=>{
+        let wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
+        let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+        let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+        expect(counter.props.wrapperProps).toBe('heheda')
+        expect(wrapperProps.textContent).toBe('miao')
+        expect(overwritedProps.textContent).toBe('miao')
+        expect(count.textContent).toBe('19')
+        return do$([
+          ()=>counterWrapper.setState({overwritedProps: 'wrapper', count: 1})
+        ])
+      }).then(()=>{
+        let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+        let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+        expect(overwritedProps.textContent).toBe('wrapper')
+        expect(count.textContent).toBe('1')
+      })
+    })
   });
 })
