@@ -10,6 +10,8 @@ const CounterView = props=> (
     <span className="count">{props.count}</span>
     <span className="wrapperProps">{props.wrapperProps}</span>
     <span className="overwritedProps">{props.overwritedProps}</span>
+    <span className="backward" onClick={props.history.backward}>-</span>
+    <span className="forward" onClick={props.history.forward}>+</span>
   </div>
 )
 
@@ -50,11 +52,12 @@ describe('react-most', () => {
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
       do$([()=>counter.actions.inc(),
-           ()=>counter.actions.inc()])
+           ()=>counter.actions.fromPromise(Promise.resolve({type:'inc'})),
+           ()=>counter.actions.fromEvent({type:'inc'})])
 
       return historyStreamOf(counter)
-        .take$(2)
-        .then(state=>expect(state.count).toEqual(2))
+        .take$(3)
+        .then(state=>expect(state.count).toEqual(3))
     })
 
     it('sink can also generate intent', ()=> {
@@ -134,4 +137,41 @@ describe('react-most', () => {
       })
     })
   });
+
+  describe('history', ()=>{
+    it('can undo', ()=> {
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      return do$([
+        ()=>counter.actions.inc(),
+        ()=>counter.actions.inc(),
+        ()=>counter.actions.inc()
+      ]).then(()=>{
+        let backward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'backward')
+        TestUtils.Simulate.click(backward)
+        TestUtils.Simulate.click(backward)
+        TestUtils.Simulate.click(backward)
+      }).then(()=>{
+        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+        expect(count.textContent).toBe('1')
+      }).then(()=>{
+        let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
+        TestUtils.Simulate.click(forward)
+      }).then(()=>{
+        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+        expect(count.textContent).toBe('2')
+      }).then(()=>{
+        let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
+        TestUtils.Simulate.click(forward)
+        TestUtils.Simulate.click(forward)
+      }).then(()=>{
+        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+        expect(count.textContent).toBe('3')
+      })
+    })
+  })
 })
