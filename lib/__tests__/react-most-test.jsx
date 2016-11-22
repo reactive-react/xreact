@@ -241,8 +241,10 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      dispatch([{type:'inc3'},
-                {type:'inc3'}], counter)
+      do$([
+        counter.actions.inc3,
+        counter.actions.inc3,
+      ])
       return historyStreamOf(counter)
         .take$(2)
         .then(state=>expect(state.count).toEqual(6))
