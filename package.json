@@ -38,7 +38,9 @@
     ],
     "testPathDirs": [
       "lib"
-    ]
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "devDependencies": {
     "babel": "^6.1.18",
