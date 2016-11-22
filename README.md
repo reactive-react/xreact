@@ -1,9 +1,11 @@
 # React Most
 
 [![Join the chat at https://gitter.im/jcouyang/react-most](https://badges.gitter.im/jcouyang/react-most.svg)](https://gitter.im/jcouyang/react-most?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A Monadic Reactive State Container for React Components
 
 [![CircleCI](https://circleci.com/gh/reactive-react/react-most.svg?style=svg)](https://circleci.com/gh/reactive-react/react-most)
+[![codecov](https://codecov.io/gh/reactive-react/react-most/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/react-most)
 [![npm](https://img.shields.io/npm/dm/react-most.svg?maxAge=2592000)](https://www.npmjs.com/package/react-most)
 [![npm](https://img.shields.io/npm/v/react-most.svg?maxAge=2592000)]()
 
