@@ -185,7 +185,7 @@ describe('react-most', () => {
   describe('composable', ()=>{
     const counterWrapper2 = connect(intent$=>{
       return {
-        sink2$: intent$.map(intent=>{
+        sink$: intent$.map(intent=>{
           switch(intent.type) {
             case 'inc2':
               return state=>({count:state.count+2})
@@ -217,4 +217,35 @@ describe('react-most', () => {
     })
   })
 
+  describe('convension default to `action` field in sinks', ()=>{
+    const Counter = connect(intent$=>{
+      return {
+        sink$: intent$.map(intent=>{
+          switch(intent.type) {
+            case 'inc3':
+              return state=>({count:state.count+3})
+            default:
+              return state=>state
+          }
+        }),
+        actions: {
+          inc3: ()=>({type: 'inc3'})
+        },
+      }
+    })(CounterView)
+
+    it('counter inc 3', ()=>{
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      dispatch([{type:'inc3'},
+                {type:'inc3'}], counter)
+      return historyStreamOf(counter)
+        .take$(2)
+        .then(state=>expect(state.count).toEqual(6))
+    })
+  })
 })
