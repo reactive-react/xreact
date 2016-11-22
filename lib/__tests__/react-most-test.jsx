@@ -2,22 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
+import {compose} from 'ramda';
 import Most, {connect} from '../react-most';
-import {do$, historyStreamOf, intentStreamOf} from '../test-utils'
+import {do$, historyStreamOf, intentStreamOf,dispatch} from '../test-utils'
 
-const CounterView = props=> (
-  <div>
-    <span className="count">{props.count}</span>
-    <span className="wrapperProps">{props.wrapperProps}</span>
-    <span className="overwritedProps">{props.overwritedProps}</span>
-    <span className="backward" onClick={props.history.backward}>-</span>
-    <span className="forward" onClick={props.history.forward}>+</span>
-  </div>
-)
+const CounterView = React.createClass({
+  render(){
+    return (
+      <div>
+        <span className="count">{this.props.count}</span>
+        <span className="wrapperProps">{this.props.wrapperProps}</span>
+        <span className="overwritedProps">{this.props.overwritedProps}</span>
+        <span className="backward" onClick={this.props.history.backward}>-</span>
+        <span className="forward" onClick={this.props.history.forward}>+</span>
+      </div>
+    )
+  }
+})
 
 CounterView.defaultProps = {count: 0, overwritedProps: 'inner'}
 
-const Counter = connect(intent$=>{
+const counterWrapper = connect(intent$=>{
   return {
     sink$: intent$.map(intent=>{
       switch(intent.type) {
@@ -39,7 +44,9 @@ const Counter = connect(intent$=>{
     changeWrapperProps: (value)=>({type:'changeWrapperProps', value}),
     changeDefaultProps: (value)=>({type:'changeDefaultProps', value}),
   }
-})(CounterView)
+})
+
+const Counter = counterWrapper(CounterView)
 
 describe('react-most', () => {
   describe('actions', ()=>{
@@ -174,4 +181,40 @@ describe('react-most', () => {
       })
     })
   })
+
+  describe('composable', ()=>{
+    const counterWrapper2 = connect(intent$=>{
+      return {
+        sink2$: intent$.map(intent=>{
+          switch(intent.type) {
+            case 'inc2':
+              return state=>({count:state.count+2})
+            case 'dec2':
+              return state=>({count:state.count-2})
+            default:
+              return state=>state
+          }
+        }),
+        inc2: ()=>({type:'inc2'}),
+        dec2: ()=>({type:'dec2'}),
+      }
+    })
+    let counterWrapper21 = compose(counterWrapper2, counterWrapper)
+    const Counter2 = counterWrapper21(CounterView)
+    it('counter add inc2, dec2', ()=>{
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter2 history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter2)
+      dispatch([{type:'inc'},
+              {type: 'inc2'},
+              {type:'dec'}], counter)
+      return historyStreamOf(counter)
+        .take$(3)
+        .then(state=>expect(state.count).toEqual(2))
+    })
+  })
+
 })
