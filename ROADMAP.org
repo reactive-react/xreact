@@ -1,10 +1,11 @@
-* RoadMap [0%]
+* RoadMap [50%]
 
-- [ ] modular, extra engine.
-- [ ] time travel
-  - [ ] inspect
-  - [ ] history.back()
+- [X] modular, extra engine.
+- [X] time travel
+  - [X] inspect
+  - [X] history.back()
 - [ ] unsubscribe when component unmount
-- [ ] todo example
+- [X] todo example
 - [ ] router example
-- [ ]
+- [ ] typescript typedef
+- [ ] flow type

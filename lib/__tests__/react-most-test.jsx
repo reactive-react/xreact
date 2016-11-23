@@ -250,4 +250,37 @@ describe('react-most', () => {
         .then(state=>expect(state.count).toEqual(6))
     })
   })
+
+  describe('convension default to `action` field in sinks', ()=>{
+    const Counter = connect(intent$=>{
+      return {
+        sink$: intent$.map(intent=>{
+          switch(intent.type) {
+            case 'exception':
+              throw new Error('exception in reducer')
+            default:
+              return state=>state
+          }
+        }),
+        actions: {
+          throwExeption: ()=>({type: 'exception'})
+        },
+      }
+    })(CounterView)
+
+    it('should recover to identity stream and log exception', ()=>{
+      spyOn(console, 'error')
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      return do$([
+        counter.actions.throwExeption,
+      ]).then(()=>{
+        expect(console.error).toHaveBeenCalled()
+      })
+    })
+  })
 })
