@@ -12,7 +12,7 @@ const CounterView = props => (
 
 CounterView.defaultProps = { count: 0 };
 
-const reactify = connect((intent$) => {
+const counterable = connect((intent$) => {
 	return {
 		sink$: intent$.map(intent => {
 			switch (intent.type) {
@@ -29,7 +29,7 @@ const reactify = connect((intent$) => {
 	}
 })
 
-const Counter = reactify(CounterView)
+const Counter = counterable(CounterView)
 
 render(
 	<Most>

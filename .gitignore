@@ -43,3 +43,5 @@ deploy.pub
 /history.js
 /test-utils.js
 public/app.js
+gh-pages/
+wiki/
