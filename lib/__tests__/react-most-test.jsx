@@ -251,7 +251,7 @@ describe('react-most', () => {
     })
   })
 
-  describe('convension default to `action` field in sinks', ()=>{
+  describe('ERROR', ()=>{
     const Counter = connect(intent$=>{
       return {
         sink$: intent$.map(intent=>{
@@ -263,7 +263,7 @@ describe('react-most', () => {
           }
         }),
         actions: {
-          throwExeption: ()=>({type: 'exception'})
+          throwExeption: ()=>({type: 'exception'}),
         },
       }
     })(CounterView)
@@ -281,6 +281,49 @@ describe('react-most', () => {
       ]).then(()=>{
         expect(console.error).toHaveBeenCalled()
       })
+    })
+  })
+
+  describe('unsubscribe when component unmounted', ()=>{
+    it('unsubscribe', (done)=>{
+      const Counter = connect(intent$=>{
+        let incForever$ = most.periodic(100, {type:'inc'}).map(intent=>{
+          done.fail('should not send intent any more')
+          return _=>_
+        })
+        return {
+          incForever$,
+          sink$: intent$.map(intent=>{
+            switch(intent.type) {
+              case 'inc':
+                return state=>({count:state.count+1})
+              default:
+                return state=>state
+            }
+          })
+        }
+      })(CounterView)
+
+      const TogglableMount = React.createClass({
+        getInitialState(){
+          return {
+            mount: true
+          }
+        },
+        render(){
+          return this.state.mount && <Counter history={true} />
+        }
+      })
+      spyOn(console, 'error')
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most >
+          <TogglableMount />
+        </Most>
+      )
+      let toggle = TestUtils.findRenderedComponentWithType(counterWrapper, TogglableMount)
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      toggle.setState({mount:false})
+      done()
     })
   })
 })
