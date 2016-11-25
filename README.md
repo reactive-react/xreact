@@ -36,34 +36,32 @@ also you can refer to various of [Examples](https://github.com/reactive-react/re
 ### 1. Create a simple statless component
 ```html
 const CounterView = props => (
-	<div>
-		<button onClick={props.actions.dec}>-</button>
-		<span>{props.count}</span>
-		<button onClick={props.actions.inc}>+</button>
-	</div>
+  <div>
+    <button onClick={props.actions.dec}>-</button>
+    <span>{props.count}</span>
+    <button onClick={props.actions.inc}>+</button>
+  </div>
 )
 ```
 ### 2. Define Counter's Behaviour
 1. a counter can have actions of `inc` and `dec`, which will send a objec `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` if it's been call
 2. a counter reactivly generate state transform function when recieve intent of type `inc` or `dec`.
 ```js
-const counterable = connect(intent$ => {
-	return {
-    actions: {
-      inc: () => ({ type: 'inc' }),
-		  dec: () => ({ type: 'dec' }),
-    },
-		sink$: intent$.map(intent => {
-			switch (intent.type) {
-				case 'inc':
-					return state => ({ count: state.count + 1 });
-				case 'dec':
-					return state => ({ count: state.count - 1 });
-				default:
-					return _ => _;
-			}
-		}),
-	}
+const counterable = connect((intent$) => {
+  return {
+    sink$: intent$.map(intent => {
+      switch (intent.type) {
+        case 'inc':
+          return state => ({ count: state.count + 1 });
+        case 'dec':
+          return state => ({ count: state.count - 1 });
+        default:
+          return _ => _;
+      }
+    }),
+    inc: () => ({ type: 'inc' }),
+    dec: () => ({ type: 'dec' }),
+  }
 })
 ```
 ### 3. connect behaviour and view
@@ -72,10 +70,10 @@ const counterable = connect(intent$ => {
 const Counter = counterable(CounterView)
 
 render(
-	<Most>
-		<Counter />
-	</Most>
-	, document.getElementById('app'));
+  <Most>
+    <Counter />
+  </Most>
+  , document.getElementById('app'));
 ```
 
 ## Features
