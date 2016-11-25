@@ -1,7 +1,7 @@
 import React from 'react'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
-import {connect} from '../../../../lib/react-most'
+import {connect} from 'react-most'
 import rest from 'rest'
 const remote = 'todos.json';
 import * as most from 'most'
@@ -36,7 +36,11 @@ export default connect((intent$)=>{
   let lensComplete = r.lensProp('done')
   let lensTodo = index => r.compose(lensTodos, r.lensIndex(index))
   let lensTodoComplete = index => r.compose(lensTodo(index), lensComplete)
+  let nextId = r.compose(r.inc, r.prop('id'), r.last, r.sortBy(r.prop('id')))
   let sinks$ = intent$.map(Intent.case({
+    Add: (todo) => state=>{
+      return r.over(lensTodos, r.append(r.assoc('id', nextId(state.todos), todo)), state)
+    },
     Edit: (todo,index) => r.set(lensTodo(index), todo),
     Clear: () => r.over(lensTodos, r.filter(todo=>!todo.done)),
     Delete: id => r.over(lensTodos, r.filter(todo=>todo.id!=id)),
@@ -67,7 +71,7 @@ export default connect((intent$)=>{
 
   return {
     sinks$,
-    searchSink$,
+    /* searchSink$,*/
     data$,
   }
 })(MainSection)

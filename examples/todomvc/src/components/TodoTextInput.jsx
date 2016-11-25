@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import MainSection from './MainSection'
 import {connect} from 'react-most'
 import TodoItem from './TodoItem'
-
+import Intent from '../todo.action'
 let TodoTextInput = React.createClass({
   getInitialState(){
     return {
@@ -17,7 +17,7 @@ let TodoTextInput = React.createClass({
     if (e.which === 13) {
       if (this.props.newTodo) {
         this.props.actions.add(msg);
-        this.props.search('')
+        this.props.actions.search('')
         this.setState({ text: '' })
       }
     }
@@ -25,7 +25,7 @@ let TodoTextInput = React.createClass({
 
   handleChange(e) {
     if (this.props.newTodo)
-      this.props.search(e.target.value)
+      this.props.actions.search(e.target.value)
     this.setState({ text: e.target.value })
   },
 
@@ -54,4 +54,9 @@ let TodoTextInput = React.createClass({
   },
 });
 
-export default TodoTextInput
+export default connect(intent$=>{
+  return {
+      add: Intent.Add,
+      search: Intent.Search,
+  }
+})(TodoTextInput)

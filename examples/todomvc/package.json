@@ -1,5 +1,5 @@
 {
-  "name": "mostux-todomvc",
+  "name": "react-most-todomvc",
   "version": "0.0.1",
   "description": "",
   "browserify": {
@@ -34,9 +34,10 @@
     "classnames": "^2.2.0",
     "lodash": "^4.0.0",
     "most": "^1.0.5",
+    "ramda": "^0.22.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-most": "^0.4.4",
+    "react-most": "0.6.4",
     "rest": "^1.3.1",
     "union-type": "^0.3.3"
   },
@@ -44,6 +45,7 @@
     "babel": "^6.5.2",
     "babel-jest": "^16.0.0",
     "babel-plugin-lodash": "^2.0.1",
+    "babel-plugin-ramda": "^1.1.6",
     "babel-plugin-transform-react-jsx": "^6.1.18",
     "babel-preset-es2015": "^6.1.18",
     "babelify": "^7.2.0",
@@ -51,7 +53,6 @@
     "ecstatic": "^1.3.1",
     "envify": "^3.4.1",
     "jest-cli": "^0.7.0",
-    "ramda": "^0.22.1",
     "react-addons-test-utils": "^15.3.2",
     "uglify-js": "^2.6.1",
     "watchify": "^3.6.1"
@@ -64,7 +65,8 @@
     ],
     "plugins": [
       "transform-react-jsx",
-      "lodash"
+      "lodash",
+      "ramda"
     ]
   }
 }

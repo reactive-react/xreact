@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import Header from './components/Header';
 import MainSection from './components/MainSection';
 import {render} from 'react-dom';
-import Most from '../../../lib/react-most'
+import Most from 'react-most'
 
-const App = (props) => {
+const App = () => {
   return (
     <div>
       <Header />

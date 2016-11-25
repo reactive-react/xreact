@@ -8,7 +8,7 @@ const TodoItemView = ({todo, actions, index}) => {
   return <div className="view">
     <input className="toggle"
            type="checkbox"
-           checked={todo.done}
+           defaultChecked={todo.done}
            onChange={()=>actions.done(index)} />
     <label onDoubleClick={()=>actions.editing(todo.id)}>
       {todo.text}
@@ -24,7 +24,6 @@ const TodoItem = props => {
   let element = editing === todo.id ? <TodoTextInput text={todo.text}
                                                      itemid={todo.id}
                                                      editing={editing === todo.id}
-                                                     actions={actions}
                                                      index={index}
                 />: <TodoItemView index={index} todo={todo} actions={actions}/>
 
@@ -42,6 +41,7 @@ const intentWrapper = connect(intent$ => {
   return {
     reduceEditing$,
     editing: Intent.Editing,
+    add: Intent.Add,
     edit: Intent.Edit,
     done: Intent.Done,
     remove: Intent.Delete,
