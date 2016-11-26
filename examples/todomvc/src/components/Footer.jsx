@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import {connect} from 'react-most'
 import MainSection from './MainSection'
-import Intent from '../todo.action.js'
+import Intent from '../intent'
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
   'SHOW_ACTIVE': 'Active',

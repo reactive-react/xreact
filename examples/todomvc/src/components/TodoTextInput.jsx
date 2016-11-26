@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import MainSection from './MainSection'
 import {connect} from 'react-most'
 import TodoItem from './TodoItem'
-import Intent from '../todo.action'
+import Intent from '../intent'
 let TodoTextInput = React.createClass({
   getInitialState(){
     return {

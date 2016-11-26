@@ -2935,9 +2935,9 @@ react-dom:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
 
-react-most@0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/react-most/-/react-most-0.6.4.tgz#a9fb1c3e77f3b97f56de9e333499e040a9193967"
+react-most@^0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/react-most/-/react-most-0.6.5.tgz#35f72e1bfc177d758defd273273428f6f69acc84"
   dependencies:
     most "^1.0.5"
     most-subject "^5.2.0"

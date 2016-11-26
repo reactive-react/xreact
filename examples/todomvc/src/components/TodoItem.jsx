@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import TodoTextInput from './TodoTextInput'
 import MainSection from './MainSection'
 import {connect} from 'react-most'
-import Intent from '../todo.action'
+import Intent from '../intent'
 const TodoItemView = ({todo, actions, index}) => {
   return <div className="view">
     <input className="toggle"

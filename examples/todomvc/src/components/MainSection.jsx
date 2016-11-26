@@ -5,7 +5,7 @@ import {connect} from 'react-most'
 import rest from 'rest'
 const remote = 'todos.json';
 import * as most from 'most'
-import Intent from '../todo.action'
+import Intent from '../intent'
 import r from 'ramda'
 const alwaysId = ()=>r.identity
 

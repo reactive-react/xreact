@@ -2,7 +2,7 @@ jest.mock('rest')
 import rest from 'rest'
 import React  from  'react'
 import when  from  'when'
-import Intent  from  '../../todo.action'
+import Intent  from  '../../intent'
 import MainSection  from  '../MainSection.jsx'
 import Footer, {FILTER_FUNC}  from  '../Footer.jsx'
 import TodoItem  from  '../TodoItem.jsx'
