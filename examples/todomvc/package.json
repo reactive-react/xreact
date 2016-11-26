@@ -43,7 +43,6 @@
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-jest": "^16.0.0",
-    "babel-plugin-lodash": "^2.0.1",
     "babel-plugin-ramda": "^1.1.6",
     "babel-plugin-transform-react-jsx": "^6.1.18",
     "babel-preset-es2015": "^6.1.18",
@@ -53,7 +52,6 @@
     "envify": "^3.4.1",
     "jest-cli": "^0.7.0",
     "react-addons-test-utils": "^15.3.2",
-    "uglify-js": "^2.6.1",
     "watchify": "^3.6.1"
   },
   "author": "Jichao Ouyang",
@@ -64,7 +62,6 @@
     ],
     "plugins": [
       "transform-react-jsx",
-      "lodash",
       "ramda"
     ]
   }
