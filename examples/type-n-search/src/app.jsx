@@ -28,14 +28,20 @@ const MostTypeNSearch = connect(function(intent$){
                            .map(url=>rest(url).then(resp=>({
                                type: 'dataUpdate',
                                value: resp.entity
-                             })))
+                           })).catch(error=>{
+                             console.error('API REQUEST ERROR:', error)
+                             return {
+                               type: 'dataError',
+                               value: error.message
+                             }
+                           }))
                            .flatMap(most.fromPromise)
                            .filter(i=>i.type=='dataUpdate')
                            .map(data=>JSON.parse(data.value).items)
                            .map(items=>items.slice(0,10))
                            .map(items=>state=>({results: items}))
                            .flatMapError(error=>{
-                             console.log('[ERROR]:', error);
+                             console.log('[CRITICAL ERROR]:', error);
                              return most.of({message:error.error,className:'display'})
                                         .merge(most.of({className:'hidden'}).delay(3000))
                                         .map(error=>state=>({error}))
