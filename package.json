@@ -28,7 +28,7 @@
     "most-subject": "^5.2.0",
     "ramda": "^0.22.1",
     "react": "^15.3.2",
-    "rx": "^4.1.0"
+    "rxjs": "^5.0.0-rc.4"
   },
   "jest": {
     "moduleFileExtensions": [
