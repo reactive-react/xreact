@@ -18,7 +18,8 @@ npm install react-most --save
 `react-most` is simple and only 100 LOC React Higher Order Component. only depends on most and react.
 
 data flow is simple and one way only
-![](https://raw.githubusercontent.com/jcouyang/react-most/master/docs/images/flow.dot.png)
+
+![](https://github.com/reactive-react/react-most/wiki/images/react-most-flow.png)
 
 ## Terminology
 - **Action**: a action can create a Intent and send to `Intent Stream`
@@ -31,9 +32,15 @@ data flow is simple and one way only
 sorry we don't have a **book** to document how to use `react-most`, and I don't really need to, but
 there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
 
-also you can refer to various of [Examples](https://github.com/reactive-react/react-most/wiki/examples.md) and it's simple [API](https://github.com/reactive-react/react-most/wiki/api.md)
+also you can refer to 
+
+- various of [Examples](https://github.com/reactive-react/react-most/wiki/examples.md)
+- simple [API](https://github.com/reactive-react/react-most/wiki/api.md)
+- [Wiki](https://github.com/reactive-react/react-most/wiki)
+
 
 ### 1. Create a simple statless component
+![](https://github.com/reactive-react/react-most/wiki/images/view.png)
 ```html
 const CounterView = props => (
   <div>
@@ -44,6 +51,8 @@ const CounterView = props => (
 )
 ```
 ### 2. Define Counter's Behaviour
+![](https://github.com/reactive-react/react-most/wiki/images/behavior.png)
+
 1. a counter can have actions of `inc` and `dec`, which will send a objec `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` if it's been call
 2. a counter reactivly generate state transform function when recieve intent of type `inc` or `dec`.
 ```js
@@ -65,7 +74,7 @@ const counterable = connect((intent$) => {
 })
 ```
 ### 3. connect behaviour and view
-
+![](https://github.com/reactive-react/react-most/wiki/images/wrap.png)
 ```js
 const Counter = counterable(CounterView)
 
