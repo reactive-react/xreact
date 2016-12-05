@@ -24,7 +24,7 @@
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "dependencies": {
-    "most": "^1.0.5",
+    "most": "^1.1.1",
     "most-subject": "^5.2.0",
     "ramda": "^0.22.1",
     "react": "^15.3.2",

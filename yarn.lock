@@ -1983,14 +1983,6 @@ mkdirp@^0.5.1, "mkdirp@>=0.5 0", mkdirp@~0.5.1, mkdirp@0.5.x:
   dependencies:
     minimist "0.0.8"
 
-most:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/most/-/most-1.0.5.tgz#fb20427e50eb6672b466931b8f5867dac964342c"
-  dependencies:
-    "@most/multicast" "^1.2.3"
-    "@most/prelude" "^1.4.0"
-    symbol-observable "^1.0.2"
-
 most-subject@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/most-subject/-/most-subject-5.2.0.tgz#4976c169589ceaca08be77d49b95885238bc8373"
@@ -2002,6 +1994,14 @@ most-subject@^5.2.0:
 most@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/most/-/most-1.1.0.tgz#b0c8ab5ceab45989c1c0229d6501313f2a3275bf"
+  dependencies:
+    "@most/multicast" "^1.2.3"
+    "@most/prelude" "^1.4.0"
+    symbol-observable "^1.0.2"
+
+most@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/most/-/most-1.1.1.tgz#75ccbb4c61a086b6794c378583ae0113b20fc7b5"
   dependencies:
     "@most/multicast" "^1.2.3"
     "@most/prelude" "^1.4.0"
