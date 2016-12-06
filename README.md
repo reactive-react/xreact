@@ -8,6 +8,7 @@ A Monadic Reactive Composable State Wrapper for React Component
 [![codecov](https://codecov.io/gh/reactive-react/react-most/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/react-most)
 [![npm](https://img.shields.io/npm/dm/react-most.svg)](https://www.npmjs.com/package/react-most)
 [![npm](https://img.shields.io/npm/v/react-most.svg)](https://www.npmjs.com/package/react-most)
+[![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/react-most.svg)](https://greenkeeper.io)
 
 ## Install
 ```
