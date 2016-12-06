@@ -6,8 +6,8 @@ A Monadic Reactive Composable State Wrapper for React Component
 
 [![CircleCI](https://circleci.com/gh/reactive-react/react-most.svg?style=svg)](https://circleci.com/gh/reactive-react/react-most)
 [![codecov](https://codecov.io/gh/reactive-react/react-most/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/react-most)
-[![npm](https://img.shields.io/npm/dm/react-most.svg?maxAge=2592000)](https://www.npmjs.com/package/react-most)
-[![npm](https://img.shields.io/npm/v/react-most.svg?maxAge=2592000)]()
+[![npm](https://img.shields.io/npm/dm/react-most.svg)](https://www.npmjs.com/package/react-most)
+[![npm](https://img.shields.io/npm/v/react-most.svg)](https://www.npmjs.com/package/react-most)
 
 ## Install
 ```
