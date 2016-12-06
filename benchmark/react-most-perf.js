@@ -1,4 +1,5 @@
 var reactMost = require('../react-most.js')
+var {INTENT_STREAM} = require('../react-most.js')
 var Most = reactMost.default;
 var timer = require('./timer')
 var time = timer.time
@@ -7,7 +8,7 @@ var todolist;
 var context = Most.prototype.getChildContext()
 var most = require('most');
 var log = _=>console.log(_)
-var intentStream = context["__reactive.react.intentStream__"]
+var intentStream = context[INTENT_STREAM]
 function genActions(intent$){
   var add$ = intent$.filter(x=>x.type=='add')
   var addState$ = add$.map((add)=>{
