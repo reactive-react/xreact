@@ -35,8 +35,9 @@ there's only 3 things you should notice when using `react-most`, I'll explain by
 
 also you can refer to 
 
-- various of [Examples](https://github.com/reactive-react/react-most/wiki/examples.md)
-- simple [API](https://github.com/reactive-react/react-most/wiki/api.md)
+- various of [Examples](https://github.com/reactive-react/react-most/wiki/examples)
+- simple [API](https://github.com/reactive-react/react-most/wiki/api)
+- [Best Practice](https://github.com/reactive-react/react-most/wiki/frp-best-practice)
 - [Wiki](https://github.com/reactive-react/react-most/wiki)
 
 
