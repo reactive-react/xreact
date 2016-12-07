@@ -41,7 +41,8 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-most": "^0.6.5",
-    "union-type": "^0.3.3"
+    "union-type": "^0.3.3",
+    "when": "^3.7.7"
   },
   "devDependencies": {
     "babel": "^6.5.2",

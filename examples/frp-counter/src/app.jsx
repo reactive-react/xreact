@@ -1,7 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Most, { connect } from '../../../lib/react-most'
-import {from, lensProp, over, set, identity} from 'ramda'
+import when from 'when'
+import {just, fromPromise} from 'most'
+import {compose, lensProp, over, set, identity} from 'ramda'
 import Type from 'union-type'
 const Intent = Type({
   Inc: [Number],
@@ -23,6 +25,14 @@ const CounterView = props => (
 CounterView.defaultProps = { count: 0 };
 
 const lensCount = lensProp('count')
+
+const asyncInitCount11 = connect(intent$=>{
+  return {
+    dataSink$: just(11)
+      .flatMap(compose(fromPromise, when))
+      .map(set(lensCount))
+  }
+})
 
 const doublable = connect(intent$ => {
   return {
@@ -52,7 +62,8 @@ const increasable = connect(intent$ => {
   }
 })
 
-const Counter = doublable(increasable(CounterView))
+const wrapper = compose(asyncInitCount11, doublable, increasable)
+const Counter = wrapper(CounterView)
 
 render(
   <Most>
