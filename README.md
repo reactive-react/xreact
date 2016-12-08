@@ -16,7 +16,7 @@ npm install react-most --save
 ```
 
 ## What
-`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [ramda](https://github.com/Ramda/ramda), [RxJS](https://github.com/Reactive-Extensions/RxJS), and [React](https://github.com/facebook/react).
+`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [ramda](https://github.com/Ramda/ramda), [React](https://github.com/facebook/react), and (optionally) [RxJS](https://github.com/Reactive-Extensions/RxJS).
 
 Data flow in `react-most` is simple and unidirectional.
 
