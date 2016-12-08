@@ -41,7 +41,7 @@ also you can refer to
 - [Wiki](https://github.com/reactive-react/react-most/wiki)
 
 
-### 1. Create a simple statless component
+### 1. Create a simple stateless component
 ![](https://github.com/reactive-react/react-most/wiki/images/view.png)
 ```html
 const CounterView = props => (
