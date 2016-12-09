@@ -16,7 +16,7 @@ npm install react-most --save
 ```
 
 ## What
-`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [ramda](https://github.com/Ramda/ramda), [React](https://github.com/facebook/react), and (optionally) [RxJS](https://github.com/Reactive-Extensions/RxJS).
+`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [ramda](https://github.com/Ramda/ramda), [React](https://github.com/facebook/react), and (optionally, if you prefered) [RxJS](https://github.com/Reactive-Extensions/RxJS).
 
 Data flow in `react-most` is simple and unidirectional.
 
@@ -27,7 +27,7 @@ Data flow in `react-most` is simple and unidirectional.
 - **Intent Stream**: a timeline of every `Intent` created by every `Action`
 - **Sink**: a timeline of transformations of state, e.g.
 
-        --- currentState => nextState --->
+        --- (currentState => nextState) -- (currentState => nextState) --->
 - **State**: a React component's state
 
 ## Quick Start
@@ -98,7 +98,9 @@ Inspired by Redux and Functional Reactive Programming, `react-most` allows you t
 In imperatively written code, you describe step-by-step how to process data.  With `react-most`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
 ### Composable and Reusable Sinks
-In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, sinks are easily composable and reusable.
+In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, sinks are reusable observable object.
+
+Wrapper is simply a function and easily composable.
 
 ```js
 const countBy1 = connect(...)
@@ -148,13 +150,24 @@ Writing actions as transducers can improve reusability.
 ### Time Travel
 Because we have all actions' streams, we can easily reproduce the actions at anytime, or get snapshot of the state's stream and going back in time.
 
-By passing the `history` parameter into the options of `connect`, a stream with all of the state's history will be created, called `historyStream`.
+By passing the `history` parameter into the options of `connect`
 ```js
 connect(intent$=>[/* your awesome flow */], { history: true })(App)
 ```
 
+or passing `history` as a prop
+```js
+<Most>
+  <Counter history={true}/>
+</Most>
+```
+
+A stream with all of the state's history will be created, called `historyStream`.
+
 ### Modular and Easy to Extend
 If you're more familiar with RxJS, it's easy to use it with `react-most` in place of `most`.  Simply pass a prop called `engine` to the `Most` component.
+
+> But, I'm strongly RECOMMEND to use the default engine `most.js`, it's how `react-most` originally built for, and production ready.
 
 ```html
 import rxEngine from 'react-most/engine/rx'
