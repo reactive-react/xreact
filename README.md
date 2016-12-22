@@ -17,9 +17,9 @@ npm install react-most --save
 ```
 ### browser
 ```html
-<script src="https://cdn.rawgit.com/cujojs/most/master/dist/vendor.js"></script>
+<script src="https://cdn.rawgit.com/reactive-react/react-most/master/dist/vendor.js"></script>
 <!-- vendor.js includes react, most, most-subject -->
-<script src="https://cdn.rawgit.com/cujojs/most/master/dist/react-most.js"></script>
+<script src="https://cdn.rawgit.com/reactive-react/react-most/master/dist/react-most.js"></script>
 ```
 
 then you can use `Most.default` and `Most.connect`
