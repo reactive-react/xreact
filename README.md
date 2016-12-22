@@ -11,9 +11,18 @@ A Monadic Reactive Composable State Wrapper for React Components
 [![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/react-most.svg)](https://greenkeeper.io)
 
 ## Install
+### npm
 ```
 npm install react-most --save
 ```
+### browser
+```html
+<script src="https://cdn.rawgit.com/cujojs/most/master/dist/vendor.js"></script>
+<!-- vendor.js includes react, most, most-subject -->
+<script src="https://cdn.rawgit.com/cujojs/most/master/dist/react-most.js"></script>
+```
+
+then you can use `Most.default` and `Most.connect`
 
 ## What
 `react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [ramda](https://github.com/Ramda/ramda), [React](https://github.com/facebook/react), and (optionally, if you prefered) [RxJS](https://github.com/Reactive-Extensions/RxJS).
