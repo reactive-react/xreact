@@ -6,4 +6,5 @@ npm start
 ```
 See the [output](localhost:8000)
 ## exercise online
-[Counter Online](http://jsbin.com/waciku/edit?html,js,console,output)
+[Counter Online](http://output.jsbin.com/waciku)
+Click "Edit in JS Bin" to see the source code. 
