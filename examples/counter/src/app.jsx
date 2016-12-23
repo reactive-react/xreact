@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Most, { connect } from '../../../lib/react-most'
+import Most, { connect } from 'react-most'
 
 const CounterView = props => (
   <div>
