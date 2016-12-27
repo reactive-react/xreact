@@ -17,7 +17,7 @@
     ]
   },
   "scripts": {
-    "build": "NODE_ENV=production browserify src/app.jsx --extension=.jsx  --extension=.es6 > public/app.js",
+    "build": "NODE_ENV=production browserify src/app.jsx --extension=.jsx  --extension=.es6| java -jar ../todomvc/bin/compiler.jar > public/app.js",
     "start": "ecstatic -p 8000 public",
     "watch": "watchify -d src/app.jsx --extension=.jsx --extension=.es6 -o public/app.js -dv",
     "test": "jest"
