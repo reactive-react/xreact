@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Most, { connect } from '../../../lib/react-most'
+import Most, { connect } from 'react-most'
 import when from 'when'
 import {just, fromPromise} from 'most'
 import {compose, lensProp, over, set, identity} from 'ramda'
