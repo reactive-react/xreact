@@ -26,10 +26,12 @@
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "dependencies": {
+    "jest": "^18.0.0",
     "most": "^1.1.1",
     "most-subject": "^5.2.0",
     "ramda": "^0.23.0",
     "react": "^15.3.2",
+    "react-most-spec": "v0.1.2",
     "rxjs": "^5.0.0-rc.4"
   },
   "jest": {
@@ -56,6 +58,7 @@
     "lodash": "^4.0.0",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.3.2",
+    "react-most-spec": "^0.1.1",
     "redux": "^3.0.4"
   },
   "author": "Jichao Ouyang",

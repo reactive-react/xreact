@@ -4,7 +4,44 @@ import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
 import {compose} from 'ramda';
 import Most, {connect} from '../react-most';
-import {do$, historyStreamOf, intentStreamOf,dispatch} from '../test-utils'
+import {sync,hold} from 'most-subject'
+import {from } from 'most'
+import {INTENT_STREAM, HISTORY_STREAM} from '../react-most'
+function getStreamOf(component, name) {
+  return component.context[name];
+}
+
+function historyStreamOf(component) {
+  return getStreamOf(component, HISTORY_STREAM)
+}
+
+function intentStreamOf(component) {
+  return getStreamOf(component, INTENT_STREAM)
+}
+function Engine() {
+  const intentStream = hold(2, sync()),
+        historyStream = [],
+        travelStream = sync();
+  intentStream.send = intentStream.next.bind(intentStream);
+  historyStream.send = historyStream.push.bind(historyStream);
+  travelStream.send = travelStream.next.bind(travelStream);
+  setTimeout(() => intentStream.complete())
+
+  function mergeObserve(actionsSinks, f){
+    let subscriptions = most.mergeArray(actionsSinks)
+      .recoverWith(e => {
+        console.error('There is Error in your reducer:',e, e.stack)
+        return of(x=>x)
+      })
+      .subscribe({
+        next:f,
+        error: (e)=>console.error('Something is Wrong:',e, e.stack),
+      });
+    return subscriptions;
+  }
+  historyStream.travel = travelStream;
+  return {intentStream, mergeObserve, historyStream}
+}
 
 const CounterView = React.createClass({
   render(){
@@ -50,36 +87,30 @@ const Counter = counterWrapper(CounterView)
 
 describe('react-most', () => {
   describe('actions', ()=>{
-    it('add intent to intent$ and go through sink$', ()=> {
+    it.only('add intent to intent$ and go through sink$', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-
-      do$([()=>counter.actions.inc(),
-           ()=>counter.actions.fromPromise(Promise.resolve({type:'inc'})),
-           ()=>counter.actions.fromEvent({type:'inc'})])
-
-      return historyStreamOf(counter)
-        .take$(3)
-        .then(state=>expect(state.count).toEqual(3))
+      counter.actions.inc()
+      counter.actions.inc()
+      counter.actions.inc()
+      expect(historyStreamOf(counter)[2].count).toBe(3)
     })
 
-    it('sink can also generate intent', ()=> {
+    it.only('sink can also generate intent', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
-      do$([()=>counter.actions.dec()])
-
-      return intentStreamOf(counter)
-        .take(2).observe(_=>_)
-        .then(intent=>expect(intent.type).toEqual('dec triggered'))
+      counter.actions.dec()
+      return intentStreamOf(counter).reduce((acc,x)=>(acc.push(x), acc), [])
+                                    .then(intent=>expect(intent[1].type).toEqual('dec triggered'))
     })
 
     it('props will overwirte components default props', ()=>{
@@ -90,10 +121,9 @@ describe('react-most', () => {
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
-      do$([()=>counter.actions.inc()])
-      return historyStreamOf(counter)
-        .take$(1)
-        .then(state=>expect(state.count).toBe(10))
+      return run(historyStreamOf(counter),
+                 dispatch([{type:'inc'}], counter),
+                 [(value)=>expect(value.count).toBe(10)])
     })
 
     it('props that not overlap with views defaultProps can not be changed', ()=>{
