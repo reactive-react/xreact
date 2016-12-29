@@ -6,43 +6,7 @@ import {compose} from 'ramda';
 import Most, {connect} from '../react-most';
 import {sync,hold} from 'most-subject'
 import {from } from 'most'
-import {INTENT_STREAM, HISTORY_STREAM} from '../react-most'
-function getStreamOf(component, name) {
-  return component.context[name];
-}
-
-function historyStreamOf(component) {
-  return getStreamOf(component, HISTORY_STREAM)
-}
-
-function intentStreamOf(component) {
-  return getStreamOf(component, INTENT_STREAM)
-}
-function Engine() {
-  const intentStream = hold(2, sync()),
-        historyStream = [],
-        travelStream = sync();
-  intentStream.send = intentStream.next.bind(intentStream);
-  historyStream.send = historyStream.push.bind(historyStream);
-  travelStream.send = travelStream.next.bind(travelStream);
-  setTimeout(() => intentStream.complete())
-
-  function mergeObserve(actionsSinks, f){
-    let subscriptions = most.mergeArray(actionsSinks)
-      .recoverWith(e => {
-        console.error('There is Error in your reducer:',e, e.stack)
-        return of(x=>x)
-      })
-      .subscribe({
-        next:f,
-        error: (e)=>console.error('Something is Wrong:',e, e.stack),
-      });
-    return subscriptions;
-  }
-  historyStream.travel = travelStream;
-  return {intentStream, mergeObserve, historyStream}
-}
-
+import {dispatch, stateHistoryOf, intentHistoryOf, Engine} from 'react-most-spec'
 const CounterView = React.createClass({
   render(){
     return (
@@ -87,7 +51,7 @@ const Counter = counterWrapper(CounterView)
 
 describe('react-most', () => {
   describe('actions', ()=>{
-    it.only('add intent to intent$ and go through sink$', ()=> {
+    it('add intent to intent$ and go through sink$', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
         <Most engine={Engine}>
           <Counter history={true} />
@@ -97,10 +61,10 @@ describe('react-most', () => {
       counter.actions.inc()
       counter.actions.inc()
       counter.actions.inc()
-      expect(historyStreamOf(counter)[2].count).toBe(3)
+      expect(stateHistoryOf(counter)[2].count).toBe(3)
     })
 
-    it.only('sink can also generate intent', ()=> {
+    it('sink can also generate intent', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
         <Most engine={Engine}>
           <Counter history={true} />
@@ -109,21 +73,18 @@ describe('react-most', () => {
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
       counter.actions.dec()
-      return intentStreamOf(counter).reduce((acc,x)=>(acc.push(x), acc), [])
-                                    .then(intent=>expect(intent[1].type).toEqual('dec triggered'))
+      expect(intentHistoryOf(counter)[1].type).toBe('dec triggered')
     })
 
     it('props will overwirte components default props', ()=>{
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine} >
           <Counter count={9} history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-
-      return run(historyStreamOf(counter),
-                 dispatch([{type:'inc'}], counter),
-                 [(value)=>expect(value.count).toBe(10)])
+      counter.actions.inc();
+      expect(stateHistoryOf(counter)[0].count).toBe(10)
     })
 
     it('props that not overlap with views defaultProps can not be changed', ()=>{
@@ -142,73 +103,57 @@ describe('react-most', () => {
                      overwritedProps={this.state.overwritedProps}
                      history={true} />
         }
-
       })
       let counterMostWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <CounterWrapper />
         </Most>
       )
       let counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-
-      return do$([
-        ()=>counter.actions.changeWrapperProps('miao'),
-        ()=>counter.actions.changeDefaultProps(19)
-      ]).then(()=>{
-        let wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
-        let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-        let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-        expect(counter.props.wrapperProps).toBe('heheda')
-        expect(wrapperProps.textContent).toBe('miao')
-        expect(overwritedProps.textContent).toBe('miao')
-        expect(count.textContent).toBe('19')
-        return do$([
-          ()=>counterWrapper.setState({overwritedProps: 'wrapper', count: 1})
-        ])
-      }).then(()=>{
-        let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-        let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-        expect(overwritedProps.textContent).toBe('wrapper')
-        expect(count.textContent).toBe('1')
-      })
+      counter.actions.changeWrapperProps('miao')
+      counter.actions.changeDefaultProps(19)
+      let wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
+      let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+      let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+      expect(counter.props.wrapperProps).toBe('heheda')
+      expect(wrapperProps.textContent).toBe('miao')
+      expect(overwritedProps.textContent).toBe('miao')
+      expect(count.textContent).toBe('19')
+      counterWrapper.setState({overwritedProps: 'wrapper', count: 1})
+      overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+      count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+      expect(overwritedProps.textContent).toBe('wrapper')
+      expect(count.textContent).toBe('1')
     })
   });
 
   describe('history', ()=>{
     it('can undo', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine} >
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      return do$([
-        ()=>counter.actions.inc(),
-        ()=>counter.actions.inc(),
-        ()=>counter.actions.inc()
-      ]).then(()=>{
-        let backward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'backward')
-        TestUtils.Simulate.click(backward)
-        TestUtils.Simulate.click(backward)
-        TestUtils.Simulate.click(backward)
-      }).then(()=>{
-        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-        expect(count.textContent).toBe('1')
-      }).then(()=>{
-        let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
-        TestUtils.Simulate.click(forward)
-      }).then(()=>{
-        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-        expect(count.textContent).toBe('2')
-      }).then(()=>{
-        let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
-        TestUtils.Simulate.click(forward)
-        TestUtils.Simulate.click(forward)
-      }).then(()=>{
-        let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-        expect(count.textContent).toBe('3')
-      })
+      counter.actions.inc()
+      counter.actions.inc()
+      counter.actions.inc()
+      let backward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'backward')
+      TestUtils.Simulate.click(backward)
+      TestUtils.Simulate.click(backward)
+      TestUtils.Simulate.click(backward)
+      let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+      expect(count.textContent).toBe('1')
+      let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
+      TestUtils.Simulate.click(forward)
+      count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+      expect(count.textContent).toBe('2')
+      forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
+      TestUtils.Simulate.click(forward)
+      TestUtils.Simulate.click(forward)
+      count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
+      expect(count.textContent).toBe('3')
     })
   })
 
@@ -233,17 +178,16 @@ describe('react-most', () => {
     const Counter2 = counterWrapper21(CounterView)
     it('counter add inc2, dec2', ()=>{
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <Counter2 history={true} />
         </Most>
       )
+      let counterView = TestUtils.findRenderedComponentWithType(counterWrapper, CounterView)
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter2)
-      dispatch([{type:'inc'},
-              {type: 'inc2'},
-              {type:'dec'}], counter)
-      return historyStreamOf(counter)
-        .take$(3)
-        .then(state=>expect(state.count).toEqual(2))
+      counterView.props.actions.inc()
+      counterView.props.actions.inc2()
+      counterView.props.actions.dec()
+      expect(stateHistoryOf(counter)[2].count).toBe(2)
     })
   })
 
@@ -266,18 +210,14 @@ describe('react-most', () => {
 
     it('counter inc 3', ()=>{
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      do$([
-        counter.actions.inc3,
-        counter.actions.inc3,
-      ])
-      return historyStreamOf(counter)
-        .take$(2)
-        .then(state=>expect(state.count).toEqual(6))
+        counter.actions.inc3()
+        counter.actions.inc3()
+      expect(stateHistoryOf(counter)[1].count).toBe(6)
     })
   })
 
@@ -301,16 +241,13 @@ describe('react-most', () => {
     it('should recover to identity stream and log exception', ()=>{
       spyOn(console, 'error')
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      return do$([
-        counter.actions.throwExeption,
-      ]).then(()=>{
-        expect(console.error).toHaveBeenCalled()
-      })
+      counter.actions.throwExeption()
+      expect(console.error).toHaveBeenCalled()
     })
   })
 
@@ -346,7 +283,7 @@ describe('react-most', () => {
       })
       spyOn(console, 'error')
       let counterWrapper = TestUtils.renderIntoDocument(
-        <Most >
+        <Most engine={Engine}>
           <TogglableMount />
         </Most>
       )
