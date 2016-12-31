@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
 import {compose} from 'ramda';
-import Most, {connect} from '../react-most';
-import {sync,hold} from 'most-subject'
-import {from } from 'most'
-import {dispatch, stateHistoryOf, intentHistoryOf, Engine} from 'react-most-spec'
+import Most, {connect} from 'react-most';
+import {stateStreamOf, stateHistoryOf,
+        intentStreamOf, intentHistoryOf,
+        run, dispatch,
+        Engine } from 'react-most-spec';
 const CounterView = React.createClass({
   render(){
     return (
@@ -227,7 +228,9 @@ describe('react-most', () => {
         sink$: intent$.map(intent=>{
           switch(intent.type) {
             case 'exception':
-              throw new Error('exception in reducer')
+              throw 'exception in reducer'
+            case 'inc':
+              return state=>({count:state.count+1})
             default:
               return state=>state
           }
@@ -241,13 +244,28 @@ describe('react-most', () => {
     it('should recover to identity stream and log exception', ()=>{
       spyOn(console, 'error')
       let counterWrapper = TestUtils.renderIntoDocument(
+        <Most>
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      return run(intentStreamOf(counter),
+                 dispatch([{type: 'exception'}], counter),
+                 [
+                   state=>expect(console.error).toBeCalledWith('There is Error in your reducer:', 'exception in reducer', undefined)
+                 ])
+    })
+
+    it('should able to catch error in sync mode', ()=>{
+      let counterWrapper = TestUtils.renderIntoDocument(
         <Most engine={Engine}>
           <Counter history={true} />
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.throwExeption()
-      expect(console.error).toHaveBeenCalled()
+      expect(()=>{
+        counter.actions.throwExeption()
+      }).toThrow('exception in reducer')
     })
   })
 
