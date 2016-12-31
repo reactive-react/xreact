@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
 import {compose} from 'ramda';
-import Most, {connect} from 'react-most';
+import Most, {connect} from '../react-most';
 import {stateStreamOf, stateHistoryOf,
         intentStreamOf, intentHistoryOf,
         run, dispatch,
@@ -63,6 +63,22 @@ describe('react-most', () => {
       counter.actions.inc()
       counter.actions.inc()
       expect(stateHistoryOf(counter)[2].count).toBe(3)
+    })
+
+    it('async action', ()=> {
+      let counterWrapper = TestUtils.renderIntoDocument(
+        <Most engine={Engine}>
+          <Counter history={true} />
+        </Most>
+      )
+      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      counter.actions.inc();
+      counter.actions.fromEvent({type:'inc'});
+      return counter.actions.fromPromise(Promise.resolve({type:'inc'}))
+                    .then(()=>{
+                      expect(stateHistoryOf(counter)[2].count).toBe(3)
+                    })
+
     })
 
     it('sink can also generate intent', ()=> {
