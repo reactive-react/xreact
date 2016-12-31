@@ -275,6 +275,7 @@ var _curry1 = require('./internal/_curry1');
  *
  *      R.mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
  *      R.mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
+ * @symb R.mergeAll([{ x: 1 }, { y: 2 }, { z: 3 }]) = { x: 1, y: 2, z: 3 }
  */
 module.exports = _curry1(function mergeAll(list) {
   return _assign.apply(null, [{}].concat(list));
@@ -557,10 +558,10 @@ function actionsAndSinks(sinks, self) {
         return x;
       };
 
-      self.context[INTENT_STREAM].send(f(e));
+      return self.context[INTENT_STREAM].send(f(e));
     },
     fromPromise: function fromPromise(p) {
-      p.then(function (x) {
+      return p.then(function (x) {
         return self.context[INTENT_STREAM].send(x);
       });
     }
