@@ -36,10 +36,10 @@ export default connect((intent$)=>{
   let lensComplete = r.lensProp('done')
   let lensTodo = index => r.compose(lensTodos, r.lensIndex(index))
   let lensTodoComplete = index => r.compose(lensTodo(index), lensComplete)
-  let nextId = r.compose(r.inc, r.prop('id'), r.last, r.sortBy(r.prop('id')))
+  let nextId = r.compose(r.last, r.map(x=>x.id+1), r.sortBy(r.prop('id')))
   let sinks$ = intent$.map(Intent.case({
     Add: (todo) => state=>{
-      return r.over(lensTodos, r.append(r.assoc('id', nextId(state.todos), todo)), state)
+      return r.over(lensTodos, r.append(r.assoc('id', nextId(state.todos)||0, todo)), state)
     },
     Edit: (todo,index) => r.set(lensTodo(index), todo),
     Clear: () => r.over(lensTodos, r.filter(todo=>!todo.done)),

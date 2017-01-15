@@ -36,7 +36,7 @@
     "ramda": "^0.22.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-most": "^0.6.5",
+    "react-most": "^0.7.0",
     "rest": "^1.3.1",
     "union-type": "^0.3.3"
   },
@@ -52,6 +52,7 @@
     "envify": "^3.4.1",
     "jest-cli": "^0.7.0",
     "react-addons-test-utils": "^15.3.2",
+    "react-most-spec": "^0.2.3",
     "watchify": "^3.6.1"
   },
   "author": "Jichao Ouyang",
