@@ -124,24 +124,20 @@ const Counter = counterable(CounterView)
 Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.
 
 ```js
-let {do$, historyStreamOf} = require('../test-utils')
-let todolist = TestUtils.renderIntoDocument(
-  <Most >
-    <RxTodoList history={true}>
-    </RxTodoList>
-  </Most>
+import {stateHistoryOf, Engine } from 'react-most-spec';
+let counterWrapper = TestUtils.renderIntoDocument(
+        <Most engine={Engine}>
+          <Counter history={true} />
+        </Most>
 )
-
-let div = TestUtils.findRenderedComponentWithType(todolist, RxTodoList);
-do$([()=>div.actions.done(1),
-     ()=>div.actions.done(2),
-     ()=>div.actions.remove(2),
-     ()=>div.actions.done(1)])
-return historyStreamOf(div)
-  .take$(4)
-  .then(state=>
-    expect(state).toEqual({todos: [{id: 1, text: 5, done: false}]}))
+let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+counter.actions.inc()
+counter.actions.inc()
+counter.actions.inc()
+expect(stateHistoryOf(counter)[2].count).toBe(3)
 ```
+
+see more details about testing at [react-most-spec](https://github.com/reactive-react/react-most-spec) or [todomvc example](https://github.com/reactive-react/react-most/blob/master/examples/todomvc/src/components/__tests__/MainSection-spec.jsx)
 
 ### Async actions
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
