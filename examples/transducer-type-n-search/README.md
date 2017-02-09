@@ -1,7 +1,5 @@
 # Github Repo Type N Search Example
 
-https://oyanglul.us/react-most/examples/type-n-search/public/
-
 ## install
 ```sh
 npm install
