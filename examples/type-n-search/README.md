@@ -1,6 +1,6 @@
 # Github Repo Type N Search Example
 
-https://oyanglul.us/react-most/examples/type-n-search/public/
+https://reactive-react.github.io/react-most/examples/type-n-search/public/
 
 ## install
 ```sh
