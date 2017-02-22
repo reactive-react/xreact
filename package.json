@@ -26,8 +26,7 @@
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "dependencies": {
-    "jest": "^18.0.0",
-    "most": "^1.1.1",
+    "most": "^1.2.2",
     "most-subject": "^5.2.0",
     "ramda": "^0.23.0",
     "react": "^15.3.2",
@@ -40,7 +39,7 @@
       "jsx",
       "es6"
     ],
-    "testPathDirs": [
+    "roots": [
       "lib"
     ],
     "coverageDirectory": "./coverage/",
@@ -53,7 +52,7 @@
     "babel-plugin-transform-react-jsx": "^6.1.18",
     "babel-preset-es2015": "^6.1.18",
     "babelify": "^7.2.0",
-    "jest": "^18.1.0",
+    "jest": "^19.0.0",
     "jest-cli": "^19.0.1",
     "lodash": "^4.0.0",
     "react-addons-test-utils": "^15.2.0",
