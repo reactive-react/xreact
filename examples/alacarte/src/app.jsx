@@ -8,6 +8,7 @@ import {
   Functor,
   interpreterFor,
   inject,
+  supTypeSameAs,
 } from 'alacarte.js'
 
 const compose = f => g => x=> f(g(x))
@@ -87,12 +88,12 @@ const CounterView = props => (
 CounterView.defaultProps = { count: 0 };
 
 const counterable = connect((intent$) => {
-  return {
-    sink$: intent$.tap(compose(console.log)(interpretExpr(printer)))
-                  .map(interpretExpr(interpreter)),
-    inc: () => over(lit('count'), add(lit(1))),
-    dec: () => over(lit('count'), add(lit(-1))),
-  }
+    return {
+      sink$: intent$.filter(supTypeSameAs(injector)).tap(compose(console.log)(interpretExpr(printer)))
+                    .map(interpretExpr(interpreter)),
+      inc: () => over(lit('count'), add(lit(1))),
+      dec: () => injectOver(injectorFrom([functorLit, functorOver]))(lit('count'), add(lit(-1)))
+    }
 })
 
 const Counter = counterable(CounterView)
