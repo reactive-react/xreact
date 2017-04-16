@@ -10,6 +10,7 @@ A Monadic Reactive Composable State Wrapper for React Components
 [![npm](https://img.shields.io/npm/v/react-most.svg)](https://www.npmjs.com/package/react-most)
 [![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/react-most.svg)](https://greenkeeper.io)
 
+[中文 :cn:](https://github.com/reactive-react/react-most/wiki/%E6%95%99%E7%A8%8B)
 ## Install
 ### npm
 ```
