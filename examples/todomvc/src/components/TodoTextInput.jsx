@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
-import {connect} from '../../../../lib/react-most'
-import _ from 'lodash'
+import {connect} from 'react-most'
 import TodoItem from './TodoItem'
+import Intent from '../intent'
 let TodoTextInput = React.createClass({
   getInitialState(){
     return {
@@ -17,7 +17,7 @@ let TodoTextInput = React.createClass({
     if (e.which === 13) {
       if (this.props.newTodo) {
         this.props.actions.add(msg);
-        this.props.search('')
+        this.props.actions.search('')
         this.setState({ text: '' })
       }
     }
@@ -25,14 +25,14 @@ let TodoTextInput = React.createClass({
 
   handleChange(e) {
     if (this.props.newTodo)
-      this.props.search(e.target.value)
+      this.props.actions.search(e.target.value)
     this.setState({ text: e.target.value })
   },
 
   handleBlur(e) {
     if (!this.props.newTodo) {
-      this.props.actions.edit({id:this.props.itemid,text:e.target.value});
-      this.props.onBlur&&this.props.onBlur()
+      this.props.actions.edit({id:this.props.itemid,text:e.target.value}, this.props.index);
+      this.props.actions.editing(-1);
     }
   },
 
@@ -54,9 +54,9 @@ let TodoTextInput = React.createClass({
   },
 });
 
-export default connect((intent$)=>{
-  return{
-    edit: todo=>({type:'edit', todo}),
-    add: todo=>_.assign({type:'add'},todo),
+export default connect(intent$=>{
+  return {
+      add: Intent.Add,
+      search: Intent.Search,
   }
 })(TodoTextInput)

@@ -1,4 +1,4 @@
-https://oyanglul.us/react-most/examples/type-n-search/public/
+https://reactive-react.github.io/react-most/examples/todomvc/public/
 
 ```
 npm install

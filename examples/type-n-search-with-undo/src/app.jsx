@@ -1,8 +1,7 @@
-import {connect} from '../../../lib/react-most'
-import Most from '../../../lib/react-most'
+import Most,{connect} from 'react-most'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import most from 'most'
+import * as most from 'most'
 import rest from 'rest'
 const GITHUB_SEARCH_API = 'https://api.github.com/search/repositories?q=';
 

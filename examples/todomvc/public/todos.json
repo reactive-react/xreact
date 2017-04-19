@@ -1,9 +1,9 @@
 [{
   "text": "Try React Most",
-  "completed": false,
+  "done": true,
   "id": 0
 },{
   "text": "Give it a Star on Github",
-  "completed": false,
+  "done": false,
   "id": 1
 }]

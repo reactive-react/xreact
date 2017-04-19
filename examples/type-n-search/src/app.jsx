@@ -1,8 +1,7 @@
-import {connect} from '../../../lib/react-most'
-import Most from '../../../lib/react-most'
+import Most, {connect} from 'react-most'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import most from 'most'
+import * as most from 'most'
 import rest from 'rest'
 const GITHUB_SEARCH_API = 'https://api.github.com/search/repositories?q=';
 const TypeNsearch = (props)=>{
@@ -28,14 +27,20 @@ const MostTypeNSearch = connect(function(intent$){
                            .map(url=>rest(url).then(resp=>({
                                type: 'dataUpdate',
                                value: resp.entity
-                             })))
+                           })).catch(error=>{
+                             console.error('API REQUEST ERROR:', error)
+                             return {
+                               type: 'dataError',
+                               value: error.message
+                             }
+                           }))
                            .flatMap(most.fromPromise)
                            .filter(i=>i.type=='dataUpdate')
                            .map(data=>JSON.parse(data.value).items)
                            .map(items=>items.slice(0,10))
                            .map(items=>state=>({results: items}))
                            .flatMapError(error=>{
-                             console.log('[ERROR]:', error);
+                             console.log('[CRITICAL ERROR]:', error);
                              return most.of({message:error.error,className:'display'})
                                         .merge(most.of({className:'hidden'}).delay(3000))
                                         .map(error=>state=>({error}))
