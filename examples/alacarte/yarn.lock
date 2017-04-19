@@ -48,9 +48,9 @@ ajv@^4.9.1:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
 
-alacarte.js@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/alacarte.js/-/alacarte.js-0.0.6.tgz#ff86efce9c393fb5d7c2b4ee642acd84eff98f0f"
+alacarte.js@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/alacarte.js/-/alacarte.js-0.2.0.tgz#9ca2425a424f206ff3e35731ed9398933a7e8562"
 
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
