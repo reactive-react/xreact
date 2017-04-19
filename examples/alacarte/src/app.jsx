@@ -2,144 +2,115 @@ import React from 'react';
 import { render } from 'react-dom';
 import Most, { connect } from 'react-most'
 import {
+  Expr,
+  Val,
   injectorFrom,
   interpreterFrom,
   interpretExpr,
-  Functor,
   interpreterFor,
-  inject,
-  supTypeSameAs,
+  isInjectedBy,
 } from 'alacarte.js'
 
 const compose = f => g => x=> f(g(x))
 
-// Data Types of Exprs
-function Add(value0) {
-  this.value0 = value0
-}
-
-function Lit(value0) {
-  this.value0 = value0
-}
-function Over(value0, value1) {
-  this.value0 = value0
-  this.value1 = value1
-}
-
-// Their Functor Instance
-const functorLit = new Functor(f => v => new Lit(v.value0))
-const functorAdd = new Functor(f => v => new Add(f(v.value0)))
-const functorOver = new Functor(f => v => new Over(f(v.value0), f(v.value1)))
-
-// Injectors
-function injectLit(injector) {
-  return n => inject(injector(functorLit))(new Lit(n))
-}
-
-function injectAdd(injector) {
-  return (a, b) => inject(injector(functorAdd))(new Add(a, b))
-}
-
-function injectOver(injector) {
-  return (a, b) => inject(injector(functorOver))(new Over(a, b))
-}
+let {Add, Over} = Expr.create({
+  Add: ['fn'],
+  Over: ['prop', 'fn']
+})
 
 // Instances of Interpreters
-const evalAdd = interpreterFor(functorAdd, function (v) {
-  return x => x + v.value0(x)
+const evalAdd = interpreterFor(Add, function (v) {
+  return x => x + v.fn(x)
 });
 
-const evalLit = interpreterFor(functorLit, function (v) {
-  return ()=> v.value0
+const evalVal = interpreterFor(Val, function (v) {
+  return ()=> v.value
 });
 
-const evalOver = interpreterFor(functorOver, function (v) {
+const evalOver = interpreterFor(Over, function (v) {
   let newstate = {}
-  let value = v.value0()
-  return state => (newstate[value] = v.value1(state[value]), newstate)
+  let prop = v.prop()
+  return state => (newstate[prop] = v.fn(state[prop]), newstate)
 });
-
-// Compose a Interpreter which can interpret Lit, Add, Over
-let interpreter = interpreterFrom([evalLit, evalAdd, evalOver])
-// Injector that can inject Lit, Add, Over
-let injector = injectorFrom([functorLit, functorAdd, functorOver])
-
-// Expressions
-let add = injectAdd(injector)
-let lit = injectLit(injector)
-let over = injectOver(injector)
 
 // You can define any Interpreters you want, instead of eval value, this interpreter print the expressions
-const printAdd = interpreterFor(functorAdd, function (v) {
-  return `(_ + ${v.value0})`
+const printAdd = interpreterFor(Add, function (v) {
+  return `(_ + ${v.fn})`
 });
 
-const printLit = interpreterFor(functorLit, function (v) {
-  return v.value0.toString()
+const printVal = interpreterFor(Val, function (v) {
+  return v.value.toString()
 });
 
-const printOver = interpreterFor(functorOver, function (v) {
-  return `over ${v.value0} do ${v.value1}`
+const printOver = interpreterFor(Over, function (v) {
+  return `over ${v.prop} do ${v.fn}`
 });
 
-const printer = interpreterFrom([printLit, printAdd, printOver])
+const printer = interpreterFrom([printVal, printAdd, printOver])
 
 const CounterView = props => (
   <div>
-    <button onClick={props.actions.dec}>-</button>
+    <button onClick={props.actions.dec}>{props.dec}</button>
     <span>{props.count}</span>
-    <button onClick={props.actions.inc}>+</button>
+    <button onClick={props.actions.inc}>{props.inc}</button>
 </div>
 )
 
 CounterView.defaultProps = { count: 1 };
 
 const counterable = connect((intent$) => {
-    return {
-      sink$: intent$.filter(supTypeSameAs(injector)) // <-- filter only expressions compose with type Lit :+: Add :+: Over
-        .tap(compose(console.log)(interpretExpr(printer))) // interpret with printer
-        .map(interpretExpr(interpreter)), // interpret with interpreter(eval value)
-      inc: () => over(lit('count'), add(add(lit(1)))), // you can compose expressions to achieve your bussiness
-      dec: () => injectOver(injectorFrom([functorLit, functorOver]))(lit('count'), add(lit(-1))) // a expr with different type like Lit :+: Over will be filtered out(do nothing here)
-    }
+  // Compose a Interpreter which can interpret Lit, Add, Over
+  let interpreter = interpreterFrom([evalVal, evalAdd, evalOver])
+  // Injector that can inject Lit, Add, Over
+  let injector = injectorFrom([Val, Add, Over])
+
+  let [val, add, over] = injector.inject()
+
+  return {
+    sink$: intent$.filter(isInjectedBy(injector)) // <-- filter only expressions compose with type Lit :+: Add :+: Over
+                  .tap(compose(console.log)(interpretExpr(printer))) // interpret with printer
+                  .map(interpretExpr(interpreter)), // interpret with interpreter(eval value)
+    inc: () => over(val('count'), add(val(1))), // you can compose expressions to achieve your bussiness
+    dec: () => {
+      let aNewInjector = injectorFrom([Val, Add, Over])
+      let [val, add, over] = aNewInjector.inject()
+      return over(val('count'), add(val(-1)))
+    } // only a expr with same type and order can be interpret
+  }
 })
 
+// a new mult expr is add without modify any of the current code
+let {Mult} = Expr.create({
+  Mult: ['fn'],
+})
+const evalMult = interpreterFor(Mult, function (v) {
+  return x => x * v.fn(x)
+});
+
+let printMult = interpreterFor(Mult, function (v) {
+  return `(_ * ${v.fn})`
+});
+
 const multable = connect((intent$) => {
-  function Mult(value0) {
-    this.value0 = value0
-  }
-  const functorMult = new Functor(f => v => new Mult(f(v.value0)))
-  function injectMult(injector) {
-    return (a, b) => inject(injector(functorMult))(new Mult(a, b))
-  }
-  const evalMult = interpreterFor(functorMult, function (v) {
-    return x => x * v.value0(x)
-  });
-  let injector = injectorFrom([functorLit, functorAdd, functorOver, functorMult])
-  let add = injectAdd(injector)
-  let lit = injectLit(injector)
-  let mult = injectMult(injector)
-  let over = injectOver(injector)
-  let printMult = interpreterFor(functorMult, function (v) {
-    return `(_ * ${v.value0})`
-  });
-  let interpreter = interpreterFrom([evalLit, evalAdd, evalOver, evalMult])
-  const printer = interpreterFrom([printLit, printAdd, printOver, printMult])
+  let injector = injectorFrom([Val, Add, Over, Mult])
+  let [val, add, over, mult] = injector.inject()
+  let interpreter = interpreterFrom([evalVal, evalAdd, evalOver, evalMult])
+  let printer = interpreterFrom([printVal, printAdd, printOver, printMult])
   return {
-    sink$: intent$.filter(supTypeSameAs(injector))
-      .tap(compose(console.log)(interpretExpr(printer)))
-      .map(interpretExpr(interpreter)),
-    inc: () => over(lit('count'), mult(add(lit(1)))),
+    sink$: intent$.filter(isInjectedBy(injector))
+                  .tap(compose(console.log)(interpretExpr(printer)))
+                  .map(interpretExpr(interpreter)),
+    inc: () => over(val('count'), mult(val(2))),
+    dec: () => over(val('count'), mult(val(0.5))),
   }
 })
 const Counter = counterable(CounterView)
-const Counter2 = multable(CounterView)
+const Multer = multable(CounterView)
 render(
     <Most>
     <div>
-    <Counter />
-    <Counter2 />
+      <Counter inc="+1" dec="-1" />
+      <Multer inc="*2" dec="/2"/>
     </div>
-
   </Most>
   , document.getElementById('app'));
