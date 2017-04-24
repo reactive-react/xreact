@@ -28,22 +28,10 @@
   "dependencies": {
     "most": "^1.2.2",
     "most-subject": "^5.2.0",
-    "ramda": "^0.23.0",
-    "react": "^15.3.2",
-    "react-most-spec": "0.2.3",
     "rxjs": "^5.0.0-rc.4"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "es6"
-    ],
-    "roots": [
-      "lib"
-    ],
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
+  "peerDependencies": {
+    "react": "^15.3.2"
   },
   "devDependencies": {
     "babel": "^6.1.18",
@@ -56,9 +44,22 @@
     "jest-cli": "^19.0.1",
     "lodash": "^4.0.0",
     "react-addons-test-utils": "^15.2.0",
+    "react": "15.3.2",
     "react-dom": "^15.3.2",
-    "react-most-spec": "^0.1.1",
+    "react-most-spec": "^0.2.3",
     "redux": "^3.0.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "es6"
+    ],
+    "roots": [
+      "lib"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "author": "Jichao Ouyang",
   "license": "MIT"

@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
-import {compose} from 'ramda';
+
 import Most, {connect} from '../react-most';
 import {stateStreamOf, stateHistoryOf,
         intentStreamOf, intentHistoryOf,
         run, dispatch,
         Engine } from 'react-most-spec';
+const compose = f => g => x => g(f(x));
+
 const CounterView = React.createClass({
   render(){
     return (
@@ -191,7 +193,7 @@ describe('react-most', () => {
         dec2: ()=>({type:'dec2'}),
       }
     })
-    let counterWrapper21 = compose(counterWrapper2, counterWrapper)
+    let counterWrapper21 = compose(counterWrapper2)(counterWrapper)
     const Counter2 = counterWrapper21(CounterView)
     it('counter add inc2, dec2', ()=>{
       let counterWrapper = TestUtils.renderIntoDocument(
