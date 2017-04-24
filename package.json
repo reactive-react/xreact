@@ -28,10 +28,11 @@
   "dependencies": {
     "most": "^1.2.2",
     "most-subject": "^5.2.0",
-    "rxjs": "^5.0.0-rc.4"
+    "rxjs": "^5.0.0-rc.4",
+    "prop-types": "^15.5.8"
   },
   "peerDependencies": {
-    "react": "^15.3.2"
+    "react": "^15.5.4"
   },
   "devDependencies": {
     "babel": "^6.1.18",
@@ -43,9 +44,9 @@
     "jest": "^19.0.0",
     "jest-cli": "^19.0.1",
     "lodash": "^4.0.0",
+    "react": "^15.5.4",
     "react-addons-test-utils": "^15.2.0",
-    "react": "15.3.2",
-    "react-dom": "^15.3.2",
+    "react-dom": "^15.5.4",
     "react-most-spec": "^0.2.3",
     "redux": "^3.0.4"
   },
