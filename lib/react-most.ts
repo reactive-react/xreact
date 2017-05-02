@@ -32,8 +32,8 @@ interface Process<T> {
   sink$: Stream<Update<T>>
 }
 
-interface ConnectProps {
-  contextTypes: any
+interface ConnectProps<T> {
+  actions: Actions<T>
 }
 interface ReactClass {}
 interface Connect{
@@ -41,10 +41,10 @@ interface Connect{
   new(props?, context?): any
 }
 const h = React.createElement;
-function connect<T>(main: Plan<T>, opts = {}): (rc: typeof React.PureComponent)=>typeof React.PureComponent{
-  return function(WrappedComponent: typeof React.PureComponent){
+function connect<T>(main: Plan<T>, opts = {history: false}): (rc:  React.ComponentClass<any>)=> React.ComponentClass<ConnectProps<T>>{
+  return function(WrappedComponent: React.ComponentClass<any>){
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
-    if (WrappedComponent === ConnectNode) {
+    if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
       return class ConnectNode extends React.PureComponent<any, any>{
         actions: Actions<T>
         sink$: Stream<Update<T>>
@@ -67,7 +67,7 @@ function connect<T>(main: Plan<T>, opts = {}): (rc: typeof React.PureComponent)=
         }
       }
     } else {
-      class ConnectLeaf extends React.PureComponent {
+      class ConnectLeaf extends React.PureComponent<any, any> {
         constructor(props, context) {
           super(props, context);
           if (opts.history || props.history) {
