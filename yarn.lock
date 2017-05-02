@@ -12,6 +12,10 @@
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@most/prelude/-/prelude-1.4.1.tgz#b940b5563096f27637401618a5351f42466ea8f3"
 
+"@types/react@^15.0.22":
+  version "15.0.22"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.22.tgz#50803cde8d89f60a9b034f2dd0d619bc5f0273b5"
+
 abab@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.3.tgz#b81de5f7274ec4e756d797cd834f303642724e5d"

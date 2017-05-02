@@ -28,13 +28,14 @@
   "dependencies": {
     "most": "^1.2.2",
     "most-subject": "^5.2.0",
-    "rxjs": "^5.0.0-rc.4",
-    "prop-types": "^15.5.8"
+    "prop-types": "^15.5.8",
+    "rxjs": "^5.0.0-rc.4"
   },
   "peerDependencies": {
     "react": "^15.5.4"
   },
   "devDependencies": {
+    "@types/react": "^15.0.22",
     "babel": "^6.1.18",
     "babel-cli": "^6.2.0",
     "babel-jest": "^19.0.0",
