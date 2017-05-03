@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import initHistory from './history';
-import { from } from 'most';
+import { from, Stream } from 'most';
 import mostEngine from './engine/most';
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 export const INTENT_STREAM = '@@reactive-react/react-most.intentStream';
@@ -13,10 +13,15 @@ const CONTEXT_TYPE = {
   [HISTORY_STREAM]: PropTypes.object,
   [MERGE_OBSERVE]: PropTypes.func,
 };
-interface State {}
-interface Stream<T> {}
+
+interface History<T> extends Stream<T> {
+  cursor: number
+  travel: Stream<T>
+  forward: () => void
+  backward: () => void
+}
 interface Actions<T> {
-  [propName: string]: (...v:any[])=>T
+  [propName: string]: (...v: any[]) => T
 }
 interface Props {
   [propName: string]: any
@@ -24,8 +29,8 @@ interface Props {
 interface Plan<T> {
   (intent: Stream<T>, props?: Props): Process<T>
 }
-interface Update<T> {
-  (current: State): State
+interface Update<S> {
+  (current: S): S
 }
 interface Process<T> {
   actions: Actions<T>,
@@ -35,24 +40,25 @@ interface Process<T> {
 interface ConnectProps<T> {
   actions: Actions<T>
 }
-interface ReactClass {}
-interface Connect{
+interface ReactClass { }
+interface Connect {
   contextTypes?: any
-  new(props?, context?): any
+  new (props?, context?): any
 }
 const h = React.createElement;
-function connect<T>(main: Plan<T>, opts = {history: false}): (rc:  React.ComponentClass<any>)=> React.ComponentClass<ConnectProps<T>>{
-  return function(WrappedComponent: React.ComponentClass<any>){
+function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.ComponentClass<Props>) => React.ComponentClass<ConnectProps<T>> {
+  return function(WrappedComponent: React.ComponentClass<Props>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
-      return class ConnectNode extends React.PureComponent<any, any>{
+      return class ConnectNode extends React.PureComponent<ConnectProps<T>, any>{
         actions: Actions<T>
         sink$: Stream<Update<T>>
+        props: ConnectProps<T>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
-        constructor(props, context) {
+        constructor(props: ConnectProps<T>, context) {
           super(props, context);
-          let {actions, sink$} = main(context[INTENT_STREAM], props)
+          let { actions, sink$ } = main(context[INTENT_STREAM], props)
           this.sink$ = sink$
           this.actions = Object.assign({}, actions, props.actions);
         }
@@ -67,12 +73,16 @@ function connect<T>(main: Plan<T>, opts = {history: false}): (rc:  React.Compone
         }
       }
     } else {
-      class ConnectLeaf extends React.PureComponent<any, any> {
+      return class ConnectLeaf extends React.PureComponent<ConnectProps<T>, any> {
+        actions: Actions<T>
+        sink$: Stream<Update<T>>
+        props: ConnectProps<T>
+        history: History<T>
         constructor(props, context) {
           super(props, context);
           if (opts.history || props.history) {
-            opts.history = initHistory(context[HISTORY_STREAM]);
-            opts.history.travel.forEach(state => {
+            [this.history, travel] = initHistory(context[HISTORY_STREAM], context[HISTORY_STREAM].travel);
+            this.history.travel.forEach(state => {
               return this.setState(state);
             });
           }
