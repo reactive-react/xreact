@@ -1,42 +1,51 @@
 import { from, Stream } from 'most'
 
-export interface Traveler<T, S> {
+export interface Path<T> extends Stream<T> {
+  send: (fn: T) => void
+}
+export class Traveler<S> {
   cursor: number
-  travel: (history: Stream<T>) => Stream<S>
-  forward: () => void
-  backward: () => void
-  path: Stream<T>
+  path: Path<(n: number) => number>
+  history: Stream<Stamp<S>[]>
+  constructor(history:Stream<Stamp<S>[]>, path:Path<(n: number) => number>) {
+    this.history = history
+    this.path = path
+  }
+  forward() {
+    this.path.send(x => x + 1)
+  }
+  backward() {
+    this.path.send(x => x - 1)
+  }
+  travel = from(this.path)
+    .sample((offset: (n: number) => number, states: Stamp<S>[]) => {
+      let cursor = offset(states.length + this.cursor)
+      if (cursor < states.length && cursor >= 0) {
+        this.cursor = offset(this.cursor)
+        return states[cursor].value;
+      }
+    }, this.path, this.history)
+    .filter(x => !!x)
+
 }
-export interface History<T, S> {
-  traveler: Traveler<T, S>
-  history: Stream<T>
+export interface History<S> {
+  path: Path<(n: number) => number>
+  history: Stream<S>
 }
-export default function initHistory<T, S>(contextHistory: History<T, S>): [Stream<T>, Traveler<T, S>] {
+
+export interface Stamp<S> {
+  value: S
+  time: number
+}
+export default function initHistory<S>(contextHistory: History<S>): [Stream<Stamp<S>[]>, Traveler<S>] {
   let history = from(contextHistory.history)
     .timestamp()
-    .scan((acc, state) => {
+    .scan((acc: Stamp<S>[], state: Stamp<S>) => {
       acc.push(state)
       return acc;
     }, [])
     .multicast()
-  let traveler = {
-    cursor: -1,
-    travel: from(contextHistory.traveler.path)
-      .sample((offset: (number) => number, states: [S]) => {
-        let cursor = offset(states.length + contextHistory.traveler.cursor)
-        if (cursor < states.length && cursor >= 0) {
-          contextHistory.traveler.cursor = offset(contextHistory.traveler.cursor)
-          return states[cursor].value;
-        }
-      }, contextHistory.traveler, history)
-      .filter(x => !!x),
-    forward: function() {
-      contextHistory.traveler.path.send(x => x + 1)
-    },
-    backward: function() {
-      contextHistory.traveler.path.send(x => x - 1)
-    }
-  }
 
-  return [history, traveler]
+
+  return [history, new Traveler(history, contextHistory.path)]
 }
