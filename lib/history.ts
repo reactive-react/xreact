@@ -1,13 +1,13 @@
 import { from, Stream } from 'most'
-
+import { EngineSubject } from './engine/most'
 export interface Path<T> extends Stream<T> {
   send: (fn: T) => void
 }
 export class Traveler<S> {
   cursor: number
-  path: Path<(n: number) => number>
+  path: EngineSubject<(n: number) => number>
   history: Stream<Stamp<S>[]>
-  constructor(history:Stream<Stamp<S>[]>, path:Path<(n: number) => number>) {
+  constructor(history: Stream<Stamp<S>[]>, path: EngineSubject<(n: number) => number>) {
     this.history = history
     this.path = path
   }
@@ -37,15 +37,13 @@ export interface Stamp<S> {
   value: S
   time: number
 }
-export default function initHistory<S>(contextHistory: History<S>): [Stream<Stamp<S>[]>, Traveler<S>] {
-  let history = from(contextHistory.history)
+export default function initHistory<S>(engineHistory: EngineSubject<S>, engineTravel: EngineSubject<(n: number) => number>): Traveler<S> {
+  let history = from(engineHistory)
     .timestamp()
     .scan((acc: Stamp<S>[], state: Stamp<S>) => {
       acc.push(state)
       return acc;
     }, [])
     .multicast()
-
-
-  return [history, new Traveler(history, contextHistory.path)]
+  return new Traveler(history, engineTravel)
 }

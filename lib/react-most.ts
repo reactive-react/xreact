@@ -1,17 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import initHistory from './history';
+import initHistory, { Traveler } from './history';
 import { from, Stream } from 'most';
-import mostEngine from './engine/most';
+import { Engine, EngineSubject } from './engine/most';
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
-export const INTENT_STREAM = '@@reactive-react/react-most.intentStream';
-export const HISTORY_STREAM = '@@reactive-react/react-most.historyStream';
-const MERGE_OBSERVE = '@@reactive-react/react-most.mergeObserve';
+export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
 
 const CONTEXT_TYPE = {
-  [INTENT_STREAM]: PropTypes.object,
-  [HISTORY_STREAM]: PropTypes.object,
-  [MERGE_OBSERVE]: PropTypes.func,
+  [REACT_MOST_ENGINE]: PropTypes.object
 };
 
 interface History<T> extends Stream<T> {
@@ -27,14 +23,14 @@ interface Props {
   [propName: string]: any
 }
 interface Plan<T> {
-  (intent: Stream<T>, props?: Props): Process<T>
+  (intent: EngineSubject<T>, props?: Props): Process<T>
 }
 interface Update<S> {
   (current: S): S
 }
 interface Process<T> {
   actions: Actions<T>,
-  sink$: Stream<Update<T>>
+  updates: Stream<Update<T>>
 }
 
 interface ConnectProps<T> {
@@ -52,46 +48,44 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
       return class ConnectNode extends React.PureComponent<ConnectProps<T>, any>{
         actions: Actions<T>
-        sink$: Stream<Update<T>>
+        updates: Stream<Update<T>>
         props: ConnectProps<T>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
         constructor(props: ConnectProps<T>, context) {
           super(props, context);
-          let { actions, sink$ } = main(context[INTENT_STREAM], props)
-          this.sink$ = sink$
+          let { actions, updates } = main(context[REACT_MOST_ENGINE].historyStream, props)
+          this.updates = updates
           this.actions = Object.assign({}, actions, props.actions);
         }
         render() {
           return h(
             WrappedComponent,
             Object.assign({}, this.props, opts, {
-              sink$: this.sink$,
+              updates: this.updates,
               actions: this.actions,
             })
           );
         }
       }
     } else {
-      return class ConnectLeaf extends React.PureComponent<ConnectProps<T>, any> {
+      return class ConnectLeaf<T, S> extends React.PureComponent<ConnectProps<T>, S> {
         actions: Actions<T>
-        sink$: Stream<Update<T>>
+        updates: Stream<Update<T>>
         props: ConnectProps<T>
-        history: History<T>
+        traveler: Traveler<S>
         constructor(props, context) {
           super(props, context);
+          let engine: Engine<T, S> = context[REACT_MOST_ENGINE]
           if (opts.history || props.history) {
-            [this.history, travel] = initHistory(context[HISTORY_STREAM], context[HISTORY_STREAM].travel);
-            this.history.travel.forEach(state => {
+            this.traveler = initHistory(engine.historyStream, engine.travelStream);
+            this.traveler.travel.forEach(state => {
               return this.setState(state);
             });
           }
 
-          let [actions, sink$] = actionsAndSinks(
-            main(context[INTENT_STREAM], props),
-            this
-          );
-          this.sink$ = sink$.concat(props.sink$ || []);
+          let { actions, updates } = main(engine.intentStream, props)
+          this.updates = updates.merge(props.updates)
           this.actions = Object.assign({}, actions, props.actions);
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
@@ -104,15 +98,15 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
           this.setState(state => pick(Object.keys(state), nextProps));
         }
         componentDidMount() {
-          this.subscriptions = this.context[MERGE_OBSERVE](
-            this.sink$,
+          this.subscriptions = this.context[REACT_MOST_ENGINE].observe(
+            this.updates,
             action => {
               if (action instanceof Function) {
                 this.setState((prevState, props) => {
                   let newState = action.call(this, prevState, props);
                   if (opts.history && newState != prevState) {
                     opts.history.cursor = -1;
-                    this.context[HISTORY_STREAM].send(prevState);
+                    this.context[REACT_MOST_ENGINE].historyStream.send(prevState);
                   }
                   return newState;
                 });
@@ -139,32 +133,32 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
           );
         }
       }
-      Connect.contextTypes = CONTEXT_TYPE;
-      Connect.displayName = connectDisplayName;
-      return Connect;
     }
   };
 }
 
-export default class Most extends React.PureComponent {
-  getChildContext() {
-    let engineClass = (this.props && this.props.engine) || mostEngine;
-    let engine = engineClass();
+export interface MostProps<T, S> {
+  engine?: Engine<T, S>
+}
+export interface MostEngine<I, H> {
+  [x: string]: Engine<I, H>
+}
+export default class Most<I, H, S> extends React.PureComponent<MostProps<I, H>, S> {
+  static childContextTypes = CONTEXT_TYPE
+  getChildContext(): MostEngine<I, H> {
+    let engine: Engine<I, H> = (this.props && this.props.engine && new this.props.engine) || new Engine<I, H>();
     /* istanbul ignore if */
     if (process.env.NODE_ENV === 'debug') {
       inspect(engine);
     }
     return {
-      [INTENT_STREAM]: engine.intentStream,
-      [MERGE_OBSERVE]: engine.mergeObserve,
-      [HISTORY_STREAM]: engine.historyStream,
+      [REACT_MOST_ENGINE]: engine
     };
   }
   render() {
     return React.Children.only(this.props.children);
   }
 }
-Most.childContextTypes = CONTEXT_TYPE;
 
 function observable(obj) {
   return !!obj.subscribe;
@@ -184,32 +178,12 @@ function inspect(engine) {
     );
 }
 
-function actionsAndSinks<T>(sinks: Stream<Update<T>>, self) {
-  let _sinks = [];
-  let _actions = {
-    fromEvent(e, f = x => x) {
-      return self.context[INTENT_STREAM].send(f(e));
-    },
-    fromPromise(p) {
-      return p.then(x => self.context[INTENT_STREAM].send(x));
-    },
-  };
-  for (let name in sinks) {
-    let value = sinks[name];
-    if (observable(value)) {
-      _sinks.push(value);
-    } else if (value instanceof Function) {
-      _actions[name] = (...args) => {
-        return self.context[INTENT_STREAM].send(value.apply(self, args));
-      };
-    } else if (name === 'actions') {
-      for (let a in value)
-        _actions[a] = (...args) => {
-          return self.context[INTENT_STREAM].send(value[a].apply(self, args));
-        };
-    }
+function pick(names, obj) {
+  let result = {};
+  for (let name of names) {
+    if (obj[name]) result[name] = obj[name];
   }
-  return [_actions, _sinks];
+  return result;
 }
 
 function getDisplayName(WrappedComponent) {

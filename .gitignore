@@ -45,3 +45,4 @@ deploy.pub
 public/app.js
 gh-pages/
 wiki/
+dist
