@@ -1,8 +1,6 @@
 import { from, Stream } from 'most'
 import { EngineSubject } from './engine/most'
-export interface Path<T> extends Stream<T> {
-  send: (fn: T) => void
-}
+
 export class Traveler<S> {
   cursor: number
   path: EngineSubject<(n: number) => number>
@@ -29,7 +27,7 @@ export class Traveler<S> {
 
 }
 export interface History<S> {
-  path: Path<(n: number) => number>
+  path: EngineSubject<(n: number) => number>
   history: Stream<S>
 }
 

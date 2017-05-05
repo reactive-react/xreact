@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import initHistory, { Traveler } from './history';
-import { from, Stream } from 'most';
+import { from, Stream, Subscription } from 'most';
 import { Engine, EngineSubject } from './engine/most';
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
@@ -10,49 +10,35 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-interface History<T> extends Stream<T> {
-  cursor: number
-  travel: Stream<T>
-  forward: () => void
-  backward: () => void
-}
 interface Actions<T> {
   [propName: string]: (...v: any[]) => T
 }
-interface Props {
-  [propName: string]: any
-}
-interface Plan<T> {
-  (intent: EngineSubject<T>, props?: Props): Process<T>
+
+interface Plan<I, S> {
+  (intent: EngineSubject<I>, props?: {}): Process<I,S>
 }
 interface Update<S> {
   (current: S): S
 }
-interface Process<T> {
-  actions: Actions<T>,
-  updates: Stream<Update<T>>
+interface Process<I,S> {
+  actions: Actions<I>,
+  updates: Stream<Update<S>>
 }
 
-interface ConnectProps<T> {
-  actions: Actions<T>
-}
-interface ReactClass { }
-interface Connect {
-  contextTypes?: any
-  new (props?, context?): any
+interface ConnectProps<I> {
+  actions: Actions<I>
 }
 const h = React.createElement;
-function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.ComponentClass<Props>) => React.ComponentClass<ConnectProps<T>> {
-  return function(WrappedComponent: React.ComponentClass<Props>) {
+function connect<I,S>(main: Plan<I,S>, opts = { history: false }) {
+  return function(WrappedComponent: React.ComponentClass<any>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
-      return class ConnectNode extends React.PureComponent<ConnectProps<T>, any>{
-        actions: Actions<T>
-        updates: Stream<Update<T>>
-        props: ConnectProps<T>
+      return class ConnectNode extends React.PureComponent<ConnectProps<I>, any>{
+        actions: Actions<I>
+        updates: Stream<Update<S>>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
-        constructor(props: ConnectProps<T>, context) {
+        constructor(props: ConnectProps<I>, context) {
           super(props, context);
           let { actions, updates } = main(context[REACT_MOST_ENGINE].historyStream, props)
           this.updates = updates
@@ -69,14 +55,14 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
         }
       }
     } else {
-      return class ConnectLeaf<T, S> extends React.PureComponent<ConnectProps<T>, S> {
-        actions: Actions<T>
-        updates: Stream<Update<T>>
-        props: ConnectProps<T>
+      return class ConnectLeaf extends React.PureComponent<ConnectProps<I>, S> {
+        actions: Actions<I>
+        updates: Stream<Update<S>>
         traveler: Traveler<S>
+        subscription: Subscription<S>
         constructor(props, context) {
           super(props, context);
-          let engine: Engine<T, S> = context[REACT_MOST_ENGINE]
+          let engine: Engine<I, S> = context[REACT_MOST_ENGINE]
           if (opts.history || props.history) {
             this.traveler = initHistory(engine.historyStream, engine.travelStream);
             this.traveler.travel.forEach(state => {
@@ -84,8 +70,8 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
             });
           }
 
-          let { actions, updates } = main(engine.intentStream, props)
-          this.updates = updates.merge(props.updates)
+          let { actions, updates } = main(context[REACT_MOST_ENGINE].engine.intentStream, props)
+          this.updates = props.updates?updates.merge(props.updates) : updates
           this.actions = Object.assign({}, actions, props.actions);
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
@@ -98,14 +84,14 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
           this.setState(state => pick(Object.keys(state), nextProps));
         }
         componentDidMount() {
-          this.subscriptions = this.context[REACT_MOST_ENGINE].observe(
+          this.subscription = this.context[REACT_MOST_ENGINE].observe(
             this.updates,
             action => {
               if (action instanceof Function) {
                 this.setState((prevState, props) => {
                   let newState = action.call(this, prevState, props);
                   if (opts.history && newState != prevState) {
-                    opts.history.cursor = -1;
+                    this.traveler.cursor = -1;
                     this.context[REACT_MOST_ENGINE].historyStream.send(prevState);
                   }
                   return newState;
@@ -122,7 +108,7 @@ function connect<T>(main: Plan<T>, opts = { history: false }): (rc: React.Compon
           );
         }
         componentWillUnmount() {
-          this.subscriptions.unsubscribe();
+          this.subscription.unsubscribe();
         }
         render() {
           return h(
@@ -146,7 +132,7 @@ export interface MostEngine<I, H> {
 export default class Most<I, H, S> extends React.PureComponent<MostProps<I, H>, S> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext(): MostEngine<I, H> {
-    let engine: Engine<I, H> = (this.props && this.props.engine && new this.props.engine) || new Engine<I, H>();
+    let engine: Engine<I, H> = (this.props && this.props.engine) || new Engine<I, H>();
     /* istanbul ignore if */
     if (process.env.NODE_ENV === 'debug') {
       inspect(engine);
