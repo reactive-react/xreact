@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
-    "build": "babel lib -d ./ --ignore '__tests__' && npm run license",
+    "build": "tsc -p .",
     "prebrowser": "npm run build",
     "browser": "browserify -r react -r most -r most-subject -o dist/vendor.js && browserify -s Most -x react -x most -x most-subject react-most.js  -o dist/react-most.js",
     "test": "jest --coverage",
@@ -35,6 +35,7 @@
     "react": "^15.5.4"
   },
   "devDependencies": {
+    "@types/node": "^7.0.18",
     "@types/react": "^15.0.22",
     "babel": "^6.1.18",
     "babel-cli": "^6.2.0",
@@ -49,7 +50,8 @@
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.5.4",
     "react-most-spec": "^0.2.3",
-    "redux": "^3.0.4"
+    "redux": "^3.0.4",
+    "typescript": "^2.3.2"
   },
   "jest": {
     "moduleFileExtensions": [

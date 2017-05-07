@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
 
-import Most, {connect} from '../react-most';
+import Most, {connect} from '../../dist/react-most';
 import {stateStreamOf, stateHistoryOf,
         intentStreamOf, intentHistoryOf,
         run, dispatch,

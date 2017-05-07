@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { from, Stream, Subscription } from 'most';
 import { Engine, EngineSubject } from './engine/most';
@@ -10,30 +10,37 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-interface Actions<T> {
+export interface Actions<T> {
   [propName: string]: (...v: any[]) => T
 }
 
-interface Plan<I, S> {
-  (intent: EngineSubject<I>, props?: {}): Process<I,S>
+export interface Plan<I, S> {
+  (intent: EngineSubject<I>, props?: {}): Process<I, S>
 }
-interface Update<S> {
+export interface Update<S> {
   (current: S): S
 }
-interface Process<I,S> {
+export interface Process<I, S> {
   actions: Actions<I>,
   updates: Stream<Update<S>>
 }
 
-interface ConnectProps<I> {
+export interface ConnectProps<I> {
   actions: Actions<I>
 }
 const h = React.createElement;
-function connect<I,S>(main: Plan<I,S>, opts = { history: false }) {
+export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
+  actions: Actions<I>
+  updates: Stream<Update<S>>
+}
+export interface ConnectClass<I, S> {
+  new (props?: ConnectProps<I>, context?: any): Connect<I, S>;
+}
+export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: React.ComponentClass<any>) => ConnectClass<I, S> {
   return function(WrappedComponent: React.ComponentClass<any>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
-      return class ConnectNode extends React.PureComponent<ConnectProps<I>, any>{
+      return class ConnectNode extends Connect<I, S>{
         actions: Actions<I>
         updates: Stream<Update<S>>
         static contextTypes = CONTEXT_TYPE
@@ -55,7 +62,7 @@ function connect<I,S>(main: Plan<I,S>, opts = { history: false }) {
         }
       }
     } else {
-      return class ConnectLeaf extends React.PureComponent<ConnectProps<I>, S> {
+      return class ConnectLeaf extends Connect<I, S> {
         actions: Actions<I>
         updates: Stream<Update<S>>
         traveler: Traveler<S>
@@ -71,7 +78,7 @@ function connect<I,S>(main: Plan<I,S>, opts = { history: false }) {
           }
 
           let { actions, updates } = main(context[REACT_MOST_ENGINE].engine.intentStream, props)
-          this.updates = props.updates?updates.merge(props.updates) : updates
+          this.updates = props.updates ? updates.merge(props.updates) : updates
           this.actions = Object.assign({}, actions, props.actions);
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
