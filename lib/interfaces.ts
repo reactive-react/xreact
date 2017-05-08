@@ -14,16 +14,17 @@ export interface Update<S> {
 }
 export interface Process<I, S> {
   actions: Actions<I>,
-  updates: Stream<Update<S>>
+  update$: Stream<Update<S>>
 }
 
 export interface ConnectProps<I> {
   actions?: Actions<I>
+  history?: boolean
 }
 
 export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
   actions: Actions<I>
-  updates: Stream<Update<S>>
+  update$: Stream<Update<S>>
 }
 
 export interface ConnectClass<I, S> {

@@ -18,20 +18,20 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
       return class ConnectNode extends Connect<I, S>{
         actions: Actions<I>
-        updates: Stream<Update<S>>
+        update$: Stream<Update<S>>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
-        constructor(props: ConnectProps<I>, context) {
+        constructor(props, context) {
           super(props, context);
-          let { actions, updates } = main(context[REACT_MOST_ENGINE].historyStream, props)
-          this.updates = updates
-          this.actions = Object.assign({}, actions, props.actions);
+          let { actions, update$ } = main(context[REACT_MOST_ENGINE].historyStream, props)
+          this.update$ = props.update$ ? update$.merge(props.update$) : update$
+          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), props.actions);
         }
         render() {
           return h(
             WrappedComponent,
-            Object.assign({}, this.props, opts, {
-              updates: this.updates,
+            Object.assign({}, opts, this.props, {
+              update$: this.update$,
               actions: this.actions,
             })
           );
@@ -40,7 +40,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
     } else {
       return class ConnectLeaf extends Connect<I, S> {
         actions: Actions<I>
-        updates: Stream<Update<S>>
+        update$: Stream<Update<S>>
         traveler: Traveler<S>
         subscription: Subscription<S>
         static contextTypes = CONTEXT_TYPE
@@ -55,9 +55,9 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
             });
           }
 
-          let { actions, updates } = main(context[REACT_MOST_ENGINE].intentStream, props)
-          this.updates = props.updates ? updates.merge(props.updates) : updates
-          this.actions = Object.assign({}, actions, props.actions);
+          let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
+          this.update$ = props.update$ ? props.update$.merge(update$) : update$
+          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), props.actions);
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
             {},
@@ -70,12 +70,12 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         }
         componentDidMount() {
           this.subscription = this.context[REACT_MOST_ENGINE].observe(
-            this.updates,
+            this.update$,
             action => {
               if (action instanceof Function) {
                 this.setState((prevState, props) => {
                   let newState = action.call(this, prevState, props);
-                  if (opts.history && newState != prevState) {
+                  if ((opts.history || props.history) && newState != prevState) {
                     this.traveler.cursor = -1;
                     this.context[REACT_MOST_ENGINE].historyStream.send(prevState);
                   }
@@ -98,8 +98,9 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         render() {
           return h(
             WrappedComponent,
-            Object.assign({}, this.props, this.state, opts, {
+            Object.assign({}, opts, this.props, this.state, {
               actions: this.actions,
+              traveler: this.traveler
             })
           );
         }
@@ -144,7 +145,23 @@ function inspect(engine) {
       console.log(`[${new Date(stamp.time).toJSON()}][STATE]:}`, stamp.value)
     );
 }
+function bindActions(actions, intent$, self) {
+  let _actions = {
+    fromEvent(e, f = x => x) {
+      return intent$.send(f(e));
+    },
+    fromPromise(p) {
+      return p.then(x => intent$.send(x));
+    },
+  };
 
+  for (let a in actions) {
+    _actions[a] = (...args) => {
+      return intent$.send(actions[a].apply(self, args));
+    };
+  }
+  return _actions;
+}
 function pick(names, obj) {
   let result = {};
   for (let name of names) {

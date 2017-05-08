@@ -14,10 +14,10 @@ export class Engine<T, S> {
     this.travelStream.send = this.travelStream.next.bind(this.historyStream)
   }
 
-  observe<T>(actionsSinks: Stream<Update<T>>[], f): Subscription<T> {
-    let subscriptions = mergeArray(actionsSinks)
-      .recoverWith(e => {
-        // console.error('There is Error in your reducer:', e, e.stack)
+  observe<T>(actionsSinks: Stream<Update<T>>, f): Subscription<T> {
+    let subscriptions = actionsSinks
+      .recoverWith((e: Error) => {
+        console.error('There is Error in your reducer:', e, e.stack)
         return of(x => x)
       })
       .subscribe({
