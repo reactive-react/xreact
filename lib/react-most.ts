@@ -1,41 +1,17 @@
 import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
+import { Plan, Actions, Connect, ConnectProps, EngineSubject, Update, ConnectClass } from './interfaces'
 import { from, Stream, Subscription } from 'most';
-import { Engine, EngineSubject } from './engine/most';
+import { Engine } from './engine/most';
+
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
-
+const h = React.createElement;
 const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-export interface Actions<T> {
-  [propName: string]: (...v: any[]) => T
-}
-
-export interface Plan<I, S> {
-  (intent: EngineSubject<I>, props?: {}): Process<I, S>
-}
-export interface Update<S> {
-  (current: S): S
-}
-export interface Process<I, S> {
-  actions: Actions<I>,
-  updates: Stream<Update<S>>
-}
-
-export interface ConnectProps<I> {
-  actions: Actions<I>
-}
-const h = React.createElement;
-export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
-  actions: Actions<I>
-  updates: Stream<Update<S>>
-}
-export interface ConnectClass<I, S> {
-  new (props?: ConnectProps<I>, context?: any): Connect<I, S>;
-}
 export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: React.ComponentClass<any>) => ConnectClass<I, S> {
   return function(WrappedComponent: React.ComponentClass<any>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
@@ -67,6 +43,8 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         updates: Stream<Update<S>>
         traveler: Traveler<S>
         subscription: Subscription<S>
+        static contextTypes = CONTEXT_TYPE
+        static displayName = connectDisplayName
         constructor(props, context) {
           super(props, context);
           let engine: Engine<I, S> = context[REACT_MOST_ENGINE]
@@ -77,7 +55,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
             });
           }
 
-          let { actions, updates } = main(context[REACT_MOST_ENGINE].engine.intentStream, props)
+          let { actions, updates } = main(context[REACT_MOST_ENGINE].intentStream, props)
           this.updates = props.updates ? updates.merge(props.updates) : updates
           this.actions = Object.assign({}, actions, props.actions);
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
@@ -131,7 +109,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
 }
 
 export interface MostProps<T, S> {
-  engine?: Engine<T, S>
+  engine?: new () => Engine<T, S>
 }
 export interface MostEngine<I, H> {
   [x: string]: Engine<I, H>
@@ -139,7 +117,7 @@ export interface MostEngine<I, H> {
 export default class Most<I, H, S> extends React.PureComponent<MostProps<I, H>, S> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext(): MostEngine<I, H> {
-    let engine: Engine<I, H> = (this.props && this.props.engine) || new Engine<I, H>();
+    let engine: Engine<I, H> = (this.props && this.props.engine && new this.props.engine()) || new Engine<I, H>();
     /* istanbul ignore if */
     if (process.env.NODE_ENV === 'debug') {
       inspect(engine);
@@ -151,10 +129,6 @@ export default class Most<I, H, S> extends React.PureComponent<MostProps<I, H>, 
   render() {
     return React.Children.only(this.props.children);
   }
-}
-
-function observable(obj) {
-  return !!obj.subscribe;
 }
 
 /* istanbul ignore next */

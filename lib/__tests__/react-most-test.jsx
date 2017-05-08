@@ -28,7 +28,7 @@ CounterView.defaultProps = {count: 0, overwritedProps: 'inner'}
 
 const counterWrapper = connect(intent$=>{
   return {
-    sink$: intent$.map(intent=>{
+    updates: intent$.map(intent=>{
       switch(intent.type) {
         case 'inc': return state=>({count:state.count+1})
         case 'dec':
@@ -43,10 +43,12 @@ const counterWrapper = connect(intent$=>{
           return state=>state
       }
     }),
-    inc: ()=>({type:'inc'}),
-    dec: ()=>({type:'dec'}),
-    changeWrapperProps: (value)=>({type:'changeWrapperProps', value}),
-    changeDefaultProps: (value)=>({type:'changeDefaultProps', value}),
+    actions:{
+      inc: ()=>({type:'inc'}),
+      dec: ()=>({type:'dec'}),
+      changeWrapperProps: (value)=>({type:'changeWrapperProps', value}),
+      changeDefaultProps: (value)=>({type:'changeDefaultProps', value}),
+    }
   }
 })
 
@@ -54,7 +56,7 @@ const Counter = counterWrapper(CounterView)
 
 describe('react-most', () => {
   describe('actions', ()=>{
-    it('add intent to intent$ and go through sink$', ()=> {
+    it.only('add intent to intent$ and go through sink$', ()=> {
       let counterWrapper = TestUtils.renderIntoDocument(
         <Most engine={Engine}>
           <Counter history={true} />
@@ -64,6 +66,7 @@ describe('react-most', () => {
       counter.actions.inc()
       counter.actions.inc()
       counter.actions.inc()
+      console.log(stateHistoryOf(counter));
       expect(stateHistoryOf(counter)[2].count).toBe(3)
     })
 

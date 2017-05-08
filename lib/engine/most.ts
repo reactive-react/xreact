@@ -1,14 +1,6 @@
 import { from, of, mergeArray, Stream, never, Subscription } from 'most'
 import { async as subject, AsyncSubject } from 'most-subject'
-
-export interface EngineSubject<T> extends AsyncSubject<T> {
-  send(x: T): this
-}
-
-export interface Update<S> {
-  (current: S): S
-}
-
+import { EngineSubject, Update } from '../interfaces'
 export class Engine<T, S> {
   intentStream: EngineSubject<T>
   historyStream: EngineSubject<S>
