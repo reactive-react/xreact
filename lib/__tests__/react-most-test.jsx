@@ -201,26 +201,18 @@ describe('react-most', () => {
     let counterWrapper21 = compose(counterWrapper2)(counterWrapper)
     const Counter2 = counterWrapper21(CounterView)
     //counterWrapper2(counterWrapper(CounterView))
-    console.log(Counter2);
-    xit('counter add inc2, dec2', (done)=>{
+    it('counter add inc2, dec2', ()=>{
       let counterWrapperr = TestUtils.renderIntoDocument(
         <Most engine={Engine}>
           <Counter2 history={true} />
         </Most>
       )
       let counterView = TestUtils.findRenderedComponentWithType(counterWrapperr, CounterView)
-      /* let counter = TestUtils.findRenderedComponentWithType(counterWrapperr, Counter)*/
       let counter2 = TestUtils.findRenderedComponentWithType(counterWrapperr, Counter2)
       counterView.props.actions.inc()
-      console.log(counterView.props.actions.inc.toString())
-      /* counterView.props.actions.inc2()*/
-      /* counterView.props.actions.dec()*/
-
-      expect(stateHistoryOf(counter2)).toBe(2)
-      /* expect(stateHistoryOf(counter
-)).toBe(2)*/
-      return intentStreamOf(counter2).take(1).observe(x=>console.log(x)).then(x=>expect(false).toBe(true)).then(done)
-
+      counterView.props.actions.inc2()
+      counterView.props.actions.dec()
+      expect(stateHistoryOf(counter2)[2].count).toBe(2)
     })
   })
 

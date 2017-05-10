@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Actions, Connect, ConnectProps, EngineSubject, Update, ConnectClass } from './interfaces'
-import { from, Stream, Subscription } from 'most';
+import { from, Stream, Subscription, mergeArray } from 'most';
 import { Engine } from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
@@ -24,10 +24,9 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         static displayName = connectDisplayName
         constructor(props, context) {
           super(props, context);
-          let { actions, update$ } = main(context[REACT_MOST_ENGINE].historyStream, props)
-          let { actions: preActions, update$: preUpdates } = this.main(context[REACT_MOST_ENGINE].historyStream, props)
-          this.update$ = preUpdates ? update$.merge(preUpdates) : update$
-          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), preActions);
+          let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
+          this.update$ = this.update$.merge(update$)
+          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.actions);
         }
       }
     } else {
@@ -48,10 +47,9 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
               return this.setState(state);
             });
           }
-          this.main = main
-          let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
-          this.update$ = props.update$ ? props.update$.merge(update$) : update$
-          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), props.actions);
+          let { actions, update$ } = main(engine.intentStream, props)
+          this.actions = bindActions(actions, engine.intentStream, this)
+          this.update$ = update$
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
             {},
