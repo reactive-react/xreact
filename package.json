@@ -47,7 +47,7 @@
     "react": "^15.5.4",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.5.4",
-    "react-most-spec": "^0.2.3",
+    "react-most-spec": "^1.0.0",
     "redux": "^3.0.4"
   },
   "jest": {
