@@ -1,18 +1,18 @@
-import { Stream } from 'most'
+import { Stream, Subscription } from 'most'
 import * as React from 'react'
 import { AsyncSubject } from 'most-subject'
-
+import { Traveler } from './history'
 export interface Actions<T> {
   [propName: string]: (...v: any[]) => T
 }
 
 export interface Plan<I, S> {
-  (intent: EngineSubject<I>, props?: {}): Process<I, S>
+  (intent: EngineSubject<I>, props?: {}): Machine<I, S>
 }
 export interface Update<S> {
   (current: S): S
 }
-export interface Process<I, S> {
+export interface Machine<I, S> {
   actions: Actions<I>,
   update$: Stream<Update<S>>
 }
@@ -23,8 +23,9 @@ export interface ConnectProps<I> {
 }
 
 export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
-  actions: Actions<I>
-  update$: Stream<Update<S>>
+  machine: Machine<I, S>
+  traveler: Traveler<S>
+  subscription: Subscription<S>
 }
 
 export interface ConnectClass<I, S> {

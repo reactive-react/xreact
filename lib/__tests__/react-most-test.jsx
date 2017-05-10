@@ -64,9 +64,9 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.inc()
-      counter.actions.inc()
-      counter.actions.inc()
+      counter.machine.actions.inc()
+      counter.machine.actions.inc()
+      counter.machine.actions.inc()
       expect(stateHistoryOf(counter)[2].count).toBe(3)
     })
 
@@ -77,9 +77,9 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.inc();
-      counter.actions.fromEvent({type:'inc'});
-      return counter.actions.fromPromise(Promise.resolve({type:'inc'}))
+      counter.machine.actions.inc();
+      counter.machine.actions.fromEvent({type:'inc'});
+      return counter.machine.actions.fromPromise(Promise.resolve({type:'inc'}))
                     .then(()=>{
                       expect(stateHistoryOf(counter)[2].count).toBe(3)
                     })
@@ -94,7 +94,7 @@ describe('react-most', () => {
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
-      counter.actions.dec()
+      counter.machine.actions.dec()
       expect(intentHistoryOf(counter)[1].type).toBe('dec triggered')
     })
 
@@ -105,7 +105,7 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.inc();
+      counter.machine.actions.inc();
       expect(stateHistoryOf(counter)[0].count).toBe(10)
     })
 
@@ -133,8 +133,8 @@ describe('react-most', () => {
       )
       let counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.changeWrapperProps('miao')
-      counter.actions.changeDefaultProps(19)
+      counter.machine.actions.changeWrapperProps('miao')
+      counter.machine.actions.changeDefaultProps(19)
       let wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
       let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
       let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
@@ -158,9 +158,9 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.actions.inc()
-      counter.actions.inc()
-      counter.actions.inc()
+      counter.machine.actions.inc()
+      counter.machine.actions.inc()
+      counter.machine.actions.inc()
       let backward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'backward')
       TestUtils.Simulate.click(backward)
       TestUtils.Simulate.click(backward)
@@ -240,8 +240,8 @@ describe('react-most', () => {
         </Most>
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-        counter.actions.inc3()
-        counter.actions.inc3()
+        counter.machine.actions.inc3()
+        counter.machine.actions.inc3()
       expect(stateHistoryOf(counter)[1].count).toBe(6)
     })
   })
@@ -288,7 +288,7 @@ describe('react-most', () => {
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
       expect(()=>{
-        counter.actions.throwExeption()
+        counter.machine.actions.throwExeption()
       }).toThrow('exception in reducer')
     })
   })

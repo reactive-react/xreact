@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
-import { Plan, Actions, Connect, ConnectProps, EngineSubject, Update, ConnectClass } from './interfaces'
-import { from, Stream, Subscription, mergeArray } from 'most';
+import { Plan, Connect, ConnectClass } from './interfaces'
+import { from, Stream, Subscription } from 'most';
 import { Engine } from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
@@ -12,30 +12,29 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: React.ComponentClass<any>) => ConnectClass<I, S> {
-  return function(WrappedComponent: ConnectClass<I, S>) {
+function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any>): ComponentClass is ConnectClass<I, S> {
+  return (<ConnectClass<I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
+}
+export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any>
+
+export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: ConnectOrReactComponent<I, S>) => ConnectClass<I, S> {
+  return function(WrappedComponent: ConnectOrReactComponent<I, S>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
-    if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
+    if (isConnectClass(WrappedComponent)) {
       return class ConnectNode extends WrappedComponent {
-        actions: Actions<I>
-        update$: Stream<Update<S>>
-        main: Plan<I, S>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
         constructor(props, context) {
           super(props, context);
           let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
-          this.update$ = this.update$.merge(update$)
-          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.actions);
+          this.machine = {
+            update$: this.machine.update$.merge(update$),
+            actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
+          }
         }
       }
     } else {
       return class ConnectLeaf extends Connect<I, S> {
-        actions: Actions<I>
-        update$: Stream<Update<S>>
-        traveler: Traveler<S>
-        subscription: Subscription<S>
-        main: Plan<I, S>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
         constructor(props, context) {
@@ -48,8 +47,10 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
             });
           }
           let { actions, update$ } = main(engine.intentStream, props)
-          this.actions = bindActions(actions, engine.intentStream, this)
-          this.update$ = update$
+          this.machine = {
+            actions: bindActions(actions, engine.intentStream, this),
+            update$: update$
+          }
           let defaultKey = Object.keys(WrappedComponent.defaultProps);
           this.state = Object.assign(
             {},
@@ -62,7 +63,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         }
         componentDidMount() {
           this.subscription = this.context[REACT_MOST_ENGINE].observe(
-            this.update$,
+            this.machine.update$,
             action => {
               if (action instanceof Function) {
                 this.setState((prevState, props) => {
@@ -91,7 +92,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
           return h(
             WrappedComponent,
             Object.assign({}, opts, this.props, this.state, {
-              actions: this.actions,
+              actions: this.machine.actions,
               traveler: this.traveler
             })
           );
