@@ -1,12 +1,12 @@
 {
   "include": [
-    "lib/*.ts"
+    "src/*.ts"
   ],
   "compilerOptions": {
     "module": "commonjs",
     "lib": ["es2015","dom"],
     "target": "es5",
-    "outDir": "dist",
+    "outDir": "lib",
     "declarationDir": "types",
     "declaration": true,
     "noImplicitAny": false,

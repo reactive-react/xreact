@@ -6,16 +6,10 @@
     "type": "git",
     "url": "git+https://github.com/jcouyang/react-most.git"
   },
-  "main": "dist/react-most.js",
+  "main": "lib/react-most.js",
   "directories": {
-    "doc": "./docs",
     "lib": "./lib"
   },
-  "files": [
-    "engine",
-    "lib",
-    "test-utils.js"
-  ],
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
     "build": "tsc -p .",
@@ -60,7 +54,7 @@
       "es6"
     ],
     "roots": [
-      "lib"
+      "src"
     ],
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
