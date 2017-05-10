@@ -28,6 +28,8 @@ export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
 }
 
 export interface ConnectClass<I, S> {
+  contextTypes?: any
+  defaultProps?: any
   new (props?: ConnectProps<I>, context?: any): Connect<I, S>;
 }
 

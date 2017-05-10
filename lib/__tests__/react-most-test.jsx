@@ -200,6 +200,8 @@ describe('react-most', () => {
     })
     let counterWrapper21 = compose(counterWrapper2)(counterWrapper)
     const Counter2 = counterWrapper21(CounterView)
+    //counterWrapper2(counterWrapper(CounterView))
+    console.log(Counter2);
     xit('counter add inc2, dec2', (done)=>{
       let counterWrapperr = TestUtils.renderIntoDocument(
         <Most engine={Engine}>

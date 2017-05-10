@@ -13,28 +13,21 @@ const CONTEXT_TYPE = {
 };
 
 export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: React.ComponentClass<any>) => ConnectClass<I, S> {
-  return function(WrappedComponent: React.ComponentClass<any>) {
+  return function(WrappedComponent: ConnectClass<I, S>) {
     let connectDisplayName = `Connect(${getDisplayName(WrappedComponent)})`;
     if (WrappedComponent.contextTypes === CONTEXT_TYPE) {
-      return class ConnectNode extends Connect<I, S>{
+      return class ConnectNode extends WrappedComponent {
         actions: Actions<I>
         update$: Stream<Update<S>>
+        main: Plan<I, S>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
         constructor(props, context) {
           super(props, context);
           let { actions, update$ } = main(context[REACT_MOST_ENGINE].historyStream, props)
-          this.update$ = props.update$ ? update$.merge(props.update$) : update$
-          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), props.actions);
-        }
-        render() {
-          return h(
-            WrappedComponent,
-            Object.assign({}, opts, this.props, {
-              update$: this.update$,
-              actions: this.actions,
-            })
-          );
+          let { actions: preActions, update$: preUpdates } = this.main(context[REACT_MOST_ENGINE].historyStream, props)
+          this.update$ = preUpdates ? update$.merge(preUpdates) : update$
+          this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), preActions);
         }
       }
     } else {
@@ -43,6 +36,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
         update$: Stream<Update<S>>
         traveler: Traveler<S>
         subscription: Subscription<S>
+        main: Plan<I, S>
         static contextTypes = CONTEXT_TYPE
         static displayName = connectDisplayName
         constructor(props, context) {
@@ -54,7 +48,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
               return this.setState(state);
             });
           }
-
+          this.main = main
           let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
           this.update$ = props.update$ ? props.update$.merge(update$) : update$
           this.actions = Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), props.actions);
