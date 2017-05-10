@@ -13,12 +13,13 @@ export interface Update<S> {
     (current: S): S;
 }
 export interface Machine<I, S> {
-    actions: Actions<I>;
-    update$: Stream<Update<S>>;
+    actions?: Actions<I>;
+    update$?: Stream<Update<S>>;
 }
 export interface ConnectProps<I> {
     actions?: Actions<I>;
     history?: boolean;
+    [propName: string]: any;
 }
 export declare class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
     machine: Machine<I, S>;
