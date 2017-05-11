@@ -16,29 +16,20 @@ A Monadic Reactive Composable State Wrapper for React Components
 ```
 npm install react-most --save
 ```
-### browser
-```html
-<script src="https://cdn.rawgit.com/reactive-react/react-most/master/dist/vendor.js"></script>
-<!-- vendor.js includes react, most, most-subject -->
-<script src="https://cdn.rawgit.com/reactive-react/react-most/master/dist/react-most.js"></script>
-```
-
-then you can use `Most.default` and `Most.connect`
-
 ## What
-`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject), [React](https://github.com/facebook/react), and (optionally, if you prefered) [RxJS](https://github.com/Reactive-Extensions/RxJS).
+`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject).
 
-Data flow in `react-most` is simple and unidirectional.
+Data flow in `react-most` is simple and unidirectional, similar to flux.
 
 ![](https://github.com/reactive-react/react-most/wiki/images/react-most-flow.png)
 
 ## Terminology
-- **Action**: an `Action` can create an `Intent` and send it to the `Intent Stream`
+- **Machine**: a machine can emit `Update` to a timeline `update$`, and can be operated by calling function in `actions`
+- **Plan**: a Plan is a function that describe how to create a `Machine`
+- **Update**: a function `currentState -> nextState` 
+- **Action**: a function that create `Intent`
+- **Intent**: describe what you want to do
 - **Intent Stream**: a timeline of every `Intent` created by every `Action`
-- **Sink**: a timeline of transformations of state, e.g.
-
-        --- (currentState => nextState) -- (currentState => nextState) --->
-- **State**: a React component's state
 
 ## Quick Start
 sorry we don't have a **book** to document how to use `react-most`, and I don't really need to, but
@@ -52,7 +43,7 @@ Also, you can refer to:
 - [Wiki](https://github.com/reactive-react/react-most/wiki)
 
 
-### 1. Create a simple stateless component
+### 1. Create a simple stateless View component
 ![](https://github.com/reactive-react/react-most/wiki/images/view.png)
 ```html
 const CounterView = props => (
@@ -63,16 +54,16 @@ const CounterView = props => (
   </div>
 )
 ```
-### 2. Define Counter's behavior
+### 2. Create a Plan
 ![](https://github.com/reactive-react/react-most/wiki/images/behavior.png)
 
-1. A counter can have actions of `inc` and `dec`, which will send either `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` upon being called.
-2. A counter reactively generates a state transformation function when it receives an `Intent` of either type `inc` or `dec`.
+1. A counter can have actions of `inc` and `dec`, which will send `Intent` of `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` upon being called.
+2. A counter reactively generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
 
 ```js
 const counterable = connect((intent$) => {
   return {
-    sink$: intent$.map(intent => {
+    update$: intent$.map(intent => {
       switch (intent.type) {
         case 'inc':
           return state => ({ count: state.count + 1 });
@@ -82,13 +73,18 @@ const counterable = connect((intent$) => {
           return _ => _;
       }
     }),
-    inc: () => ({ type: 'inc' }),
-    dec: () => ({ type: 'dec' })
+    actions: {
+      inc: () => ({ type: 'inc' }),
+      dec: () => ({ type: 'dec' })
+    }
   }
 })
 ```
+you'll see that the function in `connect` parameter is a `Plan`, the object it return is a `Machine`
 
-### 3. Connect behavior and view
+and `connect` return a HoC that you can wrap it to View Component
+
+### 3. Connect Plan and View
 ![](https://github.com/reactive-react/react-most/wiki/images/wrap.png)
 ```js
 const Counter = counterable(CounterView)
