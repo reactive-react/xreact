@@ -12,6 +12,12 @@
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@most/prelude/-/prelude-1.6.0.tgz#4256e3a902ddf04c1f07afca2267526195072e13"
 
+"@reactivex/rxjs@^5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@reactivex/rxjs/-/rxjs-5.4.0.tgz#87eb67e8e6a4fbe8ee07ee4ea94c1fa928ba1691"
+  dependencies:
+    symbol-observable "^1.0.1"
+
 "@types/jest@^19.2.3":
   version "19.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-19.2.3.tgz#61748040e8589a891dfc2ec1d16a2dd74482980e"
@@ -1801,9 +1807,9 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
-react-most-spec@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/react-most-spec/-/react-most-spec-0.2.3.tgz#496fc9516688738d6964dfb2c31895c33074360a"
+react-most-spec@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-most-spec/-/react-most-spec-1.1.0.tgz#95397e5650359ba2e5d2e8711df094b7c78b61a3"
 
 react@^15.5.4:
   version "15.5.4"
@@ -1938,12 +1944,6 @@ rimraf@^2.6.1:
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
   dependencies:
     glob "^7.0.5"
-
-rxjs@^5.0.0-rc.4:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.4.0.tgz#a7db14ab157f9d7aac6a56e655e7a3860d39bf26"
-  dependencies:
-    symbol-observable "^1.0.1"
 
 safe-buffer@^5.0.1:
   version "5.0.1"

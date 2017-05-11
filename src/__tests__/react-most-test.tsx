@@ -4,7 +4,7 @@ import * as TestUtils from 'react-addons-test-utils';
 import * as most from 'most';
 
 import Most, { connect, REACT_MOST_ENGINE } from '../../src/react-most';
-import { EngineSubject } from '../../src/interfaces'
+import { Subject } from 'most-subject'
 import {
     stateStreamOf, stateHistoryOf,
     intentStreamOf, intentHistoryOf,
@@ -32,14 +32,14 @@ interface Intent {
     type: string
     value?: any
 }
-const counterWrapper = connect((intent$: EngineSubject<Intent>) => {
+const counterWrapper = connect((intent$: Subject<Intent>) => {
     return {
         update$: intent$.map((intent: Intent) => {
             switch (intent.type) {
                 case 'inc':
                     return state => ({ count: state.count + 1 })
                 case 'dec':
-                    intent$.send({ type: 'dec triggered' })
+                    intent$.next({ type: 'dec triggered' })
                     return state => ({ count: state.count - 1 })
                 case 'changeWrapperProps':
                     return state => ({
@@ -188,7 +188,7 @@ describe('react-most', () => {
     })
 
     describe('composable', () => {
-        const counterWrapper2 = connect((intent$: EngineSubject<Intent>) => {
+        const counterWrapper2 = connect((intent$: Subject<Intent>) => {
             return {
                 update$: intent$.map(intent => {
                     switch (intent.type) {
@@ -225,7 +225,7 @@ describe('react-most', () => {
     })
 
     describe('convension default to `action` field in sinks', () => {
-        const Counter = connect((intent$: EngineSubject<Intent>) => {
+        const Counter = connect((intent$: Subject<Intent>) => {
             return {
                 update$: intent$.map(intent => {
                     switch (intent.type) {
@@ -255,7 +255,7 @@ describe('react-most', () => {
     })
 
     describe('ERROR', () => {
-        const Counter = connect((intent$: EngineSubject<Intent>) => {
+        const Counter = connect((intent$: Subject<Intent>) => {
             return {
                 update$: intent$.map(intent => {
                     switch (intent.type) {
@@ -303,9 +303,9 @@ describe('react-most', () => {
 
     describe('unsubscribe when component unmounted', () => {
         it('unsubscribe', (done) => {
-            const Counter = connect((intent$: EngineSubject<Intent>) => {
+            const Counter = connect((intent$: Subject<Intent>) => {
                 let incForever$ = most.periodic(100, { type: 'inc' }).map(intent => {
-                    done.fail('should not send intent any more')
+                    done.fail('should not next intent any more')
                     return _ => _
                 })
                 return {

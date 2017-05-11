@@ -1,9 +1,10 @@
 import { Stream, Subscription } from 'most';
-import { EngineSubject, Update } from '../interfaces';
-export declare class Engine<T, S> {
-    intentStream: EngineSubject<T>;
-    historyStream: EngineSubject<S>;
-    travelStream: EngineSubject<(n: number) => number>;
+import { Subject } from 'most-subject';
+import { Update } from '../interfaces';
+export default class Engine<T, S> {
+    intentStream: Subject<T>;
+    historyStream: Subject<S>;
+    travelStream: Subject<(n: number) => number>;
     constructor();
     observe<T>(actionsSinks: Stream<Update<T>>, f: any): Subscription<T>;
 }

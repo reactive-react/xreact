@@ -1,17 +1,14 @@
 import { from, of, mergeArray, Stream, never, Subscription } from 'most'
-import { async as subject, AsyncSubject } from 'most-subject'
-import { EngineSubject, Update } from '../interfaces'
-export class Engine<T, S> {
-  intentStream: EngineSubject<T>
-  historyStream: EngineSubject<S>
-  travelStream: EngineSubject<(n: number) => number>
+import { async as subject, AsyncSubject, Subject } from 'most-subject'
+import { Update } from '../interfaces'
+export default class Engine<T, S> {
+  intentStream: Subject<T>
+  historyStream: Subject<S>
+  travelStream: Subject<(n: number) => number>
   constructor() {
-    this.intentStream = subject() as EngineSubject<T>
-    this.intentStream.send = this.intentStream.next.bind(this.intentStream)
-    this.historyStream = subject() as EngineSubject<S>
-    this.historyStream.send = this.historyStream.next.bind(this.historyStream)
-    this.travelStream = subject() as EngineSubject<(n: number) => number>;
-    this.travelStream.send = this.travelStream.next.bind(this.historyStream)
+    this.intentStream = subject() as Subject<T>
+    this.historyStream = subject() as Subject<S>
+    this.travelStream = subject() as Subject<(n: number) => number>;
   }
 
   observe<T>(actionsSinks: Stream<Update<T>>, f): Subscription<T> {

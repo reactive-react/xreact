@@ -23,13 +23,14 @@
   "dependencies": {
     "most": "^1.2.2",
     "most-subject": "^5.2.0",
-    "prop-types": "^15.5.8",
-    "rxjs": "^5.0.0-rc.4"
+    "prop-types": "^15.5.8"
   },
   "peerDependencies": {
-    "react": "^15.5.4"
+    "react": "^15.5.4",
+    "@reactivex/rxjs": "^5.4.0"
   },
   "devDependencies": {
+    "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
     "@types/react": "^15.0.22",
@@ -38,7 +39,7 @@
     "react": "^15.5.4",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.5.4",
-    "react-most-spec": "^1.0.0",
+    "react-most-spec": "^1.1.0",
     "redux": "^3.0.4",
     "ts-jest": "^20.0.2",
     "typescript": "^2.3.2"

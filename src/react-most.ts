@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass } from './interfaces'
 import { from, Stream, Subscription } from 'most';
-import { Engine } from './engine/most';
+import Engine from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
@@ -70,7 +70,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
                   let newState = action.call(this, prevState, props);
                   if ((opts.history || props.history) && newState != prevState) {
                     this.traveler.cursor = -1;
-                    this.context[REACT_MOST_ENGINE].historyStream.send(prevState);
+                    this.context[REACT_MOST_ENGINE].historyStream.next(prevState);
                   }
                   return newState;
                 });
@@ -141,16 +141,16 @@ function inspect(engine) {
 function bindActions(actions, intent$, self) {
   let _actions = {
     fromEvent(e, f = x => x) {
-      return intent$.send(f(e));
+      return intent$.next(f(e));
     },
     fromPromise(p) {
-      return p.then(x => intent$.send(x));
+      return p.then(x => intent$.next(x));
     },
   };
 
   for (let a in actions) {
     _actions[a] = (...args) => {
-      return intent$.send(actions[a].apply(self, args));
+      return intent$.next(actions[a].apply(self, args));
     };
   }
   return _actions;
