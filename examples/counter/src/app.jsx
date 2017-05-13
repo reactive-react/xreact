@@ -7,25 +7,30 @@ const CounterView = props => (
     <button onClick={props.actions.dec}>-</button>
     <span>{props.count}</span>
     <button onClick={props.actions.inc}>+</button>
+    <button onClick={props.actions.exception}>error</button>
   </div>
 )
-
 CounterView.defaultProps = { count: 0 };
 
 const counterable = connect((intent$) => {
   return {
-    sink$: intent$.map(intent => {
+    update$: intent$.map(intent => {
       switch (intent.type) {
         case 'inc':
           return state => ({ count: state.count + 1 });
         case 'dec':
           return state => ({ count: state.count - 1 });
+        case 'exception':
+          throw new Error('exception')
         default:
           return _ => _;
       }
     }),
-    inc: () => ({ type: 'inc' }),
-    dec: () => ({ type: 'dec' }),
+    actions:{
+      inc: () => ({ type: 'inc' }),
+      dec: () => ({ type: 'dec' }),
+      exception:() => ({type: 'exception'})
+    }
   }
 })
 

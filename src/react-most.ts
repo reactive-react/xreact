@@ -82,7 +82,8 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
                   'need to be a Function which map from current state to new state'
                 );
               }
-            }
+            },
+            () => this.context[REACT_MOST_ENGINE].historyStream.complete(this.state)
           );
         }
         componentWillUnmount() {

@@ -11,17 +11,17 @@ export default class Engine<T, S> {
     this.travelStream = subject() as Subject<(n: number) => number>;
   }
 
-  observe<T>(actionsSinks: Stream<Update<T>>, f): Subscription<T> {
-    let subscriptions = actionsSinks
+  observe<T>(actionsSinks: Stream<Update<T>>, f, end): Subscription<T> {
+    let errorHandled = actionsSinks
       .recoverWith((e: Error) => {
         console.error('There is Error in your reducer:', e, e.stack)
-        return of(x => x)
+        return errorHandled
       })
+    return errorHandled
       .subscribe({
         next: f,
         error: (e) => console.error('Something is Wrong:', e, e.stack),
-        complete: f
+        complete: end
       });
-    return subscriptions;
   }
 }
