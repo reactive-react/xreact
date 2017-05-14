@@ -19,7 +19,9 @@
   "scripts": {
     "build": "NODE_ENV=production browserify src/app.jsx --extension=.jsx  --extension=.es6| java -jar ../todomvc/bin/compiler.jar > public/app.js",
     "start": "ecstatic -p 8000 public",
-    "watch": "watchify -d src/app.jsx --extension=.jsx --extension=.es6 -o public/app.js -dv",
+    "watch-app": "watchify -d src/app.jsx --extension=.jsx --extension=.es6 -o public/app.js -dv",
+    "watch-trans": "watchify -d src/transducer.jsx --extension=.jsx --extension=.es6 -o public/transducer.js -dv",
+    "watch-undo": "watchify -d src/undo.jsx --extension=.jsx --extension=.es6 -o public/undo.js -dv",
     "test": "jest"
   },
   "jest": {
@@ -43,7 +45,8 @@
     "react": "^15.2.0",
     "react-dom": "^15.2.0",
     "react-most": "^1.1.1",
-    "rest": "^1.3.1"
+    "rest": "^1.3.1",
+    "transducers-js": "^0.4.174"
   },
   "devDependencies": {
     "babel": "^6.1.18",
