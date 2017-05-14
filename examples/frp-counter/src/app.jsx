@@ -28,7 +28,7 @@ const lensCount = lensProp('count')
 
 const asyncInitCount11 = connect(intent$=>{
   return {
-    dataSink$: just(11)
+    update$: just(11)
       .flatMap(compose(fromPromise, when))
       .map(set(lensCount))
   }
@@ -36,7 +36,7 @@ const asyncInitCount11 = connect(intent$=>{
 
 const doublable = connect(intent$ => {
   return {
-    sink$: intent$.map(Intent.case({
+    update$: intent$.map(Intent.case({
       Double: () => over(lensCount, x=>x*2),
       Half: () => over(lensCount, x=>x/2),
       _: () => identity
@@ -50,7 +50,7 @@ const doublable = connect(intent$ => {
 
 const increasable = connect(intent$ => {
   return {
-    sink$: intent$.map(Intent.case({
+    update$: intent$.map(Intent.case({
       Inc: (v) => over(lensCount, x=>x+v),
       Dec: (v) => over(lensCount, x=>x-v),
       _: () => identity
