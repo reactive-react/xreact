@@ -11,11 +11,14 @@ const TypeNsearch = (props)=>{
     <input onChange={e=>search(e.target.value)}></input>
     <span className={"red " + error.className}>{error.message}</span>
     <ul>
-      {props.results&&props.results.map(item=>{
+      {props.results.map(item=>{
         return <li key={item.id}><a href={item.html_url}>{item.full_name} ({item.stargazers_count})</a></li>
   })}
     </ul>
   </div>
+}
+TypeNsearch.defaultProps = {
+  results: []
 }
 const log = x=>console.log(x)
 const MostTypeNSearch = connect(function(intent$){
@@ -47,8 +50,10 @@ const MostTypeNSearch = connect(function(intent$){
                            })
 
   return {
-    search: value=>({type:'search',value}),
-    updateSink$,
+    actions: {
+      search: value=>({type:'search',value}),
+    },
+    update$: updateSink$
   }
 })(TypeNsearch);
 
