@@ -51,11 +51,11 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
             actions: bindActions(actions, engine.intentStream, this),
             update$: update$
           }
-          let defaultKey = Object.keys(WrappedComponent.defaultProps);
+          let defaultKeys = WrappedComponent.defaultProps ? Object.keys(WrappedComponent.defaultProps) : [];
           this.state = Object.assign(
             {},
             WrappedComponent.defaultProps,
-            pick(defaultKey, props)
+            pick(defaultKeys, props)
           );
         }
         componentWillReceiveProps(nextProps) {

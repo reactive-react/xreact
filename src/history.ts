@@ -19,10 +19,10 @@ export class Traveler<S> {
       }, this.path, this.history)
       .filter(x => !!x)
   }
-  forward() {
+  forward = () => {
     this.path.next(x => x + 1)
   }
-  backward() {
+  backward = () => {
     this.path.next(x => x - 1)
   }
 

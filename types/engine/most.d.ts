@@ -6,5 +6,5 @@ export default class Engine<T, S> {
     historyStream: Subject<S>;
     travelStream: Subject<(n: number) => number>;
     constructor();
-    observe<T>(actionsSinks: Stream<Update<T>>, f: any): Subscription<T>;
+    observe<T>(actionsSinks: Stream<Update<T>>, f: any, end: any): Subscription<T>;
 }

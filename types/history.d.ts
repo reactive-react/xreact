@@ -7,7 +7,7 @@ export declare class Traveler<S> {
     history: Stream<Stamp<S>[]>;
     travel: Stream<S>;
     constructor(history: Stream<Stamp<S>[]>, path: Subject<(n: number) => number>);
-    forward(): void;
-    backward(): void;
+    forward: () => void;
+    backward: () => void;
 }
 export default function initHistory<S>(engineHistory: Subject<S>, engineTravel: Subject<(n: number) => number>): Traveler<S>;
