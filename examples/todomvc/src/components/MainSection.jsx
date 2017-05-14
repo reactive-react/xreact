@@ -14,6 +14,8 @@ const MainSection = ({todos,filter}) => {
   const filteredTodos = filter(todos);
   return (
     <section className="main">
+      <input className="toggle-all" type="checkbox"/>
+      <label for="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
         {filteredTodos.map((todo,index) =>
           <TodoItem key={todo.id} index={index} todo={todo} />
