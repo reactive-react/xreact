@@ -12,10 +12,10 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any>): ComponentClass is ConnectClass<I, S> {
+function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any> | React.StatelessComponent<any>): ComponentClass is ConnectClass<I, S> {
   return (<ConnectClass<I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
 }
-export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any>
+export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any> | React.StatelessComponent<any>
 
 export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: ConnectOrReactComponent<I, S>) => ConnectClass<I, S> {
   return function(WrappedComponent: ConnectOrReactComponent<I, S>) {
