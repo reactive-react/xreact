@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass } from './interfaces'
 import { from, Stream, Subscription } from 'most';
+import {Observable} from '@reactivex/rxjs'
 import Engine from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
@@ -12,10 +13,10 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any> | React.StatelessComponent<any>): ComponentClass is ConnectClass<I, S> {
+function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any>): ComponentClass is ConnectClass<I, S> {
   return (<ConnectClass<I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
 }
-export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any> | React.StatelessComponent<any>
+export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any>
 
 export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: ConnectOrReactComponent<I, S>) => ConnectClass<I, S> {
   return function(WrappedComponent: ConnectOrReactComponent<I, S>) {
@@ -28,7 +29,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
           super(props, context);
           let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
           this.machine = {
-            update$: this.machine.update$.merge(update$),
+            update$: (this.machine.update$ as Observable<(s:S)=>S>).merge(update$),
             actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
           }
         }

@@ -1,10 +1,4 @@
-import { Subject } from '@reactivex/rxjs/src/Subject'
-import { Observable } from '@reactivex/rxjs/src/Observable'
-import { Subscription } from '@reactivex/rxjs/src/Subscription'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/take'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/mergeAll'
+import { Subject, Observable, Subscription } from '@reactivex/rxjs'
 import { Update } from '../interfaces'
 
 export default class Engine<T, S> {
@@ -17,7 +11,7 @@ export default class Engine<T, S> {
     this.travelStream = new Subject()
   }
 
-  observe(actionsSinks: Observable<Update<T>>, f): Subscription {
+  observe(actionsSinks: Observable<Update<S>>, f): Subscription {
     return actionsSinks.subscribe(
       f,
       (e) => console.error('Something is Wrong:', e, e.stack)

@@ -11,7 +11,7 @@ export default class Engine<T, S> {
     this.travelStream = subject() as Subject<(n: number) => number>;
   }
 
-  observe<T>(actionsSinks: Stream<Update<T>>, f, end): Subscription<T> {
+  observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<S> {
     let errorHandled = actionsSinks
       .recoverWith((e: Error) => {
         console.error('There is Error in your reducer:', e, e.stack)
