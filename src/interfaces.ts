@@ -1,14 +1,22 @@
-import { Stream, Subscription } from 'most'
 import * as React from 'react'
-import { Subject } from 'most-subject'
-import { Observable, Subject as RxSubject } from '@reactivex/rxjs'
 import { Traveler } from './history'
 export interface Actions<T> {
   [propName: string]: (...v: any[]) => T
 }
+export interface Subject<T> {
+  next: (v?: T) => void
+  complete: (v?: any) => void
+}
 
+export interface Subscription<A> {
+  unsubscribe(): void;
+}
+
+export interface Stream<A> {
+  merge: (a: Stream<A>) => Stream<A>
+}
 export interface Plan<I, S> {
-  (intent: Subject<I> | RxSubject<I>, props?: {}): Machine<I, S>
+  (intent: Subject<I>, props?: {}): Machine<I, S>
 
 }
 export interface Update<S> {
@@ -16,7 +24,7 @@ export interface Update<S> {
 }
 export interface Machine<I, S> {
   actions?: Actions<I>,
-  update$: Stream<Update<S>> | Observable<Update<S>>
+  update$: Stream<Update<S>>
 }
 
 export interface ConnectProps<I> {
@@ -45,4 +53,17 @@ export interface History<S> {
 export interface Stamp<S> {
   value: S
   time: number
+}
+
+export interface Engine<I, S> {
+  intentStream: Subject<I>
+  historyStream: Subject<S>
+  travelStream: Subject<(n: number) => number>
+}
+
+export interface MostProps<T, S> {
+  engine?: new () => Engine<T, S>
+}
+export interface ContextEngine<I, H> {
+  [x: string]: Engine<I, H>
 }

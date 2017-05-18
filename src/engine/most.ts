@@ -1,7 +1,7 @@
 import { from, of, mergeArray, Stream, never, Subscription } from 'most'
 import { async as subject, AsyncSubject, Subject } from 'most-subject'
-import { Update } from '../interfaces'
-export default class Engine<T, S> {
+import { Update, Engine } from '../interfaces'
+export default class MostEngine<T, S> implements Engine<T, S> {
   intentStream: Subject<T>
   historyStream: Subject<S>
   travelStream: Subject<(n: number) => number>

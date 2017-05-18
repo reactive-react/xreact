@@ -1,7 +1,7 @@
 import { Subject, Observable, Subscription } from '@reactivex/rxjs'
-import { Update } from '../interfaces'
+import { Update, Engine } from '../interfaces'
 
-export default class Engine<T, S> {
+export default class RxEngine<T, S> implements Engine<T, S> {
   intentStream: Subject<T>
   historyStream: Subject<S>
   travelStream: Subject<(n: number) => number>

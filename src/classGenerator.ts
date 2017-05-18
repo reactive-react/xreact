@@ -2,7 +2,6 @@ import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass } from './interfaces'
-import { Observable } from '@reactivex/rxjs'
 import Engine from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
@@ -24,7 +23,7 @@ export function genNodeClass<I, S>(WrappedComponent: ConnectClass<I, S>, main: P
       super(props, context);
       let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
       this.machine = {
-        update$: (this.machine.update$ as Observable<(s: S) => S>).merge(update$),
+        update$: this.machine.update$.merge(update$),
         actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
       }
     }

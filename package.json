@@ -21,15 +21,16 @@
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "dependencies": {
-    "most": "^1.2.2",
     "most-subject": "^5.2.0",
     "prop-types": "^15.5.8"
   },
   "peerDependencies": {
     "react": "^15.5.4",
+    "most": "^1.2.2",
     "@reactivex/rxjs": "^5.4.0"
   },
   "devDependencies": {
+    "most": "^1.2.2",
     "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
