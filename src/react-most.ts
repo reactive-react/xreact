@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass } from './interfaces'
 import { from, Stream, Subscription } from 'most';
-import {Observable} from '@reactivex/rxjs'
+import { Observable } from '@reactivex/rxjs'
 import Engine from './engine/most';
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
@@ -13,10 +13,13 @@ const CONTEXT_TYPE = {
   [REACT_MOST_ENGINE]: PropTypes.object
 };
 
-function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any>): ComponentClass is ConnectClass<I, S> {
+function isConnectClass<I, S>(ComponentClass: ConnectClass<I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is ConnectClass<I, S> {
   return (<ConnectClass<I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
 }
-export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any>
+function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component is React.SFC<any> {
+  return (typeof Component == 'function')
+}
+export type ConnectOrReactComponent<I, S> = ConnectClass<I, S> | React.ComponentClass<any> | React.SFC<any>
 
 export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (WrappedComponent: ConnectOrReactComponent<I, S>) => ConnectClass<I, S> {
   return function(WrappedComponent: ConnectOrReactComponent<I, S>) {
@@ -29,7 +32,7 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
           super(props, context);
           let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
           this.machine = {
-            update$: (this.machine.update$ as Observable<(s:S)=>S>).merge(update$),
+            update$: (this.machine.update$ as Observable<(s: S) => S>).merge(update$),
             actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
           }
         }
@@ -91,13 +94,23 @@ export function connect<I, S>(main: Plan<I, S>, opts = { history: false }): (Wra
           this.subscription.unsubscribe();
         }
         render() {
-          return h(
-            WrappedComponent,
-            Object.assign({}, opts, this.props, this.state, {
-              actions: this.machine.actions,
-              traveler: this.traveler
-            })
-          );
+          if (isSFC(WrappedComponent)) {
+            return h(
+              WrappedComponent,
+              Object.assign({}, opts, this.props, this.state, {
+                actions: this.machine.actions,
+                traveler: this.traveler
+              })
+            );
+          } else {
+            return h(
+              WrappedComponent,
+              Object.assign({}, opts, this.props, this.state, {
+                actions: this.machine.actions,
+                traveler: this.traveler
+              })
+            );
+          }
         }
       }
     }
