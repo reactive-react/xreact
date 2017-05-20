@@ -1,4 +1,4 @@
-import { from, of, mergeArray, Stream, never, Subscription } from 'most'
+import { from, of, merge as mostMerge, Stream, never, Subscription } from 'most'
 import { async as subject, AsyncSubject, Subject } from 'most-subject'
 import { Update, Engine } from '../interfaces'
 export default class MostEngine<T, S> implements Engine<T, S> {
@@ -11,7 +11,7 @@ export default class MostEngine<T, S> implements Engine<T, S> {
     this.travelStream = subject() as Subject<(n: number) => number>;
   }
 
-  observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<S> {
+  observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<any> {
     let errorHandled = actionsSinks
       .recoverWith((e: Error) => {
         console.error('There is Error in your reducer:', e, e.stack)
@@ -23,5 +23,8 @@ export default class MostEngine<T, S> implements Engine<T, S> {
         error: (e) => console.error('Something is Wrong:', e, e.stack),
         complete: end
       });
+  }
+  merge<T>(a: Stream<T>, b: Stream<T>) {
+    return mostMerge(a, b)
   }
 }

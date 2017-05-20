@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
-import { Plan, Connect, ConnectClass } from './interfaces'
-import Engine from './engine/most';
+import {Observable} from '@reactivex/rxjs'
+import { Stream,Plan, Connect, ConnectClass, ContextEngine, Actions, Subject,RunableMachine,BindActions } from './interfaces'
+
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
 export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
@@ -19,11 +20,11 @@ export function genNodeClass<I, S>(WrappedComponent: ConnectClass<I, S>, main: P
   return class ConnectNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
-    constructor(props, context) {
+    constructor(props, context: ContextEngine<I,S>) {
       super(props, context);
       let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
       this.machine = {
-        update$: this.machine.update$.merge(update$),
+        update$: context[REACT_MOST_ENGINE].merge(this.machine.update$, update$),
         actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
       }
     }
@@ -33,14 +34,15 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
   return class ConnectLeaf extends Connect<I, S> {
     static contextTypes = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
-    constructor(props, context) {
+    constructor(props, context: ContextEngine<I,S>) {
       super(props, context);
-      let engine: Engine<I, S> = context[REACT_MOST_ENGINE]
+      let engine = context[REACT_MOST_ENGINE]
       if (opts.history || props.history) {
         this.traveler = initHistory(engine.historyStream, engine.travelStream);
-        this.traveler.travel.forEach(state => {
-          return this.setState(state);
-        });
+        this.context[REACT_MOST_ENGINE].observe(
+          this.traveler.travel,
+          state => this.setState(state),
+        )
       }
       let { actions, update$ } = main(engine.intentStream, props)
       this.machine = {
@@ -110,13 +112,13 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
 function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
-function bindActions(actions, intent$, self) {
+function bindActions<I>(actions: Actions<I>, intent$: Subject<I>, self):BindActions<I> {
   let _actions = {
-    fromEvent(e, f = x => x) {
+    fromEvent(e, f:(x:any)=>I = x => x) {
       return intent$.next(f(e));
     },
     fromPromise(p) {
-      return p.then(x => intent$.next(x));
+      return p.then((x:I) => intent$.next(x));
     },
   };
 

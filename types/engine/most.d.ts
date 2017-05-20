@@ -6,5 +6,6 @@ export default class MostEngine<T, S> implements Engine<T, S> {
     historyStream: Subject<S>;
     travelStream: Subject<(n: number) => number>;
     constructor();
-    observe(actionsSinks: Stream<Update<S>>, f: any, end: any): Subscription<S>;
+    observe(actionsSinks: Stream<Update<S>>, f: any, end: any): Subscription<any>;
+    merge<T>(a: Stream<T>, b: Stream<T>): Stream<T>;
 }

@@ -1,20 +1,22 @@
 import * as React from 'react'
 import { Traveler } from './history'
+import {Stream as MostStream} from 'most'
+import {Subject as MostSubject} from 'most-subject'
+import {Observable as RxStream, Subject as RxSubject} from '@reactivex/rxjs'
 export interface Actions<T> {
-  [propName: string]: (...v: any[]) => T
+  [actionName: string]: (...p: any[]) => T
 }
-export interface Subject<T> {
-  next: (v?: T) => void
-  complete: (v?: any) => void
+
+export interface BindActions<T> {
+  [actionName: string]: (...p: any[]) => void
 }
+export type Subject<T> = MostSubject<T> | RxSubject<T>
 
 export interface Subscription<A> {
   unsubscribe(): void;
 }
 
-export interface Stream<A> {
-  merge: (a: Stream<A>) => Stream<A>
-}
+export type Stream<A> = MostStream<A> | RxStream<A> 
 export interface Plan<I, S> {
   (intent: Subject<I>, props?: {}): Machine<I, S>
 
@@ -27,6 +29,10 @@ export interface Machine<I, S> {
   update$: Stream<Update<S>>
 }
 
+export interface RunableMachine<I, S> {
+  actions?: BindActions<I>,
+  update$: Stream<Update<S>>
+}
 export interface ConnectProps<I> {
   actions?: Actions<I>
   history?: boolean
@@ -34,15 +40,14 @@ export interface ConnectProps<I> {
 }
 
 export class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
-  machine: Machine<I, S>
+  machine: RunableMachine<I, S>
   traveler: Traveler<S>
   subscription: Subscription<S>
 }
 
 export interface ConnectClass<I, S> {
-  contextTypes?: any
-  defaultProps?: any
-  new (props?: ConnectProps<I>, context?: any): Connect<I, S>;
+  contextTypes?: ContextEngine<I,S>
+  new (props: ConnectProps<I>, context: ContextEngine<I,S>): Connect<I, S>;
 }
 
 export interface History<S> {
@@ -59,6 +64,8 @@ export interface Engine<I, S> {
   intentStream: Subject<I>
   historyStream: Subject<S>
   travelStream: Subject<(n: number) => number>
+  merge(a: Stream<Update<S>>, b: Stream<Update<S>>): Stream<Update<S>>
+  observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<S> 
 }
 
 export interface MostProps<T, S> {

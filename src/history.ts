@@ -1,12 +1,11 @@
-import { from, Stream } from 'most'
-import { Subject } from 'most-subject'
-import { Stamp } from './interfaces'
+import { Stamp, Stream, Subject } from './interfaces'
+import {from, Stream as MStream} from 'most'
 export class Traveler<S> {
   cursor: number
   path: Subject<(n: number) => number>
   history: Stream<Stamp<S>[]>
   travel: Stream<S>
-  constructor(history: Stream<Stamp<S>[]>, path: Subject<(n: number) => number>) {
+  constructor(history: MStream<Stamp<S>[]>, path: Subject<(n: number) => number>) {
     this.history = history
     this.path = path
     this.travel = from(this.path)
@@ -16,7 +15,7 @@ export class Traveler<S> {
           this.cursor = offset(this.cursor)
           return states[cursor].value;
         }
-      }, this.path, this.history)
+      }, from(this.path), this.history)
       .filter(x => !!x)
   }
   forward = () => {
