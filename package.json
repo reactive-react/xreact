@@ -25,18 +25,18 @@
     "prop-types": "^15.5.8"
   },
   "peerDependencies": {
-    "react": "^15.5.4",
+    "@reactivex/rxjs": "^5.4.0",
     "most": "^1.2.2",
-    "@reactivex/rxjs": "^5.4.0"
+    "react": "^15.5.4"
   },
   "devDependencies": {
-    "most": "^1.2.2",
     "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
     "@types/react": "^15.0.22",
     "jest": "^20.0.0",
     "lodash": "^4.0.0",
+    "most": "^1.2.2",
     "react": "^15.5.4",
     "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.5.4",

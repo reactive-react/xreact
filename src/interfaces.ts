@@ -56,9 +56,9 @@ export interface Stamp<S> {
 }
 
 export interface Engine<I, S> {
-  intentStream: Subject<I>
-  historyStream: Subject<S>
-  travelStream: Subject<(n: number) => number>
+  intent$: Subject<I>
+  history$: Subject<S>
+  travel$: Subject<(n: number) => number>
 }
 
 export interface MostProps<T, S> {

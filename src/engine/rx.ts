@@ -2,13 +2,13 @@ import { Subject, Observable, Subscription } from '@reactivex/rxjs'
 import { Update, Engine } from '../interfaces'
 
 export default class RxEngine<T, S> implements Engine<T, S> {
-  intentStream: Subject<T>
-  historyStream: Subject<S>
-  travelStream: Subject<(n: number) => number>
+  intent$: Subject<T>
+  history$: Subject<S>
+  travel$: Subject<(n: number) => number>
   constructor() {
-    this.intentStream = new Subject()
-    this.historyStream = new Subject()
-    this.travelStream = new Subject()
+    this.intent$ = new Subject()
+    this.history$ = new Subject()
+    this.travel$ = new Subject()
   }
 
   observe(actionsSinks: Observable<Update<S>>, f): Subscription {

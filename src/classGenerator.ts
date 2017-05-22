@@ -37,14 +37,14 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
       super(props, context);
       let engine: Engine<I, S> = context[REACT_MOST_ENGINE]
       if (opts.history || props.history) {
-        this.traveler = initHistory(engine.historyStream, engine.travelStream);
+        this.traveler = initHistory(engine.history$, engine.travel$);
         this.traveler.travel.forEach(state => {
           return this.setState(state);
         });
       }
-      let { actions, update$ } = main(engine.intentStream, props)
+      let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
-        actions: bindActions(actions, engine.intentStream, this),
+        actions: bindActions(actions, engine.intent$, this),
         update$: update$
       }
       let defaultKeys = WrappedComponent.defaultProps ? Object.keys(WrappedComponent.defaultProps) : [];

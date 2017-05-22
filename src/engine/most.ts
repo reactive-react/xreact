@@ -2,13 +2,13 @@ import { from, of, mergeArray, Stream, never, Subscription } from 'most'
 import { async as subject, AsyncSubject, Subject } from 'most-subject'
 import { Update, Engine } from '../interfaces'
 export default class MostEngine<T, S> implements Engine<T, S> {
-  intentStream: Subject<T>
-  historyStream: Subject<S>
-  travelStream: Subject<(n: number) => number>
+  intent$: Subject<T>
+  history$: Subject<S>
+  travel$: Subject<(n: number) => number>
   constructor() {
-    this.intentStream = subject() as Subject<T>
-    this.historyStream = subject() as Subject<S>
-    this.travelStream = subject() as Subject<(n: number) => number>;
+    this.intent$ = subject() as Subject<T>
+    this.history$ = subject() as Subject<S>
+    this.travel$ = subject() as Subject<(n: number) => number>;
   }
 
   observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<S> {
