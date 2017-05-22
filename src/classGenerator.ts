@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
-import { Plan, Connect, ConnectClass } from './interfaces'
-import Engine from './engine/most';
+import { Plan, Connect, ConnectClass, ContextEngine, REACT_MOST_ENGINE, Update } from './interfaces'
+import { StaticStream, HKTS, HKT } from './engine'
 
 // unfortunately React doesn't support symbol as context key yet, so let me just preteding using Symbol until react implement the Symbol version of Object.assign
-export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
+
 
 const h = React.createElement;
 export const CONTEXT_TYPE = {
@@ -15,32 +15,33 @@ function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component
   return (typeof Component == 'function')
 }
 
-export function genNodeClass<I, S>(WrappedComponent: ConnectClass<I, S>, main: Plan<I, S>): ConnectClass<I, S> {
+export function genNodeClass<E extends HKTS, I, S>(WrappedComponent: ConnectClass<E, I, S>, main: Plan<E, I, S>): ConnectClass<E, I, S> {
   return class ConnectNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
-    constructor(props, context) {
+    constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
-      let { actions, update$ } = main(context[REACT_MOST_ENGINE].intentStream, props)
+      let engine = context[REACT_MOST_ENGINE]
+      let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
-        update$: this.machine.update$.merge(update$),
-        actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intentStream, this), this.machine.actions)
+        update$: engine.operators.merge<Update<S>>(this.machine.update$, update$),
+        actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intent$, this), this.machine.actions)
       }
     }
   }
 }
-export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<I, S>, opts?): ConnectClass<I, S> {
-  return class ConnectLeaf extends Connect<I, S> {
-    static contextTypes = CONTEXT_TYPE
+export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): ConnectClass<E, I, S> {
+  return class ConnectLeaf extends Connect<E, I, S> {
+    static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
-    constructor(props, context) {
+    constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
-      let engine: Engine<I, S> = context[REACT_MOST_ENGINE]
+      let engine = context[REACT_MOST_ENGINE]
       if (opts.history || props.history) {
-        this.traveler = initHistory(engine.history$, engine.travel$);
-        this.traveler.travel.forEach(state => {
-          return this.setState(state);
-        });
+        // this.traveler = initHistory(engine.history$, engine.travel$);
+        // this.traveler.travel.forEach(state => {
+        //   return this.setState(state);
+        // });
       }
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
@@ -58,7 +59,7 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
       this.setState(state => pick(Object.keys(state), nextProps));
     }
     componentDidMount() {
-      this.subscription = this.context[REACT_MOST_ENGINE].observe(
+      this.subscription = this.context[REACT_MOST_ENGINE].operators.subscribe(
         this.machine.update$,
         action => {
           if (action instanceof Function) {
@@ -66,7 +67,7 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
               let newState = action.call(this, prevState, props);
               if ((opts.history || props.history) && newState != prevState) {
                 this.traveler.cursor = -1;
-                this.context[REACT_MOST_ENGINE].historyStream.next(prevState);
+                this.context[REACT_MOST_ENGINE].history$.next(prevState);
               }
               return newState;
             });
@@ -79,7 +80,7 @@ export function genLeafClass<I, S>(WrappedComponent: React.SFC<any> | React.Comp
             );
           }
         },
-        () => this.context[REACT_MOST_ENGINE].historyStream.complete(this.state)
+        () => this.context[REACT_MOST_ENGINE].history$.complete(this.state)
       );
     }
     componentWillUnmount() {

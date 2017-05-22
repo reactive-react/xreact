@@ -1,60 +1,54 @@
 /// <reference types="react" />
 import * as React from 'react';
 import { Traveler } from './history';
+import { StaticStream, HKTS, HKT, Subject, Subscription } from './engine';
+export declare const REACT_MOST_ENGINE = "@@reactive-react/react-most.engine";
 export interface Actions<T> {
     [propName: string]: (...v: any[]) => T;
 }
-export interface Subject<T> {
-    next: (v?: T) => void;
-    complete: (v?: any) => void;
-}
-export interface Subscription<A> {
-    unsubscribe(): void;
-}
-export interface Stream<A> {
-    merge: (a: Stream<A>) => Stream<A>;
-}
-export interface Plan<I, S> {
-    (intent: Subject<I>, props?: {}): Machine<I, S>;
+export interface Plan<E extends HKTS, I, S> {
+    (intent: Subject<E, I>, props?: {}): Machine<E, I, S>;
 }
 export interface Update<S> {
     (current: S): S;
 }
-export interface Machine<I, S> {
+export interface Machine<E extends HKTS, I, S> {
     actions?: Actions<I>;
-    update$: Stream<Update<S>>;
+    update$: HKT<Update<S>>[E];
 }
 export interface ConnectProps<I> {
     actions?: Actions<I>;
     history?: boolean;
     [propName: string]: any;
 }
-export declare class Connect<I, S> extends React.PureComponent<ConnectProps<I>, S> {
-    machine: Machine<I, S>;
+export declare class Connect<E extends HKTS, I, S> extends React.PureComponent<ConnectProps<I>, S> {
+    machine: Machine<E, I, S>;
     traveler: Traveler<S>;
-    subscription: Subscription<S>;
+    subscription: Subscription;
+    context: ContextEngine<E, I, S>;
 }
-export interface ConnectClass<I, S> {
-    contextTypes?: any;
+export interface ConnectClass<E extends HKTS, I, S> {
+    contextTypes?: ContextEngine<E, I, S>;
     defaultProps?: any;
-    new (props?: ConnectProps<I>, context?: any): Connect<I, S>;
+    new (props?: ConnectProps<I>, context?: ContextEngine<E, I, S>): Connect<E, I, S>;
 }
-export interface History<S> {
-    path: Subject<(n: number) => number>;
-    history: Stream<S>;
+export interface History<E extends HKTS, S> {
+    path: Subject<E, (n: number) => number>;
+    history: HKT<S>[E];
 }
 export interface Stamp<S> {
     value: S;
     time: number;
 }
-export interface Engine<I, S> {
-    intent$: Subject<I>;
-    history$: Subject<S>;
-    travel$: Subject<(n: number) => number>;
+export interface Engine<E extends HKTS, I, S> {
+    intent$: Subject<E, I>;
+    history$: Subject<E, S>;
+    travel$: Subject<E, (n: number) => number>;
+    operators: StaticStream<E>;
 }
-export interface MostProps<T, S> {
-    engine?: new () => Engine<T, S>;
+export interface MostProps<A extends HKTS> {
+    engine?: StaticStream<A>;
 }
-export interface ContextEngine<I, H> {
-    [x: string]: Engine<I, H>;
+export interface ContextEngine<E extends HKTS, I, H> {
+    [name: string]: Engine<E, I, H>;
 }
