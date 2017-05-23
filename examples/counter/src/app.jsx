@@ -1,6 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
-import Most, { connect } from 'react-most'
+import * as RX from '../../../lib/engine/rx'
+import X, { x } from '../../../lib/x'
 
 const CounterView = props => (
   <div>
@@ -12,7 +13,7 @@ const CounterView = props => (
 )
 CounterView.defaultProps = { count: 0 };
 
-const counterable = connect((intent$) => {
+const counterable = x((intent$) => {
   return {
     update$: intent$.map(intent => {
       switch (intent.type) {
@@ -26,10 +27,10 @@ const counterable = connect((intent$) => {
           return _ => _;
       }
     }),
-    actions:{
+    actions: {
       inc: () => ({ type: 'inc' }),
       dec: () => ({ type: 'dec' }),
-      exception:() => ({type: 'exception'})
+      exception: () => ({ type: 'exception' })
     }
   }
 })
@@ -37,7 +38,7 @@ const counterable = connect((intent$) => {
 const Counter = counterable(CounterView)
 
 render(
-  <Most>
+  <X engine={RX}>
     <Counter />
-  </Most>
+  </X>
   , document.getElementById('app'));
