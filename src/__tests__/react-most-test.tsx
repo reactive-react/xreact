@@ -1,15 +1,10 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import * as TestUtils from 'react-addons-test-utils';
-import '@reactivex/rxjs/dist/cjs/add/operator/scan'
-import '@reactivex/rxjs/dist/cjs/add/operator/take'
-import '@reactivex/rxjs/dist/cjs/add/operator/do'
-import '@reactivex/rxjs/dist/cjs/add/operator/toPromise'
-import X, { x } from '../../src/react-most';
+import '@reactivex/rxjs'
+import X, { x } from '../../src/x';
 import * as RX from '../../src/engine/rx'
 const compose = f => g => x => g(f(x));
-
-
 
 const CounterView = React.createClass({
   render() {
