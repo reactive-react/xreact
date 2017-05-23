@@ -16,4 +16,3 @@ export interface StaticStream<F extends HKTS> {
     merge<A>(a: HKT<A>[F], b: HKT<A>[F]): HKT<A>[F];
     subscribe<A>(fa: HKT<A>[F], next: (v: A) => void, complete: () => void): Subscription;
 }
-export declare function map<F extends HKTS, A, B>(f: (a: A) => B, fa: HKT<A>[F]): HKT<B>[F];

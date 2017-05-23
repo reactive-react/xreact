@@ -65,10 +65,6 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
           if (action instanceof Function) {
             this.setState((prevState, props) => {
               let newState = action.call(this, prevState, props);
-              if ((opts.history || props.history) && newState != prevState) {
-                this.traveler.cursor = -1;
-                this.context[REACT_MOST_ENGINE].history$.next(prevState);
-              }
               return newState;
             });
           } else {
@@ -109,7 +105,7 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
 }
 
 function getDisplayName(WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  return WrappedComponent.displayName || WrappedComponent.name || 'X';
 }
 function bindActions(actions, intent$, self) {
   let _actions = {
