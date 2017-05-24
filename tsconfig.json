@@ -1,6 +1,7 @@
 {
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "compilerOptions": {
     "module": "commonjs",
@@ -11,7 +12,7 @@
     "declarationDir": "types",
     "declaration": true,
     "noImplicitAny": false,
-    "sourceMap": false,
-    "pretty": true
+    "sourceMap": false
+    // "pretty": true
   }
 }

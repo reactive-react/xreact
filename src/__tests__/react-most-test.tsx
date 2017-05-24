@@ -4,6 +4,7 @@ import * as TestUtils from 'react-addons-test-utils';
 import '@reactivex/rxjs'
 import X, { x } from '../../src/x';
 import * as RX from '../../src/engine/rx'
+import { StaticStream } from '../../src/engine'
 const compose = f => g => x => g(f(x));
 
 const CounterView = React.createClass({
@@ -23,7 +24,7 @@ interface Intent {
   type: string
   value?: any
 }
-const counterWrapper = x((intent$) => {
+const counterWrapper = x<RX.URI, any, any>((intent$) => {
   return {
     update$: intent$.map((intent: Intent) => {
       switch (intent.type) {
@@ -51,28 +52,25 @@ const counterWrapper = x((intent$) => {
     }
   }
 })
-
+let XX = x => React.createFactory(X)({ engine: RX }, x)
 const Counter = counterWrapper(CounterView)
-
 describe('react-most', () => {
   describe('actions', () => {
     it('add intent to intent$ and go through sink$', () => {
       let counterWrapper = TestUtils.renderIntoDocument(
-        <X engine={RX}>
-          <Counter history={true} />
-        </X>
+        XX(<Counter history={true} />)
       )
       let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      let source =  counter.machine.update$
-        .scan((cs, f) => f.call(null ,cs), { count: 0})
-          .take(3)
+      let source = counter.machine.update$
+        .scan((cs, f) => f.call(null, cs), { count: 0 })
+        .take(3)
         .toPromise()
 
-counter.machine.actions.inc()
+      counter.machine.actions.inc()
       counter.machine.actions.inc()
       counter.machine.actions.inc()
 
-      return source.then(x=>expect(x.count).toBe(3))
+      return source.then(x => expect(x.count).toBe(3))
 
 
     })

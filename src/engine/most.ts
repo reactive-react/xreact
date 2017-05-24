@@ -1,27 +1,26 @@
-// import { from, of, mergeArray, Stream, never, Subscription } from 'most'
-// import { async as subject, AsyncSubject, Subject } from 'most-subject'
-// import { Update, Engine } from '../interfaces'
-// export default class MostEngine<T, S> implements Engine<T, S> {
-//   intent$: Subject<T>
-//   history$: Subject<S>
-//   travel$: Subject<(n: number) => number>
-//   constructor() {
-//     this.intent$ = subject() as Subject<T>
-//     this.history$ = subject() as Subject<S>
-//     this.travel$ = subject() as Subject<(n: number) => number>;
-//   }
+import { Stream } from 'most'
+import { async, AsyncSubject, Subject } from 'most-subject'
+import {Subscription} from './index'
+export const URI = 'sStream'
+export type URI = typeof URI
 
-//   observe(actionsSinks: Stream<Update<S>>, f, end): Subscription<S> {
-//     let errorHandled = actionsSinks
-//       .recoverWith((e: Error) => {
-//         console.error('There is Error in your reducer:', e, e.stack)
-//         return errorHandled
-//       })
-//     return errorHandled
-//       .subscribe({
-//         next: f,
-//         error: (e) => console.error('Something is Wrong:', e, e.stack),
-//         complete: end
-//       });
-//   }
-// }
+declare module './index' {
+  interface HKT<A> {
+    Stream: Stream<A>
+  }
+}
+
+export function map<A, B>(f: (a: A) => B, fa: Stream<A>): Stream<B> {
+  return fa.map(f)
+}
+export function subject<A>() {
+  return async()
+}
+
+export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete: () => void) {
+  return fa.subscribe({next, error:x => console.error(x), complete}) as Subscription
+}
+
+export function merge<A>(a: Stream<A>, b: Stream<A>): Stream<A> {
+  return a.merge(b)
+}

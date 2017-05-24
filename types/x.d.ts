@@ -7,10 +7,10 @@ export declare type ConnectOrReactComponent<E extends HKTS, I, S> = ConnectClass
 export declare function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts?: {
     history: boolean;
 }): (WrappedComponent: ConnectOrReactComponent<E, I, S>) => ConnectClass<E, I, S>;
-export default class X<E extends HKTS, I, H, S> extends React.PureComponent<MostProps<E>, S> {
+export default class X<E extends HKTS, S> extends React.PureComponent<MostProps<E>, S> {
     static childContextTypes: {
         [x: string]: any;
     };
-    getChildContext(): ContextEngine<E, I, H>;
+    getChildContext<I, H>(): ContextEngine<E, I, H>;
     render(): React.ReactElement<any>;
 }
