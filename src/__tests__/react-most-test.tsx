@@ -7,17 +7,13 @@ import * as RX from '../../src/engine/rx'
 import { StaticStream } from '../../src/engine'
 const compose = f => g => x => g(f(x));
 
-const CounterView = React.createClass({
-  render() {
-    return (
-      <div>
-        <span className="count">{this.props.count}</span>
-        <span className="wrapperProps">{this.props.wrapperProps}</span>
-        <span className="overwritedProps">{this.props.overwritedProps}</span>
-      </div>
-    )
-  }
-})
+const CounterView: React.SFC<any> = props => (
+  <div>
+    <span className="count">{props.count}</span>
+    <span className="wrapperProps">{props.wrapperProps}</span>
+    <span className="overwritedProps">{props.overwritedProps}</span>
+  </div>
+)
 
 CounterView.defaultProps = { count: 0, overwritedProps: 'inner' }
 interface Intent {
@@ -31,8 +27,10 @@ const counterWrapper = x<RX.URI, any, any>((intent$) => {
         case 'inc':
           return state => ({ count: state.count + 1 })
         case 'dec':
-          intent$.next({ type: 'dec triggered' })
+          intent$.next({ type: 'abs' })
           return state => ({ count: state.count - 1 })
+        case 'abs':
+          return state => ({ count: Math.abs(state.count) })
         case 'changeWrapperProps':
           return state => ({
             wrapperProps: intent.value,
@@ -53,66 +51,80 @@ const counterWrapper = x<RX.URI, any, any>((intent$) => {
   }
 })
 let XX = x => React.createFactory(X)({ engine: RX }, x)
+
+function Test(initState) {
+  this.plans = 0
+  this.things = []
+  this.initState = initState
+}
+Test.prototype.plan = function(n) {
+  this.plans = n
+  return this
+}
+Test.prototype.do = function(things) {
+  this.things = things
+  return this
+}
+Test.prototype.collect = function(component) {
+  let latestState = component.machine.update$
+    .scan((cs, f) => f.call(null, cs), this.initState)
+    .take(this.plans).toPromise()
+  this.things.forEach(f => f())
+  return latestState
+}
 const Counter = counterWrapper(CounterView)
-describe('react-most', () => {
+describe('X', () => {
   describe('actions', () => {
-    it('add intent to intent$ and go through sink$', () => {
-      let counterWrapper = TestUtils.renderIntoDocument(
-        XX(<Counter history={true} />)
+    let counterWrapper, counter, t
+    beforeEach(() => {
+      counterWrapper = TestUtils.renderIntoDocument(
+        XX(<Counter />)
       )
-      let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      let source = counter.machine.update$
-        .scan((cs, f) => f.call(null, cs), { count: 0 })
-        .take(3)
-        .toPromise()
-
-      counter.machine.actions.inc()
-      counter.machine.actions.inc()
-      counter.machine.actions.inc()
-
-      return source.then(x => expect(x.count).toBe(3))
-
+      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
 
     })
+    t = new Test({ count: 0 });
+    it('add intent to intent$ and go through sink$', () => {
+      return t.plan(3)
+        .do([
+          counter.machine.actions.inc,
+          counter.machine.actions.inc,
+          counter.machine.actions.inc
+        ])
+        .collect(counter)
+        .then(x => expect(x.count).toBe(3))
+    })
 
-    // it('async action', () => {
-    //   let counterWrapper = TestUtils.renderIntoDocument(
-    //     <Most engine={Engine}>
-    //       <Counter history={true} />
-    //     </Most>
-    //   )
-    //   let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-    //   counter.machine.actions.inc();
-    //   counter.machine.actions.fromEvent({ type: 'inc' });
-    //   return counter.machine.actions.fromPromise(Promise.resolve({ type: 'inc' }))
-    //     .then(() => {
-    //       expect(stateHistoryOf(counter)[2].count).toBe(3)
-    //     })
+    it('async action', () => {
+      return t.plan(3)
+        .do([
+          counter.machine.actions.inc,
+          () => counter.machine.actions.fromEvent({ type: 'inc' }),
+          () => counter.machine.actions.fromPromise(Promise.resolve({ type: 'inc' }))
+        ])
+        .collect(counter)
+        .then(state => expect(state.count).toBe(3))
+    })
 
-    // })
+    it('update can also generate new intent', () => {
+      return new Test({ count: -3 }).plan(3)
+        .do([
+          counter.machine.actions.dec
+        ]).collect(counter)
+        .then(state => expect(state.count).toBe(2))
+    })
 
-    // it('sink can also generate intent', () => {
-    //   let counterWrapper = TestUtils.renderIntoDocument(
-    //     <Most engine={Engine}>
-    //       <Counter history={true} />
-    //     </Most>
-    //   )
-    //   let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-
-    //   counter.machine.actions.dec()
-    //   expect(intentHistoryOf(counter)[1].type).toBe('dec triggered')
-    // })
-
-    // it('props will overwirte components default props', () => {
-    //   let counterWrapper = TestUtils.renderIntoDocument(
-    //     <Most engine={Engine} >
-    //       <Counter count={9} history={true} />
-    //     </Most>
-    //   )
-    //   let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-    //   counter.machine.actions.inc();
-    //   expect(stateHistoryOf(counter)[0].count).toBe(10)
-    // })
+    it('props will overwirte components default props', () => {
+      counterWrapper = TestUtils.renderIntoDocument(
+        XX(<Counter count={9} />)
+      )
+      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      return new Test(counter.props).plan(1)
+        .do([
+          counter.machine.actions.inc
+        ]).collect(counter)
+        .then(state => expect(state.count).toBe(10))
+    })
 
     // it('props that not overlap with views defaultProps can not be changed', () => {
     //   let CounterWrapper = React.createClass({
