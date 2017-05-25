@@ -3,6 +3,7 @@ import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
 import { StaticStream, Subscription } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/observable/merge'
+import '@reactivex/rxjs/dist/cjs/add/operator/catch'
 export const URI = 'Observable'
 export type URI = typeof URI
 
@@ -20,7 +21,10 @@ export function subject<A>() {
 }
 
 export function subscribe<A>(fa: Observable<A>, next: (v: A) => void, complete: () => void) {
-  return fa.subscribe(next, x => console.error(x), complete) as Subscription
+  return fa.catch(x => {
+    console.error(x)
+    return fa
+  }).subscribe(next, x => console.error(x), complete) as Subscription
 }
 
 export function merge<A>(a: Observable<A>, b: Observable<A>): Observable<A> {

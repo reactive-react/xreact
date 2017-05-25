@@ -3,7 +3,9 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X, { x } from '../x';
 import * as RX from '../engine/rx'
+import { Observable } from '@reactivex/rxjs'
 import { StaticStream } from '../engine'
+import * as createClass from 'create-react-class'
 import Xtest from '../xtest'
 const compose = (f, g) => x => f(g(x));
 const mountx = compose(mount, x => React.createFactory(X)({ engine: RX }, x))
@@ -20,9 +22,9 @@ interface Intent {
   value?: any
 }
 
-const counterWrapper = x<RX.URI, any, any>((intent$) => {
+const xcountable = x<RX.URI, Intent, any>((intent$) => {
   return {
-    update$: intent$.map((intent: Intent) => {
+    update$: intent$.map((intent) => {
       switch (intent.type) {
         case 'inc':
           return state => ({ count: state.count + 1 })
@@ -38,6 +40,8 @@ const counterWrapper = x<RX.URI, any, any>((intent$) => {
           })
         case 'changeDefaultProps':
           return state => ({ count: intent.value })
+        case 'exception':
+          throw new Error('exception!!!')
         default:
           return state => state
       }
@@ -45,13 +49,14 @@ const counterWrapper = x<RX.URI, any, any>((intent$) => {
     actions: {
       inc: () => ({ type: 'inc' }),
       dec: () => ({ type: 'dec' }),
+      exception: () => ({ type: 'exception' }),
       changeWrapperProps: (value) => ({ type: 'changeWrapperProps', value }),
       changeDefaultProps: (value) => ({ type: 'changeDefaultProps', value }),
     }
   }
 })
 
-const Counter = counterWrapper(CounterView)
+let Counter = xcountable(CounterView)
 describe('X', () => {
   describe('actions', () => {
     let counterWrapper, counter, t, counterView, actions
@@ -136,159 +141,111 @@ describe('X', () => {
     })
   })
 
-  // describe('composable', () => {
-  //   const counterWrapper2 = connect((intent$: Subject<Intent>) => {
-  //     return {
-  //       update$: intent$.map(intent => {
-  //         switch (intent.type) {
-  //           case 'inc2':
-  //             return state => ({ count: state.count + 2 })
-  //           case 'dec2':
-  //             return state => ({ count: state.count - 2 })
-  //           default:
-  //             return state => state
-  //         }
-  //       }),
-  //       actions: {
-  //         inc2: () => ({ type: 'inc2' }),
-  //         dec2: () => ({ type: 'dec2' }),
-  //       }
-  //     }
-  //   })
-  //   let counterWrapper21 = compose(counterWrapper2)(counterWrapper)
-  //   const Counter2 = counterWrapper21(CounterView)
-  //   //counterWrapper2(counterWrapper(CounterView))
-  //   it('counter add inc2, dec2', () => {
-  //     let counterWrapperr = TestUtils.renderIntoDocument(
-  //       <Most engine={Engine}>
-  //         <Counter2 history={true} />
-  //       </Most>
-  //     )
-  //     let counterView = TestUtils.findRenderedComponentWithType(counterWrapperr, CounterView)
-  //     let counter2 = TestUtils.findRenderedComponentWithType(counterWrapperr, Counter2)
-  //     counterView.props.actions.inc()
-  //     counterView.props.actions.inc2()
-  //     counterView.props.actions.dec()
-  //     expect(stateHistoryOf(counter2)[2].count).toBe(2)
-  //   })
-  // })
+  describe('composable', () => {
+    let counterWrapper, counter, t, counterView, actions
+    const xxcountable = x<RX.URI, Intent, any>((intent$) => {
+      return {
+        update$: intent$.map(intent => {
+          switch (intent.type) {
+            case 'inc2':
+              return state => ({ count: state.count + 2 })
+            case 'dec2':
+              return state => ({ count: state.count - 2 })
+            default:
+              return state => state
+          }
+        }),
+        actions: {
+          inc2: () => ({ type: 'inc2' }),
+          dec2: () => ({ type: 'dec2' }),
+        }
+      }
+    })
+    let xxxcoutable = compose(xxcountable, xcountable)
+    beforeEach(() => {
+      Counter = xxxcoutable(CounterView)
+      counterWrapper = mountx(
+        <Counter />
+      )
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest(counterView.props());
+    })
+    it('compose xxcountable will provide actions inc2, dec2', () => {
+      return t.plan(6)
+        .do([
+          actions.inc,
+          actions.inc2,
+          actions.dec2,
+        ]).collect(counter)
+        .then(state => expect(state.count).toBe(1))
+    })
+  })
 
-  // describe('convension default to `action` field in sinks', () => {
-  //   const Counter = connect((intent$: Subject<Intent>) => {
-  //     return {
-  //       update$: intent$.map(intent => {
-  //         switch (intent.type) {
-  //           case 'inc3':
-  //             return state => ({ count: state.count + 3 })
-  //           default:
-  //             return state => state
-  //         }
-  //       }),
-  //       actions: {
-  //         inc3: () => ({ type: 'inc3' })
-  //       },
-  //     }
-  //   })(CounterView)
+  describe('ERROR', () => {
+    let counterWrapper, counter, t, counterView, actions
+    beforeEach(() => {
+      spyOn(console, 'error')
+      counterWrapper = mountx(
+        <Counter />
+      )
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest(counterView.props());
+    })
 
-  //   it('counter inc 3', () => {
-  //     let counterWrapper = TestUtils.renderIntoDocument(
-  //       <Most engine={Engine}>
-  //         <Counter history={true} />
-  //       </Most>
-  //     )
-  //     let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-  //     counter.machine.actions.inc3()
-  //     counter.machine.actions.inc3()
-  //     expect(stateHistoryOf(counter)[1].count).toBe(6)
-  //   })
-  // })
+    it('should recover to identity stream and log exception', () => {
+      return t.plan(3)
+        .do([
+          actions.inc,
+          actions.exception,
+          actions.inc
+        ]).collect(counter)
+        .then(state => expect(state.count).toBe(2))
+        .then(() => expect(console.error).toBeCalled)
 
-  // describe('ERROR', () => {
-  //   const Counter = connect((intent$: Subject<Intent>) => {
-  //     return {
-  //       update$: intent$.map(intent => {
-  //         switch (intent.type) {
-  //           case 'exception':
-  //             throw 'exception in reducer'
-  //           case 'inc':
-  //             return state => ({ count: state.count + 1 })
-  //           default:
-  //             return state => state
-  //         }
-  //       }),
-  //       actions: {
-  //         throwExeption: () => ({ type: 'exception' }),
-  //       },
-  //     }
-  //   })(CounterView)
+    })
+  })
 
-  //   it('should recover to identity stream and log exception', () => {
-  //     spyOn(console, 'error')
-  //     let counterWrapper = TestUtils.renderIntoDocument(
-  //       <Most>
-  //         <Counter history={true} />
-  //       </Most>
-  //     )
-  //     let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-  //     return run(intentStreamOf(counter),
-  //       dispatch([{ type: 'exception' }], counter),
-  //       [
-  //         state => expect(console.error).toBeCalledWith('There is Error in your reducer:', 'exception in reducer', undefined)
-  //       ])
-  //   })
+  describe('unsubscribe when component unmounted', () => {
+    it('unsubscribe', (done) => {
+      const Counter = x<RX.URI, Intent, any>((intent$) => {
+        let incForever$ = Observable.interval(100).map(n => {
+          done.fail('should not next intent any more')
+          return _ => ({ count: 'should not next intent any more' })
+        })
+        return {
+          update$: intent$.map(intent => {
+            switch (intent.type) {
+              case 'inc':
+                return state => ({ count: state.count + 1 })
+              default:
+                return state => state
+            }
+          }).merge(incForever$)
+        }
+      })(CounterView)
 
-  //   it('should able to catch error in sync mode', () => {
-  //     let counterWrapper = TestUtils.renderIntoDocument(
-  //       <Most engine={Engine}>
-  //         <Counter history={true} />
-  //       </Most>
-  //     )
-  //     let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-  //     expect(() => {
-  //       counter.machine.actions.throwExeption()
-  //     }).toThrow('exception in reducer')
-  //   })
-  // })
-
-  // describe('unsubscribe when component unmounted', () => {
-  //   it('unsubscribe', (done) => {
-  //     const Counter = connect((intent$: Subject<Intent>) => {
-  //       let incForever$ = most.periodic(100, { type: 'inc' }).map(intent => {
-  //         done.fail('should not next intent any more')
-  //         return _ => _
-  //       })
-  //       return {
-  //         update$: intent$.map(intent => {
-  //           switch (intent.type) {
-  //             case 'inc':
-  //               return state => ({ count: state.count + 1 })
-  //             default:
-  //               return state => state
-  //           }
-  //         }).merge(incForever$)
-  //       }
-  //     })(CounterView)
-
-  //     const TogglableMount = React.createClass({
-  //       getInitialState() {
-  //         return {
-  //           mount: true
-  //         }
-  //       },
-  //       render() {
-  //         return this.state.mount && <Counter history={true} />
-  //       }
-  //     })
-  //     spyOn(console, 'error')
-  //     let counterWrapper = TestUtils.renderIntoDocument(
-  //       <Most engine={Engine}>
-  //         <TogglableMount />
-  //       </Most>
-  //     )
-  //     let toggle = TestUtils.findRenderedComponentWithType(counterWrapper, TogglableMount)
-  //     let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-  //     toggle.setState({ mount: false })
-  //     done()
-  //   })
-  // })
+      const TogglableMount = createClass({
+        getInitialState() {
+          return {
+            mount: true
+          }
+        },
+        render() {
+          return this.state.mount && <Counter history={true} />
+        }
+      })
+      spyOn(console, 'error')
+      let counterWrapper = mountx(
+        <TogglableMount />
+      )
+      let toggle = counterWrapper.find(TogglableMount)
+      let counter = counterWrapper.find(Counter)
+      toggle.getNode().setState({ mount: false })
+      done()
+    })
+  })
 })
