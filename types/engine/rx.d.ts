@@ -3,6 +3,7 @@ import { Subject } from '@reactivex/rxjs/dist/cjs/Subject';
 import { Subscription } from './index';
 import '@reactivex/rxjs/dist/cjs/add/operator/map';
 import '@reactivex/rxjs/dist/cjs/add/observable/merge';
+import '@reactivex/rxjs/dist/cjs/add/operator/catch';
 export declare const URI = "Observable";
 export declare type URI = typeof URI;
 declare module './index' {

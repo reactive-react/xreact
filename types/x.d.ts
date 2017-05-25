@@ -1,8 +1,8 @@
 /// <reference types="react" />
 import * as React from 'react';
 import { HKTS } from './engine';
-import { Plan, ConnectClass, MostProps, ContextEngine, REACT_MOST_ENGINE } from './interfaces';
-export { REACT_MOST_ENGINE };
+import { Plan, ConnectClass, MostProps, ContextEngine, XREACT_ENGINE } from './interfaces';
+export { XREACT_ENGINE };
 export declare type ConnectOrReactComponent<E extends HKTS, I, S> = ConnectClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>;
 export declare function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts?: {
     history: boolean;
