@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/jcouyang/react-most.git"
   },
-  "main": "lib/react-most.js",
+  "main": "lib/x.js",
   "typings": "types/react-most.d.ts",
   "files": [
     "src",

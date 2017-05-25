@@ -2,11 +2,11 @@ import * as React from 'react';
 import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
-import { Plan, Connect, ConnectClass, ContextEngine, REACT_MOST_ENGINE, Update } from './interfaces'
+import { Plan, Connect, ConnectClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
 import { StaticStream, HKTS, HKT } from './engine'
 
 export const CONTEXT_TYPE = {
-  [REACT_MOST_ENGINE]: PropTypes.object
+  [XREACT_ENGINE]: PropTypes.object
 };
 function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component is React.SFC<any> {
   return (typeof Component == 'function')
@@ -18,11 +18,11 @@ export function genNodeClass<E extends HKTS, I, S>(WrappedComponent: ConnectClas
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
     constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
-      let engine = context[REACT_MOST_ENGINE]
+      let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
         update$: engine.operators.merge<Update<S>>(this.machine.update$, update$),
-        actions: Object.assign({}, bindActions(actions, context[REACT_MOST_ENGINE].intent$, this), this.machine.actions)
+        actions: Object.assign({}, bindActions(actions, context[XREACT_ENGINE].intent$, this), this.machine.actions)
       }
     }
   }
@@ -34,7 +34,7 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
     defaultKeys: string[]
     constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
-      let engine = context[REACT_MOST_ENGINE]
+      let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
         actions: bindActions(actions, engine.intent$, this),
@@ -51,7 +51,7 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
       this.setState(state => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
     }
     componentDidMount() {
-      this.subscription = this.context[REACT_MOST_ENGINE].operators.subscribe(
+      this.subscription = this.context[XREACT_ENGINE].operators.subscribe(
         this.machine.update$,
         action => {
           if (action instanceof Function) {
@@ -68,7 +68,7 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
             );
           }
         },
-        () => this.context[REACT_MOST_ENGINE].history$.complete(this.state)
+        () => this.context[XREACT_ENGINE].history$.complete(this.state)
       );
     }
     componentWillUnmount() {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Traveler } from './history'
 import { StaticStream, HKTS, HKT, Subject, Subscription } from './engine'
-export const REACT_MOST_ENGINE = '@@reactive-react/react-most.engine';
+export const XREACT_ENGINE = '@reactive-react/xreact.engine';
 export interface Actions<T> {
   [propName: string]: (...v: any[]) => T
 }
