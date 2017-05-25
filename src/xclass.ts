@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createElement as h} from 'react'
+import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass, ContextEngine, REACT_MOST_ENGINE, Update } from './interfaces'
@@ -31,29 +31,24 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
   return class ConnectLeaf extends Connect<E, I, S> {
     static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
+    defaultKeys: string[]
     constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[REACT_MOST_ENGINE]
-      if (opts.history || props.history) {
-        // this.traveler = initHistory(engine.history$, engine.travel$);
-        // this.traveler.travel.forEach(state => {
-        //   return this.setState(state);
-        // });
-      }
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
         actions: bindActions(actions, engine.intent$, this),
         update$: update$
       }
-      let defaultKeys = WrappedComponent.defaultProps ? Object.keys(WrappedComponent.defaultProps) : [];
+      this.defaultKeys = WrappedComponent.defaultProps ? Object.keys(WrappedComponent.defaultProps) : [];
       this.state = Object.assign(
         {},
         WrappedComponent.defaultProps,
-        pick(defaultKeys, props)
+        pick(this.defaultKeys, props)
       );
     }
     componentWillReceiveProps(nextProps) {
-      this.setState(state => pick(Object.keys(state), nextProps));
+      this.setState(state => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
     }
     componentDidMount() {
       this.subscription = this.context[REACT_MOST_ENGINE].operators.subscribe(

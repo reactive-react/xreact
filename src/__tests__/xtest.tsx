@@ -11,8 +11,6 @@ const mountx = compose(mount, x => React.createFactory(X)({ engine: RX }, x))
 const CounterView: React.SFC<any> = props => (
   <div className="counter-view">
     <span className="count">{props.count}</span>
-    <span className="wrapperProps">{props.wrapperProps}</span>
-    <span className="overwritedProps">{props.overwritedProps}</span>
   </div>
 )
 
@@ -115,83 +113,28 @@ describe('X', () => {
     })
   })
 
-  describe('props changes', () => {
+  describe('scope', () => {
     let counterWrapper, counter, t, counterView, actions
     beforeEach(() => {
       counterWrapper = mountx(
-        <Counter count={9} />
+        <Counter count={0} wrapperProps={0} overwritedProps={0} />
       )
-      counter = counterWrapper.find(Counter).getNode()
+      counter = counterWrapper.find(Counter)
       counterView = counterWrapper.find(CounterView)
       actions = counterView.prop('actions')
       t = new Xtest(counterView.props());
     })
-    xit('props that not overlap with views defaultProps can not be changed', () => {
-      let CounterWrapper = React.createClass({
-        getInitialState() {
-          return {
-            wrapperProps: 'heheda',
-            overwritedProps: 'hoho',
-            count: 0,
-          }
-        },
-        render() {
-          return <Counter
-            count={this.state.count}
-            wrapperProps={this.state.wrapperProps}
-            overwritedProps={this.state.overwritedProps}
-            history={true} />
-        }
-      })
-      let counterMostWrapper = TestUtils.renderIntoDocument(
-        XX(<CounterWrapper />)
-      )
-      counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
-      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      counter.machine.actions.changeWrapperProps('miao')
-      counter.machine.actions.changeDefaultProps(19)
-      wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
-      overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-      let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-      expect(counter.props.wrapperProps).toBe('heheda')
-      expect(wrapperProps.textContent).toBe('miao')
-      expect(overwritedProps.textContent).toBe('miao')
-      expect(count.textContent).toBe('19')
-      counterWrapper.setState({ overwritedProps: 'wrapper', count: 1 })
-      overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-      count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-      expect(overwritedProps.textContent).toBe('wrapper')
-      expect(count.textContent).toBe('1')
+    it('like scope in function, outter component change overwrited props wont works', () => {
+      return t.plan(1)
+        .do([
+          () => actions.changeDefaultProps(19),
+          () => counterWrapper.setProps({ wrapperProps: 1, overwritedProps: 1, count: 9 })
+        ]).collect(counter.getNode())
+        .then(() => expect(counterView.prop('wrapperProps')).toBe(0))
+        .then(() => expect(counterView.prop('overwritedProps')).toBe('inner'))
+        .then(() => expect(counterView.prop('count')).toBe(19))
     })
   })
-  // describe('history', () => {
-  //   it('can undo', () => {
-  //     let counterWrapper = TestUtils.renderIntoDocument(
-  //       <Most engine={Engine} >
-  //         <Counter history={true} />
-  //       </Most>
-  //     )
-  //     let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-  //     counter.machine.actions.inc()
-  //     counter.machine.actions.inc()
-  //     counter.machine.actions.inc()
-  //     let backward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'backward')
-  //     TestUtils.Simulate.click(backward)
-  //     TestUtils.Simulate.click(backward)
-  //     TestUtils.Simulate.click(backward)
-  //     let count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-  //     expect(count.textContent).toBe('1')
-  //     let forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
-  //     TestUtils.Simulate.click(forward)
-  //     count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-  //     expect(count.textContent).toBe('2')
-  //     forward = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'forward')
-  //     TestUtils.Simulate.click(forward)
-  //     TestUtils.Simulate.click(forward)
-  //     count = TestUtils.findRenderedDOMComponentWithClass(counterWrapper, 'count')
-  //     expect(count.textContent).toBe('3')
-  //   })
-  // })
 
   // describe('composable', () => {
   //   const counterWrapper2 = connect((intent$: Subject<Intent>) => {
