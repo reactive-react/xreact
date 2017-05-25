@@ -1,14 +1,15 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import * as TestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import '@reactivex/rxjs'
-import X, { x } from '../../src/x';
-import * as RX from '../../src/engine/rx'
-import { StaticStream } from '../../src/engine'
-const compose = f => g => x => g(f(x));
+import X, { x } from '../x';
+import * as RX from '../engine/rx'
+import { StaticStream } from '../engine'
+import Xtest from '../xtest'
+const compose = (f, g) => x => f(g(x));
+const mountx = compose(mount, x => React.createFactory(X)({ engine: RX }, x))
 
 const CounterView: React.SFC<any> = props => (
-  <div>
+  <div className="counter-view">
     <span className="count">{props.count}</span>
     <span className="wrapperProps">{props.wrapperProps}</span>
     <span className="overwritedProps">{props.overwritedProps}</span>
@@ -20,6 +21,7 @@ interface Intent {
   type: string
   value?: any
 }
+
 const counterWrapper = x<RX.URI, any, any>((intent$) => {
   return {
     update$: intent$.map((intent: Intent) => {
@@ -50,46 +52,24 @@ const counterWrapper = x<RX.URI, any, any>((intent$) => {
     }
   }
 })
-let XX = x => React.createFactory(X)({ engine: RX }, x)
 
-function Test(initState) {
-  this.plans = 0
-  this.things = []
-  this.initState = initState
-}
-Test.prototype.plan = function(n) {
-  this.plans = n
-  return this
-}
-Test.prototype.do = function(things) {
-  this.things = things
-  return this
-}
-Test.prototype.collect = function(component) {
-  let latestState = component.machine.update$
-    .scan((cs, f) => f.call(null, cs), this.initState)
-    .take(this.plans).toPromise()
-  this.things.forEach(f => f())
-  return latestState
-}
 const Counter = counterWrapper(CounterView)
 describe('X', () => {
   describe('actions', () => {
-    let counterWrapper, counter, t
+    let counterWrapper, counter, t, counterView, actions
     beforeEach(() => {
-      counterWrapper = TestUtils.renderIntoDocument(
-        XX(<Counter />)
-      )
-      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest(counterView.props());
     })
-    t = new Test({ count: 0 });
     it('add intent to intent$ and go through sink$', () => {
       return t.plan(3)
         .do([
-          counter.machine.actions.inc,
-          counter.machine.actions.inc,
-          counter.machine.actions.inc
+          actions.inc,
+          actions.inc,
+          actions.inc
         ])
         .collect(counter)
         .then(x => expect(x.count).toBe(3))
@@ -98,75 +78,92 @@ describe('X', () => {
     it('async action', () => {
       return t.plan(3)
         .do([
-          counter.machine.actions.inc,
-          () => counter.machine.actions.fromEvent({ type: 'inc' }),
-          () => counter.machine.actions.fromPromise(Promise.resolve({ type: 'inc' }))
+          actions.inc,
+          () => actions.fromEvent({ type: 'inc' }),
+          () => actions.fromPromise(Promise.resolve({ type: 'inc' }))
         ])
         .collect(counter)
         .then(state => expect(state.count).toBe(3))
     })
 
     it('update can also generate new intent', () => {
-      return new Test({ count: -3 }).plan(3)
+      return new Xtest({ count: -3 }).plan(3)
         .do([
           counter.machine.actions.dec
         ]).collect(counter)
         .then(state => expect(state.count).toBe(2))
     })
+  });
 
-    it('props will overwirte components default props', () => {
-      counterWrapper = TestUtils.renderIntoDocument(
-        XX(<Counter count={9} />)
+  describe('props', () => {
+    let counterWrapper, counter, t, counterView, actions
+    beforeEach(() => {
+      counterWrapper = mountx(
+        <Counter count={9} />
       )
-      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-      return new Test(counter.props).plan(1)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest(counterView.props());
+    })
+    it('wrappers props will overwirte components default props', () => {
+      return t.plan(1)
         .do([
           counter.machine.actions.inc
         ]).collect(counter)
         .then(state => expect(state.count).toBe(10))
     })
+  })
 
-    // it('props that not overlap with views defaultProps can not be changed', () => {
-    //   let CounterWrapper = React.createClass({
-    //     getInitialState() {
-    //       return {
-    //         wrapperProps: 'heheda',
-    //         overwritedProps: 'hoho',
-    //         count: 0,
-    //       }
-    //     },
-    //     render() {
-    //       return <Counter
-    //         count={this.state.count}
-    //         wrapperProps={this.state.wrapperProps}
-    //         overwritedProps={this.state.overwritedProps}
-    //         history={true} />
-    //     }
-    //   })
-    //   let counterMostWrapper = TestUtils.renderIntoDocument(
-    //     <Most engine={Engine}>
-    //       <CounterWrapper />
-    //     </Most>
-    //   )
-    //   let counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
-    //   let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-    //   counter.machine.actions.changeWrapperProps('miao')
-    //   counter.machine.actions.changeDefaultProps(19)
-    //   let wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
-    //   let overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-    //   let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-    //   expect(counter.props.wrapperProps).toBe('heheda')
-    //   expect(wrapperProps.textContent).toBe('miao')
-    //   expect(overwritedProps.textContent).toBe('miao')
-    //   expect(count.textContent).toBe('19')
-    //   counterWrapper.setState({ overwritedProps: 'wrapper', count: 1 })
-    //   overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
-    //   count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
-    //   expect(overwritedProps.textContent).toBe('wrapper')
-    //   expect(count.textContent).toBe('1')
-    // })
-  });
-
+  describe('props changes', () => {
+    let counterWrapper, counter, t, counterView, actions
+    beforeEach(() => {
+      counterWrapper = mountx(
+        <Counter count={9} />
+      )
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest(counterView.props());
+    })
+    xit('props that not overlap with views defaultProps can not be changed', () => {
+      let CounterWrapper = React.createClass({
+        getInitialState() {
+          return {
+            wrapperProps: 'heheda',
+            overwritedProps: 'hoho',
+            count: 0,
+          }
+        },
+        render() {
+          return <Counter
+            count={this.state.count}
+            wrapperProps={this.state.wrapperProps}
+            overwritedProps={this.state.overwritedProps}
+            history={true} />
+        }
+      })
+      let counterMostWrapper = TestUtils.renderIntoDocument(
+        XX(<CounterWrapper />)
+      )
+      counterWrapper = TestUtils.findRenderedComponentWithType(counterMostWrapper, CounterWrapper)
+      counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
+      counter.machine.actions.changeWrapperProps('miao')
+      counter.machine.actions.changeDefaultProps(19)
+      wrapperProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'wrapperProps')
+      overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+      let count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+      expect(counter.props.wrapperProps).toBe('heheda')
+      expect(wrapperProps.textContent).toBe('miao')
+      expect(overwritedProps.textContent).toBe('miao')
+      expect(count.textContent).toBe('19')
+      counterWrapper.setState({ overwritedProps: 'wrapper', count: 1 })
+      overwritedProps = TestUtils.findRenderedDOMComponentWithClass(counter, 'overwritedProps')
+      count = TestUtils.findRenderedDOMComponentWithClass(counter, 'count')
+      expect(overwritedProps.textContent).toBe('wrapper')
+      expect(count.textContent).toBe('1')
+    })
+  })
   // describe('history', () => {
   //   it('can undo', () => {
   //     let counterWrapper = TestUtils.renderIntoDocument(
