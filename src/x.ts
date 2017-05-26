@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { genNodeClass, genLeafClass, CONTEXT_TYPE } from './xclass'
-import { StaticStream, HKTS, HKT, Subject } from './engine'
+import { StaticStream, HKTS, HKT, Subject } from './xs'
 import { Plan, Connect, ConnectClass, Engine, MostProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
 function isConnectClass<E extends HKTS, I, S>(ComponentClass: ConnectClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is ConnectClass<E, I, S> {
@@ -22,7 +22,7 @@ export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = { history: f
 export default class X<E extends HKTS, S> extends React.PureComponent<MostProps<E>, S> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext<I, H>(): ContextEngine<E, I, H> {
-    let engineClass = this.props.engine
+    let engineClass = this.props.x
     return {
       [XREACT_ENGINE]: {
         intent$: engineClass.subject() as Subject<E, I>,

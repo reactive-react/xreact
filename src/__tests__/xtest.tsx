@@ -2,13 +2,13 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X, { x } from '../x';
-import * as RX from '../engine/rx'
+import * as RX from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
-import { StaticStream } from '../engine'
+import { StaticStream } from '../xs'
 import * as createClass from 'create-react-class'
 import Xtest from '../xtest'
 const compose = (f, g) => x => f(g(x));
-const mountx = compose(mount, x => React.createFactory(X)({ engine: RX }, x))
+const mountx = compose(mount, x => React.createFactory(X)({ x: RX }, x))
 
 const CounterView: React.SFC<any> = props => (
   <div className="counter-view">

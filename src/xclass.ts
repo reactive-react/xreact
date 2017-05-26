@@ -3,7 +3,7 @@ import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import initHistory, { Traveler } from './history';
 import { Plan, Connect, ConnectClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
-import { StaticStream, HKTS, HKT } from './engine'
+import { StaticStream, HKTS, HKT } from './xs'
 
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.object

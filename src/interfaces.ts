@@ -56,7 +56,7 @@ export interface Engine<E extends HKTS, I, S> {
 }
 
 export interface MostProps<A extends HKTS> {
-  engine?: StaticStream<A>
+  x: StaticStream<A>
 }
 export interface ContextEngine<E extends HKTS, I, H> {
   [name: string]: Engine<E, I, H>
