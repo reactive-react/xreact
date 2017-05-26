@@ -20,7 +20,7 @@ export function subject<A>() {
   return new Subject()
 }
 
-export function subscribe<A>(fa: Observable<A>, next: (v: A) => void, complete: () => void) {
+export function subscribe<A>(fa: Observable<A>, next: (v: A) => void, complete?: () => void) {
   return fa.catch(x => {
     console.error(x)
     return fa

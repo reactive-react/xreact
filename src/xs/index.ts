@@ -15,5 +15,5 @@ export interface StaticStream<F extends HKTS> {
   subject<A>(): HKT<A>[F] & FantasySubject<A>
   map<A, B>(f: (a: A) => B, fa: HKT<A>[F]): HKT<B>[F]
   merge<A>(a: HKT<A>[F], b: HKT<A>[F]): HKT<A>[F]
-  subscribe<A>(fa: HKT<A>[F], next: (v: A) => void, complete: () => void): Subscription
+  subscribe<A>(fa: HKT<A>[F], next: (v: A) => void, complete?: () => void): Subscription
 }

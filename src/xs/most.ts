@@ -1,6 +1,6 @@
 import { Stream } from 'most'
 import { async, AsyncSubject, Subject } from 'most-subject'
-import {Subscription} from './index'
+import { Subscription } from './index'
 export const URI = 'sStream'
 export type URI = typeof URI
 
@@ -17,8 +17,8 @@ export function subject<A>() {
   return async()
 }
 
-export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete: () => void) {
-  return fa.subscribe({next, error:x => console.error(x), complete}) as Subscription
+export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {
+  return fa.subscribe({ next, error: x => console.error(x), complete }) as Subscription
 }
 
 export function merge<A>(a: Stream<A>, b: Stream<A>): Stream<A> {

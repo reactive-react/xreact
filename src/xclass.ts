@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
-import initHistory, { Traveler } from './history';
-import { Plan, Connect, ConnectClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
+import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
 import { StaticStream, HKTS, HKT } from './xs'
 
 export const CONTEXT_TYPE = {
-  [XREACT_ENGINE]: PropTypes.object
+  [XREACT_ENGINE]: PropTypes.shape({
+    intent$: PropTypes.object,
+    operators: PropTypes.object
+  })
 };
 function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component is React.SFC<any> {
   return (typeof Component == 'function')
 }
 
-export function genNodeClass<E extends HKTS, I, S>(WrappedComponent: ConnectClass<E, I, S>, main: Plan<E, I, S>): ConnectClass<E, I, S> {
+export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: XcomponentClass<E, I, S>, main: Plan<E, I, S>): XcomponentClass<E, I, S> {
   return class ConnectNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
@@ -27,8 +29,8 @@ export function genNodeClass<E extends HKTS, I, S>(WrappedComponent: ConnectClas
     }
   }
 }
-export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): ConnectClass<E, I, S> {
-  return class ConnectLeaf extends Connect<E, I, S> {
+export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): XcomponentClass<E, I, S> {
+  return class ConnectLeaf extends Xcomponent<E, I, S> {
     static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
     static displayName = `Connect(${getDisplayName(WrappedComponent)})`
     defaultKeys: string[]
@@ -67,8 +69,7 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
               'need to be a Function which map from current state to new state'
             );
           }
-        },
-        () => this.context[XREACT_ENGINE].history$.complete(this.state)
+        }
       );
     }
     componentWillUnmount() {
@@ -80,7 +81,6 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
           WrappedComponent,
           Object.assign({}, opts, this.props, this.state, {
             actions: this.machine.actions,
-            traveler: this.traveler
           })
         );
       } else {
@@ -88,7 +88,6 @@ export function genLeafClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<a
           WrappedComponent,
           Object.assign({}, opts, this.props, this.state, {
             actions: this.machine.actions,
-            traveler: this.traveler
           })
         );
       }

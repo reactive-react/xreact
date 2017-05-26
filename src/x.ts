@@ -1,34 +1,33 @@
 import * as React from 'react';
-import { genNodeClass, genLeafClass, CONTEXT_TYPE } from './xclass'
+import { extendXComponentClass, genXComponentClass, CONTEXT_TYPE } from './xclass'
 import { StaticStream, HKTS, HKT, Subject } from './xs'
-import { Plan, Connect, ConnectClass, Engine, MostProps, ContextEngine, XREACT_ENGINE } from './interfaces'
+import { Plan, Xcomponent, XcomponentClass, Engine, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
-function isConnectClass<E extends HKTS, I, S>(ComponentClass: ConnectClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is ConnectClass<E, I, S> {
-  return (<ConnectClass<E, I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
-}
-export type ConnectOrReactComponent<E extends HKTS, I, S> = ConnectClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>
 
-export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = { history: false }): (WrappedComponent: ConnectOrReactComponent<E, I, S>) => ConnectClass<E, I, S> {
-  return function(WrappedComponent: ConnectOrReactComponent<E, I, S>) {
-    if (isConnectClass(WrappedComponent)) {
-      return genNodeClass(WrappedComponent, main)
+function isXcomponentClass<E extends HKTS, I, S>(ComponentClass: XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is XcomponentClass<E, I, S> {
+  return (<XcomponentClass<E, I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
+}
+export type XOrReactComponent<E extends HKTS, I, S> = XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>
+
+export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = { history: false }): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S> {
+  return function(WrappedComponent: XOrReactComponent<E, I, S>) {
+    if (isXcomponentClass(WrappedComponent)) {
+      return extendXComponentClass(WrappedComponent, main)
     } else {
-      return genLeafClass(WrappedComponent, main, opts)
+      return genXComponentClass(WrappedComponent, main, opts)
     }
   };
 }
 
 
-export default class X<E extends HKTS, S> extends React.PureComponent<MostProps<E>, S> {
+export default class X<E extends HKTS, S> extends React.PureComponent<XProps<E>, S> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext<I, H>(): ContextEngine<E, I, H> {
-    let engineClass = this.props.x
+    let XClass = this.props.x
     return {
       [XREACT_ENGINE]: {
-        intent$: engineClass.subject() as Subject<E, I>,
-        history$: engineClass.subject() as Subject<E, H>,
-        travel$: engineClass.subject() as Subject<E, (n: number) => number>,
-        operators: engineClass
+        intent$: XClass.subject() as Subject<E, I>,
+        operators: XClass
       }
     }
   }
