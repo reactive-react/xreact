@@ -18,7 +18,10 @@ export function subject<A>() {
 }
 
 export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {
-  return fa.subscribe({ next, error: x => console.error(x), complete }) as Subscription
+  return fa.recoverWith(x => {
+    console.error(x)
+    return fa
+  }).subscribe({ next, error: x => console.error(x), complete }) as Subscription
 }
 
 export function merge<A>(a: Stream<A>, b: Stream<A>): Stream<A> {

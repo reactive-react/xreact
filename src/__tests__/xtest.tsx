@@ -59,7 +59,7 @@ const xcountable = x<rx.URI, Intent, any>((intent$) => {
 })
 
 let Counter = xcountable(CounterView);
-const Xs = { rx, /* most*/ }
+const Xs = { rx, most }
 for (let name in Xs) {
   let Xtest = xtest[name]
   let mountx = compose(mount, y => React.createFactory(X)({ x: Xs[name] }, y))
@@ -218,10 +218,6 @@ for (let name in Xs) {
     describe('unsubscribe when component unmounted', () => {
       it('unsubscribe', (done) => {
         const Counter = x<rx.URI, Intent, any>((intent$) => {
-          let incForever$ = Observable.interval(100).map(n => {
-            done.fail('should not next intent any more')
-            return _ => ({ count: 'should not next intent any more' })
-          })
           return {
             update$: intent$.map(intent => {
               switch (intent.type) {
@@ -230,7 +226,10 @@ for (let name in Xs) {
                 default:
                   return state => state
               }
-            }).merge(incForever$)
+            }),
+            actions: {
+              inc: () => ({ type: 'inc' })
+            }
           }
         })(CounterView)
 
@@ -241,17 +240,24 @@ for (let name in Xs) {
             }
           },
           render() {
-            return this.state.mount && <Counter history={true} />
+            return this.state.mount && <Counter />
           }
         })
         spyOn(console, 'error')
         let counterWrapper = mountx(
           <TogglableMount />
         )
-        let toggle = counterWrapper.find(TogglableMount)
-        let counter = counterWrapper.find(Counter)
-        toggle.getNode().setState({ mount: false })
-        done()
+        let toggle = counterWrapper.find(TogglableMount).getNode()
+        let counter = counterWrapper.find(Counter).getNode()
+        setTimeout(() => done(), 3)
+        new Xtest()
+          .do([
+            () => toggle.setState({ mount: false }),
+            counter.machine.actions.inc,
+            counter.machine.actions.inc,
+          ]).collect(counter)
+          .then(done.fail)
+
       })
     })
   })

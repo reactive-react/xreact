@@ -1,7 +1,8 @@
-export default function Test(initState) {
+import { XREACT_ENGINE } from '../interfaces'
+import { doSequence } from './util'
+export default function Test() {
   this.plans = 0
   this.things = []
-  this.initState = initState
 }
 Test.prototype.plan = function(n) {
   this.plans = n
@@ -11,16 +12,18 @@ Test.prototype.do = function(things) {
   this.things = things
   return this
 }
+
 Test.prototype.collect = function(component) {
-  let latestState = component.machine.update$
-    .flatMapError(x => {
-      console.error(x)
-      return component.machine.update$
-    })
-    .tap(f => { if (process.env.NODE_ENV == 'debug') console.log("UPDATE:", f) })
-    .scan((cs, f) => f.call(null, cs), this.initState)
-    // .take(this.plans)
-    .observe(x => { if (process.env.NODE_ENV == 'debug') console.log("STATE:", x) })
-  this.things.forEach(f => f())
+  let latestState
+  if (this.plans != 0) {
+    latestState = component.context[XREACT_ENGINE].history$.take(this.plans).observe(() => { })
+  } else {
+    latestState = component.context[XREACT_ENGINE].history$.observe(() => { })
+  }
+  doSequence(this.things).then(() => {
+    if (this.plans == 0)
+      component.machine.actions.terminate()
+  })
+
   return latestState
 }
