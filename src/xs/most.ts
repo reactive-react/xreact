@@ -1,5 +1,5 @@
 import { Stream } from 'most'
-import { async, AsyncSubject, Subject } from 'most-subject'
+import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription } from './index'
 export const URI = 'sStream'
 export type URI = typeof URI
@@ -14,7 +14,7 @@ export function map<A, B>(f: (a: A) => B, fa: Stream<A>): Stream<B> {
   return fa.map(f)
 }
 export function subject<A>() {
-  return async()
+  return sync()
 }
 
 export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {

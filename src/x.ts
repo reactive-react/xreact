@@ -27,6 +27,7 @@ export default class X<E extends HKTS, S> extends React.PureComponent<XProps<E>,
     return {
       [XREACT_ENGINE]: {
         intent$: XClass.subject() as Subject<E, I>,
+        history$: XClass.subject() as Subject<E, S>,
         operators: XClass
       }
     }

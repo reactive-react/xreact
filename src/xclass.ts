@@ -57,8 +57,13 @@ export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React
         this.machine.update$,
         action => {
           if (action instanceof Function) {
+            if (process.env.NODE_ENV == 'debug')
+              console.log('UPDATE:', action)
             this.setState((prevState, props) => {
               let newState = action.call(this, prevState, props);
+              this.context[XREACT_ENGINE].history$.next(newState)
+              if (process.env.NODE_ENV == 'debug')
+                console.log('STATE:', newState)
               return newState;
             });
           } else {
@@ -68,6 +73,15 @@ export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React
               action,
               'need to be a Function which map from current state to new state'
             );
+          }
+        },
+        () => {
+          this.context[XREACT_ENGINE].history$.complete(this.state)
+          if (process.env.NODE_ENV == 'production') {
+            console.error('YOU HAVE TERMINATED THE INTENT STREAM...')
+          }
+          if (process.env.NODE_ENV == 'debug') {
+            console.log(`LAST STATE is`, this.state)
           }
         }
       );
@@ -106,6 +120,11 @@ function bindActions(actions, intent$, self) {
     fromPromise(p) {
       return p.then(x => intent$.next(x));
     },
+    terminate(a) {
+      if (process.env.NODE_ENV == 'debug')
+        console.error('INTENT TERMINATED')
+      return intent$.complete(a)
+    }
   };
 
   for (let a in actions) {
