@@ -20,14 +20,14 @@ export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = { history: f
 }
 
 
-export default class X<E extends HKTS, S> extends React.PureComponent<XProps<E>, S> {
+export default class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext<I, H>(): ContextEngine<E, I, H> {
     let XClass = this.props.x
     return {
       [XREACT_ENGINE]: {
         intent$: XClass.subject() as Subject<E, I>,
-        history$: XClass.subject() as Subject<E, S>,
+        history$: XClass.subject() as Subject<E, H>,
         operators: XClass
       }
     }

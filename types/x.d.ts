@@ -7,7 +7,7 @@ export declare type XOrReactComponent<E extends HKTS, I, S> = XcomponentClass<E,
 export declare function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts?: {
     history: boolean;
 }): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S>;
-export default class X<E extends HKTS, S> extends React.PureComponent<XProps<E>, S> {
+export default class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}> {
     static childContextTypes: {
         [x: string]: any;
     };

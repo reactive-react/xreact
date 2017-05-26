@@ -42,6 +42,7 @@ export interface Stamp<S> {
 }
 export interface Engine<E extends HKTS, I, S> {
     intent$: Subject<E, I>;
+    history$: Subject<E, S>;
     operators: StaticStream<E>;
 }
 export interface XProps<A extends HKTS> {
