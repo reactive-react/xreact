@@ -1,13 +1,13 @@
 {
   "name": "xreact",
   "version": "0.0.0",
-  "description": "High Prefomance Monadic Reactive State Container for React",
+  "description": "Functional Reactive State Container for React",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jcouyang/react-most.git"
   },
   "main": "lib/x.js",
-  "typings": "types/react-most.d.ts",
+  "typings": "types/x.d.ts",
   "files": [
     "src",
     "lib",
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
-    "build": "tsc -p .",
+    "build": "tsc",
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
@@ -65,5 +65,25 @@
     "collectCoverage": true
   },
   "author": "Jichao Ouyang",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "Rx",
+    "RxJS",
+    "ReactiveX",
+    "ReactiveExtensions",
+    "Streams",
+    "Observables",
+    "Observable",
+    "Stream",
+    "React",
+    "most",
+    "mostjs",
+    "FRP",
+    "Reactive",
+    "ES6",
+    "ES2015",
+    "xreact",
+    "typescript"
+  ]
+
 }
