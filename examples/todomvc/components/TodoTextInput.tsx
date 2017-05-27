@@ -1,11 +1,15 @@
-import React, { Component, PropTypes } from 'react'
-import classnames from 'classnames'
+import * as React from 'react'
+import { Component, PropTypes } from 'react'
+import * as classnames from 'classnames'
 import MainSection from './MainSection'
-import {x} from 'react-most/lib/x'
+import { x } from 'xreact/lib/x'
 import TodoItem from './TodoItem'
-import Intent from '../intent'
+import * as Intent from '../intent'
+import { Todo } from './interfaces'
+import { just } from 'most'
+import { identity as id } from 'ramda'
 let TodoTextInput = React.createClass({
-  getInitialState(){
+  getInitialState() {
     return {
       text: this.props.text || ''
     }
@@ -13,25 +17,22 @@ let TodoTextInput = React.createClass({
 
   handleSubmit(e) {
     const text = e.target.value.trim()
-    let msg = {id:this.props.itemid,text:text}
+    let msg = { id: this.props.itemid, text: text }
     if (e.which === 13) {
       if (this.props.newTodo) {
         this.props.actions.add(msg);
-        this.props.actions.search('')
         this.setState({ text: '' })
       }
     }
   },
 
   handleChange(e) {
-    if (this.props.newTodo)
-      this.props.actions.search(e.target.value)
     this.setState({ text: e.target.value })
   },
 
   handleBlur(e) {
     if (!this.props.newTodo) {
-      this.props.actions.edit({id:this.props.itemid,text:e.target.value}, this.props.index);
+      this.props.actions.edit({ id: this.props.itemid, text: e.target.value }, this.props.index);
       this.props.actions.editing(-1);
     }
   },
@@ -54,9 +55,11 @@ let TodoTextInput = React.createClass({
   },
 });
 
-export default x(intent$=>{
-  return {
-      add: () => ({kind:'add'} as Intent.Add),
-      search: Intent.Search,
+export default x(intent$ => (
+  {
+    update$: just(id),
+    actions: {
+      add: (value) => ({ kind: 'add', value } as Intent.Add<Todo>)
+    }
   }
-})(TodoTextInput)
+))(TodoTextInput)

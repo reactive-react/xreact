@@ -1,5 +1,5 @@
 import * as React from 'react'
-import classnames from 'classnames'
+import * as classnames from 'classnames'
 import MainSection from './MainSection'
 import * as Intent from '../intent'
 import { x } from 'xreact/lib/x'
@@ -7,8 +7,7 @@ import * as StaticStream from 'xreact/lib/xs'
 import * as Most from 'xreact/lib/xs/most'
 import { Todo } from './interfaces'
 import { of } from 'most'
-const id = _ => _
-let a: StaticStream.HKTS = 'Stream'
+import { identity } from 'ramda'
 
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
@@ -17,65 +16,65 @@ const FILTER_TITLES = {
 }
 
 export const FILTER_FUNC = {
-  'SHOW_ALL': id,
-  'SHOW_ACTIVE': todos => todos.filter(todo => !todo.done),
-  'SHOW_COMPLETED': todos => todos.filter(todo => todo.done),
+  'SHOW_ALL': identity,
+  'SHOW_ACTIVE': (todos: Todo[]) => todos.filter(todo => !todo.done),
+  'SHOW_COMPLETED': (todos: Todo[]) => todos.filter(todo => todo.done),
 }
-let Footer = React.createClass({
-  renderTodoCount() {
-    const { activeCount } = this.props
-    const itemWord = activeCount === 1 ? 'item' : 'items'
+const FilterLink = ({ onClick, filter, current }) => {
+  return <li>
+    <a className={classnames({ selected: filter === current })}
+      style={{ cursor: 'pointer' }}
+      onClick={onClick}>
+      {FILTER_TITLES[filter]}
+    </a>
+  </li>
+}
 
-    return (
-      <span className="todo-count">
-        <strong>{activeCount || 'No'}</strong> {itemWord} left
-      </span>
-    )
-  },
+const TodoCount = ({ activeCount }) => (
+  <span className="todo-count">
+    <strong>{activeCount || 'No'}</strong>
+    {activeCount === 1 ? 'item' : 'items'} left
+  </span>
+)
 
-  renderFilterLink(filter) {
-    const title = FILTER_TITLES[filter]
-    const { filter: selectedFilter, onShow, actions } = this.props
-    return (
-      <a className={classnames({ selected: filter === selectedFilter })}
-        style={{ cursor: 'pointer' }}
-        onClick={() => actions.filterWith(FILTER_FUNC[filter])}>
-        {title}
-      </a>
-    )
-  },
-
-  renderClearButton() {
-    const { completedCount, actions } = this.props
-    if (completedCount > 0) {
-      return (
-        <button className="clear-completed"
-          onClick={actions.clear} >
-          Clear completed
-        </button>
-      )
+const ClearButton = ({ completedCount, actions }) => (
+  completedCount > 0 ?
+    <button className="clear-completed"
+      onClick={actions.clear} >
+      Clear completed
+    </button> : null
+)
+const Footer = React.createClass({
+  getInitialState() {
+    return {
+      currentFilter: 'SHOW_ALL'
     }
   },
 
   render() {
     return (
       <footer className="footer">
-        {this.renderTodoCount()}
+        <TodoCount activeCount={this.props.activeCount} />
         <ul className="filters">
           {['SHOW_ALL', 'SHOW_ACTIVE', 'SHOW_COMPLETED'].map(filter =>
-            <li key={filter}>
-              {this.renderFilterLink(filter)}
-            </li>
+            <FilterLink
+              key={filter}
+              filter={filter}
+              current={this.state.currentFilter}
+              onClick={() => {
+                this.setState({ currentFilter: filter })
+                this.props.actions.filterWith(FILTER_FUNC[filter])
+              }} />
           )}
         </ul>
-        {this.renderClearButton()}
+        <ClearButton completedCount={this.props.completeCount} actions={this.props.actions} />
       </footer>
     )
   },
 });
 export default x<Most.URI, Intent.Intent<Todo>, Todo>((intent$) => {
   return {
-    update$: of(id),
+    update$: of(identity),
     actions: {
       clear: () => ({ kind: 'complete' } as Intent.Complete),
       filterWith: (f) => ({ kind: 'filter', filter: f } as Intent.Filter<Todo>),

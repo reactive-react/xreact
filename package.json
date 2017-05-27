@@ -1,17 +1,16 @@
 {
   "name": "xreact",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Functional Reactive State Container for React",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jcouyang/react-most.git"
   },
   "main": "lib/x.js",
-  "typings": "types/lib/x.d.ts",
+  "typings": "lib/x.d.ts",
   "files": [
     "src",
-    "lib",
-    "types"
+    "lib"
   ],
   "scripts": {
     "build": "tsc",

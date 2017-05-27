@@ -3,14 +3,12 @@ import TodoItem from './TodoItem'
 import Footer from './Footer'
 import { x } from 'xreact/lib/x'
 import * as Most from 'xreact/lib/xs/most'
-import * as rest from 'rest'
-const remote = 'todos.json';
 import { Subject } from 'most-subject'
 import { Stream } from 'most'
 import { Intent } from '../intent'
 import * as r from 'ramda'
 const alwaysId = () => r.identity
-
+import * as most from 'most'
 interface Todo {
   id: number
   text: string
@@ -42,37 +40,42 @@ MainSection.defaultProps = {
   filter: (_: Todo[]) => _
 }
 
-export default x<Most.URI, Intent<Todo>, Todo>((intent$) => {
+export default x<Most.URI, Intent<Todo>, MainSectionProps>((intent$) => {
   let lensTodos = r.lensProp('todos')
   let lensComplete = r.lensProp('done')
-  let lensTodo = (index: number) => r.compose(lensTodos, r.lensIndex(index))
-  let lensTodoComplete = (index: number) => r.compose(lensTodo(index), lensComplete)
-  let nextId: (todos: Todo[]) => number = r.compose(r.last, r.map((x: Todo) => x.id + 1), r.sortBy(r.prop('id')))
-  let update$: Stream<(state: MainSectionProps) => MainSectionProps> = intent$.map((intent: Intent<Todo>) => {
-    // switch (intent.kind) {
-    //     case ('add'):
-    //         return (state: MainSectionProps) => {
-    //             return r.over(lensTodos, r.append(r.assoc('id', nextId(state.todos) || 0, intent.todo)), state)
-    //         }
-    //     default:
-    return (state: MainSectionProps) => state
-    // }
+  let lensTodo = (index: number) =>
+    r.compose(lensTodos, r.lensIndex(index))
+  let lensTodoComplete = (index: number) =>
+    r.compose(lensTodo(index), lensComplete)
+  let nextId = r.compose(r.last,
+    r.map((x: Todo) => x.id + 1),
+    r.sortBy(r.prop('id')))
+  let update$ = intent$.map((intent: Intent<Todo>) => {
+    switch (intent.kind) {
+      case ('add'):
+        return (state: MainSectionProps) => {
+          let nextid = nextId(state.todos) || 0
+          return r.over(lensTodos, r.append(r.assoc('id', nextid, intent.value)), state)
+        }
+      case 'edit':
+        return r.set(lensTodo(intent.todo.id), intent.todo)
+      case 'clear':
+        return r.over(lensTodos, r.filter((todo: Todo) => !todo.done))
+      case 'delete':
+        return r.over(lensTodos, r.filter((todo: Todo) => todo.id != intent.id))
+      case 'filter':
+        return (state: MainSectionProps) => ({ filter: intent.filter })
+      case 'done':
+        return r.over(lensTodoComplete(intent.index), r.not)
+      default:
+        return (state: MainSectionProps) => state
+    }
   })
 
-  // Intent.case({
-  //     Add: ,
-  //     Edit: (todo: Todo, index: number) => r.set(lensTodo(index), todo),
-  //     Clear: () => r.over(lensTodos, r.filter((todo: Todo) => !todo.done)),
-  //     Delete: (id: number) => r.over(lensTodos, r.filter((todo: Todo) => todo.id != id)),
-  //     Filter: (filter: (todos: Todo[]) => Todo[]) => (state: MainSectionProps) => ({ filter }),
-  //     Done: (index: number) => r.over(lensTodoComplete(index), r.not),
-  //     _: alwaysId
-  // }))
-  // let data$ = most.fromPromise(rest(remote))
-  //     .map(x => JSON.parse(x.entity))
-  //     .map(data => () => ({ todos: data }));
+  let data$ = most.fromPromise(Promise.resolve(require('../todos.json')))
+    .map(state => () => state)
 
   return {
-    update$: update$,
+    update$: update$.merge(data$),
   }
 })(MainSection)

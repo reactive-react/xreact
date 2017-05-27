@@ -5,13 +5,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import MainSection from './components/MainSection';
 import { render } from 'react-dom';
-import Most from 'react-most'
 
 const App = () => (
   <div>
     <Header />
     <MainSection />
-    <Footer />
   </div>
 )
 

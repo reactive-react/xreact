@@ -1,10 +1,13 @@
 import * as React from 'react'
-import classnames from 'classnames'
+import * as classnames from 'classnames'
 import TodoTextInput from './TodoTextInput'
 import MainSection from './MainSection'
-import { x } from 'react-most/lib/x'
+import { x } from 'xreact/lib/x'
+import * as Most from 'xreact/lib/xs/most'
 import * as Intent from '../intent'
 import { Todo } from './interfaces'
+import { just } from 'most'
+import { identity as id } from 'ramda'
 const TodoItemView = ({ todo, actions, index }) => {
   return <div className="view">
     <input className="toggle"
@@ -34,12 +37,13 @@ const TodoItem = props => {
   })}>{element}</li>
 }
 
-const intentWrapper = x(() => {
+const intentWrapper = x<Most.URI, Intent.Intent<Todo>, {}>((intent$) => {
   return {
+    update$: just(id),
     actions: {
       add: () => ({ kind: 'add' } as Intent.Add<Todo>),
       edit: (todo) => ({ kind: 'edit', todo } as Intent.Edit<Todo>),
-      done: () => ({ kind: 'done' } as Intent.Done),
+      done: (index) => ({ kind: 'done', index } as Intent.Done),
       remove: (id) => ({ kind: 'delete', id } as Intent.Delete),
     }
   }

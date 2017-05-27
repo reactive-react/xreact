@@ -8,7 +8,7 @@
     "target": "es5",
     "outDir": "lib",
     "jsx": "react",
-    "declarationDir": "types/lib",
+    "declarationDir": "lib",
     "declaration": true,
     "noImplicitAny": false,
     "sourceMap": false

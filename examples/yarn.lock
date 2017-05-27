@@ -2,11 +2,29 @@
 # yarn lockfile v1
 
 
+"@most/multicast@^1.2.4", "@most/multicast@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@most/multicast/-/multicast-1.2.5.tgz#ba5abc997f9a6511094bec117914f4959720a8fb"
+  dependencies:
+    "@most/prelude" "^1.4.0"
+
+"@most/prelude@^1.4.0", "@most/prelude@^1.4.1":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@most/prelude/-/prelude-1.6.0.tgz#4256e3a902ddf04c1f07afca2267526195072e13"
+
 "@reactivex/rxjs@^5.4.0":
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@reactivex/rxjs/-/rxjs-5.4.0.tgz#87eb67e8e6a4fbe8ee07ee4ea94c1fa928ba1691"
   dependencies:
     symbol-observable "^1.0.1"
+
+"@types/classnames@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.0.tgz#f2312039e780bdf89d7d4102a26ec11de5ec58aa"
+
+"@types/node@^7.0.22":
+  version "7.0.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.22.tgz#4593f4d828bdd612929478ea40c67b4f403ca255"
 
 "@types/react-dom@^15.5.0":
   version "15.5.0"
@@ -14,7 +32,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
+"@types/react@*", "@types/react@^15.0.25":
   version "15.0.25"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.25.tgz#d396949cccc9a90b61755def9781e5aced9b2261"
 
@@ -1889,6 +1907,22 @@ module-deps@^4.0.8:
     through2 "^2.0.0"
     xtend "^4.0.0"
 
+most-subject@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/most-subject/-/most-subject-5.3.0.tgz#3a6e3efd436fa93bd8b33c2a239c9088230a6102"
+  dependencies:
+    "@most/multicast" "^1.2.4"
+    "@most/prelude" "^1.4.1"
+    most "^1.1.0"
+
+most@^1.1.0, most@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/most/-/most-1.4.0.tgz#da6e4a098ccad6e8268ee6837ada50d01101c4fc"
+  dependencies:
+    "@most/multicast" "^1.2.5"
+    "@most/prelude" "^1.4.0"
+    symbol-observable "^1.0.2"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -2578,7 +2612,7 @@ supports-color@^3.1.2:
   dependencies:
     has-flag "^1.0.0"
 
-symbol-observable@^1.0.1:
+symbol-observable@^1.0.1, symbol-observable@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
 
@@ -2858,9 +2892,9 @@ xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
 
-xreact@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/xreact/-/xreact-0.2.1.tgz#ad5d8656d6a1f9e75745c75eb1ef58e86e40ca6f"
+xreact@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/xreact/-/xreact-0.2.3.tgz#f60e57796179f88651931c67f1636999ec9491ff"
   dependencies:
     prop-types "^15.5.8"
 

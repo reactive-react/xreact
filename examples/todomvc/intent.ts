@@ -1,6 +1,6 @@
 export interface Add<S> {
   kind: 'add'
-  todo: S
+  value: S
 }
 export interface Delete {
   kind: 'delete'
@@ -20,6 +20,7 @@ export interface Filter<S> {
 
 export interface Done {
   kind: 'done'
+  index: number
 }
 export interface Complete {
   kind: 'complete'
