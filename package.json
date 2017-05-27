@@ -14,7 +14,6 @@
     "types"
   ],
   "scripts": {
-    "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
     "build": "tsc",
     "test": "jest",
     "prepublish": "npm run build",

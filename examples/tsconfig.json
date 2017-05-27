@@ -1,6 +1,6 @@
 {
   "include": [
-    "counter/**/*.jsx"
+    "todomvc/app.tsx"
   ],
   "compilerOptions": {
     /* Basic Options */
