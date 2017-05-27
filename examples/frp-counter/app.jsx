@@ -1,10 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
-import Most, { connect } from 'react-most'
-import when from 'when'
+import X, { x } from 'xreact'
+import * as rx from 'xreact/lib/xs/rx'
+import * as when from 'when'
 import {just, fromPromise} from 'most'
 import {compose, lensProp, over, set, identity} from 'ramda'
-import Type from 'union-type'
+import * as Type from 'union-type'
 const Intent = Type({
   Inc: [Number],
   Dec: [Number],
@@ -26,7 +27,7 @@ CounterView.defaultProps = { count: 0 };
 
 const lensCount = lensProp('count')
 
-const asyncInitCount11 = connect(intent$=>{
+const asyncInitCount11 = x(intent$=>{
   return {
     update$: just(11)
       .flatMap(compose(fromPromise, when))
@@ -34,7 +35,7 @@ const asyncInitCount11 = connect(intent$=>{
   }
 })
 
-const doublable = connect(intent$ => {
+const doublable = x(intent$ => {
   return {
     update$: intent$.map(Intent.case({
       Double: () => over(lensCount, x=>x*2),
@@ -42,13 +43,13 @@ const doublable = connect(intent$ => {
       _: () => identity
     })),
     actions: {
-      double: Intent.Double,
-      half: Intent.Half,
+      double: ()=>Intent.Double,
+      half: ()=>Intent.Half,
     }
   }
 })
 
-const increasable = connect(intent$ => {
+const increasable = x(intent$ => {
   return {
     update$: intent$.map(Intent.case({
       Inc: (v) => over(lensCount, x=>x+v),
@@ -66,7 +67,7 @@ const wrapper = compose(asyncInitCount11, doublable, increasable)
 const Counter = wrapper(CounterView)
 
 render(
-  <Most>
+  <X x={rx}>
     <Counter />
-  </Most>
+  </X>
   , document.getElementById('app'));

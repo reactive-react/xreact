@@ -5,7 +5,8 @@
   "author": "Jichao OUYANG",
   "license": "MIT",
   "scripts": {
-    "counter": "browserify -p tsify counter/app.jsx | uglifyjs > counter/app.js"
+    "counter": "browserify -p tsify counter/app.jsx | uglifyjs > counter/app.js",
+    "frp-counter": "browserify -p tsify frp-counter/app.jsx | uglifyjs > frp-counter/app.js"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.4.0",
@@ -14,9 +15,13 @@
     "xreact": "latest"
   },
   "devDependencies": {
+    "@types/react-dom": "^15.5.0",
     "browserify": "^14.3.0",
+    "ramda": "^0.23.0",
     "tsify": "^3.0.1",
     "typescript": "^2.3.3",
-    "uglify-js": "^3.0.11"
+    "uglify-js": "^3.0.11",
+    "union-type": "^0.4.0",
+    "when": "^3.7.8"
   }
 }
