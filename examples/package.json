@@ -1,0 +1,22 @@
+{
+  "name": "xreact-examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jichao OUYANG",
+  "license": "MIT",
+  "scripts": {
+    "counter": "browserify -p tsify counter/app.jsx | uglifyjs > counter/app.js"
+  },
+  "dependencies": {
+    "@reactivex/rxjs": "^5.4.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "xreact": "latest"
+  },
+  "devDependencies": {
+    "browserify": "^14.3.0",
+    "tsify": "^3.0.1",
+    "typescript": "^2.3.3",
+    "uglify-js": "^3.0.11"
+  }
+}
