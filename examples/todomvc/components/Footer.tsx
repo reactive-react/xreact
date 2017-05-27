@@ -32,7 +32,7 @@ const FilterLink = ({ onClick, filter, current }) => {
 
 const TodoCount = ({ activeCount }) => (
   <span className="todo-count">
-    <strong>{activeCount || 'No'}</strong>
+    <strong>{activeCount || 'No '}</strong>
     {activeCount === 1 ? 'item' : 'items'} left
   </span>
 )
@@ -67,7 +67,7 @@ const Footer = React.createClass({
               }} />
           )}
         </ul>
-        <ClearButton completedCount={this.props.completeCount} actions={this.props.actions} />
+        <ClearButton completedCount={this.props.completedCount} actions={this.props.actions} />
       </footer>
     )
   },
@@ -76,7 +76,7 @@ export default x<Most.URI, Intent.Intent<Todo>, Todo>((intent$) => {
   return {
     update$: of(identity),
     actions: {
-      clear: () => ({ kind: 'complete' } as Intent.Complete),
+      clear: () => ({ kind: 'clear' } as Intent.Clear),
       filterWith: (f) => ({ kind: 'filter', filter: f } as Intent.Filter<Todo>),
     }
   }
