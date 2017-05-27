@@ -9,7 +9,8 @@
     "frp-counter": "browserify -p tsify frp-counter/app.jsx | uglifyjs > frp-counter/app.js",
     "type-n-search": "browserify -p tsify type-n-search/app.jsx | uglifyjs > type-n-search/app.js",
     "alacarte": "browserify -p tsify alacarte/app.jsx | uglifyjs > alacarte/app.js",
-    "todomvc": "browserify -p tsify todomvc/app.tsx | uglifyjs > todomvc/app.js"
+    "todomvc": "browserify -p tsify todomvc/app.tsx | uglifyjs > todomvc/app.js",
+    "test": "jest"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.4.0",
