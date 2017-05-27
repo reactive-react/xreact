@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import MainSection from './MainSection'
-import {connect} from 'react-most'
+import {x} from 'react-most/lib/x'
 import TodoItem from './TodoItem'
 import Intent from '../intent'
 let TodoTextInput = React.createClass({
@@ -45,7 +45,7 @@ let TodoTextInput = React.createClass({
         })}
         type="text"
         placeholder={this.props.placeholder}
-        autoFocus="true"
+        autoFocus={true}
         value={this.state.text}
         onBlur={this.handleBlur}
         onChange={this.handleChange}
@@ -54,9 +54,9 @@ let TodoTextInput = React.createClass({
   },
 });
 
-export default connect(intent$=>{
+export default x(intent$=>{
   return {
-      add: Intent.Add,
+      add: () => ({kind:'add'} as Intent.Add),
       search: Intent.Search,
   }
 })(TodoTextInput)

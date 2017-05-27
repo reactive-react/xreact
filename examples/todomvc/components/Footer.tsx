@@ -1,10 +1,14 @@
 import * as React from 'react'
 import classnames from 'classnames'
-import { x } from 'xreact'
 import MainSection from './MainSection'
 import * as Intent from '../intent'
-import * as MOST from 'xreact/src/xs/most'
+import { x } from 'xreact/lib/x'
+import * as StaticStream from 'xreact/lib/xs'
+import * as Most from 'xreact/lib/xs/most'
 import { Todo } from './interfaces'
+import { of } from 'most'
+const id = _ => _
+let a: StaticStream.HKTS = 'Stream'
 
 const FILTER_TITLES = {
   'SHOW_ALL': 'All',
@@ -13,7 +17,7 @@ const FILTER_TITLES = {
 }
 
 export const FILTER_FUNC = {
-  'SHOW_ALL': _ => _,
+  'SHOW_ALL': id,
   'SHOW_ACTIVE': todos => todos.filter(todo => !todo.done),
   'SHOW_COMPLETED': todos => todos.filter(todo => todo.done),
 }
@@ -69,10 +73,12 @@ let Footer = React.createClass({
     )
   },
 });
-
-export default x<MOST.URI, Intent.Intent<Todo>, Todo>((intent$) => {
+export default x<Most.URI, Intent.Intent<Todo>, Todo>((intent$) => {
   return {
-    clear: () => ({ kind: 'complete' } as Intent.Complete),
-    filterWith: (f) => ({ kind: 'filter', filter: f } as Intent.Filter<Todo>),
+    update$: of(id),
+    actions: {
+      clear: () => ({ kind: 'complete' } as Intent.Complete),
+      filterWith: (f) => ({ kind: 'filter', filter: f } as Intent.Filter<Todo>),
+    }
   }
 })(Footer)

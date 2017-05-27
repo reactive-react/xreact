@@ -1,8 +1,8 @@
 import * as React from 'react'
 import TodoItem from './TodoItem'
 import Footer from './Footer'
-import { x } from 'xreact'
-import * as Most from 'xreact/src/xs/most'
+import { x } from 'xreact/lib/x'
+import * as Most from 'xreact/lib/xs/most'
 import * as rest from 'rest'
 const remote = 'todos.json';
 import { Subject } from 'most-subject'

@@ -1,16 +1,16 @@
-interface Add<S> {
+export interface Add<S> {
   kind: 'add'
   todo: S
 }
-interface Delete {
+export interface Delete {
   kind: 'delete'
   id: number
 }
-interface Edit<S> {
+export interface Edit<S> {
   kind: 'edit'
   todo: S
 }
-interface Clear {
+export interface Clear {
   kind: 'clear'
 }
 export interface Filter<S> {
@@ -18,7 +18,7 @@ export interface Filter<S> {
   filter: (xs: S[]) => S[]
 }
 
-interface Done {
+export interface Done {
   kind: 'done'
 }
 export interface Complete {
