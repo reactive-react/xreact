@@ -2858,9 +2858,9 @@ xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
 
-xreact@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/xreact/-/xreact-0.2.0.tgz#6c53f245f7ec5ae164031e1d2e48a88f0878338c"
+xreact@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/xreact/-/xreact-0.2.1.tgz#ad5d8656d6a1f9e75745c75eb1ef58e86e40ca6f"
   dependencies:
     prop-types "^15.5.8"
 
