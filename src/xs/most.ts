@@ -1,7 +1,7 @@
 import { Stream } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription } from './index'
-export const URI = 'sStream'
+export const URI = 'Stream'
 export type URI = typeof URI
 
 declare module './index' {
