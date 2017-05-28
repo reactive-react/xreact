@@ -23,7 +23,7 @@ yarn add xreact
 ```
 
 ## What
-`xreact` is a lightweight Higher Order Component for React. 
+`xreact` is a lightweight Higher Order State Component for React. 
 
 Data flow in `xreact` is simple and unidirectional, similar to flux.
 
@@ -32,16 +32,17 @@ Data flow in `xreact` is simple and unidirectional, similar to flux.
 ## Terminology
 - **Machine**: a machine can emit `Update` to a timeline `update$`, and can be operated by calling function in `actions`
 - **Plan**: a Plan is a function that describe how to create a `Machine`
-- **Update**: a function `currentState -> nextState` 
-- **Action**: a function that create `Intent`
+- **Update**: a function of `currentState -> nextState` 
+- **Action**: a function that create instance of `Intent`
 - **Intent**: describe what you want to do
 - **Intent Stream**: a timeline of every `Intent` created by every `Action`
 
 ## Quick Start
-sorry we don't have a **book** to document how to use `xreact`, and I don't really need to, but
+
+sorry we don't have a **book** to document how to use `xreact`, and I don't really need to,
 there's only 3 things you should notice when using `xreact`, I'll explain by a simple counter app.
 
-Also, you can refer to: 
+Also, you can refer more documents here:
 
 - various [Examples](https://github.com/reactive-react/xreact/wiki/examples)
 - simple [API](https://github.com/reactive-react/xreact/wiki/api)
@@ -50,25 +51,33 @@ Also, you can refer to:
 
 
 ### 1. Define a simple stateless View component
+
 ![](https://github.com/reactive-react/xreact/wiki/images/view.png)
+
 ```html
-const CounterView = props => (
+const CounterView = ({actions, count}) => (
   <div>
-    <button onClick={props.actions.dec}>-</button>
-    <span>{props.count}</span>
-    <button onClick={props.actions.inc}>+</button>
+    <button onClick={actions.dec}>-</button>
+    <span>{count}</span>
+    <button onClick={actions.inc}>+</button>
   </div>
 )
 ```
-### 2. Deine a Plan
+
+every View component expected a `actions` fields in `props`
+
+### 2. Define a `Plan`
 
 ![](https://github.com/reactive-react/xreact/wiki/images/behavior.png)
+
+After we have a pretty view for represention and inteacting interface, we can define how to update the view, or "how to react on actions". In such case:
 
 1. A counter can have actions of `inc` and `dec`, which will send `Intent` of `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` upon being called.
 2. A counter reactively generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
 
 ```js
-const counterable = connect((intent$) => {
+
+const countable = x((intent$) => {
   return {
     update$: intent$.map(intent => {
       switch (intent.type) {
@@ -87,37 +96,47 @@ const counterable = connect((intent$) => {
   }
 })
 ```
-you'll see that the function in `connect` parameter is a `Plan`, the object it return is a `Machine`
+you'll see that the function in `x` is a `Plan`, a `Plan` will take `intent$`(Intent Stream) and return a `Machine`.
+a `Machine` defines
 
-and `connect` return a HoC that you can wrap it to View Component
+- how you can act on the machine 
+- how the machine will react on intents.
 
 ### 3. Connect Plan and View
+
 ![](https://github.com/reactive-react/xreact/wiki/images/wrap.png)
+
 ```js
-const Counter = counterable(CounterView)
+import {render} from 'react-dom'
+import X from 'xreact/lib/x'
+import * as rx from 'xreact/lib/xs/rx'
+
+const Counter = countable(CounterView)
 
 render(
-  <Most>
+  <X x={rx}>
     <Counter />
-  </Most>,
+  </X>,
   document.getElementById('app')
 );
 ```
 
 ## Features
-Inspired by Redux and Functional Reactive Programming, `xreact` allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and join those streams to form your application's state.
+Inspired by Redux and Functional Reactive Programming, `xreact` allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and subscribe those streams into your application's state.
 
 ### Purely Functional, Declarative, and Monadic
 In imperatively written code, you describe step-by-step how to process data.  With `xreact`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
-### Composable and Reusable Sinks
-In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, sinks are reusable observable object.
+### Typesafe and scalable
+Rewritten in Typescript, and abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
 
-Wrapper is simply a function and easily composable.
+### Composable and Reusable `Plan`
+In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, the function `x` return is simply a function which can easily compose.
+
 
 ```js
-const countBy1 = connect(...)
-const countBy2 = connect(...)
+const countBy1 = connect(plan1)
+const countBy2 = connect(plan2)
 const Counter = countBy1(countBy2(CounterView))
 // or
 const counterable = compose(countBy1, countBy2)
@@ -128,22 +147,34 @@ const Counter = counterable(CounterView)
 Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.
 
 ```js
-import {stateHistoryOf, Engine } from 'xreact-spec';
-let counterWrapper = TestUtils.renderIntoDocument(
-        <Most engine={Engine}>
-          <Counter history={true} />
-        </Most>
+import {mount} from 'enzyme'
+import * as rx from 'xreact/lib/xs/rx'
+import {rx as xtest} from 'xreact/lib/xtests'
+const mountx = compose(mount, c => React.createFactory(X)({ x: rx }, c))
+
+let counterX = mountx(
+  <Counter />
 )
-let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-counter.actions.inc()
-counter.actions.inc()
-counter.actions.inc()
-expect(stateHistoryOf(counter)[2].count).toBe(3)
+          
+let counter = counterX.find(Counter).getNode()
+let counterView = counterX.find(CounterView)
+let actions = counterView.prop('actions')
+it('add intent to intent$ and go through sink$', () => {
+  return new xtest
+    .do([
+      actions.inc,
+      actions.inc,
+      actions.inc,
+    ])
+    .collect(counter)
+    .then(state => expect(state.count).toBe(3))
+})
+
 ```
 
-see more details about testing at [xreact-spec](https://github.com/reactive-react/xreact-spec) or [todomvc example](https://github.com/reactive-react/xreact/blob/master/examples/todomvc/src/components/__tests__/MainSection-spec.jsx)
+see more details about testing examples at [todomvc example](https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx)
 
-### Async actions
+### Async actions made easy
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
 
 ```js
@@ -154,38 +185,24 @@ intent$.map(promise => most.fromPromise(promise))
 ### Transducers support
 [Transducer](https://github.com/cognitect-labs/transducers-js) is another high-performance, functional way to compose non-monadic data flows.
 
-Writing actions as transducers can improve reusability.
+Writing actions as transducers can improve reusability and readability.
 
-### Time Travel
-Because we have all actions' streams, we can easily reproduce the actions at anytime, or get snapshot of the state's stream and going back in time.
-
-By passing the `history` parameter into the options of `connect`
-```js
-connect(intent$=>[/* your awesome flow */], { history: true })(App)
-```
-
-or passing `history` as a prop
-```js
-<Most>
-  <Counter history={true}/>
-</Most>
-```
-
-A stream with all of the state's history will be created, called `historyStream`.
-
-### Modular and Easy to Extend
-If you're more familiar with RxJS, it's easy to use it with `xreact` in place of `most`.  Simply pass a prop called `engine` to the `Most` component.
-
-> But, I'm strongly RECOMMEND to use the default engine `most.js`, it's how `xreact` originally built for, and production ready.
-
-```html
-import rxEngine from 'xreact/engine/rx'
-<Most engine={rxEngine}>
-  <App />
-</Most>
-```
+### Higher level extract and ready for any FRP library
+xreact came with 2 FRP libs of choice, rxjs and mostjs, for any new lib you only need to implement the `StaticStream` with your prefered lib as Higher Kind Type.
 
 ## [More Documents...](https://github.com/jcouyang/xreact/wiki)
+
+## FAQ
+
+### How it's different from redux
+
+unlike redux, xreact turn FRP to 11 in react, it model problem different
+
+- "global" intent stream(using redux's word should be intent store) not global state store
+- there's not such thing as state store, no state will store anywhere, only state transformations
+- FRP lib as your choice, choose any lib your familiar with
+
+
 
 ## Thanks to...
 - [rxjs](https://github.com/ReactiveX/rxjs)
