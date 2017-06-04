@@ -143,6 +143,7 @@ const counterable = compose(countBy1, countBy2)
 const Counter = counterable(CounterView)
 ```
 
+what really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC and no any performance overhead.
 ### Easy to test, no need for mocks
 Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.
 
@@ -194,7 +195,7 @@ xreact came with 2 FRP libs of choice, rxjs and mostjs, for any new lib you only
 
 ## FAQ
 
-### How it's different from redux
+### How it's different from redux?
 
 unlike redux, xreact turn FRP to 11 in react, it model problem different
 
@@ -202,7 +203,18 @@ unlike redux, xreact turn FRP to 11 in react, it model problem different
 - there's not such thing as state store, no state will store anywhere, only state transformations
 - FRP lib as your choice, choose any lib your familiar with
 
+### How it's different from cycle.js?
 
+think xreact as a more specify and optimized cycle just for react.
+
+### Why not global state?
+global is state is not scalable, think it as a database, and every component query data from it,however, database are hard to scale, design and maintain.
+
+instead of making state global, we think a better choice of doing such reversely, just have what you want to do(intent) globally instead. So, every component can just broadcast what it's trying to do, but only focus on how to reduce intent into a state transformation for it self.
+
+In this case, one component won't need worry about how the global state structure, and just focus on itself. So, components are more modular and decoupled.
+
+Furher more, it's composable, we can build small x component constructors and compose them at will to create a bigger and powerfult component constructors. It's much easier and flexible by compose small behavior and state into a big component, not destruct a big global state into small components.
 
 ## Thanks to...
 - [rxjs](https://github.com/ReactiveX/rxjs)
