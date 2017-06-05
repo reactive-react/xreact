@@ -5,9 +5,6 @@ general:
 machine:
   node:
     version: 6.6.0
-dependencies:
-  pre:
-    - npm install -g babel-cli
 test:
   post:
     - bash <(curl -s https://codecov.io/bash)

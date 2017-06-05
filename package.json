@@ -1,6 +1,6 @@
 {
   "name": "xreact",
-  "version": "0.2.3",
+  "version": "2.0.0",
   "description": "Functional Reactive State Container for React",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
-    "@types/react": "^15.0.22",
+    "@types/react": "^15.0.26",
     "create-react-class": "^15.5.3",
     "enzyme": "^2.8.2",
     "jest": "^20.0.0",
