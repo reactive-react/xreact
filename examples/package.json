@@ -1,0 +1,40 @@
+{
+  "name": "xreact-examples",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jichao OUYANG",
+  "license": "MIT",
+  "scripts": {
+    "counter": "browserify -p tsify counter/app.jsx | uglifyjs > counter/app.js",
+    "frp-counter": "browserify -p tsify frp-counter/app.jsx | uglifyjs > frp-counter/app.js",
+    "type-n-search": "browserify -p tsify type-n-search/app.jsx | uglifyjs > type-n-search/app.js",
+    "alacarte": "browserify -p tsify alacarte/app.jsx | uglifyjs > alacarte/app.js",
+    "todomvc": "browserify -p tsify todomvc/app.tsx | uglifyjs > todomvc/app.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@reactivex/rxjs": "^5.4.0",
+    "classnames": "^2.2.5",
+    "most": "^1.4.0",
+    "most-subject": "^5.3.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "xreact": "^0.2.3"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.0",
+    "@types/node": "^7.0.22",
+    "@types/react": "^15.0.25",
+    "@types/react-dom": "^15.5.0",
+    "alacarte.js": "^0.2.0",
+    "browserify": "^14.3.0",
+    "jest": "^20.0.4",
+    "ramda": "^0.23.0",
+    "rest": "^2.0.0",
+    "tsify": "^3.0.1",
+    "typescript": "^2.3.3",
+    "uglify-js": "^3.0.11",
+    "union-type": "^0.4.0",
+    "when": "^3.7.8"
+  }
+}

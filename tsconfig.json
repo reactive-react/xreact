@@ -8,10 +8,10 @@
     "target": "es5",
     "outDir": "lib",
     "jsx": "react",
-    "declarationDir": "types",
+    "declarationDir": "lib",
     "declaration": true,
     "noImplicitAny": false,
-    "sourceMap": false,
-    "pretty": true
+    "sourceMap": false
+    // "pretty": true
   }
 }

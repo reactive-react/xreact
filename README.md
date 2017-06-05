@@ -1,71 +1,83 @@
-```
-        (>'o')> ♥ <('o'<)
- _  _  _   _ |_    _   _   _ |_ 
-|  (- (_| (_ |_   ||| (_) _) |_ 
-```
+# xreact
 
-[![Join the chat at https://gitter.im/jcouyang/react-most](https://badges.gitter.im/jcouyang/react-most.svg)](https://gitter.im/jcouyang/react-most?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+> formerly know as react-most, renamed so because mostjs is not madatory anymore.
 
-A Monadic Reactive Composable State Wrapper for React Components
+[![Join the chat at https://gitter.im/jcouyang/xreact](https://badges.gitter.im/jcouyang/xreact.svg)](https://gitter.im/jcouyang/xreact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![CircleCI](https://circleci.com/gh/reactive-react/react-most.svg?style=svg)](https://circleci.com/gh/reactive-react/react-most)
-[![codecov](https://codecov.io/gh/reactive-react/react-most/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/react-most)
-[![npm](https://img.shields.io/npm/dm/react-most.svg)](https://www.npmjs.com/package/react-most)
-[![npm](https://img.shields.io/npm/v/react-most.svg)](https://www.npmjs.com/package/react-most)
-[![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/react-most.svg)](https://greenkeeper.io)
+A Functional Reactive State Wrapper for React Components
 
-[中文 :cn:](https://github.com/reactive-react/react-most/wiki/%E6%95%99%E7%A8%8B)
+[![CircleCI](https://circleci.com/gh/reactive-react/xreact.svg?style=svg)](https://circleci.com/gh/reactive-react/xreact)
+[![codecov](https://codecov.io/gh/reactive-react/xreact/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/xreact)
+[![npm](https://img.shields.io/npm/dm/xreact.svg)](https://www.npmjs.com/package/xreact)
+[![npm](https://img.shields.io/npm/v/xreact.svg)](https://www.npmjs.com/package/xreact)
+[![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/xreact.svg)](https://greenkeeper.io)
+
+
+[中文 :cn:](https://github.com/reactive-react/xreact/wiki/%E6%95%99%E7%A8%8B)
+
 ## Install
-### npm
 ```
-npm install react-most --save
+npm install xreact --save
+# or
+yarn add xreact
 ```
+
 ## What
-`react-most` is a simple, 100 LOC Higher Order Component for React. Its only dependencies are [most](https://github.com/cujojs/most), [most-subject](https://github.com/mostjs-community/subject).
+`xreact` is a lightweight Higher Order State Component for React. 
 
-Data flow in `react-most` is simple and unidirectional, similar to flux.
+Data flow in `xreact` is simple and unidirectional, similar to flux.
 
-![](https://github.com/reactive-react/react-most/wiki/images/react-most-flow.png)
+![](https://github.com/reactive-react/xreact/wiki/images/xreact-flow.png)
 
 ## Terminology
 - **Machine**: a machine can emit `Update` to a timeline `update$`, and can be operated by calling function in `actions`
 - **Plan**: a Plan is a function that describe how to create a `Machine`
-- **Update**: a function `currentState -> nextState` 
-- **Action**: a function that create `Intent`
+- **Update**: a function of `currentState -> nextState` 
+- **Action**: a function that create instance of `Intent`
 - **Intent**: describe what you want to do
 - **Intent Stream**: a timeline of every `Intent` created by every `Action`
 
 ## Quick Start
-sorry we don't have a **book** to document how to use `react-most`, and I don't really need to, but
-there's only 3 things you should notice when using `react-most`, I'll explain by a simple counter app.
 
-Also, you can refer to: 
+sorry we don't have a **book** to document how to use `xreact`, and I don't really need to,
+there's only 3 things you should notice when using `xreact`, I'll explain by a simple counter app.
 
-- various [Examples](https://github.com/reactive-react/react-most/wiki/examples)
-- simple [API](https://github.com/reactive-react/react-most/wiki/api)
-- [Best Practices](https://github.com/reactive-react/react-most/wiki/frp-best-practice)
-- [Wiki](https://github.com/reactive-react/react-most/wiki)
+Also, you can refer more documents here:
+
+- various [Examples](https://github.com/reactive-react/xreact/wiki/examples)
+- simple [API](https://github.com/reactive-react/xreact/wiki/api)
+- [Best Practices](https://github.com/reactive-react/xreact/wiki/frp-best-practice)
+- [Wiki](https://github.com/reactive-react/xreact/wiki)
 
 
-### 1. Create a simple stateless View component
-![](https://github.com/reactive-react/react-most/wiki/images/view.png)
+### 1. Define a simple stateless View component
+
+![](https://github.com/reactive-react/xreact/wiki/images/view.png)
+
 ```html
-const CounterView = props => (
+const CounterView = ({actions, count}) => (
   <div>
-    <button onClick={props.actions.dec}>-</button>
-    <span>{props.count}</span>
-    <button onClick={props.actions.inc}>+</button>
+    <button onClick={actions.dec}>-</button>
+    <span>{count}</span>
+    <button onClick={actions.inc}>+</button>
   </div>
 )
 ```
-### 2. Create a Plan
-![](https://github.com/reactive-react/react-most/wiki/images/behavior.png)
+
+every View component expected a `actions` fields in `props`
+
+### 2. Define a `Plan`
+
+![](https://github.com/reactive-react/xreact/wiki/images/behavior.png)
+
+After we have a pretty view for represention and inteacting interface, we can define how to update the view, or "how to react on actions". In such case:
 
 1. A counter can have actions of `inc` and `dec`, which will send `Intent` of `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` upon being called.
 2. A counter reactively generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
 
 ```js
-const counterable = connect((intent$) => {
+
+const countable = x((intent$) => {
   return {
     update$: intent$.map(intent => {
       switch (intent.type) {
@@ -84,63 +96,86 @@ const counterable = connect((intent$) => {
   }
 })
 ```
-you'll see that the function in `connect` parameter is a `Plan`, the object it return is a `Machine`
+you'll see that the function in `x` is a `Plan`, a `Plan` will take `intent$`(Intent Stream) and return a `Machine`.
+a `Machine` defines
 
-and `connect` return a HoC that you can wrap it to View Component
+- how you can act on the machine 
+- how the machine will react on intents.
 
 ### 3. Connect Plan and View
-![](https://github.com/reactive-react/react-most/wiki/images/wrap.png)
+
+![](https://github.com/reactive-react/xreact/wiki/images/wrap.png)
+
 ```js
-const Counter = counterable(CounterView)
+import {render} from 'react-dom'
+import X from 'xreact/lib/x'
+import * as rx from 'xreact/lib/xs/rx'
+
+const Counter = countable(CounterView)
 
 render(
-  <Most>
+  <X x={rx}>
     <Counter />
-  </Most>,
+  </X>,
   document.getElementById('app')
 );
 ```
 
 ## Features
-Inspired by Redux and Functional Reactive Programming, `react-most` allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and join those streams to form your application's state.
+Inspired by Redux and Functional Reactive Programming, `xreact` allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and subscribe those streams into your application's state.
 
 ### Purely Functional, Declarative, and Monadic
-In imperatively written code, you describe step-by-step how to process data.  With `react-most`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
+In imperatively written code, you describe step-by-step how to process data.  With `xreact`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
-### Composable and Reusable Sinks
-In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, sinks are reusable observable object.
+### Typesafe and scalable
+Rewritten in Typescript, and abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
 
-Wrapper is simply a function and easily composable.
+### Composable and Reusable `Plan`
+In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, the function `x` return is simply a function which can easily compose.
+
 
 ```js
-const countBy1 = connect(...)
-const countBy2 = connect(...)
+const countBy1 = connect(plan1)
+const countBy2 = connect(plan2)
 const Counter = countBy1(countBy2(CounterView))
 // or
 const counterable = compose(countBy1, countBy2)
 const Counter = counterable(CounterView)
 ```
 
+what really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC and no any performance overhead.
 ### Easy to test, no need for mocks
 Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.
 
 ```js
-import {stateHistoryOf, Engine } from 'react-most-spec';
-let counterWrapper = TestUtils.renderIntoDocument(
-        <Most engine={Engine}>
-          <Counter history={true} />
-        </Most>
+import {mount} from 'enzyme'
+import * as rx from 'xreact/lib/xs/rx'
+import {rx as xtest} from 'xreact/lib/xtests'
+const mountx = compose(mount, c => React.createFactory(X)({ x: rx }, c))
+
+let counterX = mountx(
+  <Counter />
 )
-let counter = TestUtils.findRenderedComponentWithType(counterWrapper, Counter)
-counter.actions.inc()
-counter.actions.inc()
-counter.actions.inc()
-expect(stateHistoryOf(counter)[2].count).toBe(3)
+          
+let counter = counterX.find(Counter).getNode()
+let counterView = counterX.find(CounterView)
+let actions = counterView.prop('actions')
+it('add intent to intent$ and go through sink$', () => {
+  return new xtest
+    .do([
+      actions.inc,
+      actions.inc,
+      actions.inc,
+    ])
+    .collect(counter)
+    .then(state => expect(state.count).toBe(3))
+})
+
 ```
 
-see more details about testing at [react-most-spec](https://github.com/reactive-react/react-most-spec) or [todomvc example](https://github.com/reactive-react/react-most/blob/master/examples/todomvc/src/components/__tests__/MainSection-spec.jsx)
+see more details about testing examples at [todomvc example](https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx)
 
-### Async actions
+### Async actions made easy
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
 
 ```js
@@ -151,41 +186,38 @@ intent$.map(promise => most.fromPromise(promise))
 ### Transducers support
 [Transducer](https://github.com/cognitect-labs/transducers-js) is another high-performance, functional way to compose non-monadic data flows.
 
-Writing actions as transducers can improve reusability.
+Writing actions as transducers can improve reusability and readability.
 
-### Time Travel
-Because we have all actions' streams, we can easily reproduce the actions at anytime, or get snapshot of the state's stream and going back in time.
+### Higher level extract and ready for any FRP library
+xreact came with 2 FRP libs of choice, rxjs and mostjs, for any new lib you only need to implement the `StaticStream` with your prefered lib as Higher Kind Type.
 
-By passing the `history` parameter into the options of `connect`
-```js
-connect(intent$=>[/* your awesome flow */], { history: true })(App)
-```
+## [More Documents...](https://github.com/jcouyang/xreact/wiki)
 
-or passing `history` as a prop
-```js
-<Most>
-  <Counter history={true}/>
-</Most>
-```
+## FAQ
 
-A stream with all of the state's history will be created, called `historyStream`.
+### How it's different from redux?
 
-### Modular and Easy to Extend
-If you're more familiar with RxJS, it's easy to use it with `react-most` in place of `most`.  Simply pass a prop called `engine` to the `Most` component.
+unlike redux, xreact turn FRP to 11 in react, it model problem different
 
-> But, I'm strongly RECOMMEND to use the default engine `most.js`, it's how `react-most` originally built for, and production ready.
+- "global" intent stream(using redux's word should be intent store) not global state store
+- there's not such thing as state store, no state will store anywhere, only state transformations
+- FRP lib as your choice, choose any lib your familiar with
 
-```html
-import rxEngine from 'react-most/engine/rx'
-<Most engine={rxEngine}>
-  <App />
-</Most>
-```
+### How it's different from cycle.js?
 
-## [More Documents...](https://github.com/jcouyang/react-most/wiki)
+think xreact as a more specify and optimized cycle just for react.
 
+### Why not global state?
+global is state is not scalable, think it as a database, and every component query data from it,however, database are hard to scale, design and maintain.
+
+instead of making state global, we think a better choice of doing such reversely, just have what you want to do(intent) globally instead. So, every component can just broadcast what it's trying to do, but only focus on how to reduce intent into a state transformation for it self.
+
+In this case, one component won't need worry about how the global state structure, and just focus on itself. So, components are more modular and decoupled.
+
+Furher more, it's composable, we can build small x component constructors and compose them at will to create a bigger and powerfult component constructors. It's much easier and flexible by compose small behavior and state into a big component, not destruct a big global state into small components.
 
 ## Thanks to...
+- [rxjs](https://github.com/ReactiveX/rxjs)
 - [most](https://github.com/cujojs/most)
 - [React](http://facebook.github.io/react/)
 - [redux](https://github.com/rackt/redux)

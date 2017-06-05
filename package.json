@@ -1,46 +1,46 @@
 {
-  "name": "react-most",
-  "version": "1.1.4",
-  "description": "High Prefomance Monadic Reactive State Container for React",
+  "name": "xreact",
+  "version": "2.0.0",
+  "description": "Functional Reactive State Container for React",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jcouyang/react-most.git"
   },
-  "main": "lib/react-most.js",
-  "typings": "types/react-most.d.ts",
+  "main": "lib/x.js",
+  "typings": "lib/x.d.ts",
   "files": [
     "src",
-    "lib",
-    "types"
+    "lib"
   ],
   "scripts": {
-    "license": "(cat LICENSE.txt; cat react-most.js) > react-most.licensed.js && mv react-most.licensed.js react-most.js",
-    "build": "tsc -p .",
+    "build": "tsc",
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "dependencies": {
-    "most-subject": "^5.2.0",
     "prop-types": "^15.5.8"
   },
   "peerDependencies": {
-    "react": "^15.5.4",
+    "@reactivex/rxjs": "^5.4.0",
     "most": "^1.2.2",
-    "@reactivex/rxjs": "^5.4.0"
+    "most-subject": "^5.3.0",
+    "react": "^15.5.4"
   },
   "devDependencies": {
-    "most": "^1.2.2",
     "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
-    "@types/react": "^15.0.22",
+    "@types/react": "^15.0.26",
+    "create-react-class": "^15.5.3",
+    "enzyme": "^2.8.2",
     "jest": "^20.0.0",
     "lodash": "^4.0.0",
+    "most": "^1.2.2",
+    "most-subject": "^5.3.0",
     "react": "^15.5.4",
-    "react-addons-test-utils": "^15.2.0",
     "react-dom": "^15.5.4",
-    "react-most-spec": "^1.1.0",
+    "react-test-renderer": "^15.5.4",
     "redux": "^3.0.4",
     "ts-jest": "^20.0.2",
     "typescript": "^2.3.2"
@@ -64,5 +64,24 @@
     "collectCoverage": true
   },
   "author": "Jichao Ouyang",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "Rx",
+    "RxJS",
+    "ReactiveX",
+    "ReactiveExtensions",
+    "Streams",
+    "Observables",
+    "Observable",
+    "Stream",
+    "React",
+    "most",
+    "mostjs",
+    "FRP",
+    "Reactive",
+    "ES6",
+    "ES2015",
+    "xreact",
+    "typescript"
+  ]
 }

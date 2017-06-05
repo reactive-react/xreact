@@ -5,12 +5,8 @@ general:
 machine:
   node:
     version: 6.6.0
-dependencies:
-  pre:
-    - npm install -g babel-cli
 test:
   post:
-    - cd examples/todomvc && npm install && npm test
     - bash <(curl -s https://codecov.io/bash)
 deployment:
   production:
