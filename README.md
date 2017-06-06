@@ -27,7 +27,7 @@ yarn add xreact
 
 Data flow in `xreact` is simple and unidirectional, similar to flux.
 
-![](https://github.com/reactive-react/xreact/wiki/images/xreact-flow.png)
+![](https://www.evernote.com/l/ABcSUEkq5_xPTrWy_YdF5iM1Fxu14WMB7eAB/image.png)
 
 ## Terminology
 - **Machine**: a machine can emit `Update` to a timeline `update$`, and can be operated by calling function in `actions`
@@ -52,7 +52,7 @@ Also, you can refer more documents here:
 
 ### 1. Define a simple stateless View component
 
-![](https://github.com/reactive-react/xreact/wiki/images/view.png)
+![](https://www.evernote.com/l/ABd-YTQc2FVBjqOEkpiFZDltPloti8a2Hq8B/image.png)
 
 ```html
 const CounterView = ({actions, count}) => (
@@ -68,7 +68,7 @@ every View component expected a `actions` fields in `props`
 
 ### 2. Define a `Plan`
 
-![](https://github.com/reactive-react/xreact/wiki/images/behavior.png)
+![](https://www.evernote.com/l/ABeLlbr3vQNM_JKfcd_W4zfW262lxWJhOsMB/image.png)
 
 After we have a pretty view for represention and inteacting interface, we can define how to update the view, or "how to react on actions". In such case:
 
@@ -76,8 +76,7 @@ After we have a pretty view for represention and inteacting interface, we can de
 2. A counter reactively generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
 
 ```js
-
-const countable = x((intent$) => {
+const plan = (intent$) => {
   return {
     update$: intent$.map(intent => {
       switch (intent.type) {
@@ -94,24 +93,25 @@ const countable = x((intent$) => {
       dec: () => ({ type: 'dec' })
     }
   }
-})
+}
 ```
-you'll see that the function in `x` is a `Plan`, a `Plan` will take `intent$`(Intent Stream) and return a `Machine`.
+a `Plan` will take `intent$`(Intent Stream) and return a `Machine`.
+
 a `Machine` defines
 
 - how you can act on the machine 
 - how the machine will react on intents.
 
-### 3. Connect Plan and View
+### 3. Plan X View
 
-![](https://github.com/reactive-react/xreact/wiki/images/wrap.png)
+![](https://www.evernote.com/l/ABdv2Ks5f7dNQKxyoz7Q1eB9Xm9vy3U11ZMB/image.png)
 
 ```js
 import {render} from 'react-dom'
-import X from 'xreact/lib/x'
+import X, {x} from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
 
-const Counter = countable(CounterView)
+const Counter = x(plan)(CounterView)
 
 render(
   <X x={rx}>
