@@ -120,6 +120,10 @@ render(
   document.getElementById('app')
 );
 ```
+`Counter` is product(x) of `plan` and `CounterView`, which means it can react to `Intent` as it's plan, and update `CounterView`
+
+`<X></X>` will provide a `intent$` instance.
+
 
 ## Features
 Inspired by Redux and Functional Reactive Programming, `xreact` allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and subscribe those streams into your application's state.
@@ -135,12 +139,10 @@ In Redux, reducers' use of `switch` statements can make them difficult to compos
 
 
 ```js
-const countBy1 = connect(plan1)
-const countBy2 = connect(plan2)
-const Counter = countBy1(countBy2(CounterView))
-// or
-const counterable = compose(countBy1, countBy2)
-const Counter = counterable(CounterView)
+const Counter = x(plan1)(x(plan2)(CounterView))
+// is the same as
+const plan1_x_plan2_x = compose(x(plan1), x(plan2))
+const Counter = plan1_x_plan2_x(CounterView)
 ```
 
 what really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC and no any performance overhead.
@@ -179,9 +181,18 @@ see more details about testing examples at [todomvc example](https://github.com/
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
 
 ```js
-intent$.map(promise => most.fromPromise(promise))
-	.flatMap(value => /* use the results */)
+import {Observable} from '@reactivex/rxjs/Observable'
+
+...
+
+intent$.filter(x=>x.kind=='rest')
+  .flatMap(({url}) => Observable.fromPromise(rest(url)))
+  .map(...)
+
+...
 ```
+
+see `rest(url)` will return a `Promise`,
 
 ### Transducers support
 [Transducer](https://github.com/cognitect-labs/transducers-js) is another high-performance, functional way to compose non-monadic data flows.
