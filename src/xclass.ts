@@ -15,9 +15,9 @@ function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component
 }
 
 export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: XcomponentClass<E, I, S>, main: Plan<E, I, S>): XcomponentClass<E, I, S> {
-  return class ConnectNode extends WrappedComponent {
+  return class XNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
-    static displayName = `Connect(${getDisplayName(WrappedComponent)})`
+    static displayName = `X(${getDisplayName(WrappedComponent)})`
     constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[XREACT_ENGINE]
@@ -30,9 +30,9 @@ export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: Xc
   }
 }
 export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): XcomponentClass<E, I, S> {
-  return class ConnectLeaf extends Xcomponent<E, I, S> {
+  return class XLeaf extends Xcomponent<E, I, S> {
     static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
-    static displayName = `Connect(${getDisplayName(WrappedComponent)})`
+    static displayName = `X(${getDisplayName(WrappedComponent)})`
     defaultKeys: string[]
     constructor(props, context: ContextEngine<E, I, S>) {
       super(props, context);

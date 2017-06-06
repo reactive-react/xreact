@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Traveler } from './history'
 import { StaticStream, HKTS, HKT, Subject, Subscription } from './xs'
 
 export const XREACT_ENGINE = '@reactive-react/xreact.engine';
@@ -30,7 +29,6 @@ export interface Xprops<I> {
 
 export class Xcomponent<E extends HKTS, I, S> extends React.PureComponent<Xprops<I>, S> {
   machine: Machine<E, I, S>
-  traveler: Traveler<S>
   subscription: Subscription
   context: ContextEngine<E, I, S>
 }
