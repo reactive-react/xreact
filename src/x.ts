@@ -9,7 +9,7 @@ function isXcomponentClass<E extends HKTS, I, S>(ComponentClass: XcomponentClass
 }
 export type XOrReactComponent<E extends HKTS, I, S> = XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>
 
-export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S> {
+export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = {}): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S> {
   return function(WrappedComponent: XOrReactComponent<E, I, S>) {
     if (isXcomponentClass(WrappedComponent)) {
       return extendXComponentClass(WrappedComponent, main)
