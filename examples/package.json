@@ -19,7 +19,7 @@
     "most-subject": "^5.3.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "xreact": "^0.2.3"
+    "xreact": "^2.0.2"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.0",
