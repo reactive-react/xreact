@@ -1,19 +1,17 @@
+[🇨🇳 中文](https://github.com/reactive-react/xreact/wiki/%E6%95%99%E7%A8%8B) | [🌰 Examples](https://github.com/reactive-react/xreact/examples) | [🎓 Best Practices](https://github.com/reactive-react/xreact/wiki/frp-best-practice) | [ 📖 Wiki](https://github.com/reactive-react/xreact/wiki)
+
 # xreact
-
-> formerly know as react-most, renamed so because mostjs is not madatory anymore.
-
-[![Join the chat at https://gitter.im/jcouyang/xreact](https://badges.gitter.im/jcouyang/xreact.svg)](https://gitter.im/jcouyang/xreact?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Functional Reactive State Wrapper for React Components
 
+> formerly know as react-most, renamed so because mostjs is not madatory anymore.
+
+[![Join the chat at https://gitter.im/jcouyang/react-most](https://badges.gitter.im/jcouyang/react-most.svg)](https://gitter.im/jcouyang/react-most?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![CircleCI](https://circleci.com/gh/reactive-react/xreact.svg?style=svg)](https://circleci.com/gh/reactive-react/xreact)
 [![codecov](https://codecov.io/gh/reactive-react/xreact/branch/master/graph/badge.svg)](https://codecov.io/gh/reactive-react/xreact)
 [![npm](https://img.shields.io/npm/dm/xreact.svg)](https://www.npmjs.com/package/xreact)
 [![npm](https://img.shields.io/npm/v/xreact.svg)](https://www.npmjs.com/package/xreact)
 [![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/xreact.svg)](https://greenkeeper.io)
-
-
-[中文 :cn:](https://github.com/reactive-react/xreact/wiki/%E6%95%99%E7%A8%8B)
 
 ## Install
 ```
@@ -44,10 +42,6 @@ there's only 3 things you should notice when using `xreact`, I'll explain by a s
 
 Also, you can refer more documents here:
 
-- various [Examples](https://github.com/reactive-react/xreact/wiki/examples)
-- simple [API](https://github.com/reactive-react/xreact/wiki/api)
-- [Best Practices](https://github.com/reactive-react/xreact/wiki/frp-best-practice)
-- [Wiki](https://github.com/reactive-react/xreact/wiki)
 
 
 ### 1. Define a simple stateless View component
