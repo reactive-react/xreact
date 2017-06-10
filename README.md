@@ -1,4 +1,4 @@
-[🇨🇳 中文](https://github.com/reactive-react/xreact/wiki/%E6%95%99%E7%A8%8B) | [🌰 Examples](https://github.com/reactive-react/xreact/examples) | [🎓 Best Practices](https://github.com/reactive-react/xreact/wiki/frp-best-practice) | [ 📖 Wiki](https://github.com/reactive-react/xreact/wiki)
+[🇨🇳 中文](https://github.com/reactive-react/xreact/wiki/%E6%95%99%E7%A8%8B) | [🌰 Examples](examples) | [🎓 Best Practices](https://github.com/reactive-react/xreact/wiki/frp-best-practice) | [ 📖 Wiki](https://github.com/reactive-react/xreact/wiki)
 
 # xreact
 
