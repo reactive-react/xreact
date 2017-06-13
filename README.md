@@ -169,7 +169,7 @@ it('add intent to intent$ and go through sink$', () => {
 
 ```
 
-see more details about testing examples at [todomvc example](https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx)
+see more details about testing examples at <https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx>
 
 ### Async actions made easy
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
@@ -188,15 +188,10 @@ intent$.filter(x=>x.kind=='rest')
 
 see `rest(url)` will return a `Promise`,
 
-### Transducers support
-[Transducer](https://github.com/cognitect-labs/transducers-js) is another high-performance, functional way to compose non-monadic data flows.
-
-Writing actions as transducers can improve reusability and readability.
-
 ### Higher level extract and ready for any FRP library
 xreact came with 2 FRP libs of choice, rxjs and mostjs, for any new lib you only need to implement the `StaticStream` with your prefered lib as Higher Kind Type.
 
-## [More Documents...](https://github.com/jcouyang/xreact/wiki)
+more details about HKT implementation in TypeScript is [here](https://github.com/gcanti/fp-ts)
 
 ## FAQ
 

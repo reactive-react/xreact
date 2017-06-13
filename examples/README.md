@@ -17,3 +17,4 @@ e.g. if you want to build todomvc example, `yarn todomvc`
 - [frp-counter](https://xreact.oyanglul.us/examples/frp-counter/)
 - [todomvc](https://xreact.oyanglul.us/examples/todomvc/)
 - [type-n-search](https://xreact.oyanglul.us/examples/type-n-search/)
+- [firebase](https://github.com/jcouyang/gulugulu)
