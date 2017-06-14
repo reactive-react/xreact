@@ -3,7 +3,6 @@ import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
 import { StaticStream, HKTS, HKT } from './xs'
-
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.shape({
     intent$: PropTypes.object,

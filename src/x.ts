@@ -4,10 +4,10 @@ import { StaticStream, HKTS, HKT, Subject } from './xs'
 import { Plan, Xcomponent, XcomponentClass, Engine, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
 
-function isXcomponentClass<E extends HKTS, I, S>(ComponentClass: XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is XcomponentClass<E, I, S> {
+export function isXcomponentClass<E extends HKTS, I, S>(ComponentClass: XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is XcomponentClass<E, I, S> {
   return (<XcomponentClass<E, I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
 }
-export type XOrReactComponent<E extends HKTS, I, S> = XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>
+export type XOrReactComponent<E extends HKTS, I, S> = XcomponentClass<E, I, S> | React.ComponentClass<S> | React.SFC<S>
 
 export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = {}): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S> {
   return function(WrappedComponent: XOrReactComponent<E, I, S>) {
@@ -18,7 +18,6 @@ export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = {}): (Wrappe
     }
   };
 }
-
 
 export default class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}> {
   static childContextTypes = CONTEXT_TYPE
