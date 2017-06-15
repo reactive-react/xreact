@@ -1,6 +1,6 @@
 import { HKTS } from './xs'
 import { Plan, Xcomponent, XcomponentClass, Engine, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
-import { isXcomponentClass, XOrReactComponent, x } from './x'
+import { XOrReactComponent, x } from './x'
 import { extendXComponentClass, genXComponentClass } from './xclass'
 export class FantasyX<E extends HKTS, I, S> {
   plan: Plan<E, I, S>

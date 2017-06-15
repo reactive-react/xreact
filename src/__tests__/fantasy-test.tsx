@@ -2,9 +2,12 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
-import { pure, map } from '../fantasy'
+import { Plan } from '../interfaces'
+import { pure, map, lift2 } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
+import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
+import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import * as createClass from 'create-react-class'
 import { rx as Xtest } from '../xtests'
 import * as _ from 'lodash/fp'
@@ -90,6 +93,64 @@ describe('actions', () => {
         ])
         .collect(counter)
         .then(x => expect(x.count).toBe(6))
+    })
+  })
+
+  describe('lift2', () => {
+    let input1
+    beforeEach(() => {
+      function plus(p1: Plan<rx.URI, Intent, any>, p2: Plan<rx.URI, Intent, any>) {
+        return function(intent$) {
+          let machine1 = p1(intent$),
+            machine2 = p2(intent$)
+          let update$ = Observable.combineLatest(
+            machine1.update$,
+            machine2.update$,
+            (s1, s2) => (state => ({ sum: s1(state).value + s2(state).value }))
+          )
+          return { actions, update$ }
+        }
+      }
+      let fantasyX1 = pure<rx.URI, Intent, any>(intent$ => {
+        return {
+          update$: intent$.filter(i => i.type == 'change1')
+            .map(i => state => ({ value: i.value }))
+        }
+      })
+
+      let fantasyX2 = pure<rx.URI, Intent, any>(intent$ => {
+        return {
+          update$: intent$.filter(i => i.type == 'change2')
+            .map(i => state => ({ value: i.value }))
+        }
+      })
+
+      let View: React.SFC<any> = props => (
+        <div>
+          <span className="count">{props.sum}</span>
+        </div>
+      )
+
+      View.defaultProps = { sum: 0, value: 0 }
+
+      Counter = lift2<rx.URI, Intent, any, any, any>(plus)(fantasyX1, fantasyX2).apply(View)
+
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(View)
+      input1 = counterView.find('#input1')
+      actions = counterView.prop('actions')
+      t = new Xtest();
+    })
+    it.only('inc will + 2', () => {
+      return t
+        .do([
+          () => actions.fromEvent({ type: 'change1', value: 3 }),
+          () => actions.fromEvent({ type: 'change2', value: 10 })
+
+        ])
+        .collect(counter)
+        .then(x => expect(x.sum).toBe(13))
     })
   })
 })
