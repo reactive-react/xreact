@@ -1,4 +1,4 @@
-import { Stream, empty } from 'most'
+import { Stream, empty, combine } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription, StreamOps } from './index'
 
@@ -13,6 +13,7 @@ StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }
 
+StreamOps.prototype.combine = combine
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: Stream<A>): Stream<B> {
   return fa.map(f)
 }

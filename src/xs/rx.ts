@@ -4,6 +4,7 @@ import { Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
+import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
 
 declare module './index' {
   interface HKT<A> {
@@ -12,6 +13,10 @@ declare module './index' {
 }
 
 StreamOps.prototype.empty = Observable.empty
+
+StreamOps.prototype.combine = function(f, a, b) {
+  return Observable.combineLatest(a, b, f)
+}
 
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: Observable<A>): Observable<B> {
   return fa.map(f)

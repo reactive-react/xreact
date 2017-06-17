@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { pure, map, lift2 } from '../fantasy'
+import { PlanX, pure, map, lift2, liftCombine } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -12,7 +12,6 @@ import * as createClass from 'create-react-class'
 import { rx as Xtest } from '../xtests'
 import * as _ from 'lodash/fp'
 const compose = (f, g) => x => f(g(x));
-
 
 const CounterView: React.SFC<any> = props => (
   <div className="counter-view">
@@ -71,12 +70,12 @@ describe('actions', () => {
   })
   describe('map', () => {
     beforeEach(() => {
-      let newPlan = plan => intent$ => ({
-        update$: plan(intent$).update$.map(f => compose(f, f)),
+      let newPlan = (plan: PlanX<rx.URI, Intent, any>) => new PlanX<rx.URI, Intent, any>(intent$ => ({
+        update$: plan.apply(intent$).update$.map(f => compose(f, f)),
         actions: {
           inc: () => ({ type: 'inc' }),
         }
-      })
+      }))
       Counter = fantasyX.map(plan => newPlan(plan)).apply(CounterView)
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()
@@ -99,17 +98,17 @@ describe('actions', () => {
   describe('lift2', () => {
     let input1
     beforeEach(() => {
-      function plus(p1: Plan<rx.URI, Intent, any>, p2: Plan<rx.URI, Intent, any>) {
-        return function(intent$) {
-          let machine1 = p1(intent$),
-            machine2 = p2(intent$)
+      function plus(p1: PlanX<rx.URI, Intent, any>, p2: PlanX<rx.URI, Intent, any>) {
+        return new PlanX<rx.URI, Intent, any>(function(intent$) {
+          let machine1 = p1.apply(intent$),
+            machine2 = p2.apply(intent$)
           let update$ = Observable.combineLatest(
             machine1.update$,
             machine2.update$,
             (s1, s2) => (state => ({ sum: s1(state).value + s2(state).value }))
           )
           return { actions, update$ }
-        }
+        })
       }
       let fantasyX1 = pure<rx.URI, Intent, any>(intent$ => {
         return {

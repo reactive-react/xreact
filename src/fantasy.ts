@@ -25,6 +25,21 @@ export class PlanX<E extends HKTS, I, A> {
     }
   }
 
+  combine<B, C>(
+    f: (ua: Update<A>, ub: Update<B>) => Update<C>,
+    planB: PlanX<E, I, B>
+  ): PlanX<E, I, C> {
+    return new PlanX<E, I, C>(intent$ => {
+      let machineB = planB.apply(intent$),
+        machineA = this.apply(intent$)
+      let update$ = streamOps.combine<Update<A>, Update<B>, Update<C>>(
+        f, machineA.update$, machineB.update$
+      )
+      let actions = Object.assign({}, machineA.actions, machineB.actions)
+      return { update$, actions }
+    })
+  }
+
   map<B>(f: (a: Update<A>) => Update<B>): PlanX<E, I, B> {
     return new PlanX<E, I, B>(intent$ => {
       let machine = this.apply(intent$)
@@ -62,6 +77,13 @@ export function map<E extends HKTS, I, A, B>(
   return fa.map(f)
 }
 
+export function overUpdate<E extends HKTS, I, A, B>(
+  f: (update: Update<A>) => Update<B>,
+  fa: FantasyX<E, I, A>
+): FantasyX<E, I, B> {
+  return fa.map(plan => plan.map(f))
+}
+
 export function lift<E extends HKTS, I, A, B>(
   f: (plan: PlanX<E, I, A>) => PlanX<E, I, B>
 ): (fa: FantasyX<E, I, A>) => FantasyX<E, I, B> {
@@ -72,4 +94,10 @@ export function lift2<E extends HKTS, I, A, B, C>(
   f: (plan1: PlanX<E, I, A>, plan2: PlanX<E, I, B>) => PlanX<E, I, C>
 ): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, B>) => FantasyX<E, I, C> {
   return (fa1, fa2) => new FantasyX(f(fa1.plan, fa2.plan).apply)
+}
+
+export function liftCombine<E extends HKTS, I, A, B, C>(
+  f: (ua: Update<A>, ub: Update<B>) => Update<C>
+): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, B>) => FantasyX<E, I, C> {
+  return lift2<E, I, A, B, C>((p1, p2) => p1.combine(f, p2))
 }
