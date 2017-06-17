@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StaticStream, HKTS, HKT, Subject, Subscription } from './xs'
+import { XStream, HKTS, HKT, Subject, Subscription } from './xs'
 
 export const XREACT_ENGINE = '@reactive-react/xreact.engine';
 
@@ -55,7 +55,7 @@ export interface Engine<E extends HKTS, I, S> {
 }
 
 export interface XProps<A extends HKTS> {
-  x: StaticStream<A>
+  x: XStream<A>
 }
 export interface ContextEngine<E extends HKTS, I, H> {
   [name: string]: Engine<E, I, H>

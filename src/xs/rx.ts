@@ -4,8 +4,6 @@ import { StaticStream, Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
-import '@reactivex/rxjs/dist/cjs/add/operator/toPromise'
-import '@reactivex/rxjs/dist/cjs/add/operator/take'
 
 declare module './index' {
   interface HKT<A> {
