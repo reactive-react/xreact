@@ -125,6 +125,12 @@ Inspired by Redux and Functional Reactive Programming, `xreact` allows you to mo
 ### Purely Functional, Declarative, and Monadic
 In imperatively written code, you describe step-by-step how to process data.  With `xreact`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
+### Fantasy Land<sup>beta</sup>
+
+![](https://github.com/fantasyland/fantasy-land/raw/master/logo.png)
+
+There's also [Fantasy Land](https://github.com/fantasyland/fantasy-land) implementation in `src/fantasy.ts`, you can see [bmi calculator example](https://github.com/reactive-react/xreact/blob/master/examples/bmi-calc/app.tsx) to get the idea.
+
 ### Typesafe and scalable
 Rewritten in Typescript, and abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
 
@@ -140,6 +146,7 @@ const Counter = plan1_x_plan2_x(CounterView)
 ```
 
 what really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC and no any performance overhead.
+
 ### Easy to test, no need for mocks
 Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.
 
