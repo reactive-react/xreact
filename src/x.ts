@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { extendXComponentClass, genXComponentClass, CONTEXT_TYPE } from './xclass'
-import { StaticStream, HKTS, HKT, Subject } from './xs'
+import { streamOps, HKTS, Subject } from './xs'
 import { Plan, Xcomponent, XcomponentClass, Engine, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
 
@@ -25,9 +25,8 @@ export default class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}
     let XClass = this.props.x
     return {
       [XREACT_ENGINE]: {
-        intent$: XClass.subject() as Subject<E, I>,
-        history$: XClass.subject() as Subject<E, H>,
-        operators: XClass
+        intent$: streamOps.subject() as Subject<E, I>,
+        history$: streamOps.subject() as Subject<E, H>
       }
     }
   }

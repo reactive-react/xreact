@@ -2,12 +2,8 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X, { x } from '../x';
-import * as rx from '../xs/rx'
-import * as most from '../xs/most'
-import { Observable } from '@reactivex/rxjs'
-import { StaticStream } from '../xs'
 import * as createClass from 'create-react-class'
-import * as xtest from '../xtests'
+
 const compose = (f, g) => x => f(g(x));
 
 
@@ -59,14 +55,19 @@ const xcountable = x<rx.URI, Intent, any>((intent$) => {
 })
 
 let Counter = xcountable(CounterView);
-const Xs = { rx, most }
-for (let name in Xs) {
-  let Xtest = xtest[name]
-  let mountx = compose(mount, y => React.createFactory(X)({ x: Xs[name] }, y))
+const Xs = ['most', 'rx']
+for (let name of Xs) {
   describe('X=' + name, () => {
+    let engine, Xtest, mountx
+    beforeEach(() => {
+      engine = require(`../xs/${name}`)
+      Xtest = require(`../xtests/${name}`).default
+      mountx = compose(mount, y => React.createFactory(X)({ x: engine }, y))
+    })
     describe('actions', () => {
       let counterWrapper, counter, t, counterView, actions
       beforeEach(() => {
+        console.log(engine)
         counterWrapper = mountx(<Counter />)
         counter = counterWrapper.find(Counter).getNode()
         counterView = counterWrapper.find(CounterView)

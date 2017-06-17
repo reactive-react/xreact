@@ -43,7 +43,7 @@
     "react-test-renderer": "^15.5.4",
     "redux": "^3.0.4",
     "ts-jest": "^20.0.2",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.4"
   },
   "jest": {
     "transform": {

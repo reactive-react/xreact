@@ -1,8 +1,6 @@
 import { Stream } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
-import { Subscription } from './index'
-export const URI = 'Stream'
-export type URI = typeof URI
+import { Subscription, StreamOps, StaticStream } from './index'
 
 declare module './index' {
   interface HKT<A> {
@@ -10,20 +8,24 @@ declare module './index' {
   }
 }
 
-export function map<A, B>(f: (a: A) => B, fa: Stream<A>): Stream<B> {
+StreamOps.prototype.merge = function(a, b) {
+  return a.merge(b)
+}
+
+StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: Stream<A>): Stream<B> {
   return fa.map(f)
 }
-export function subject<A>() {
+StreamOps.prototype.subject = function <A>() {
   return sync()
 }
 
-export function subscribe<A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {
+StreamOps.prototype.subscribe = function <A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {
   return fa.recoverWith(x => {
     console.error(x)
     return fa
   }).subscribe({ next, error: x => console.error(x), complete }) as Subscription
 }
 
-export function merge<A>(a: Stream<A>, b: Stream<A>): Stream<A> {
-  return a.merge(b)
-}
+export const URI = 'Stream'
+export type URI = typeof URI
+

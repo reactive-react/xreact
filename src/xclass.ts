@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
-import { StaticStream, HKTS, HKT } from './xs'
+import { streamOps, HKTS, HKT } from './xs'
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.shape({
     intent$: PropTypes.object,
@@ -22,7 +22,7 @@ export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: Xc
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
-        update$: engine.operators.merge<Update<S>>(this.machine.update$, update$),
+        update$: streamOps.merge<Update<S>>(this.machine.update$, update$),
         actions: Object.assign({}, bindActions(actions, context[XREACT_ENGINE].intent$, this), this.machine.actions)
       }
     }
@@ -52,7 +52,7 @@ export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React
       this.setState(state => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
     }
     componentDidMount() {
-      this.subscription = this.context[XREACT_ENGINE].operators.subscribe(
+      this.subscription = streamOps.subscribe(
         this.machine.update$,
         action => {
           if (action instanceof Function) {

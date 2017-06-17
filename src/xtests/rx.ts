@@ -1,4 +1,5 @@
 import { XREACT_ENGINE } from '../interfaces'
+
 import { doSequence } from './util'
 export default function Test() {
   this.plans = 0
@@ -14,6 +15,7 @@ Test.prototype.do = function(things) {
 }
 Test.prototype.collect = function(component) {
   let latestState
+  console.log(component.context[XREACT_ENGINE].history$.toPromise, '..................')
   if (this.plans != 0) {
     latestState = component.context[XREACT_ENGINE].history$.take(this.plans).toPromise()
   } else {
