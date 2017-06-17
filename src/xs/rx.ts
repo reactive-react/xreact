@@ -4,6 +4,8 @@ import { Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
+import '@reactivex/rxjs/dist/cjs/add/operator/filter'
+import '@reactivex/rxjs/dist/cjs/add/observable/empty'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
 
 declare module './index' {

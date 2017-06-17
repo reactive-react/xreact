@@ -9,8 +9,8 @@ export class PlanX<E extends HKTS, I, A> {
     this.apply = plan
   }
 
-  static empty<F extends HKTS, A>() {
-    return new PlanX(intent$ => ({
+  static empty<F extends HKTS, I, A>() {
+    return new PlanX<F, I, A>(intent$ => ({
       update$: streamOps.empty() as HKT<Update<A>>[F],
       actions: {}
     }))

@@ -10,6 +10,7 @@
     "type-n-search": "browserify -p tsify type-n-search/app.jsx | uglifyjs > type-n-search/app.js",
     "alacarte": "browserify -p tsify alacarte/app.jsx | uglifyjs > alacarte/app.js",
     "todomvc": "browserify -p tsify todomvc/app.tsx | uglifyjs > todomvc/app.js",
+    "bmi-calc": "browserify -p tsify bmi-calc/app.tsx | uglifyjs > bmi-calc/app.js",
     "test": "jest"
   },
   "dependencies": {

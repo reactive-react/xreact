@@ -11,6 +11,7 @@ export interface Subscription {
 }
 
 export type Subject<F extends HKTS, A> = HKT<A>[F] & FantasySubject<A>
+
 export interface XStream<F extends HKTS> {
   readonly URI: F
 }
