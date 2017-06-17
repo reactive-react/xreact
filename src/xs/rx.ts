@@ -1,6 +1,6 @@
 import { Observable } from '@reactivex/rxjs/dist/cjs/Observable'
 import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
-import { StaticStream, Subscription, StreamOps } from './index'
+import { Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'

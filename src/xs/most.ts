@@ -1,6 +1,6 @@
 import { Stream } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
-import { Subscription, StreamOps, StaticStream } from './index'
+import { Subscription, StreamOps } from './index'
 
 declare module './index' {
   interface HKT<A> {
@@ -28,4 +28,3 @@ StreamOps.prototype.subscribe = function <A>(fa: Stream<A>, next: (v: A) => void
 
 export const URI = 'Stream'
 export type URI = typeof URI
-
