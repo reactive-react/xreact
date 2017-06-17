@@ -17,6 +17,7 @@ export interface XStream<F extends HKTS> {
 
 export class StreamOps<F extends HKTS> { }
 export interface StreamOps<F extends HKTS> {
+  empty<A>(): HKT<A>[F]
   merge<A>(
     a: HKT<A>[F],
     b: HKT<A>[F]

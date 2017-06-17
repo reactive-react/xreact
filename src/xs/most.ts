@@ -1,4 +1,4 @@
-import { Stream } from 'most'
+import { Stream, empty } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription, StreamOps } from './index'
 
@@ -8,6 +8,7 @@ declare module './index' {
   }
 }
 
+StreamOps.prototype.empty = empty
 StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }

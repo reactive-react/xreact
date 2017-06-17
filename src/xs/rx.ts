@@ -11,6 +11,8 @@ declare module './index' {
   }
 }
 
+StreamOps.prototype.empty = Observable.empty
+
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: Observable<A>): Observable<B> {
   return fa.map(f)
 }
