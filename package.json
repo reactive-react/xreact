@@ -30,7 +30,7 @@
   "devDependencies": {
     "@reactivex/rxjs": "^5.4.0",
     "@types/jest": "^19.2.3",
-    "@types/node": "^7.0.18",
+    "@types/node": "^8.0.0",
     "@types/react": "^15.0.26",
     "create-react-class": "^15.5.3",
     "enzyme": "^2.8.2",
