@@ -1,5 +1,5 @@
 import { HKTS, HKT, streamOps } from './xs'
-import { Plan, Xcomponent, XcomponentClass, Engine, Update, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
+import { Plan, Actions, Xcomponent, XcomponentClass, Engine, Update, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 import { XOrReactComponent, x } from './x'
 import { extendXComponentClass, genXComponentClass } from './xclass'
 
@@ -48,6 +48,20 @@ export class PlanX<E extends HKTS, I, A> {
         machine.update$
       )
       return { update$, actions: machine.actions }
+    })
+  }
+
+  bimap<B>(
+    fu: (a: Update<A>) => Update<B>,
+    fa: (a: Actions<I>) => Actions<I>
+  ): PlanX<E, I, B> {
+    return new PlanX<E, I, B>(intent$ => {
+      let machine = this.apply(intent$)
+      let update$ = streamOps.map<Update<A>, Update<B>>(
+        update => fu(update),
+        machine.update$
+      )
+      return { update$, actions: fa(machine.actions) }
     })
   }
 }
