@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { PlanX, pure, map, lift2, liftCombine } from '../fantasy'
+import { State, Partial, PlanX, pure, map, lift2, combine } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -95,32 +95,26 @@ describe('actions', () => {
     })
   })
 
-  describe('lift2', () => {
+  describe('combine', () => {
     let input1
     beforeEach(() => {
-      function plus(p1: PlanX<rx.URI, Intent, any>, p2: PlanX<rx.URI, Intent, any>) {
-        return new PlanX<rx.URI, Intent, any>(function(intent$) {
-          let machine1 = p1.apply(intent$),
-            machine2 = p2.apply(intent$)
-          let update$ = Observable.combineLatest(
-            machine1.update$,
-            machine2.update$,
-            (s1, s2) => (state => ({ sum: s1(state).value + s2(state).value }))
-          )
-          return { actions, update$ }
-        })
-      }
-      let fantasyX1 = pure<rx.URI, Intent, any>(intent$ => {
+      let fantasyX1 = pure<rx.URI, Intent, ViewProps>(intent$ => {
         return {
           update$: intent$.filter(i => i.type == 'change1')
-            .map(i => state => ({ value: i.value }))
+            .map(i =>
+              State.pure<ViewProps, Partial<ViewProps>>(
+                { value0: i.value }
+              ))
         }
       })
 
       let fantasyX2 = pure<rx.URI, Intent, any>(intent$ => {
         return {
           update$: intent$.filter(i => i.type == 'change2')
-            .map(i => state => ({ value: i.value }))
+            .map(i =>
+              State.pure<ViewProps, Partial<ViewProps>>(
+                { value1: i.value }
+              ))
         }
       })
 
@@ -130,9 +124,22 @@ describe('actions', () => {
         </div>
       )
 
-      View.defaultProps = { sum: 0, value: 0 }
+      View.defaultProps = { sum: 0, value0: 0, value1: 0 }
+      interface ViewProps {
+        sum: number,
+        value0: number,
+        value1: number
+      }
 
-      Counter = lift2<rx.URI, Intent, any, any, any>(plus)(fantasyX1, fantasyX2).apply(View)
+      Counter = combine<rx.URI, Intent, ViewProps>((S1, S2) => {
+        return S1.chain(s1 => {
+          return S2.chain(s2 => {
+            return State.pure<ViewProps, Partial<ViewProps>>({
+              sum: s1.value0 + s2.value1
+            })
+          })
+        })
+      })(fantasyX1, fantasyX2).apply(View)
 
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()
