@@ -35,16 +35,16 @@ export class State<S, A> {
     return this.runState(state).s
   }
 
-  get(): State<S, S> {
+  static get<S>(): State<S, S> {
     return new State((s: S) => ({ s: s, a: s }))
   }
 
-  put(s) {
-    return new State((_) => ({ a: null, s: s }))
+  static put<S>(s: S): State<S, {}> {
+    return new State((_: S) => ({ a: null, s: s }))
   }
 
-  modify(f) {
-    return new State(s => ({ a: null, s: f(s) }))
+  static modify<S>(f: (s: S) => S): State<S, {}> {
+    return new State((s: S) => ({ a: null, s: f(s) }))
   }
 }
 
