@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { State, StateP, Partial, PlanX, pure, map, lift2 } from '../fantasy'
+import { State, StateP, Partial, PlanX, pure, map, lift2, lift } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -37,13 +37,14 @@ const fantasyX = pure<rx.URI, Intent, CountProps>((intent$) => {
       switch (intent.type) {
         case 'inc':
           return State.get<CountProps>()
-            .chain(state => State.pure<CountProps, Partial<CountProps>>(
-              { count: state.count + 1 }
-            ))
+            .chain(state =>
+              State.pure(
+                { count: state.count + 1 }
+              ))
 
         case 'dec':
           return State.get<CountProps>()
-            .chain(state => State.pure<CountProps, Partial<CountProps>>(
+            .chain(state => State.pure(
               { count: state.count - 1 }
             ))
         default:
@@ -83,10 +84,35 @@ describe('actions', () => {
   describe('map', () => {
     beforeEach(() => {
       Counter = fantasyX.map<CountProps>(s => s.chain(
-        a => State.pure<CountProps, Partial<CountProps>>(
+        a => State.pure(
           { count: a.count * 2 }
         )))
         .apply(CounterView)
+
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest();
+    })
+    it('inc will + 1 then * 2', () => {
+      return t
+        .do([
+          actions.inc,
+          actions.inc,
+          actions.inc,
+        ])
+        .collect(counter)
+        .then(x => expect(x.count).toBe(14))
+    })
+  })
+
+  describe('lift', () => {
+    beforeEach(() => {
+      Counter = lift<rx.URI, Intent, CountProps, CountProps>(s => s.chain(
+        a => State.pure(
+          { count: a.count * 2 }
+        )))(fantasyX).apply(CounterView)
 
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()
@@ -112,7 +138,7 @@ describe('actions', () => {
         return {
           update$: intent$.filter(i => i.type == 'change1')
             .map(i =>
-              State.pure<ViewProps, Partial<ViewProps>>(
+              State.pure(
                 { value0: i.value }
               ))
         }
@@ -122,7 +148,7 @@ describe('actions', () => {
         return {
           update$: intent$.filter(i => i.type == 'change2')
             .map(i =>
-              State.pure<ViewProps, Partial<ViewProps>>(
+              State.pure(
                 { value1: i.value }
               ))
         }
@@ -145,7 +171,7 @@ describe('actions', () => {
       Counter = lift2<rx.URI, Intent, ViewProps, ViewProps, ViewProps>((S1, S2) => {
         return S1.chain(s1 => {
           return S2.chain(s2 => {
-            return State.pure<ViewProps, Partial<ViewProps>>({
+            return State.pure({
               sum: s1.value0 + s2.value1
             })
           })

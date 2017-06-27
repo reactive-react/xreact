@@ -17,8 +17,8 @@ export class State<S, A> {
   constructor(runState: (s: S) => pair<S, A>) {
     this.runState = runState
   }
-  static pure<S, A>(a: A) {
-    return new State((s: S) => ({ s: s, a: a }))
+  static pure<A>(a: A) {
+    return new State((s: any) => ({ s: s, a: a }))
   }
 
   chain<B>(f: (a: A) => State<S, B>): State<S, B> {
