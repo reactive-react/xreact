@@ -8,6 +8,7 @@
     "lib": ["es2015","dom"],
     "target": "es5",
     "outDir": "lib",
+    "strict": true,
     "jsx": "react",
     "declarationDir": "lib",
     "declaration": true,

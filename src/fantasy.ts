@@ -40,12 +40,12 @@ export class State<S, A> {
     return new State((s: S) => ({ s: s, a: s }))
   }
 
-  static put<S>(s: S): State<S, {}> {
-    return new State((_: S) => ({ a: null, s: s }))
+  static put<S>(s: S): State<S, void> {
+    return new State((_: S) => ({ a: undefined, s: s }))
   }
 
-  static modify<S>(f: (s: S) => S): State<S, {}> {
-    return new State((s: S) => ({ a: null, s: f(s) }))
+  static modify<S>(f: (s: S) => S): State<S, void> {
+    return new State((s: S) => ({ a: undefined, s: f(s) }))
   }
 }
 
@@ -107,7 +107,7 @@ export class PlanX<E extends HKTS, I, A> {
     return intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, Update<A>>(
-        s => (state => s.runA(state)),
+        s => s.runA.bind(s),
         machine.update$
       )
       return { update$, actions: machine.actions }
@@ -124,7 +124,7 @@ export class PlanX<E extends HKTS, I, A> {
         update => fu(update),
         machine.update$
       )
-      return { update$, actions: fa(machine.actions) }
+      return { update$, actions: machine.actions ? fa(machine.actions) : {} }
     })
   }
 }

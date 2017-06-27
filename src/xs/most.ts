@@ -21,7 +21,7 @@ StreamOps.prototype.subject = function <A>() {
   return sync()
 }
 
-StreamOps.prototype.subscribe = function <A>(fa: Stream<A>, next: (v: A) => void, complete?: () => void) {
+StreamOps.prototype.subscribe = function <A>(fa: Stream<A>, next: (v: A) => void, complete: () => void) {
   return fa.recoverWith(x => {
     console.error(x)
     return fa
