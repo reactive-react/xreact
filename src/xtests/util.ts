@@ -1,14 +1,19 @@
-export default function Test() {
-  this.plans = 0
-  this.things = []
-}
-Test.prototype.plan = function(n) {
-  this.plans = n
-  return this
-}
-Test.prototype.do = function(things) {
-  this.things = things
-  return this
+export class Test {
+  plans: number
+  things: any[]
+  constructor() {
+    this.plans = 0
+    this.things = []
+  }
+  plan(n) {
+    this.plans = n
+    return this
+  }
+
+  do(things) {
+    this.things = things
+    return this
+  }
 }
 
 export function doSequence(tasks) {
