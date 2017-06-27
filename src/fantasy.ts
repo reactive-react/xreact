@@ -2,6 +2,7 @@ import { HKTS, Subject, HKT, streamOps } from './xs'
 import { Plan as Plan0, Actions, Xcomponent, XcomponentClass, Engine, Update, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 import { XOrReactComponent, x } from './x'
 import { extendXComponentClass, genXComponentClass } from './xclass'
+
 export type Partial<T> = {
   [P in keyof T]?: T[P];
 }
@@ -136,8 +137,8 @@ export class FantasyX<E extends HKTS, I, S> {
   apply(WrappedComponent) {
     return x(this.plan.toPlan())(WrappedComponent)
   }
-  map<A>(f: (plan: PlanX<E, I, S>) => PlanX<E, I, A>): FantasyX<E, I, A> {
-    return new FantasyX(f(this.plan).apply)
+  map<A>(f: (s: StateP<S>) => StateP<A>): FantasyX<E, I, A> {
+    return new FantasyX(this.plan.map(f).apply)
   }
   chain<A>(f: (plan: PlanX<E, I, S>) => FantasyX<E, I, A>): FantasyX<E, I, A> {
     return f(this.plan)
@@ -150,25 +151,19 @@ export function pure<E extends HKTS, I, S>(f: Plan<E, I, S>): FantasyX<E, I, S> 
 }
 
 export function map<E extends HKTS, I, A, B>(
-  f: (plan: PlanX<E, I, A>) => PlanX<E, I, B>, fa: FantasyX<E, I, A>
+  f: (s: StateP<A>) => StateP<B>, fa: FantasyX<E, I, A>
 ): FantasyX<E, I, B> {
   return fa.map(f)
 }
 
 export function lift<E extends HKTS, I, A, B>(
-  f: (plan: PlanX<E, I, A>) => PlanX<E, I, B>
+  f: (s: StateP<A>) => StateP<B>
 ): (fa: FantasyX<E, I, A>) => FantasyX<E, I, B> {
   return fa => fa.map(f)
 }
 
 export function lift2<E extends HKTS, I, A, B, C>(
-  f: (plan1: PlanX<E, I, A>, plan2: PlanX<E, I, B>) => PlanX<E, I, C>
+  f: (s1: StateP<A>, s2: StateP<B>) => StateP<C>
 ): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, B>) => FantasyX<E, I, C> {
-  return (fa1, fa2) => new FantasyX(f(fa1.plan, fa2.plan).apply)
-}
-
-export function combine<E extends HKTS, I, A>(
-  f: (ua: StateP<A>, ub: StateP<A>) => StateP<A>
-): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, A>) => FantasyX<E, I, A> {
-  return lift2<E, I, A, A, A>((p1, p2) => p1.combine(f, p2))
+  return (fa1, fa2) => new FantasyX(fa1.plan.combine(f, fa2.plan).apply)
 }

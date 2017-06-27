@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { State, StateP, Partial, PlanX, pure, map, lift2, combine } from '../fantasy'
+import { State, StateP, Partial, PlanX, pure, map, lift2 } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -69,7 +69,7 @@ describe('actions', () => {
       actions = counterView.prop('actions')
       t = new Xtest();
     })
-    it.only('add intent to intent$ and go through sink$', () => {
+    it('add intent to intent$ and go through sink$', () => {
       return t
         .do([
           actions.inc,
@@ -80,33 +80,31 @@ describe('actions', () => {
         .then(x => expect(x.count).toBe(3))
     })
   })
-  /* describe('map', () => {
-   *   beforeEach(() => {
-   *     let newPlan = (plan: PlanX<rx.URI, Intent, any>) => new PlanX<rx.URI, Intent, any>(intent$ => ({
-   *       update$: plan.apply(intent$).update$.map(f => compose(f, f)),
-   *       actions: {
-   *         inc: () => ({ type: 'inc' }),
-   *       }
-   *     }))
-   *     Counter = fantasyX.map(plan => newPlan(plan)).apply(CounterView)
-   *     counterWrapper = mountx(<Counter />)
-   *     counter = counterWrapper.find(Counter).getNode()
-   *     counterView = counterWrapper.find(CounterView)
-   *     actions = counterView.prop('actions')
-   *     t = new Xtest();
-   *   })
-   *   it('inc will + 2', () => {
-   *     return t
-   *       .do([
-   *         actions.inc,
-   *         actions.inc,
-   *         actions.inc,
-   *       ])
-   *       .collect(counter)
-   *       .then(x => expect(x.count).toBe(6))
-   *   })
-   * })
-   * /*/
+  describe('map', () => {
+    beforeEach(() => {
+      Counter = fantasyX.map<CountProps>(s => s.chain(
+        a => State.pure<CountProps, Partial<CountProps>>(
+          { count: a.count * 2 }
+        )))
+        .apply(CounterView)
+
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest();
+    })
+    it('inc will + 1 then * 2', () => {
+      return t
+        .do([
+          actions.inc,
+          actions.inc,
+          actions.inc,
+        ])
+        .collect(counter)
+        .then(x => expect(x.count).toBe(14))
+    })
+  })
   describe('combine', () => {
     let input1
     beforeEach(() => {
@@ -144,7 +142,7 @@ describe('actions', () => {
         value1: number
       }
 
-      Counter = combine<rx.URI, Intent, ViewProps>((S1, S2) => {
+      Counter = lift2<rx.URI, Intent, ViewProps, ViewProps, ViewProps>((S1, S2) => {
         return S1.chain(s1 => {
           return S2.chain(s2 => {
             return State.pure<ViewProps, Partial<ViewProps>>({
@@ -161,7 +159,7 @@ describe('actions', () => {
       actions = counterView.prop('actions')
       t = new Xtest();
     })
-    it.only('inc will + 2', () => {
+    it('inc will + 2', () => {
       return t
         .do([
           () => actions.fromEvent({ type: 'change1', value: 3 }),
