@@ -31,6 +31,7 @@ const View: React.SFC<BMIProps<Intent>> = props => (
     <p>which means you're <b>{props.health}</b></p>
   </div>
 )
+
 View.defaultProps = { bmi: '', health: '' }
 
 
