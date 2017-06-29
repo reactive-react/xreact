@@ -29,4 +29,4 @@ export interface StreamOps<F extends HKTS> {
   subscribe<A>(fa: HKT<A>[F], next: (v: A) => void, complete?: () => void)
 }
 
-export const streamOps = new StreamOps
+export const streamOps: StreamOps<HKTS> = new StreamOps
