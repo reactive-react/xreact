@@ -36,21 +36,13 @@ const fantasyX = pure<rx.URI, Intent, CountProps>((intent$) => {
     update$: intent$.map((intent) => {
       switch (intent.type) {
         case 'inc':
-          return State.get<CountProps>()
-            .chain(state =>
-              State.pure(
-                { count: state.count + 1 }
-              ))
+          return state => ({ count: state.count + 1 })
 
         case 'dec':
-          return State.get<CountProps>()
-            .chain(state => State.pure(
-              { count: state.count - 1 }
-            ))
+          return state => ({ count: state.count + 1 })
         default:
-          return State.get<CountProps>()
+          return state => state
       }
-
     }),
     actions: {
       inc: () => ({ type: 'inc' }),
@@ -135,20 +127,14 @@ describe('actions', () => {
       let fantasyX1 = pure<rx.URI, Intent, ViewProps>(intent$ => {
         return {
           update$: intent$.filter(i => i.type == 'change1')
-            .map(i =>
-              State.pure(
-                { value0: i.value }
-              ))
+            .map(i => state => ({ value0: i.value }))
         }
       })
 
       let fantasyX2 = pure<rx.URI, Intent, any>(intent$ => {
         return {
           update$: intent$.filter(i => i.type == 'change2')
-            .map(i =>
-              State.pure(
-                { value1: i.value }
-              ))
+            .map(i => state => ({ value1: i.value }))
         }
       })
 

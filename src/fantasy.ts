@@ -1,5 +1,5 @@
 import { HKTS, Subject, HKT, streamOps } from './xs'
-import { Plan as Plan0, Actions, Xcomponent, XcomponentClass, Engine, Update, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
+import { Plan, Actions, Xcomponent, XcomponentClass, Engine, Update, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
 import { XOrReactComponent, x } from './x'
 import { extendXComponentClass, genXComponentClass } from './xclass'
 
@@ -47,6 +47,15 @@ export class State<S, A> {
   static modify<S>(f: (s: S) => S): State<S, void> {
     return new State((s: S) => ({ a: undefined, s: f(s) }))
   }
+
+  static patch<S>(f: (s: S) => Partial<S>): State<S, Partial<S>> {
+    return new State((s: S) => {
+      let p = f(s)
+      return {
+        a: p, s: Object.assign({}, s, p)
+      }
+    })
+  }
 }
 
 export type StateP<S> = State<S, Partial<S>>
@@ -56,25 +65,9 @@ export interface Machine<E extends HKTS, I, S> {
   update$: HKT<StateP<S>>[E]
 }
 export class PlanX<E extends HKTS, I, A> {
-  apply: Plan<E, I, A>
-  constructor(plan: Plan<E, I, A>) {
+  apply: PlanS<E, I, A>
+  constructor(plan: PlanS<E, I, A>) {
     this.apply = plan
-  }
-
-  static empty<F extends HKTS, I, A>() {
-    return new PlanX<F, I, A>(intent$ => ({
-      update$: streamOps.empty() as HKT<StateP<A>>[F],
-      actions: {}
-    }))
-  }
-
-  concat(planB: PlanX<E, I, A>): Plan<E, I, A> {
-    return intent$ => {
-      let machineB = planB.apply(intent$), machineA = this.apply(intent$)
-      let update$ = streamOps.merge<StateP<A>>(machineA.update$, machineB.update$)
-      let actions = Object.assign({}, machineA.actions, machineB.actions)
-      return { update$, actions }
-    }
   }
 
   combine(
@@ -109,7 +102,7 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
-  toPlan(): Plan0<E, I, A> {
+  toPlan(): Plan<E, I, A> {
     return intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, Update<A>>(
@@ -120,24 +113,24 @@ export class PlanX<E extends HKTS, I, A> {
     }
   }
 
-  bimap<B>(
-    fu: (a: StateP<A>) => StateP<B>,
-    fa: (a: Actions<I>) => Actions<I>
-  ): PlanX<E, I, B> {
-    return new PlanX<E, I, B>(intent$ => {
-      let machine = this.apply(intent$)
-      let update$ = streamOps.map<StateP<A>, StateP<B>>(
-        update => fu(update),
-        machine.update$
-      )
-      return { update$, actions: machine.actions ? fa(machine.actions) : {} }
-    })
-  }
+  // bimap<B>(
+  //   fu: (a: StateP<A>) => StateP<B>,
+  //   fa: (a: Actions<I>) => Actions<I>
+  // ): PlanX<E, I, B> {
+  //   return new PlanX<E, I, B>(intent$ => {
+  //     let machine = this.apply(intent$)
+  //     let update$ = streamOps.map<StateP<A>, StateP<B>>(
+  //       update => fu(update),
+  //       machine.update$
+  //     )
+  //     return { update$, actions: machine.actions ? fa(machine.actions) : {} }
+  //   })
+  // }
 }
 
 export class FantasyX<E extends HKTS, I, S> {
   plan: PlanX<E, I, S>
-  constructor(plan: Plan<E, I, S>) {
+  constructor(plan: PlanS<E, I, S>) {
     this.plan = new PlanX(plan)
   }
   apply(WrappedComponent) {
@@ -146,14 +139,20 @@ export class FantasyX<E extends HKTS, I, S> {
   map(f: (s: Partial<S>) => Partial<S>): FantasyX<E, I, S> {
     return new FantasyX(this.plan.map(f).apply)
   }
-  chain<A>(f: (plan: PlanX<E, I, S>) => FantasyX<E, I, A>): FantasyX<E, I, A> {
-    return f(this.plan)
-  }
 }
-export type Plan<E extends HKTS, I, S> = (i: Subject<E, I>) => Machine<E, I, S>
 
-export function pure<E extends HKTS, I, S>(f: Plan<E, I, S>): FantasyX<E, I, S> {
-  return new FantasyX(f)
+export type PlanS<E extends HKTS, I, S> = (i: Subject<E, I>) => Machine<E, I, S>
+
+export function pure<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S> {
+  return new FantasyX<E, I, S>(intent$ => {
+    let { update$, actions } = plan(intent$)
+    return {
+      actions,
+      update$: streamOps.map<Update<Partial<S>>, StateP<S>>(
+        f => State.patch<S>(f), update$
+      )
+    }
+  })
 }
 
 export function map<E extends HKTS, I, A>(
