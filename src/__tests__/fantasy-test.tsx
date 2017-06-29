@@ -83,10 +83,9 @@ describe('actions', () => {
   })
   describe('map', () => {
     beforeEach(() => {
-      Counter = fantasyX.map<CountProps>(s => s.chain(
-        a => State.pure(
-          { count: (a.count || 0) * 2 }
-        )))
+      Counter = fantasyX.map(a => (
+        { count: (a.count || 0) * 2 }
+      ))
         .apply(CounterView)
 
       counterWrapper = mountx(<Counter />)
@@ -109,10 +108,9 @@ describe('actions', () => {
 
   describe('lift', () => {
     beforeEach(() => {
-      Counter = lift<rx.URI, Intent, CountProps, CountProps>(s => s.chain(
-        a => State.pure(
-          { count: (a.count || 0) * 2 }
-        )))(fantasyX).apply(CounterView)
+      Counter = lift<rx.URI, Intent, CountProps>(a => (
+        { count: (a.count || 0) * 2 }
+      ))(fantasyX).apply(CounterView)
 
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()
@@ -168,15 +166,9 @@ describe('actions', () => {
         value1: number
       }
 
-      Counter = lift2<rx.URI, Intent, ViewProps, ViewProps, ViewProps>((S1, S2) => {
-        return S1.chain(s1 => {
-          return S2.chain(s2 => {
-            return State.pure({
-              sum: (s1.value0 || 0) + (s2.value1 || 0)
-            })
-          })
-        })
-      })(fantasyX1, fantasyX2).apply(View)
+      Counter = lift2<rx.URI, Intent, ViewProps>(
+        (s1, s2) => ({ sum: (s1.value0 || 0) + (s2.value1 || 0) })
+      )(fantasyX1, fantasyX2).apply(View)
 
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()

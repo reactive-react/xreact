@@ -77,26 +77,32 @@ export class PlanX<E extends HKTS, I, A> {
     }
   }
 
-  combine<B, C>(
-    f: (ua: StateP<A>, ub: StateP<B>) => StateP<C>,
-    planB: PlanX<E, I, B>
-  ): PlanX<E, I, C> {
-    return new PlanX<E, I, C>(intent$ => {
+  combine(
+    f: (a: Partial<A>, ub: Partial<A>) => Partial<A>,
+    planB: PlanX<E, I, A>
+  ): PlanX<E, I, A> {
+    return new PlanX<E, I, A>(intent$ => {
       let machineB = planB.apply(intent$),
         machineA = this.apply(intent$)
-      let update$ = streamOps.combine<StateP<A>, StateP<B>, StateP<C>>(
-        f, machineA.update$, machineB.update$
+      let update$ = streamOps.combine<StateP<A>, StateP<A>, StateP<A>>(
+        (S1, S2) => {
+          return S1.chain(s1 => {
+            return S2.chain(s2 => {
+              return State.pure(f(s1, s2))
+            })
+          })
+        }, machineA.update$, machineB.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions)
       return { update$, actions }
     })
   }
 
-  map<B>(f: (a: StateP<A>) => StateP<B>): PlanX<E, I, B> {
-    return new PlanX<E, I, B>(intent$ => {
+  map<B>(f: (a: Partial<A>) => Partial<A>): PlanX<E, I, A> {
+    return new PlanX<E, I, A>(intent$ => {
       let machine = this.apply(intent$)
-      let update$ = streamOps.map<StateP<A>, StateP<B>>(
-        update => f(update),
+      let update$ = streamOps.map<StateP<A>, StateP<A>>(
+        state => state.chain(s => State.pure(f(s))),
         machine.update$
       )
       return { update$, actions: machine.actions }
@@ -137,7 +143,7 @@ export class FantasyX<E extends HKTS, I, S> {
   apply(WrappedComponent) {
     return x(this.plan.toPlan())(WrappedComponent)
   }
-  map<A>(f: (s: StateP<S>) => StateP<A>): FantasyX<E, I, A> {
+  map(f: (s: Partial<S>) => Partial<S>): FantasyX<E, I, S> {
     return new FantasyX(this.plan.map(f).apply)
   }
   chain<A>(f: (plan: PlanX<E, I, S>) => FantasyX<E, I, A>): FantasyX<E, I, A> {
@@ -150,20 +156,20 @@ export function pure<E extends HKTS, I, S>(f: Plan<E, I, S>): FantasyX<E, I, S> 
   return new FantasyX(f)
 }
 
-export function map<E extends HKTS, I, A, B>(
-  f: (s: StateP<A>) => StateP<B>, fa: FantasyX<E, I, A>
-): FantasyX<E, I, B> {
+export function map<E extends HKTS, I, A>(
+  f: (s: Partial<A>) => Partial<A>, fa: FantasyX<E, I, A>
+): FantasyX<E, I, A> {
   return fa.map(f)
 }
 
-export function lift<E extends HKTS, I, A, B>(
-  f: (s: StateP<A>) => StateP<B>
-): (fa: FantasyX<E, I, A>) => FantasyX<E, I, B> {
+export function lift<E extends HKTS, I, A>(
+  f: (s: Partial<A>) => Partial<A>
+): (fa: FantasyX<E, I, A>) => FantasyX<E, I, A> {
   return fa => fa.map(f)
 }
 
-export function lift2<E extends HKTS, I, A, B, C>(
-  f: (s1: StateP<A>, s2: StateP<B>) => StateP<C>
-): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, B>) => FantasyX<E, I, C> {
+export function lift2<E extends HKTS, I, A>(
+  f: (s1: Partial<A>, s2: Partial<A>) => Partial<A>
+): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, A>) => FantasyX<E, I, A> {
   return (fa1, fa2) => new FantasyX(fa1.plan.combine(f, fa2.plan).apply)
 }
