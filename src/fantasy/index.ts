@@ -33,3 +33,10 @@ export function lift2<E extends HKTS, I, A>(
 ): (fa1: FantasyX<E, I, A>, fa2: FantasyX<E, I, A>) => FantasyX<E, I, A> {
   return (fa1, fa2) => new FantasyX(fa1.plan.combine(f, fa2.plan).apply)
 }
+
+export function concat<E extends HKTS, I, A>(
+  fa: FantasyX<E, I, A>,
+  fb: FantasyX<E, I, A>
+): FantasyX<E, I, A> {
+  return new FantasyX(fa.plan.concat(fb.plan).apply)
+}

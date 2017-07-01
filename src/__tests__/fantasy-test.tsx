@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { pure, map, lift2, lift } from '../fantasy'
+import { pure, map, lift2, lift, concat } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -37,9 +37,8 @@ const fantasyX = pure<rx.URI, Intent, CountProps>((intent$) => {
       switch (intent.type) {
         case 'inc':
           return state => ({ count: state.count + 1 })
-
         case 'dec':
-          return state => ({ count: state.count + 1 })
+          return state => ({ count: state.count - 1 })
         default:
           return state => state
       }
@@ -119,6 +118,50 @@ describe('actions', () => {
         ])
         .collect(counter)
         .then(x => expect(x.count).toBe(14))
+    })
+  })
+  describe('concat', () => {
+    let fantasyXB;
+    beforeEach(() => {
+      fantasyXB = pure<rx.URI, Intent, CountProps>((intent$) => {
+        return {
+          update$: intent$.map((intent) => {
+            switch (intent.type) {
+              case 'double':
+                return state => ({ count: state.count * 2 })
+              case 'half':
+                return state => ({ count: state.count / 2 })
+              default:
+                return state => state
+            }
+          }),
+          actions: {
+            double: () => ({ type: 'double' }),
+            half: () => ({ type: 'half' }),
+          }
+        }
+      })
+      Counter = concat<rx.URI, Intent, CountProps>(fantasyX, fantasyXB).apply(CounterView)
+
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest();
+    })
+    it('should able to inc,dec,half  and double', () => {
+      return t
+        .do([
+          actions.inc,
+          actions.inc,
+          actions.double,
+          actions.dec,
+          actions.double,
+          actions.inc,
+          actions.half
+        ])
+        .collect(counter)
+        .then(x => expect(x.count).toBe(3.5))
     })
   })
   describe('combine', () => {

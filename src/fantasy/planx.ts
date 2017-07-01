@@ -29,6 +29,20 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
+  concat(
+    fa: PlanX<E, I, A>
+  ): PlanX<E, I, A> {
+    return new PlanX<E, I, A>(intent$ => {
+      let machineA = this.apply(intent$)
+      let machineB = fa.apply(intent$)
+      let update$ = streamOps.merge<StateP<A>>(
+        machineA.update$,
+        machineB.update$
+      )
+      return { update$, actions: Object.assign({}, machineA.actions, machineB.actions) }
+    })
+  }
+
   map(f: (a: Partial<A>) => Partial<A>): PlanX<E, I, A> {
     return new PlanX<E, I, A>(intent$ => {
       let machine = this.apply(intent$)
