@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { State, StateP, Partial, PlanX, pure, map, lift2, lift } from '../fantasy'
+import { pure, map, lift2, lift } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
