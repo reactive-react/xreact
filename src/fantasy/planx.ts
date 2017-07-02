@@ -55,15 +55,15 @@ export class PlanX<E extends HKTS, I, A> {
   }
 
   bimap(
-    fa: (a: Partial<A>) => Partial<A>, fb: (b?: Actions<I>) => Actions<I>
+    fa: (b?: Actions<I>) => Actions<I>, fb: (a: Partial<A>) => Partial<A>
   ): PlanX<E, I, A> {
     return new PlanX<E, I, A>(intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, StateP<A>>(
-        state => state.chain(s => State.pure(fa(s))),
+        state => state.chain(s => State.pure(fb(s))),
         machine.update$
       )
-      return { update$, actions: fb(machine.actions) }
+      return { update$, actions: fa(machine.actions) }
     })
   }
 

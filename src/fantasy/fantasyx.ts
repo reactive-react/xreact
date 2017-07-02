@@ -26,7 +26,7 @@ export class FantasyX<E extends HKTS, I, S> {
     return new FantasyX(this.plan.concat(fb.plan).apply)
   }
   bimap(
-    fa: (a: Partial<S>) => Partial<S>, fb: (b?: Actions<I>) => Actions<I>
+    fa: (b?: Actions<I>) => Actions<I>, fb: (a: Partial<S>) => Partial<S>
   ): FantasyX<E, I, S> {
     return new FantasyX(this.plan.bimap(fa, fb).apply)
   }

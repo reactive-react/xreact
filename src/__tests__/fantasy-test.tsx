@@ -97,6 +97,36 @@ describe('actions', () => {
     })
   })
 
+  describe('bimap', () => {
+    beforeEach(() => {
+      Counter = fantasyX.bimap(
+        () => ({
+          double: () => ({ type: 'double' }),
+          inc: () => ({ type: 'inc' })
+        }),
+        a => (
+          { count: (a.count || 0) * 2 }
+        ))
+        .apply(CounterView)
+
+      counterWrapper = mountx(<Counter />)
+      counter = counterWrapper.find(Counter).getNode()
+      counterView = counterWrapper.find(CounterView)
+      actions = counterView.prop('actions')
+      t = new Xtest();
+    })
+    it('inc will + 1 then * 2, otherwise * 2', () => {
+      return t
+        .do([
+          actions.inc, // (0 + 1) * 2 = 2
+          actions.double, // 2 * 2 = 4
+          actions.inc, // (4 + 1) * 2 = 10
+        ])
+        .collect(counter)
+        .then(x => expect(x.count).toBe(10))
+    })
+  })
+
   describe('lift', () => {
     beforeEach(() => {
       Counter = lift<rx.URI, Intent, CountProps>(a => (
