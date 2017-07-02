@@ -22,6 +22,33 @@ export class FantasyX<E extends HKTS, I, S> {
     return new FantasyX(this.plan.combine(f, fb.plan).apply)
   }
 
+  combine3(
+    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>) => Partial<S>,
+    fb: FantasyX<E, I, S>,
+    fc: FantasyX<E, I, S>
+  ): FantasyX<E, I, S> {
+    return new FantasyX(this.plan.combine3(f, fb.plan, fc.plan).apply)
+  }
+
+  combine4(
+    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>, s4: Partial<S>) => Partial<S>,
+    fb: FantasyX<E, I, S>,
+    fc: FantasyX<E, I, S>,
+    fd: FantasyX<E, I, S>
+  ): FantasyX<E, I, S> {
+    return new FantasyX(this.plan.combine4(f, fb.plan, fc.plan, fd.plan).apply)
+  }
+
+  combine5(
+    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>, s4: Partial<S>, s5: Partial<S>) => Partial<S>,
+    fb: FantasyX<E, I, S>,
+    fc: FantasyX<E, I, S>,
+    fd: FantasyX<E, I, S>,
+    fe: FantasyX<E, I, S>
+  ): FantasyX<E, I, S> {
+    return new FantasyX(this.plan.combine5(f, fb.plan, fc.plan, fd.plan, fe.plan).apply)
+  }
+
   concat(fb: FantasyX<E, I, S>): FantasyX<E, I, S> {
     return new FantasyX(this.plan.concat(fb.plan).apply)
   }
