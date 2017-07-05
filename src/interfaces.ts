@@ -13,7 +13,7 @@ export interface Plan<E extends HKTS, I, S> {
 }
 
 export interface Update<S> {
-  (current?: S): S
+  (current?: S): Partial<S>
 }
 
 export interface Machine<E extends HKTS, I, S> {

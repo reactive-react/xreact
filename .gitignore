@@ -31,19 +31,4 @@ build/Release
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 
-examples/todomvc/public/*
-!examples/todomvc/public/index.html
-
-/react-most.js
-/engine
-public
-deploy
-deploy.pub
-/browser.js
-/history.js
-/test-utils.js
-public/app.js
-gh-pages/
-wiki/
-dist
 lib

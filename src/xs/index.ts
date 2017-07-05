@@ -25,8 +25,42 @@ export interface StreamOps<F extends HKTS> {
   ): HKT<A>[F]
   map<A, B>(f: (a: A) => B, fa: HKT<A>[F]): HKT<B>[F]
   subject<A>(): Subject<F, A>
-  combine<A, B, C>(f: (a: A, b: B) => C, fa: HKT<A>[F], fb: HKT<B>[F]): HKT<C>[F]
+  combine<A, B, C>(
+    f: (a: A, b: B) => C,
+    fa: HKT<A>[F],
+    fb: HKT<B>[F]
+  ): HKT<C>[F]
+  combine<A, B, C, D>(
+    f: (a: A, b: B, c: C) => D,
+    fa: HKT<A>[F],
+    fb: HKT<B>[F],
+    fc: HKT<C>[F]
+  ): HKT<D>[F]
+  combine<A, B, C, D, E>(
+    f: (a: A, b: B, c: C, d: D) => E,
+    fa: HKT<A>[F],
+    fb: HKT<B>[F],
+    fc: HKT<C>[F],
+    fd: HKT<D>[F]
+  ): HKT<E>[F]
+  combine<A, B, C, D, E, G>(
+    f: (a: A, b: B, c: C, d: D, e: E) => G,
+    fa: HKT<A>[F],
+    fb: HKT<B>[F],
+    fc: HKT<C>[F],
+    fd: HKT<D>[F],
+    fe: HKT<E>[F]
+  ): HKT<G>[F]
+  combine<A, B, C, D, E, G, H>(
+    f: (a: A, b: B, c: C, d: D, e: E, g: G) => H,
+    fa: HKT<A>[F],
+    fb: HKT<B>[F],
+    fc: HKT<C>[F],
+    fd: HKT<D>[F],
+    fe: HKT<E>[F],
+    fg: HKT<G>[F]
+  ): HKT<H>[F]
   subscribe<A>(fa: HKT<A>[F], next: (v: A) => void, complete?: () => void)
 }
 
-export const streamOps = new StreamOps
+export const streamOps: StreamOps<HKTS> = new StreamOps
