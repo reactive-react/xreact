@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import '@reactivex/rxjs'
 import X from '../x';
 import { Plan } from '../interfaces'
-import { pure, map, lift2, lift, concat } from '../fantasy'
+import { pure, map, lift2, lift, lift3, lift4, lift5, concat } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -245,6 +245,80 @@ describe('actions', () => {
         ])
         .collect(counter)
         .then(x => expect(x.sum).toBe(13))
+    })
+  })
+})
+
+describe('liftN', () => {
+  let Fa, stub, CounterView: React.SFC<any>
+
+  beforeEach(() => {
+    let fan = [1, 2, 3, 4, 5];
+    Fa = fan.map(i => pure<rx.URI, Intent, CountProps>(intent$ => {
+      return {
+        update$: Observable.of(state => ({ count: i })),
+        actions: {
+          ['action' + i]: () => ({ type: 'action' + i })
+        }
+      }
+    }))
+    stub = jest.fn()
+    CounterView = props => {
+      stub(props)
+      return (<div />)
+    }
+
+    CounterView.defaultProps = { count: 0 }
+  })
+
+  describe('#lift3', () => {
+    beforeEach(() => {
+      let Counter = lift3<rx.URI, Intent, CountProps>((s1, s2, s3) => {
+        return { count: ((s1.count || 0) + (s2.count || 0) + (s3.count || 0)) }
+      })(Fa[0], Fa[1], Fa[2]).apply(CounterView)
+      mountx(<Counter />)
+    })
+
+    it('should sum all 3 FantasyX', () => {
+      expect(stub.mock.calls[1][0].count).toEqual(6)
+    })
+  })
+
+  describe('#lift4', () => {
+    beforeEach(() => {
+      let Counter = lift4<rx.URI, Intent, CountProps>((s1, s2, s3, s4) => {
+        return {
+          count: ((s1.count || 0) +
+            (s2.count || 0) +
+            (s3.count || 0)) +
+          (s4.count || 0)
+        }
+      })(Fa[0], Fa[1], Fa[2], Fa[3]).apply(CounterView)
+      mountx(<Counter />)
+    })
+
+    it('should sum all 3 FantasyX', () => {
+      expect(stub.mock.calls[1][0].count).toEqual(10)
+    })
+  })
+
+  describe('#lift5', () => {
+    beforeEach(() => {
+      let Counter = lift5<rx.URI, Intent, CountProps>((s1, s2, s3, s4, s5) => {
+        return {
+          count: ((s1.count || 0) +
+            (s2.count || 0) +
+            (s3.count || 0) +
+            (s4.count || 0) +
+            (s5.count || 0)
+          )
+        }
+      })(Fa[0], Fa[1], Fa[2], Fa[3], Fa[4]).apply(CounterView)
+      mountx(<Counter />)
+    })
+
+    it('should sum all 3 FantasyX', () => {
+      expect(stub.mock.calls[1][0].count).toEqual(15)
     })
   })
 })
