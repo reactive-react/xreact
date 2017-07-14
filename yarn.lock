@@ -18,9 +18,9 @@
   dependencies:
     symbol-observable "^1.0.1"
 
-"@types/jest@^19.2.3":
-  version "19.2.3"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-19.2.3.tgz#61748040e8589a891dfc2ec1d16a2dd74482980e"
+"@types/jest@^20.0.2":
+  version "20.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.2.tgz#86c751121fb53dbd39bb1a08c45083da13f2dc67"
 
 "@types/node@^8.0.0":
   version "8.0.5"

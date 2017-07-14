@@ -19,7 +19,9 @@ StreamOps.prototype.empty = Observable.empty
 StreamOps.prototype.combine = function(f, ...v) {
   return Observable.combineLatest(v, f)
 }
-
+StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: Observable<A>): Observable<A> {
+  return fa.filter(f)
+}
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: Observable<A>): Observable<B> {
   return fa.map(f)
 }

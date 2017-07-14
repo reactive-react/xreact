@@ -12,7 +12,9 @@ StreamOps.prototype.empty = empty
 StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }
-
+StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: Stream<A>): Stream<A> {
+  return fa.filter(f)
+}
 StreamOps.prototype.combine = function(f, ...v) {
   return combineArray(f, v)
 }

@@ -24,6 +24,7 @@ export interface StreamOps<F extends HKTS> {
     b: HKT<A>[F]
   ): HKT<A>[F]
   map<A, B>(f: (a: A) => B, fa: HKT<A>[F]): HKT<B>[F]
+  filter<A>(f: (a: A) => boolean, fa: HKT<A>[F]): HKT<A>[F]
   subject<A>(): Subject<F, A>
   combine<A, B, C>(
     f: (a: A, b: B) => C,

@@ -11,6 +11,8 @@ import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import * as createClass from 'create-react-class'
 import { rx as Xtest } from '../xtests'
 import * as _ from 'lodash/fp'
+import { inputx } from '../forms'
+
 const compose = (f, g) => x => f(g(x));
 
 const CounterView: React.SFC<any> = props => (
@@ -197,19 +199,10 @@ describe('actions', () => {
   describe('combine', () => {
     let input1
     beforeEach(() => {
-      let fantasyX1 = pure<rx.URI, Intent, ViewProps>(intent$ => {
-        return {
-          update$: intent$.filter(i => i.type == 'change1')
-            .map(i => state => ({ value0: i.value }))
-        }
-      })
+      let inputNumber = x => inputx<'number', rx.URI, Event, ViewProps>(x)
+      let fantasyX1 = inputNumber('value0')
 
-      let fantasyX2 = pure<rx.URI, Intent, any>(intent$ => {
-        return {
-          update$: intent$.filter(i => i.type == 'change2')
-            .map(i => state => ({ value1: i.value }))
-        }
-      })
+      let fantasyX2 = inputNumber('value1')
 
       let View: React.SFC<any> = props => (
         <div>
@@ -225,7 +218,7 @@ describe('actions', () => {
         value1: number
       }
 
-      Counter = lift2<rx.URI, Intent, ViewProps>(
+      Counter = lift2<rx.URI, Event, ViewProps>(
         (s1, s2) => ({ sum: (s1.value0 || 0) + (s2.value1 || 0) })
       )(fantasyX1, fantasyX2).apply(View)
 
@@ -239,8 +232,8 @@ describe('actions', () => {
     it('inc will + 2', () => {
       return t
         .do([
-          () => actions.fromEvent({ type: 'change1', value: 3 }),
-          () => actions.fromEvent({ type: 'change2', value: 10 })
+          () => actions.fromEvent({ type: 'change', target: { name: 'value0', value: 3 } }),
+          () => actions.fromEvent({ type: 'change', target: { name: 'value1', value: 10 } })
 
         ])
         .collect(counter)
