@@ -13,7 +13,7 @@ export interface InputType {
 export function inputx<K extends keyof InputType,
   E extends HKTS,
   I extends Event,
-  S>(name: string) {
+  S extends Partial<InputType>>(name: keyof S) {
   return pure<E, I, S>(intent$ => {
     return {
       update$:
