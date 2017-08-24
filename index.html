@@ -1,0 +1,131 @@
+<html><head><title>Xreact</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jichao Ouyang" /><meta name="description" content="Reactive x React" /><meta name="og:image" content="/img/poster.png" /><meta name="og:title" content="Xreact" /><meta name="og:site_name" content="Xreact" /><meta name="og:url" content="https://xreact.oyanglul.us/" /><meta name="og:type" content="website" /><meta name="og:description" content="Reactive x React" /><link rel="icon" type="image/png" href="/img/favicon.png" /><meta name="twitter:title" content="Xreact" /><meta name="twitter:image" content="https://xreact.oyanglul.us/img/poster.png" /><meta name="twitter:description" content="Reactive x React" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@oyanglulu" /><link rel="icon" type="image/png" sizes="16x16" href="/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/highlight/styles/default.css" /><link rel="stylesheet" href="/css/style.css" /><link rel="stylesheet" href="/css/palette.css" /><link rel="stylesheet" href="/css/codemirror.css" /><link rel="stylesheet" href="/css/kazari-style.css" /><link rel="stylesheet" href="/css/monokai.css" /><link rel="stylesheet" href="/css/override.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-6"><a href="/" class="brand"><div class="icon-wrapper"><span>Xreact</span></div></a></div><div class="col-xs-6"><nav class="text-right"><ul class=""><li><a href="https://github.com/reactive-react/xreact"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li><li><a href="/docs"><i class="fa fa-file-text"></i><span class="hidden-xs">Documentation</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Reactive x React</h1><h2></h2><p class="text-center"><a href="https://github.com/reactive-react/xreact" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div><ul class="horizontalNav">           <li><a class="" href="/Fantasy.html">XReact Fantasy</a></li>  <li><a class="" href="/Get-Started.html">Quick Start</a></li>  <li><a class="" href="/zh.html">读我 🇨🇳</a></li>  <li><a class="" href="/FAQ.html">FAQ</a></li>  <li><a class="" href="/Examples.html">Examples</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><p>Xreact is a lightweight Higher Order State Component for React.</p>
+
+<p>Data flow in Xreact is observable and unidirectional.</p>
+
+<p><img src="https://www.evernote.com/l/ABcSUEkq5_xPTrWy_YdF5iM1Fxu14WMB7eAB/image.png" alt="" /></p>
+
+<h2 id="get-started">Get Started</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install xreact --save
+# or
+yarn add xreact
+</code></pre>
+</div>
+
+<p>A <a href="Get-Started.html">quick walk through of a counter app</a> will give you a brief idea of how Xreact work.</p>
+
+<h2 id="features">Features</h2>
+<p>Inspired by Redux and Functional Reactive Programming, <code class="highlighter-rouge">xreact</code> allows you to model user events, actions, and data as reactive streams.  Now you can map, filter, compose, and subscribe those streams into your application’s state.</p>
+
+<h3 id="purely-functional-declarative-and-monadic">Purely Functional, Declarative, and Monadic</h3>
+<p>In imperatively written code, you describe step-by-step how to process data.  With <code class="highlighter-rouge">xreact</code>, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow’s data composition!</p>
+
+<h3 id="fantasy-landbeta">Fantasy Land<sup>beta</sup></h3>
+
+<p><img src="https://github.com/fantasyland/fantasy-land/raw/master/logo.png" alt="" /></p>
+
+<p>There’s also <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a> implementation in <code class="highlighter-rouge">src/fantasy.ts</code>, you can see <a href="https://github.com/reactive-react/xreact/blob/master/examples/bmi-calc/app.tsx">bmi calculator example</a> to get the idea.</p>
+
+<h3 id="typesafe-and-scalable">Typesafe and scalable</h3>
+<p>Rewritten in Typescript, and abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.</p>
+
+<h3 id="composable-and-reusable-plan">Composable and Reusable <code class="highlighter-rouge">Plan</code></h3>
+<p>In Redux, reducers’ use of <code class="highlighter-rouge">switch</code> statements can make them difficult to compose. Unlike reducers, the function <code class="highlighter-rouge">x</code> return is simply a function which can easily compose.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Counter</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">plan1</span><span class="p">)(</span><span class="nx">x</span><span class="p">(</span><span class="nx">plan2</span><span class="p">)(</span><span class="nx">CounterView</span><span class="p">))</span>
+<span class="c1">// is the same as</span>
+<span class="kr">const</span> <span class="nx">plan1_x_plan2_x</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">x</span><span class="p">(</span><span class="nx">plan1</span><span class="p">),</span> <span class="nx">x</span><span class="p">(</span><span class="nx">plan2</span><span class="p">))</span>
+<span class="kr">const</span> <span class="nx">Counter</span> <span class="o">=</span> <span class="nx">plan1_x_plan2_x</span><span class="p">(</span><span class="nx">CounterView</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>what really happen behind compose is actually ES6 style mixin, so there won’t be any extra layer of HoC and no any performance overhead.</p>
+
+<h3 id="easy-to-test-no-need-for-mocks">Easy to test, no need for mocks</h3>
+<p>Because UI and UI behavior are loosely coupled, you can test a React component by just passing it data. Behaviors can be tested by calling actions and then verifying the state.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">mount</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'enzyme'</span>
+<span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">rx</span> <span class="nx">from</span> <span class="s1">'xreact/lib/xs/rx'</span>
+<span class="kr">import</span> <span class="p">{</span><span class="nx">rx</span> <span class="nx">as</span> <span class="nx">xtest</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'xreact/lib/xtests'</span>
+<span class="kr">const</span> <span class="nx">mountx</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">mount</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=&gt;</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createFactory</span><span class="p">(</span><span class="nx">X</span><span class="p">)({</span> <span class="na">x</span><span class="p">:</span> <span class="nx">rx</span> <span class="p">},</span> <span class="nx">c</span><span class="p">))</span>
+
+<span class="kd">let</span> <span class="nx">counterX</span> <span class="o">=</span> <span class="nx">mountx</span><span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">Counter</span> <span class="o">/&gt;</span>
+<span class="p">)</span>
+          
+<span class="kd">let</span> <span class="nx">counter</span> <span class="o">=</span> <span class="nx">counterX</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">Counter</span><span class="p">).</span><span class="nx">getNode</span><span class="p">()</span>
+<span class="kd">let</span> <span class="nx">counterView</span> <span class="o">=</span> <span class="nx">counterX</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">CounterView</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">actions</span> <span class="o">=</span> <span class="nx">counterView</span><span class="p">.</span><span class="nx">prop</span><span class="p">(</span><span class="s1">'actions'</span><span class="p">)</span>
+<span class="nx">it</span><span class="p">(</span><span class="s1">'add intent to intent$ and go through sink$'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">xtest</span>
+    <span class="p">.</span><span class="k">do</span><span class="p">([</span>
+      <span class="nx">actions</span><span class="p">.</span><span class="nx">inc</span><span class="p">,</span>
+      <span class="nx">actions</span><span class="p">.</span><span class="nx">inc</span><span class="p">,</span>
+      <span class="nx">actions</span><span class="p">.</span><span class="nx">inc</span><span class="p">,</span>
+    <span class="p">])</span>
+    <span class="p">.</span><span class="nx">collect</span><span class="p">(</span><span class="nx">counter</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="p">})</span>
+
+</code></pre>
+</div>
+
+<p>see more details about testing examples at <a href="https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx">https://github.com/reactive-react/xreact/blob/master/src/__tests__/xtest.tsx</a></p>
+
+<h3 id="async-actions-made-easy">Async actions made easy</h3>
+<p>Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">Observable</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'@reactivex/rxjs/Observable'</span>
+
+<span class="p">...</span>
+
+<span class="nx">intent$</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="p">.</span><span class="nx">kind</span><span class="o">==</span><span class="s1">'rest'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">flatMap</span><span class="p">(({</span><span class="nx">url</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">rest</span><span class="p">(</span><span class="nx">url</span><span class="p">)))</span>
+  <span class="p">.</span><span class="nx">map</span><span class="p">(...)</span>
+
+<span class="p">...</span>
+</code></pre>
+</div>
+
+<p>see <code class="highlighter-rouge">rest(url)</code> will return a <code class="highlighter-rouge">Promise</code>,</p>
+
+<h3 id="higher-level-extract-and-ready-for-any-frp-library">Higher level extract and ready for any FRP library</h3>
+<p>xreact came with 2 FRP libs of choices, rxjs and mostjs, for any new lib you only need to implement the <code class="highlighter-rouge">StaticStream</code> with your prefered lib as Higher Kind Type.</p>
+
+<p>more details about HKT implementation in TypeScript is <a href="https://github.com/gcanti/fp-ts">here</a></p>
+
+<h2 id="thanks-to">Thanks to…</h2>
+<ul>
+  <li><a href="https://github.com/ReactiveX/rxjs">rxjs</a></li>
+  <li><a href="https://github.com/cujojs/most">most</a></li>
+  <li><a href="http://facebook.github.io/react/">React</a></li>
+  <li><a href="https://github.com/rackt/redux">redux</a></li>
+  <li><a href="https://github.com/omcljs/om">Om</a></li>
+  <li><a href="http://cycle.js.org/">Cycle</a></li>
+  <li><a href="https://github.com/jcouyang/transdux">transdux</a></li>
+</ul>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MSMNJ7D');</script>
+
+<!-- End Google Tag Manager -->
+
+</div></div></section><section class="technologies"><div class="container"><div class="row">
+            <div class="col-md-4"><div class="first-icon-wrapper"></div><h3>Functional</h3><p>Declarative and composable data flow</p></div>
+          
+            <div class="col-md-4"><div class="second-icon-wrapper"></div><h3>Reactive</h3><p>Asynchronous flow made easy</p></div>
+          
+            <div class="col-md-4"><div class="third-icon-wrapper"></div><h3>React</h3><p>Seamless and idiomatic integration with React</p></div>
+          </div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Xreact is designed and developed by <a href="https://oyanglul.us" target="_blank">Jichao Ouyang</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/reactive-react/xreact"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6"><p>Website built with <a href="https://47deg.github.io/sbt-microsites/" target="_blank">Sbt-microsites</a> - © 2016 <a href="https://www.47deg.com/" target="_blank">47 Degrees</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'reactive-react/xreact'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
