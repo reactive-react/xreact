@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
-import X, { x } from '../x';
+import { X, x } from '../index';
 import * as createClass from 'create-react-class'
 import * as rx from '../xs/rx'
 const compose = (f, g) => x => f(g(x));

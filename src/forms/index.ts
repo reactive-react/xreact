@@ -10,7 +10,7 @@ export interface InputType {
   email: string
 }
 
-export function inputx<K extends keyof InputType,
+export function xinput<K extends keyof InputType,
   E extends HKTS,
   I extends Event,
   S extends Partial<InputType>>(name: keyof S) {

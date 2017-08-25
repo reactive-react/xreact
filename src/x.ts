@@ -19,7 +19,7 @@ export function x<E extends HKTS, I, S>(main: Plan<E, I, S>, opts = {}): (Wrappe
   };
 }
 
-export default class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}> {
+export class X<E extends HKTS> extends React.PureComponent<XProps<E>, {}> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext<I, H>(): ContextEngine<E, I, H> {
     let XClass = this.props.x

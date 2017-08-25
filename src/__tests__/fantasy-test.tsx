@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
-import X from '../x';
-import { Plan } from '../interfaces'
+import { Plan, X } from '../index'
 import { pure, map, lift2, lift, lift3, lift4, lift5, concat } from '../fantasy'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
@@ -11,7 +10,7 @@ import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import * as createClass from 'create-react-class'
 import { rx as Xtest } from '../xtests'
 import * as _ from 'lodash/fp'
-import { inputx } from '../forms'
+import { xinput } from '../forms'
 
 const compose = (f, g) => x => f(g(x));
 
@@ -199,7 +198,7 @@ describe('actions', () => {
   describe('combine', () => {
     let input1
     beforeEach(() => {
-      let inputNumber = x => inputx<'number', rx.URI, Event, ViewProps>(x)
+      let inputNumber = x => xinput<'number', rx.URI, Event, ViewProps>(x)
       let fantasyX1 = inputNumber('value0')
 
       let fantasyX2 = inputNumber('value1')
