@@ -13,6 +13,39 @@
 
 <p>think xreact as a more specify and optimized cycle just for react.</p>
 
+<h3 id="why-not-just-reduce-into-a-new-statevalue-just-like-redux">Why not just reduce into a new state(value) just like redux?</h3>
+
+<p>Q: Instead of:</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="nx">intent</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">intent</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s1">'inc'</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span> <span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">});</span>
+    <span class="k">case</span> <span class="s1">'dec'</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span> <span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">});</span>
+    <span class="nl">default</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">_</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>why not just simply:</p>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">update</span> <span class="o">=</span> <span class="nx">intent</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">intent</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s1">'inc'</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">({</span> <span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">});</span>
+    <span class="k">case</span> <span class="s1">'dec'</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">({</span> <span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">});</span>
+    <span class="nl">default</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">_</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>A: https://github.com/reactive-react/xreact/issues/40</p>
+
 <h3 id="why-not-global-state">Why not global state?</h3>
 <p>global is state is not scalable, think it as a database, and every component query data from it,however, database are hard to scale, design and maintain.</p>
 
