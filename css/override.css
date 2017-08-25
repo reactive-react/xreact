@@ -1,3 +1,9 @@
 img {
   max-width: 100%;
 }
+.jumbotron {
+  background-size: 46px 46px;
+}
+.modal-kazari {
+  display: none;
+}
