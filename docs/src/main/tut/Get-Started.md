@@ -5,22 +5,20 @@ section: en
 position: 1
 ---
 
+![](https://www.evernote.com/l/ABcSUEkq5_xPTrWy_YdF5iM1Fxu14WMB7eAB/image.png)
+
 ## Terminology
 - **Machine**: a machine can emit `Update` to a timeline `update$`, and can be operated by calling function in `actions`
 - **Plan**: a Plan is a function that describe how to create a `Machine`
 - **Update**: a function of `currentState -> nextState` 
 - **Action**: a function that create instance of `Intent`
 - **Intent**: describe what you want to do
-- **Intent Stream**: a timeline of every `Intent` created by every `Action`
+- **Intent Stream**: a timeline of every `Intent` created by each `Action`
 
 ## Quick Start
 
-sorry we don't have a **book** to document how to use `xreact`, and I don't really need to,
-there's only 3 things you should notice when using `xreact`, I'll explain by a simple counter app.
-
-Also, you can refer more documents here:
-
-
+Sorry we don't have a **book** to document how to use xreact, and I don't really need to,
+there's only 3 things you should notice when using xreact, I'll explain by a simple counter app.
 
 ### 1. Define a simple stateless View component
 

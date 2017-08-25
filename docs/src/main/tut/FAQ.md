@@ -18,6 +18,39 @@ unlike redux, xreact turn FRP to 11 in react, it model problem different
 
 think xreact as a more specify and optimized cycle just for react.
 
+### Why not just reduce into a new state(value) just like redux?
+
+Q: Instead of:
+
+```js
+const update = intent => {
+  switch (intent.type) {
+    case 'inc':
+      return state => ({ count: state.count + 1 });
+    case 'dec':
+      return state => ({ count: state.count - 1 });
+    default:
+      return _ => _;
+  }
+}
+```
+
+why not just simply:
+```js
+const update = intent => {
+  switch (intent.type) {
+    case 'inc':
+      return ({ count: state.count + 1 });
+    case 'dec':
+      return ({ count: state.count - 1 });
+    default:
+      return _ => _;
+  }
+}
+```
+
+A: https://github.com/reactive-react/xreact/issues/40
+
 ### Why not global state?
 global is state is not scalable, think it as a database, and every component query data from it,however, database are hard to scale, design and maintain.
 

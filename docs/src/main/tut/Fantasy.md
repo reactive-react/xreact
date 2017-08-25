@@ -1,8 +1,8 @@
 ---
 layout: docs
-title: XReact Fantasy
+title: Fantasy
 section: en
-position: 1
+position: 3
 ---
 
 # XReact Fantasy

@@ -1,7 +1,7 @@
 general:
   branches:
-    ignore:
-      - gh-pages
+    only:
+      - master
 machine:
   node:
     version: 6.6.0
