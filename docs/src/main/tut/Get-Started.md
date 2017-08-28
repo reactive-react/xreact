@@ -20,6 +20,8 @@ position: 1
 Sorry we don't have a **book** to document how to use xreact, and I don't really need to,
 there's only 3 things you should notice when using xreact, I'll explain by a simple counter app.
 
+<iframe src="https://www.webpackbin.com/bins/-KsSVkmGpVrLlwylSrkE" frameborder="0" width="100%" height="500"></iframe>
+
 ### 1. Define a simple stateless View component
 
 ![](https://www.evernote.com/l/ABd-YTQc2FVBjqOEkpiFZDltPloti8a2Hq8B/image.png)
@@ -78,7 +80,7 @@ a `Machine` defines
 
 ```js
 import {render} from 'react-dom'
-import X, {x} from 'xreact/lib/x'
+import {x, X} from 'xreact/lib/x'
 import * as rx from 'xreact/lib/xs/rx'
 
 const Counter = x(plan)(CounterView)
@@ -93,3 +95,10 @@ render(
 `Counter` is product(x) of `plan` and `CounterView`, which means it can react to `Intent` as it's plan, and update `CounterView`
 
 `<X></X>` will provide a `intent$` instance.
+
+
+## Type Safe Counter
+
+If you are TypeScript user and want to enjoy a type safe counter app, it's simple to do so since Xreact is written 100% in TypeScript.
+
+<iframe src="https://www.webpackbin.com/bins/-KsSYQVTkFjd_MQon3b9" frameborder="0" width="100%" height="500"></iframe>

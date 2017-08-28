@@ -5,9 +5,13 @@ section: en
 position: 4
 ---
 
-- [Counter](https://github.com/reactive-react/react-most/tree/master/examples/counter)
-- [BMI Calculator](http://jsbin.com/bojaqiv/edit?js,output)
+# Counter
+<iframe src="https://www.webpackbin.com/bins/-KsSYQVTkFjd_MQon3b9" frameborder="0" width="100%" height="500"></iframe>
+
+## BMI Calculator
+
+<iframe src="https://www.webpackbin.com/bins/-Ksaj0iHMWD2xC24bAqR" frameborder="0" width="100%" height="500"></iframe>
+
 - [Type N Search](https://github.com/reactive-react/react-most/tree/master/examples/type-n-search) [(live)](https://reactive-react.github.io/react-most/examples/type-n-search/public/)
+
 - [TodoMVC](https://github.com/reactive-react/react-most/tree/master/examples/todomvc) [(live)](https://reactive-react.github.io/react-most/examples/todomvc/public/)
-- [Type N Search with Transducers](https://github.com/reactive-react/react-most/tree/master/examples/transducer-type-n-search) [(live)](https://reactive-react.github.io/react-most/examples/transducer-type-n-search/public/)
-- [Type N Search with Time Travel](https://github.com/reactive-react/react-most/tree/master/examples/type-n-search-with-undo) [(live)](https://reactive-react.github.io/react-most/examples/type-n-search-with-undo/public/)

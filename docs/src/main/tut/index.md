@@ -1,6 +1,6 @@
 ---
 layout: home
-title:  "Reactive X React"
+title:  "Reactive x React"
 section: "home"
 technologies:
  - first: ["Functional", "Declarative and composable data flow"]
@@ -8,7 +8,7 @@ technologies:
  - third: ["React", "Seamless and idiomatic integration with React"]
 ---
 
-Xreact is a lightweight reactive HOC for React. Data flow in Xreact is observable and unidirectional.
+xReact is a lightweight reactive HOC for React. Data flow in xReact is observable and unidirectional.
 
 ![](https://www.evernote.com/l/ABdv2Ks5f7dNQKxyoz7Q1eB9Xm9vy3U11ZMB/image.png)
 
@@ -19,7 +19,7 @@ npm install xreact --save
 yarn add xreact
 ```
 
-A [quick walk through of a counter app](Get-Started.html) will give you a brief idea of how Xreact work.
+A 👉 [quick walk through of a counter app](Get-Started.html) will give you a brief idea of how xReact work.
 
 ## Features
 
@@ -31,7 +31,7 @@ In imperatively written code, you describe step-by-step how to process data.  Wi
 There's also [Fantasy Land](https://github.com/fantasyland/fantasy-land) implementation in `src/fantasy.ts`, you can see [bmi calculator example](https://github.com/reactive-react/xreact/blob/master/examples/bmi-calc/app.tsx) to get the idea.
 
 ### Typesafe and scalable
-Rewritten in Typescript, and abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
+xReact is 100% Typescript!, abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
 
 ### Composable and Reusable `Plan`
 In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, the function `x` return is simply a function which can easily compose.
@@ -67,7 +67,7 @@ intent$.filter(x=>x.kind=='rest')
 where `fetch(url)` will return a `Promise`,
 
 ### Reactive libs of your choice
-Xreact came with 2 FRP libs of choices, rxjs and mostjs, for any new lib you only need to implement the `StaticStream` with your prefered lib as Higher Kind Type.
+xReact came with 2 FRP libs of choices, rxjs and mostjs, for any new lib you only need to implement the `StaticStream` with your prefered lib as Higher Kind Type.
 
 more details about HKT implementation in TypeScript is [here](https://github.com/gcanti/fp-ts)
 

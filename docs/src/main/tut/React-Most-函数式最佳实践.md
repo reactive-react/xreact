@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Xreact 函数式最佳实践
+title: xReact 函数式最佳实践
 section: zh
 ---
 

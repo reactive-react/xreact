@@ -1,5 +1,5 @@
-micrositeName := "Xreact"
-micrositeDescription := "Reactive x React = Xreact"
+micrositeName := "xReact"
+micrositeDescription := "Reactive x React = xReact"
 micrositeAuthor := "Jichao Ouyang"
 micrositeHomepage := "https://xreact.oyanglul.us/"
 micrositeOrganizationHomepage := "https://oyanglul.us"

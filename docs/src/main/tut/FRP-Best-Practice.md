@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Functional Best Practice in xReact
+title: Functional Best Practice
 section: en
 ---
 
