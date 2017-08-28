@@ -1,22 +1,24 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import * as RX from '../../src/xs/rx'
-import X from '../../src/x'
-import { pure, lift2 } from '../../src/fantasy'
-import { Actions } from '../../src/interfaces'
-interface Change extends Event {
-  type: string
-  target: HTMLInputElement
-}
-type Intent = Change
+import * as RX from '../../lib/xs/rx'
+import { X, xinput, lift2, Actions } from '../..'
+
+// Types
+interface Intent extends Event { }
+
 interface BMIState {
   value: number
+  weight: number
+  height: number
   bmi: string
   health: string
 }
+
 interface BMIProps<I> extends BMIState {
   actions: Actions<I>;
 }
+
+// View
 const View: React.SFC<BMIProps<Intent>> = props => (
   <div>
     <label>
@@ -34,24 +36,17 @@ const View: React.SFC<BMIProps<Intent>> = props => (
 
 View.defaultProps = { bmi: '', health: '' }
 
+// Plan
+const weightx = xinput<'number', RX.URI, Intent, BMIState>('weight')
 
-const planx = (name: string) => (intent$) => {
-  return {
-    update$: intent$.filter(i => i.type == 'change' && i.target.name == name)
-      .map(i => parseFloat(i.target.value))
-      .map(value => state => ({ value }))
-  }
-}
-const weightx = pure<RX.URI, Intent, BMIState>(planx('weight'))
-
-const heightx = pure<RX.URI, Intent, BMIState>(planx('height'))
+const heightx = xinput<'number', RX.URI, Intent, BMIState>('height')
 
 const BMIx = lift2<RX.URI, Intent, BMIState>(
   (s1, s2) => {
     let bmi = 0
     let health = '...'
-    if (s1.value && s2.value) {
-      bmi = s1.value / (s2.value * s2.value)
+    if (s1.weight && s2.height) {
+      bmi = s1.weight / (s2.height * s2.height)
     }
     if (bmi < 18.5) health = 'underweight'
     else if (bmi < 24.9) health = 'normal'
@@ -66,8 +61,8 @@ const BMI = BMIx.apply(View)
 // BMIx is compose from weightx and heightx
 
 // while weightx and heightx can be still use to create another component
-const Weight = weightx.apply(props => props.value ? <p>where height is {props.value} kg</p> : null)
-const Height = heightx.apply(props => props.value ? <p>and {props.value}m height</p> : null)
+const Weight = weightx.apply(props => props.weight ? <p>where weight is {props.weight} kg</p> : null)
+const Height = heightx.apply(props => props.height ? <p>and {props.height}m height</p> : null)
 render(
   <X x={RX}>
     <form>
