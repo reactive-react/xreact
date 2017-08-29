@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
-import { Plan, X } from '../index'
-import { pure, map, lift2, lift, lift3, lift4, lift5, concat } from '../fantasy'
+import { Plan, X, pure, map, lift2, lift, lift3, lift4, lift5, concat } from '..'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
