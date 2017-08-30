@@ -197,10 +197,9 @@ describe('actions', () => {
   describe('combine', () => {
     let input1
     beforeEach(() => {
-      let inputNumber = x => xinput<'number', rx.URI, Event, ViewProps>(x)
-      let fantasyX1 = inputNumber('value0')
+      let fantasyX1 = xinput<rx.URI, Event, ViewProps>('value0')
 
-      let fantasyX2 = inputNumber('value1')
+      let fantasyX2 = xinput<rx.URI, Event, ViewProps>('value1')
 
       let View: React.SFC<any> = props => (
         <div>
