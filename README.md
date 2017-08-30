@@ -11,8 +11,6 @@ xReact is a Functional Reactive State Wrapper for React Components. Data flow in
 [![npm](https://img.shields.io/npm/v/xreact.svg)](https://www.npmjs.com/package/xreact)
 [![greenkeeper.io](https://badges.greenkeeper.io/reactive-react/xreact.svg)](https://greenkeeper.io)
 
-```
-
 
 ## Get Started
 
