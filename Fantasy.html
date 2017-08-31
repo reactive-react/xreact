@@ -54,6 +54,33 @@
 </code></pre>
 </div>
 
+<p>Now we have a <code class="highlighter-rouge">xplan</code> of type <code class="highlighter-rouge">FantasyX</code>, simply apply it to a View and then you will get a React Component.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">View</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+      <span class="nx">weight</span><span class="p">(</span><span class="nx">kg</span><span class="p">)</span><span class="err">:</span>
+      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"weight"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"0"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+      <span class="nx">height</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span><span class="err">:</span>
+      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"height"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"0"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Your</span> <span class="nx">BMI</span> <span class="nx">is</span> <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">bmi</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">which</span> <span class="nx">means</span> <span class="nx">you</span><span class="err">'</span><span class="nx">re</span> <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">health</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">BMICalc</span> <span class="o">=</span> <span class="nx">xplan</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">View</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Check out the Calculator:</p>
+
+<iframe src="https://www.webpackbin.com/bins/-Ksaj0iHMWD2xC24bAqR" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="fantasyx"><code class="highlighter-rouge">FantasyX</code></h2>
+
+<p>``FantasyX<code class="highlighter-rouge"> implement </code>Applicative<code class="highlighter-rouge">, </code>Monoid`,</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

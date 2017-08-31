@@ -1,0 +1,112 @@
+<html><head><title>xReact</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jichao Ouyang" /><meta name="description" content="Reactive x React = xReact" /><meta name="og:image" content="/img/poster.png" /><meta name="og:title" content="xReact" /><meta name="og:site_name" content="xReact" /><meta name="og:url" content="https://xreact.oyanglul.us/" /><meta name="og:type" content="website" /><meta name="og:description" content="Reactive x React = xReact" /><link rel="icon" type="image/png" href="/img/favicon.png" /><meta name="twitter:title" content="xReact" /><meta name="twitter:image" content="https://xreact.oyanglul.us/img/poster.png" /><meta name="twitter:description" content="Reactive x React = xReact" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@oyanglulu" /><link rel="icon" type="image/png" sizes="16x16" href="/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/highlight/styles/default.css" /><link rel="stylesheet" href="/css/style.css" /><link rel="stylesheet" href="/css/palette.css" /><link rel="stylesheet" href="/css/codemirror.css" /><link rel="stylesheet" href="/css/kazari-style.css" /><link rel="stylesheet" href="/css/monokai.css" /><link rel="stylesheet" href="/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/" class="brand"><div class="brand-wrapper"><span>xReact</span></div></a></li><li><a href="/%E8%8C%83%E7%89%B9%E8%A5%BF.html" class=" active ">范特西</a></li><li><a href="/React-Most-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5.html" class="">xReact 函数式最佳实践</a></li><li><a href="/zh.html" class="">读我</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('xReact Reactive x React = xReact');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('xReact Reactive x React = xReact');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="reactive-react" data-github-repo="xreact"><div class="content-wrapper"><section><h1 id="xreact-函数式范特西">xReact 函数式范特西</h1>
+
+<p>xReact 2.3.0  后加入了一个新功能，那就是一个新的类型 <code class="highlighter-rouge">FantasyX</code>。这个类型，会彻底改变编写前端控件的方式。</p>
+
+<blockquote>
+  <p>如果接触过 PureScript 的同学，估计已经对一个叫 <a href="https://david-peter.de/articles/flare/">Flare</a>的库有所了解，<code class="highlighter-rouge">FantasyX</code> 正是 Flare 在 xReact 的实现，但是不同的是，xReact 并没有把 UI 和逻辑揉到一起定义。</p>
+</blockquote>
+
+<h2 id="只需一个例子">只需一个例子</h2>
+
+<p>想象一下我们要实现一个函数来做乘法操作，如果不涉及 UI，只是输入两个数，输出结果，会是多么简单的一件事情：</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="c1">// Number -&gt; Number -&gt; Number</span>
+<span class="kd">function</span> <span class="nx">mult</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">a</span> <span class="o">*</span> <span class="nx">b</span>
+<span class="p">}</span>
+<span class="nx">mult</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>但是如果我们要写成 UI 控件, 将会变得多么复杂:</p>
+
+<ul>
+  <li>两个输入控件 <code class="highlighter-rouge">&lt;input/&gt;</code></li>
+  <li>一个输出控件用来显示结果</li>
+  <li>绑定函数到 input 的 onChange 上,一旦任何一个 input 发生变化, 则回调函数</li>
+  <li>还要从函数获取两个 input 的值作为输入</li>
+</ul>
+
+<p>天哪, 为什么前端程序员每天都要干这么蠢的事情. 就算使用 React 来做组件,这些过程也一样不能少.</p>
+
+<p>所以才有了 <code class="highlighter-rouge">FantasyX</code>,  他帮助你构造一起 UI 组件的 Monad, Applicative, Functor, Monoid, 如果你没听过这些词, 没关系,例子会解释一切.</p>
+
+<p>还是实现乘法, 非常简单,只需要把普通函数 lift 起来:</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="c1">// FantasyX -&gt; FantasyX -&gt; FantasyX</span>
+<span class="kd">let</span> <span class="nx">xMult</span> <span class="o">=</span> <span class="nx">lift2</span><span class="p">(</span><span class="nx">mult</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>mult 有两个参数, 所以我们需要 <code class="highlighter-rouge">lift2</code>, 得到的 <code class="highlighter-rouge">xMult</code> 依然是函数, 但是 你会发现他的类型从 接收 Number 并返回 Number 的函数,变成了接收 FantasyX 返回 FantasyX 的函数.  这种操作就叫做 <code class="highlighter-rouge">lift</code></p>
+
+<p>有了这个函数, 我们需要找输入了, <code class="highlighter-rouge">mult</code> 需要两个为 Number 的输入, 那么我们的 FantasyX 类型的输入怎么给呢?</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMult</span> <span class="o">=</span> <span class="nx">xMult</span><span class="p">(</span><span class="nx">xinput</span><span class="p">(</span><span class="s1">'a'</span><span class="p">),</span> <span class="nx">xinput</span><span class="p">(</span><span class="s1">'b'</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>擦,不能这么简单吧. <code class="highlighter-rouge">xinput</code> 又是什么鬼?</p>
+
+<p>你管,反正这里的 xinput 帮你构造了一个 FantasyX, 在里面有着炫酷的数据流.</p>
+
+<p>可能是这样的</p>
+
+<p><img src="https://xreact.oyanglul.us/img/futurama_June_22__2016_at_0120AM.gif" alt="" /></p>
+
+<p>或者是这样的</p>
+
+<p><img src="https://xreact.oyanglul.us/img/futurama_September_11__2016_at_0545AM (2).gif" alt="" /></p>
+
+<p>自己看源码吧. 不过看之前可能你会需要了解 <a href="https://github.com/reactive-react/xreact/blob/master/src/fantasy/state.ts">State Monad</a></p>
+
+<p>要知道, 到此为止我们得到的 <code class="highlighter-rouge">XMult</code> 依然是 FantasyX 类型. 先要得到一个正常的 React Component, 只需要 apply 到一个 React Component 上.</p>
+
+<p>一个简单 Stateless Component</p>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">View</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"a"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">a</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"b"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">b</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">output</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="nx">View</span><span class="p">.</span><span class="nx">defaultProps</span> <span class="o">=</span> <span class="p">{</span> <span class="na">a</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span> <span class="na">b</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span><span class="na">output</span><span class="p">:</span><span class="s2">""</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>apply 到 View 上获得 React Component  一枚</p>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">Mult</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">View</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>完整代码: https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq</p>
+
+<iframe src="https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="summary">Summary</h2>
+
+<p>使用 FantasyX, 我们很简单将逻辑从 UI 中分离</p>
+
+<ul>
+  <li>写一个一般的简单函数, lift 之, 应用到 <code class="highlighter-rouge">xinput</code>  或者其他任何 <code class="highlighter-rouge">FantasyX</code> 类型</li>
+  <li>apply 到 View 上, 得到正常 ReactComponent</li>
+</ul>
+
+<p>不但如此, 你还可以简单的变换或者合并 FantasyX</p>
+
+<ul>
+  <li>FantasyX 实现 Functor, 让你可以 从一个 FantasyX 轻松 map 到另一个 FantasyX</li>
+  <li>FantasyX 实现 Monoid,  简单的 concat 两个 FantasyX, 合成一个 FantasyX, 就跟数组 concat 一样.</li>
+</ul>
+
+<p><a href="http://xreact.oyanglul.us/">更多…</a></p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'jcouyang/react-most'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/js/main.js"></script><script src="/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
