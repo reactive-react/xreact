@@ -48,7 +48,7 @@
 
 <p>擦,不能这么简单吧. <code class="highlighter-rouge">xinput</code> 又是什么鬼?</p>
 
-<p>你管,反正这里的 xinput 帮你构造了一个 FantasyX, 在里面有着炫酷的数据流.</p>
+<p>你管,反正这里的 xinput 帮你构造了一个 FantasyX, 在里面编制着炫酷的数据流.</p>
 
 <p>可能是这样的</p>
 
@@ -79,9 +79,67 @@
 </code></pre>
 </div>
 
-<p>完整代码: https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq</p>
+<p>完整代码: <a href="https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq">https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq</a></p>
 
 <iframe src="https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="functor">Functor</h2>
+
+<p>想象一下以前构造出来的 ReactComponent,  一旦构造出来就不好修改或重用, 比如还是前面的例子, 你有一个 Mult 控件, 做的是乘法.</p>
+
+<p>那么如果我需要一个新的控件, 而且控件的也需要 <code class="highlighter-rouge">a * b</code>,  但是不同的是, 我们新控件的公式是 <code class="highlighter-rouge">(a * b)^2</code>. 要是修改函数我们思路很清晰, 构造个新函数呗:</p>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">mmp</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">mult</span><span class="p">(</span><span class="nx">mult</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">),</span> <span class="nx">mult</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>如果是 React, 那就构造个 HoC 把 Mult 控件套进去呗.</p>
+
+<p>但是不管是包函数还是包 React 控件, 都不是一个可持续组合的方式, 而且构造新的 React Class 又会需要很多啰嗦的模板代码, 如果你经常写 React 你知道我在说什么.</p>
+
+<p>Functor 可以免去这些复杂的过程, 而且提供了高可重用与组合的可能.</p>
+
+<p>接着 <code class="highlighter-rouge">XMult</code>, 我们很容易能将其变换成 <code class="highlighter-rouge">XMMP</code></p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMMP</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">output</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span> <span class="o">*</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span><span class="p">}))</span>
+</code></pre>
+</div>
+
+<p>这样我们就轻松从 XMult 生成一个新的 FantasyX, 在之前的基础上平方一下.</p>
+
+<p>这就像操作数据一样简单 不是吗</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span><span class="p">)</span>
+<span class="c1">// [2,4,6]</span>
+</code></pre>
+</div>
+
+<p>完整代码: <a href="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB">https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB</a></p>
+
+<iframe src="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="monoid">Monoid</h2>
+
+<p>有了变换, 我们可能还需要合并两个 FantasyX,  比如上面的 XMMP 和 XMult, 如果我需要一个同时能具有两种行为的 FantasyX</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XCOMBINE</span> <span class="o">=</span> <span class="nx">XMMP</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">XMult</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>仅此, 我们就得到了一个同时具有 XMMP 与 XMult 行为的 FantasyX</p>
+
+<p>当然, 因为他们都会修改 <code class="highlighter-rouge">state.output</code>,  合并到一起会导致冲突, 我们稍微修改下 XMMP</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMMP</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">output2</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span> <span class="o">*</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span><span class="p">}))</span>
+</code></pre>
+</div>
+
+<p>这样 View 就可以把 XMMP 和 Mult 的输出都显示出来</p>
+
+<p>完整代码: <a href="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB">https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB</a></p>
+
+<iframe src="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB" frameborder="0" width="100%" height="500"></iframe>
 
 <h2 id="summary">Summary</h2>
 
