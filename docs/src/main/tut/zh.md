@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: 读我 🇨🇳
+title: 读我
 section: zh
 position: 2
 ---

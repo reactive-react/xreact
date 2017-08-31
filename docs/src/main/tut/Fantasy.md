@@ -61,3 +61,30 @@ How can we lift this function and make the exactly same functional React Compone
 let xplan = lift2(calcBMI)(xinput('weight'), xinput('height'))
 ```
 
+Now we have a `xplan` of type `FantasyX`, simply apply it to a View and then you will get a React Component.
+
+```js
+let View = props => (
+  <div>
+    <label>
+      weight(kg):
+      <input type="number" name="weight" defaultValue="0" onChange={props.actions.fromEvent} />
+    </label>
+    <label>
+      height(m):
+      <input type="number" name="height" defaultValue="0" onChange={props.actions.fromEvent} />
+    </label>
+    <p>Your BMI is <b>{props.bmi}</b></p>
+    <p>which means you're <b>{props.health}</b></p>
+  </div>
+)
+let BMICalc = xplan.apply(View)
+```
+
+Check out the Calculator:
+
+<iframe src="https://www.webpackbin.com/bins/-Ksaj0iHMWD2xC24bAqR" frameborder="0" width="100%" height="500"></iframe>
+
+## `FantasyX`
+
+``FantasyX` implement `Applicative`, `Monoid`,
