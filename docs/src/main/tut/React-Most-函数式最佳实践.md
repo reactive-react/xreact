@@ -42,9 +42,9 @@ case union-type 是 pattern matching, 不是 switch case
 
 ``` javascript
 import Intent from 'intent'
-const counterable = connect(intent$ => {
+const counterable = x(intent$ => {
     return {
-        sink$: intent$.map(Intent.case({
+        update$: intent$.map(Intent.case({
             Inc: () => state => ({count: state.count + 1}),
             Dec: () => state => ({count: state.count - 1}),
             _: () => state => state
@@ -73,9 +73,9 @@ export default Type({
 
 ``` javascript
 import Intent from 'intent'
-const counterable = connect(intent$ => {
+const counterable = x(intent$ => {
     return {
-        sink$: intent$.map(Intent.case({
+        update$: intent$.map(Intent.case({
             Inc: (value) => state => ({count: state.count + value}),
             Dec: (value) => state => ({count: state.count - value}),
             _: () => state => state
@@ -133,10 +133,10 @@ lens 是 composable, immutable, functional 的更新，观察数据结构的方�
 
 ``` javascript
 import {lens, over, inc, dec, identity} from 'ramda'
-const counterable = connect(intent$ => {
+const counterable = x(intent$ => {
     let lensCount = lens(prop('count'))
      return {
-        sink$: intent$.map(Intent.case({
+        update$: intent$.map(Intent.case({
             Inc: () => over(lensCount, inc)
             Dec: () => over(lensCount, dec),
             _: () => identity
@@ -153,10 +153,10 @@ flatMap
 ``` javascript
 import when from 'when'
 import {just, from, lens, over, set, inc, dec, identity, compose} from 'ramda'
-const counterable = connect(intent$ => {
+const counterable = x(intent$ => {
     let lensCount = lens(prop('count'))
     return {
-        sink$: intent$.map(Intent.case({
+        update$: intent$.map(Intent.case({
             Inc: () => over(lensCount, inc)
             Dec: () => over(lensCount, dec),
             _: () => identity
@@ -186,10 +186,10 @@ export default Type({
 比如还可以创建一个wrapper，可以翻倍、减半
 
 ``` javascript
-const doublable = connect(intent$ => {
+const doublable = x(intent$ => {
     let lensCount = lens(prop('count'))
     return {
-        sink$: intent$.map(Intent.case({
+        update$: intent$.map(Intent.case({
             Double: () => over(lensCount, x=>x*2)
             Half: () => over(lensCount, x=>X/2),
             _: () => identity,
@@ -228,13 +228,13 @@ const CounterView = props => (
 搞基
 ====
 
-掌握了 lens，union-type, flatmap, compose 的概念之后，如果还不够爽，可以用一些更搞基的pattern来让代码的 ~~逼格~~ 扩展性更高一些。比如
+掌握了 lens，union-type, flatmap, compose 的概念之后，如果还不够爽，可以用一些更搞基的pattern来让代码的 ~~逼格~~ 扩展性更高一些。比如:
+
+[FantasyX](https://xreact.oyanglul.us/%E8%8C%83%E7%89%B9%E8%A5%BF.html)
+-------------------------------------------------------------
+Fantasy land 标准的 Functor, Monoid, Applicative
 
 [Data types à la carte](https://github.com/jcouyang/alacarte)
 -------------------------------------------------------------
 
-简单的说还是interpreter pattern，但不是用 free monad, 是更简单的combinator，瞬间就能去掉pattern match 和action定义的表达式扩展问题
-
-[读我](https://github.com/jcouyang/alacarte/wiki/读我)
-
-代码看 [这里](https://github.com/reactive-react/react-most/blob/master/examples/alacarte/src/app.jsx)
+简单的说还是interpreter pattern，但不是用 free monad, 是更简单的combinator，瞬间就能去掉pattern match 和action定义的表达式扩展问题, [比如](https://github.com/jcouyang/alacarte/wiki/读我)
