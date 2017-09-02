@@ -1,6 +1,6 @@
 <html><head><title>xReact</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jichao Ouyang" /><meta name="description" content="Reactive x React = xReact" /><meta name="og:image" content="/img/poster.png" /><meta name="og:title" content="xReact" /><meta name="og:site_name" content="xReact" /><meta name="og:url" content="https://xreact.oyanglul.us/" /><meta name="og:type" content="website" /><meta name="og:description" content="Reactive x React = xReact" /><link rel="icon" type="image/png" href="/img/favicon.png" /><meta name="twitter:title" content="xReact" /><meta name="twitter:image" content="https://xreact.oyanglul.us/img/poster.png" /><meta name="twitter:description" content="Reactive x React = xReact" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@oyanglulu" /><link rel="icon" type="image/png" sizes="16x16" href="/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/highlight/styles/default.css" /><link rel="stylesheet" href="/css/style.css" /><link rel="stylesheet" href="/css/palette.css" /><link rel="stylesheet" href="/css/codemirror.css" /><link rel="stylesheet" href="/css/kazari-style.css" /><link rel="stylesheet" href="/css/monokai.css" /><link rel="stylesheet" href="/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/" class="brand"><div class="brand-wrapper"><span>xReact</span></div></a></li><li><a href="/FAQ.html" class="">FAQ</a></li><li><a href="/FRP-Best-Practice.html" class="">Functional Best Practice</a></li><li><a href="/Fantasy.html" class=" active ">Fantasy</a></li><li><a href="/Get-Started.html" class="">Quick Start</a></li><li><a href="/Examples.html" class="">Examples</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('xReact Reactive x React = xReact');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('xReact Reactive x React = xReact');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="reactive-react" data-github-repo="xreact"><div class="content-wrapper"><section><h1 id="xreact-fantasy">XReact Fantasy</h1>
 
-<p>xreact is already a Functional library that can integrete FRP lib rxjs or mostjs into react. But it’s still too many details you need to care while modeling UI components.</p>
+<p>xreact is a Functional library that can integrete FRP lib rxjs or mostjs into react. But there’re still too many details you need to care while modeling UI components.</p>
 
 <p>The implement of <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a>, which will change the way you model and implement UI entirely.</p>
 
@@ -18,69 +18,112 @@
 
 <p>You should notice that both lift and map transform <code class="highlighter-rouge">x =&gt; x + 1</code> which should only able to apply to <code class="highlighter-rouge">Number</code>, to a function that can apply to <code class="highlighter-rouge">Array[Number]</code></p>
 
-<p>We can now (from v2.3.0) lift a normal function to xReact as well.</p>
+<p>We can now (from v2.3.0) lift a normal function to which can apply to xReact FantasyX as well.</p>
 
-<p>Let’s take BMI calculator for example.</p>
+<p>Let’s take a look at a really simple example, multiply 2 numbers.</p>
 
-<p>the key business logic of a BMI calculator is very simple</p>
-
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">calcBMI</span><span class="p">(</span><span class="nx">weight</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">let</span> <span class="nx">bmi</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="kd">let</span> <span class="nx">health</span> <span class="o">=</span> <span class="s1">'...'</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">height</span> <span class="o">&amp;&amp;</span> <span class="nx">weight</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">bmi</span> <span class="o">=</span> <span class="nx">height</span> <span class="o">/</span> <span class="p">(</span><span class="nx">weight</span> <span class="o">*</span> <span class="nx">weight</span><span class="p">)</span>
-  <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">bmi</span> <span class="o">&lt;</span> <span class="mf">18.5</span><span class="p">)</span> <span class="nx">health</span> <span class="o">=</span> <span class="s1">'underweight'</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bmi</span> <span class="o">&lt;</span> <span class="mf">24.9</span><span class="p">)</span> <span class="nx">health</span> <span class="o">=</span> <span class="s1">'normal'</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bmi</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span> <span class="nx">health</span> <span class="o">=</span> <span class="s1">'Overweight'</span>
-  <span class="k">else</span> <span class="nx">health</span> <span class="o">=</span> <span class="s1">'Obese'</span>
-  <span class="k">return</span> <span class="p">{</span> <span class="na">bmi</span><span class="p">:</span> <span class="nx">bmi</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="nx">health</span> <span class="p">}</span>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="c1">// Number -&gt; Number -&gt; Number</span>
+<span class="kd">function</span> <span class="nx">mult</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">a</span> <span class="o">*</span> <span class="nx">b</span>
 <span class="p">}</span>
+<span class="nx">mult</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </code></pre>
 </div>
 
-<p>The implementation doesn’t seem to very Functional, but it doesn’t matter since it’s very low level implementation. It’s a very easy to use, pure function:</p>
+<p>But if we need a React Component that multiply 2 numbers from 2 input box, how complicated it could be?</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">calcBMI</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mf">1.72</span><span class="p">)</span>
-<span class="c1">// =&gt; Object { bmi: "23.661438615467823", health: "normal" }</span>
+<p>Now you get simply get a free FantasyX from just any normal function, via <code class="highlighter-rouge">lift</code>.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="c1">// FantasyX -&gt; FantasyX -&gt; FantasyX</span>
+<span class="kd">let</span> <span class="nx">xMult</span> <span class="o">=</span> <span class="nx">lift2</span><span class="p">(</span><span class="nx">mult</span><span class="p">)</span>
 </code></pre>
 </div>
 
-<p>Now we have a pretty simple function that can calc BMI and return health level and bmi score.</p>
+<p><code class="highlighter-rouge">mult</code> need 2 arguments, that’s why we use <code class="highlighter-rouge">lift2</code> here.</p>
 
-<p>How can we lift this function and make the exactly same functional React Component then?</p>
+<p>Now that we have on function <code class="highlighter-rouge">xMult</code> that can turn 2 FantasyX into one, lets do this:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">xplan</span> <span class="o">=</span> <span class="nx">lift2</span><span class="p">(</span><span class="nx">calcBMI</span><span class="p">)(</span><span class="nx">xinput</span><span class="p">(</span><span class="s1">'weight'</span><span class="p">),</span> <span class="nx">xinput</span><span class="p">(</span><span class="s1">'height'</span><span class="p">))</span>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMult</span> <span class="o">=</span> <span class="nx">xMult</span><span class="p">(</span><span class="nx">xinput</span><span class="p">(</span><span class="s1">'a'</span><span class="p">),</span> <span class="nx">xinput</span><span class="p">(</span><span class="s1">'b'</span><span class="p">))</span>
 </code></pre>
 </div>
 
-<p>Now we have a <code class="highlighter-rouge">xplan</code> of type <code class="highlighter-rouge">FantasyX</code>, simply apply it to a View and then you will get a React Component.</p>
+<p>and we got a new FantasyX <code class="highlighter-rouge">XMult</code> with the computation built in.</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">View</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="p">(</span>
+<p><code class="highlighter-rouge">xinput</code> is an FantasyX abstraction of input box.</p>
+
+<p>All we have so far was just a FantasyX <code class="highlighter-rouge">XMult</code> with computation composed inside, and we need a View to display and interact with. Here comes a really simple Stateless Component</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">View</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="p">(</span>
   <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
-      <span class="nx">weight</span><span class="p">(</span><span class="nx">kg</span><span class="p">)</span><span class="err">:</span>
-      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"weight"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"0"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
-      <span class="nx">height</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span><span class="err">:</span>
-      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"height"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"0"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
-</span>    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Your</span> <span class="nx">BMI</span> <span class="nx">is</span> <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">bmi</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">which</span> <span class="nx">means</span> <span class="nx">you</span><span class="err">'</span><span class="nx">re</span> <span class="o">&lt;</span><span class="nx">b</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">health</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/b&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"a"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">a</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"b"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">b</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">output</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span><span class="p">)</span>
-<span class="kd">let</span> <span class="nx">BMICalc</span> <span class="o">=</span> <span class="nx">xplan</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">View</span><span class="p">)</span>
+<span class="nx">View</span><span class="p">.</span><span class="nx">defaultProps</span> <span class="o">=</span> <span class="p">{</span> <span class="na">a</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span> <span class="na">b</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span><span class="na">output</span><span class="p">:</span><span class="s2">""</span><span class="p">}</span>
 </code></pre>
 </div>
 
-<p>Check out the Calculator:</p>
+<p>apply XMult to View then we’ll get a React Component</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">Mult</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">View</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><a href="https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq">https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq</a></p>
+
+<iframe src="https://www.webpackbin.com/bins/-KoGxSJ-3pOi4DicUvaq" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="functor">Functor</h2>
+
+<p>FantasyX also implemented Functor, so we can transform one FantasyX to another</p>
+
+<p>For example, from <code class="highlighter-rouge">XMult</code>, we could simply transform it into a <code class="highlighter-rouge">XMMP</code> with new computation</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMMP</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">output</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span> <span class="o">*</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span><span class="p">}))</span>
+</code></pre>
+</div>
+
+<p>it’s just like maping on a list</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span><span class="p">)</span>
+<span class="c1">// [2,4,6]</span>
+</code></pre>
+</div>
+
+<p><a href="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB">https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB</a></p>
+
+<iframe src="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB" frameborder="0" width="100%" height="500"></iframe>
+
+<h2 id="monoid">Monoid</h2>
+
+<p>It’s actually Semigroup, but if we have a ID FantasyX, we have Monoid, a Identity FantasyX make sense in that the computation inside is just Identity.</p>
+
+<p>Anyway, let’s see how can we combine two FantasyX together</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XCOMBINE</span> <span class="o">=</span> <span class="nx">XMMP</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">XMult</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>仅此, 我们就得到了一个同时具有 XMMP 与 XMult 行为的 FantasyX</p>
+
+<p>当然, 因为他们都会修改 <code class="highlighter-rouge">state.output</code>,  合并到一起会导致冲突, 我们稍微修改下 XMMP</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">XMMP</span> <span class="o">=</span> <span class="nx">XMult</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">output2</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span> <span class="o">*</span> <span class="nx">s</span><span class="p">.</span><span class="nx">output</span><span class="p">}))</span>
+</code></pre>
+</div>
+
+<p>nothing special just like how you concat two Arrays</p>
+
+<p><a href="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB">https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB</a></p>
+
+<iframe src="https://www.webpackbin.com/bins/-Kss6m5ORK74CObhAPqB" frameborder="0" width="100%" height="500"></iframe>
+
+<hr />
+
+<p>Check out a more complicated BMI Calculator:</p>
 
 <iframe src="https://www.webpackbin.com/bins/-Ksaj0iHMWD2xC24bAqR" frameborder="0" width="100%" height="500"></iframe>
-
-<h2 id="fantasyx"><code class="highlighter-rouge">FantasyX</code></h2>
-
-<p>``FantasyX<code class="highlighter-rouge"> implement </code>Applicative<code class="highlighter-rouge">, </code>Monoid`,</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });

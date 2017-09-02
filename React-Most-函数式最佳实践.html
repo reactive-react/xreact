@@ -4,7 +4,9 @@
 
 <p>先来初级的函数式重构</p>
 
-<h2 id="使用-union-type-定义-intent">使用 union-type 定义 <code class="highlighter-rouge">Intent</code></h2>
+<h2 id="javascript-union-types">JavaScript Union Types</h2>
+
+<h3 id="使用-union-type-定义-intent">使用 Union Type 定义 <code class="highlighter-rouge">Intent</code></h3>
 
 <p><a href="https://github.com/paldepind/union-type">union-type</a> 是一个简单的提供 union type，或者说 case class 的库。</p>
 
@@ -26,7 +28,7 @@
 </code></pre>
 </div>
 
-<h2 id="case-intent-别-switch">case Intent, 别 switch</h2>
+<h3 id="case-intent-别-switch">case Intent, 别 switch</h3>
 
 <p>case union-type 是 pattern matching, 不是 switch case</p>
 
@@ -47,7 +49,7 @@
 </code></pre>
 </div>
 
-<h2 id="pattern-match-union-type">pattern match union type</h2>
+<h3 id="pattern-match-union-type">pattern match union type</h3>
 
 <p>union type 还可以带上值，比如 <code class="highlighter-rouge">Inc</code> 的内容是 <code class="highlighter-rouge">Number</code></p>
 
@@ -78,6 +80,41 @@
 </code></pre>
 </div>
 
+<h2 id="typescript-union-types">TypeScript Union Types</h2>
+<p>使用 TypeScript 的 Union Type 会简单得多, 而且运行时是zero cost, 只会在编译时检查.</p>
+
+<div class="language-ts highlighter-rouge"><pre class="highlight"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">Inc</span> <span class="p">{</span>
+  <span class="nl">kind</span><span class="p">:</span> <span class="s1">'inc'</span>
+<span class="p">}</span>
+<span class="k">export</span> <span class="kr">interface</span> <span class="nx">Dec</span> <span class="p">{</span>
+  <span class="nl">kind</span><span class="p">:</span> <span class="s1">'dec'</span>
+<span class="p">}</span>
+<span class="k">export</span> <span class="kd">type</span> <span class="nx">Intent</span> <span class="o">=</span> <span class="nx">Inc</span> <span class="o">|</span> <span class="nx">Dec</span>
+</code></pre>
+</div>
+
+<p>稍微缺陷的是 TypeScript 没有 pattern matching</p>
+
+<div class="language-ts highlighter-rouge"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">x</span><span class="o">&lt;</span><span class="s2">"Observable"</span><span class="p">,</span> <span class="nx">Intent</span><span class="p">,</span> <span class="nx">State</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">intent</span> <span class="o">=&gt;</span><span class="p">{</span>
+          <span class="k">switch</span><span class="p">(</span><span class="nx">intent</span><span class="p">.</span><span class="nx">kind</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="s1">'inc'</span><span class="p">:</span> <span class="k">return</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">})</span>
+          <span class="k">case</span> <span class="s1">'dec'</span><span class="p">:</span> <span class="k">return</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">})</span>
+          <span class="na">default</span><span class="p">:</span> <span class="k">return</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="s1">'
+          }
+        }),
+        actions: {
+            inc: () =&gt; ({kind: '</span><span class="nx">inc</span><span class="s1">'} as Inc),
+            dec () =&gt; ({kind: '</span><span class="nx">dec</span><span class="err">'</span><span class="p">}</span> <span class="k">as</span> <span class="nx">Dec</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<p>但是没关系, 编译器会保证你case的类型正确, 比如你在case 里写错类型的字符串如 <code class="highlighter-rouge">incblahblah</code>, 编译不会通过.</p>
+
 <h2 id="lens">lens</h2>
 
 <p>lens 是 composable, immutable, functional 的更新，观察数据结构的方式</p>
@@ -87,7 +124,7 @@
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">lens</span><span class="p">,</span> <span class="nx">over</span><span class="p">,</span> <span class="nx">inc</span><span class="p">,</span> <span class="nx">dec</span><span class="p">,</span> <span class="nx">identity</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'ramda'</span>
 <span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">lensCount</span> <span class="o">=</span> <span class="nx">lens</span><span class="p">(</span><span class="nx">prop</span><span class="p">(</span><span class="s1">'count'</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">{</span>
+     <span class="k">return</span> <span class="p">{</span>
         <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Inc</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">inc</span><span class="p">)</span>
             <span class="na">Dec</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">dec</span><span class="p">),</span>
