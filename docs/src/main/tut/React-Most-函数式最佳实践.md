@@ -11,8 +11,10 @@ section: zh
 
 先来初级的函数式重构
 
-使用 union-type 定义 `Intent`
------------------------------
+JavaScript Union Types
+---------------
+
+### 使用 Union Type 定义 `Intent`
 
 [union-type](https://github.com/paldepind/union-type) 是一个简单的提供 union type，或者说 case class 的库。
 
@@ -34,8 +36,7 @@ export default Type({
 })
 ```
 
-case Intent, 别 switch
-----------------------
+### case Intent, 别 switch
 
 case union-type 是 pattern matching, 不是 switch case
 
@@ -56,8 +57,7 @@ const counterable = connect(intent$ => {
 })
 ```
 
-pattern match union type
-------------------------
+### pattern match union type
 
 union type 还可以带上值，比如 `Inc` 的内容是 `Number`
 
@@ -88,6 +88,42 @@ const counterable = connect(intent$ => {
 })
 ```
 
+TypeScript Union Types
+----------------------
+使用 TypeScript 的 Union Type 会简单得多, 而且运行时是zero cost, 只会在编译时检查.
+
+```ts
+export interface Inc {
+  kind: 'inc'
+}
+export interface Dec {
+  kind: 'dec'
+}
+export type Intent = Inc | Dec
+```
+
+稍微缺陷的是 TypeScript 没有 pattern matching
+
+```ts
+const counterable = x<"Observable", Intent, State>(intent$ => {
+    return {
+        update$: intent$.map(intent =>{
+          switch(intent.kind) {
+          case 'inc': return state => ({count: state.count + 1})
+          case 'dec': return state => ({count: state.count + 1})
+          default: return state => state'
+          }
+        }),
+        actions: {
+            inc: () => ({kind: 'inc'} as Inc),
+            dec () => ({kind: 'dec'} as Dec)
+        }
+    }
+})
+```
+
+但是没关系, 编译器会保证你case的类型正确, 比如你在case 里写错类型的字符串如 `incblahblah`, 编译不会通过.
+
 lens
 ----
 
@@ -99,7 +135,7 @@ lens 是 composable, immutable, functional 的更新，观察数据结构的方�
 import {lens, over, inc, dec, identity} from 'ramda'
 const counterable = connect(intent$ => {
     let lensCount = lens(prop('count'))
-    return {
+     return {
         sink$: intent$.map(Intent.case({
             Inc: () => over(lensCount, inc)
             Dec: () => over(lensCount, dec),
@@ -187,6 +223,7 @@ const CounterView = props => (
 ```
 
 现在我们的Counter 就变成了[这样](https://github.com/reactive-react/react-most/blob/master/examples/frp-counter/src/app.jsx)
+
 
 搞基
 ====
