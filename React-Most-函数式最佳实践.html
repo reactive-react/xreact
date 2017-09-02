@@ -33,9 +33,9 @@
 <p>case union-type 是 pattern matching, 不是 switch case</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">Intent</span> <span class="nx">from</span> <span class="s1">'intent'</span>
-<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Inc</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}),</span>
             <span class="na">Dec</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}),</span>
             <span class="na">_</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span>
@@ -64,9 +64,9 @@
 <p>你可以 case <code class="highlighter-rouge">Number</code> 出啦</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">Intent</span> <span class="nx">from</span> <span class="s1">'intent'</span>
-<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Inc</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="nx">value</span><span class="p">}),</span>
             <span class="na">Dec</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">count</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">count</span> <span class="o">-</span> <span class="nx">value</span><span class="p">}),</span>
             <span class="na">_</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span>
@@ -122,10 +122,10 @@
 <p>下面是使用 <a href="http://ramdajs.com/">ramda</a> 的 lens 实现的例子</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">lens</span><span class="p">,</span> <span class="nx">over</span><span class="p">,</span> <span class="nx">inc</span><span class="p">,</span> <span class="nx">dec</span><span class="p">,</span> <span class="nx">identity</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'ramda'</span>
-<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">lensCount</span> <span class="o">=</span> <span class="nx">lens</span><span class="p">(</span><span class="nx">prop</span><span class="p">(</span><span class="s1">'count'</span><span class="p">))</span>
      <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Inc</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">inc</span><span class="p">)</span>
             <span class="na">Dec</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">dec</span><span class="p">),</span>
             <span class="na">_</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">identity</span>
@@ -141,10 +141,10 @@
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">when</span> <span class="nx">from</span> <span class="s1">'when'</span>
 <span class="kr">import</span> <span class="p">{</span><span class="nx">just</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">lens</span><span class="p">,</span> <span class="nx">over</span><span class="p">,</span> <span class="nx">set</span><span class="p">,</span> <span class="nx">inc</span><span class="p">,</span> <span class="nx">dec</span><span class="p">,</span> <span class="nx">identity</span><span class="p">,</span> <span class="nx">compose</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'ramda'</span>
-<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kr">const</span> <span class="nx">counterable</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">lensCount</span> <span class="o">=</span> <span class="nx">lens</span><span class="p">(</span><span class="nx">prop</span><span class="p">(</span><span class="s1">'count'</span><span class="p">))</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Inc</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">inc</span><span class="p">)</span>
             <span class="na">Dec</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">dec</span><span class="p">),</span>
             <span class="na">_</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">identity</span>
@@ -173,10 +173,10 @@
 
 <p>比如还可以创建一个wrapper，可以翻倍、减半</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">doublable</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">doublable</span> <span class="o">=</span> <span class="nx">x</span><span class="p">(</span><span class="nx">intent$</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">lensCount</span> <span class="o">=</span> <span class="nx">lens</span><span class="p">(</span><span class="nx">prop</span><span class="p">(</span><span class="s1">'count'</span><span class="p">))</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="nx">sink</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
+        <span class="nx">update</span><span class="na">$</span><span class="p">:</span> <span class="nx">intent$</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">Intent</span><span class="p">.</span><span class="k">case</span><span class="p">({</span>
             <span class="na">Double</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
             <span class="na">Half</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">over</span><span class="p">(</span><span class="nx">lensCount</span><span class="p">,</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">X</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
             <span class="na">_</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">identity</span><span class="p">,</span>
@@ -214,15 +214,14 @@
 
 <h1 id="搞基">搞基</h1>
 
-<p>掌握了 lens，union-type, flatmap, compose 的概念之后，如果还不够爽，可以用一些更搞基的pattern来让代码的 <del>逼格</del> 扩展性更高一些。比如</p>
+<p>掌握了 lens，union-type, flatmap, compose 的概念之后，如果还不够爽，可以用一些更搞基的pattern来让代码的 <del>逼格</del> 扩展性更高一些。比如:</p>
+
+<h2 id="fantasyx"><a href="https://xreact.oyanglul.us/%E8%8C%83%E7%89%B9%E8%A5%BF.html">FantasyX</a></h2>
+<p>Fantasy land 标准的 Functor, Monoid, Applicative</p>
 
 <h2 id="data-types-à-la-carte"><a href="https://github.com/jcouyang/alacarte">Data types à la carte</a></h2>
 
-<p>简单的说还是interpreter pattern，但不是用 free monad, 是更简单的combinator，瞬间就能去掉pattern match 和action定义的表达式扩展问题</p>
-
-<p><a href="https://github.com/jcouyang/alacarte/wiki/读我">读我</a></p>
-
-<p>代码看 <a href="https://github.com/reactive-react/react-most/blob/master/examples/alacarte/src/app.jsx">这里</a></p>
+<p>简单的说还是interpreter pattern，但不是用 free monad, 是更简单的combinator，瞬间就能去掉pattern match 和action定义的表达式扩展问题, <a href="https://github.com/jcouyang/alacarte/wiki/读我">比如</a></p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['scala','java','bash']
 });
