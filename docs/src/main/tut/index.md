@@ -19,23 +19,22 @@ npm install xreact --save
 yarn add xreact
 ```
 
-A 👉 [quick walk through of a counter app](Get-Started.html) will give you a brief idea of how xReact work.
+- Come from redux? :point_right: <https://xreact.oyanglul.us/Get-Started.html>
+- Come from fantasy land? :rainbow: <https://xreact.oyanglul.us/Fantasy.html>
+- Examples :point_down:
+  - <https://github.com/reactive-react/xreact/tree/master/examples>
+  - <https://xreact.oyanglul.us/Examples.html>
 
 ## Features
 
 ### Purely Functional, Declarative, and Monadic
 In imperatively written code, you describe step-by-step how to process data.  With `xreact`, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
-![](https://github.com/fantasyland/fantasy-land/raw/master/logo.png)
-
-There's also [Fantasy Land](https://github.com/fantasyland/fantasy-land) implementation in `src/fantasy.ts`, you can see [bmi calculator example](https://github.com/reactive-react/xreact/blob/master/examples/bmi-calc/app.tsx) to get the idea.
-
 ### Typesafe and scalable
 xReact is 100% Typescript!, abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.
 
 ### Composable and Reusable `Plan`
 In Redux, reducers' use of `switch` statements can make them difficult to compose. Unlike reducers, the function `x` return is simply a function which can easily compose.
-
 
 ```js
 const Counter = x(plan1)(x(plan2)(CounterView))
@@ -53,15 +52,8 @@ Because UI and UI behavior are loosely coupled, you can test a React component b
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
 
 ```js
-import {Observable} from '@reactivex/rxjs/Observable'
-
-...
-
 intent$.filter(x=>x.kind=='rest')
   .flatMap(({url}) => Observable.fromPromise(fetch(url)))
-  .map(...)
-
-...
 ```
 
 where `fetch(url)` will return a `Promise`,

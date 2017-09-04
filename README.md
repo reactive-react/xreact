@@ -15,7 +15,7 @@ xReact is a Functional Reactive State Wrapper for React Components. Data flow in
 
 ## Get Started
 
-xReact works for both TypeScript and CMD JS, to install xReact simply use you yarn or npm:
+xReact works for both TypeScript and CMD JS, to install xReact simply use yarn or npm:
 
 ```
 npm install xreact --save
@@ -23,15 +23,17 @@ npm install xreact --save
 yarn add xreact
 ```
 
-- Quick Start :point_right: https://xreact.oyanglul.us/Get-Started.html
-- Examples :point_right: https://github.com/reactive-react/xreact/tree/master/examples
+
+- Come from redux? :point_right: <https://xreact.oyanglul.us/Get-Started.html>
+- Come from fantasy land? :rainbow: <https://xreact.oyanglul.us/Fantasy.html>
+- Examples :point_down:
+  - <https://github.com/reactive-react/xreact/tree/master/examples>
+  - <https://xreact.oyanglul.us/Examples.html>
 
 ## Documentation
 
-xReact information and documentation is available on [the website](http://xreact.oyanglul.us/).
+All xReact information and documentation is available on [the website](http://xreact.oyanglul.us/).
 
-<!-- We also have a Scaladoc index. -->
+And... we have a list of [frequently-asked questions](https://xreact.oyanglul.us/FAQ.html).
 
-Finally, we have a list of [frequently-asked questions](https://xreact.oyanglul.us/FAQ.html).
-
-Our goal is to have clear and comprehensive documentation. If you notice problems, omissions, or errors, please [let us know](https://github.com/reactive-react/xreact/issues).
+Our goal is to have clear and comprehensive documentation. If you notice problems, omissions, or errors, please [let us know](https://github.com/reactive-react/xreact/issues), or PR is more than welcome.
