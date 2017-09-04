@@ -9,16 +9,21 @@ yarn add xreact
 </code></pre>
 </div>
 
-<p>A 👉 <a href="Get-Started.html">quick walk through of a counter app</a> will give you a brief idea of how xReact work.</p>
+<ul>
+  <li>Come from redux? :point_right: <a href="https://xreact.oyanglul.us/Get-Started.html">https://xreact.oyanglul.us/Get-Started.html</a></li>
+  <li>Come from fantasy land? :rainbow: <a href="https://xreact.oyanglul.us/Fantasy.html">https://xreact.oyanglul.us/Fantasy.html</a></li>
+  <li>Examples :point_down:
+    <ul>
+      <li><a href="https://github.com/reactive-react/xreact/tree/master/examples">https://github.com/reactive-react/xreact/tree/master/examples</a></li>
+      <li><a href="https://xreact.oyanglul.us/Examples.html">https://xreact.oyanglul.us/Examples.html</a></li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="features">Features</h2>
 
 <h3 id="purely-functional-declarative-and-monadic">Purely Functional, Declarative, and Monadic</h3>
 <p>In imperatively written code, you describe step-by-step how to process data.  With <code class="highlighter-rouge">xreact</code>, we simply define data transformations, then compose them to form our data flow. There are no variables, no intermediate state, and no side effects in your data flow’s data composition!</p>
-
-<p><img src="https://github.com/fantasyland/fantasy-land/raw/master/logo.png" alt="" /></p>
-
-<p>There’s also <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a> implementation in <code class="highlighter-rouge">src/fantasy.ts</code>, you can see <a href="https://github.com/reactive-react/xreact/blob/master/examples/bmi-calc/app.tsx">bmi calculator example</a> to get the idea.</p>
 
 <h3 id="typesafe-and-scalable">Typesafe and scalable</h3>
 <p>xReact is 100% Typescript!, abstract Stream as Higher Kind type so easier to bring new FRP lib to integrete with xreact.</p>
@@ -41,15 +46,8 @@ yarn add xreact
 <h3 id="async-actions-made-easy">Async actions made easy</h3>
 <p>Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">Observable</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'@reactivex/rxjs/Observable'</span>
-
-<span class="p">...</span>
-
-<span class="nx">intent$</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="p">.</span><span class="nx">kind</span><span class="o">==</span><span class="s1">'rest'</span><span class="p">)</span>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">intent$</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="p">.</span><span class="nx">kind</span><span class="o">==</span><span class="s1">'rest'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">flatMap</span><span class="p">(({</span><span class="nx">url</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">)))</span>
-  <span class="p">.</span><span class="nx">map</span><span class="p">(...)</span>
-
-<span class="p">...</span>
 </code></pre>
 </div>
 
