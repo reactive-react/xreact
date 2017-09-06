@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import '@reactivex/rxjs'
-import { Plan, X, pure, map, lift2, lift, lift3, lift4, lift5, concat } from '..'
+import { Plan, X, fromPlan, map, lift2, lift, lift3, lift4, lift5, concat } from '..'
 import * as rx from '../xs/rx'
 import { Observable } from '@reactivex/rxjs'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -31,7 +31,7 @@ interface CountProps {
 
 let mountx = compose(mount, y => React.createFactory(X)({ x: rx }, y))
 
-const fantasyX = pure<rx.URI, Intent, CountProps>((intent$) => {
+const fantasyX = fromPlan<rx.URI, Intent, CountProps>((intent$) => {
   return {
     update$: intent$.map((intent) => {
       switch (intent.type) {
@@ -153,7 +153,7 @@ describe('actions', () => {
   describe('concat', () => {
     let fantasyXB;
     beforeEach(() => {
-      fantasyXB = pure<rx.URI, Intent, CountProps>((intent$) => {
+      fantasyXB = fromPlan<rx.URI, Intent, CountProps>((intent$) => {
         return {
           update$: intent$.map((intent) => {
             switch (intent.type) {
@@ -244,7 +244,7 @@ describe('liftN', () => {
 
   beforeEach(() => {
     let fan = [1, 2, 3, 4, 5];
-    Fa = fan.map(i => pure<rx.URI, Intent, CountProps>(intent$ => {
+    Fa = fan.map(i => fromPlan<rx.URI, Intent, CountProps>(intent$ => {
       return {
         update$: Observable.of(state => ({ count: i })),
         actions: {

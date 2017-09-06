@@ -1,4 +1,4 @@
-import { Stream, empty, combineArray } from 'most'
+import { Stream, empty, just, combineArray } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription, StreamOps } from './index'
 
@@ -9,6 +9,7 @@ declare module './index' {
 }
 
 StreamOps.prototype.empty = empty
+StreamOps.prototype.just = just
 StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }

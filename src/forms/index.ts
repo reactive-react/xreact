@@ -1,5 +1,5 @@
 import { HKTS, streamOps, HKT } from '../xs'
-import { Update, pure } from '..'
+import { Update, fromPlan } from '..'
 import { FantasyX } from '../fantasy/fantasyx'
 import { Partial } from '../fantasy/interfaces'
 
@@ -11,7 +11,7 @@ export function xinput<
   E extends HKTS,
   I extends Event,
   S extends AnyProps>(name: keyof S) {
-  return pure<E, I, S>(intent$ => {
+  return fromPlan<E, I, S>(intent$ => {
     return {
       update$:
       streamOps.map<string, Update<S>>(

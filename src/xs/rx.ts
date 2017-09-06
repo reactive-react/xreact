@@ -16,6 +16,8 @@ declare module './index' {
 
 StreamOps.prototype.empty = Observable.empty
 
+StreamOps.prototype.just = Observable.of
+
 StreamOps.prototype.combine = function(f, ...v) {
   return Observable.combineLatest(v, f)
 }

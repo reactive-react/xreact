@@ -1,10 +1,10 @@
-import { HKTS, streamOps } from '../xs'
+import { HKTS, streamOps, HKT } from '../xs'
 import { FantasyX } from './fantasyx'
 import { Plan, Update } from '../interfaces'
 import { StateP, Partial } from './interfaces'
 import { State } from './state'
 
-export function pure<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S> {
+export function fromPlan<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S> {
   return new FantasyX<E, I, S>(intent$ => {
     let { update$, actions } = plan(intent$)
     return {
@@ -12,6 +12,14 @@ export function pure<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, 
       update$: streamOps.map<Update<Partial<S>>, StateP<S>>(
         f => State.patch<S>(f), update$
       )
+    }
+  })
+}
+
+export function pure<E extends HKTS, I, S>(s: S) {
+  return new FantasyX<E, I, S>(intent$ => {
+    return {
+      update$: streamOps.map<I, StateP<S>>(() => State.pure<S>(s), intent$ as HKT<I>[E])
     }
   })
 }
