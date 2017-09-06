@@ -10,11 +10,10 @@ Functional Best Practice in xReact
 I'll guide you to some good practice of Functional Programming through the Counter example.
 
 > It's really helpful even you don't use xreact, the FP idea is common and applicable to anywhere even for redux project.
-
-use Union Type to define Intent
+Usee Union Type to define Intent
 -------------------------------
 
-union-type is a awesome library to define union type/case class.
+union-type is an awesome library to define union type/case class.
 
 most flux-like library will define Intents using the keyword \`type\`
 

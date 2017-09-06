@@ -42,10 +42,10 @@ every View component expected a `actions` fields in `props`
 
 ![](https://www.evernote.com/l/ABeLlbr3vQNM_JKfcd_W4zfW262lxWJhOsMB/image.png)
 
-After we have a pretty view for represention and inteacting interface, we can define how to update the view, or "how to react on actions". In such case:
+After we have a pretty view for representation and interacting interface, we can define how to update the view, or "how to react on actions". In such case:
 
 1. A counter can have actions of `inc` and `dec`, which will send `Intent` of `{type: 'inc'}` or `{type:'dec'}` to `Intent Stream` upon being called.
-2. A counter reactively generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
+2. A counter reactivity generates `Update` when it receives an `Intent` of either type `inc` or `dec`.
 
 ```js
 const plan = (intent$) => {
@@ -99,6 +99,6 @@ render(
 
 ## Type Safe Counter
 
-If you are TypeScript user and want to enjoy a type safe counter app, it's simple to do so since Xreact is written 100% in TypeScript.
+If you are TypeScript user and want to enjoy a type safe counter app, it's simple to do so since xReact is written 100% in TypeScript.
 
 <iframe src="https://www.webpackbin.com/bins/-KsSYQVTkFjd_MQon3b9" frameborder="0" width="100%" height="500"></iframe>

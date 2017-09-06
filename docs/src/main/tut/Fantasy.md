@@ -7,7 +7,7 @@ position: 3
 
 # XReact Fantasy
 
-xreact is a Functional library that can integrete FRP lib rxjs or mostjs into react. But there're still too many details you need to care while modeling UI components.
+xreact is a Functional library that can integrate FRP lib rxjs or mostjs into react. But there're still too many details you need to care while modeling UI components.
 
 The implement of [Fantasy Land](https://github.com/fantasyland/fantasy-land), which will change the way you model and implement UI entirely.
 
@@ -92,7 +92,7 @@ For example, from `XMult`, we could simply transform it into a `XMMP` with new c
 let XMMP = XMult.map((s) => ({output: s.output * s.output}))
 ```
 
-it's just like maping on a list
+it's just like mapping on a list
 
 ```js
 [1,2,3].map(x=>x*x)
@@ -105,7 +105,7 @@ it's just like maping on a list
 
 ## Monoid
 
-It's actually Semigroup, but if we have a ID FantasyX, we have Monoid, a Identity FantasyX make sense in that the computation inside is just Identity.
+It's actually Semigroup, but if we have a ID FantasyX, we have Monoid, an Identity FantasyX make sense in that the computation inside is just Identity.
 
 Anyway, let's see how can we combine two FantasyX together
 
