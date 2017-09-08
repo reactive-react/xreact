@@ -1,4 +1,4 @@
-lazy val docs = (project in file("./docs"))
+lazy val docs = project
   .enablePlugins(MicrositesPlugin)
   .settings(
     micrositeName := "xReact",
