@@ -30,6 +30,8 @@ yarn add xreact
 ### Purely Functional, Declarative, and Monadic
 In imperatively code, you have to describe verbose of how to process data.  With `xreact`, we simply define data transformations, then compose them to form data flow. There are no variables, no intermediate state, and no side effects in your data flow's data composition!
 
+For FP maniac, you will definitely have fun with [FantasyX](https://xreact.oyanglul.us/Fantasy.html), which implemented Functor and Applicative type class instances on top of xReact, with State Monad.
+
 ### Typesafe and scalable
 xReact is 100% Typescript! Turn your runtime bugs into compile time errors, fail and fix early.
 
@@ -43,7 +45,7 @@ const plan1_x_plan2_x = compose(x(plan1), x(plan2))
 const Counter = plan1_x_plan2_x(CounterView)
 ```
 
-What really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC and no any performance overhead.
+What really happen behind compose is actually ES6 style mixin, so there won't be any extra layer of HoC or any performance overhead.
 
 ### Asynchronous made easy
 Asynchronous functions, such as Promises, can be converted to a stream and then flat-mapped.
