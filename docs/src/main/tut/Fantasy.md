@@ -7,25 +7,31 @@ position: 3
 
 # XReact Fantasy
 
-xreact is a Functional library that can integrate FRP lib rxjs or mostjs into react. But there're still too many details you need to care while modeling UI components.
+xReact is a Functional library that can integrate FRP lib rxjs or mostjs into react. But there're still too many verbose you need to care while modeling UI components.
 
 The implement of [Fantasy Land](https://github.com/fantasyland/fantasy-land), which will change the way you model and implement UI entirely.
+
+> The idea of FantasyX is highly inspired by [flare](http://sharkdp.github.io/purescript-flare/) by purescript
 
 ## `lift`
 
 Let's use List as example, what `lift` does is very similar to `map`
 
 ```js
-[1,2,3].map(x=>x+1) // => [2,3,4]
+const f = x => x + 1
+[1,2,3].map(f) // => [2,3,4]
 ```
+
+It simply map `f` to every items in the list. While if we do it another way around:
 
 ```js
-lift(x=>x+1)([1,2,3]) // => [2,3,4]
+const lf = lift(f)
+lf([1,2,3]) // => [2,3,4]
 ```
 
-You should notice that both lift and map transform `x => x + 1` which should only able to apply to `Number`, to a function that can apply to `Array[Number]`
+Now `lf` can take a list, apply `f` to each item, and return a new list. So `lf` is just a lifted version of `f`. You should notice that both lift and map transform `x => x + 1` which should only able to apply to `Number`, to a function that can apply to `Array<Number>`
 
-We can now (from v2.3.0) lift a normal function to which can apply to xReact FantasyX as well.
+We can now (from v2.3.0) lift a normal function(takes value and return value) to a FantasyX level function(take FantasyX and return FantasyX) as well.
 
 Let's take a look at a really simple example, multiply 2 numbers.
 
@@ -37,7 +43,7 @@ function mult(a, b) {
 mult(1, 2)
 ```
 
-But if we need a React Component that multiply 2 numbers from 2 input box, how complicated it could be?
+But if we need a React Component that multiply 2 numbers from 2 input boxes, how complicated it could be?
 
 Now you get simply get a free FantasyX from just any normal function, via `lift`.
 
