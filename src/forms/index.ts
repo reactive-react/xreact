@@ -23,7 +23,12 @@ export function xinput<
         streamOps.map<Event, string>(
           e => (e.target as HTMLFormElement).value,
           streamOps.filter<I>(i => {
-            return i.type == 'change' && (i.target as HTMLFormElement).name == name
+            let target = i.target as HTMLFormElement
+            if (target.type in ['submit', 'search', 'button', 'search', 'reset']) {
+              return i.type == 'click' && (target as HTMLFormElement).name == name
+            } else {
+              return i.type == 'change' && (target as HTMLFormElement).name == name
+            }
           }, (intent$ as HKT<I>[E])))
       )
     }
