@@ -19,7 +19,7 @@ const CounterView: React.SFC<any> = props => (
   </div>
 )
 
-CounterView.defaultProps = { count: 0 }
+CounterView.defaultProps = { count: 0, count1: 1, count2: 0 }
 
 interface Intent {
   type: string
@@ -27,6 +27,8 @@ interface Intent {
 }
 interface CountProps {
   count: number
+  count1: number
+  count2: number
 }
 
 let mountx = compose(mount, y => React.createFactory(X)({ x: rx }, y))
@@ -75,9 +77,10 @@ describe('actions', () => {
   describe('map', () => {
     beforeEach(() => {
       Counter = fantasyX.map(a => (
-        { count: (a.count || 0) * 2 }
-      ))
-        .apply(CounterView)
+        { count1: (a.count1 || 1) * 2 }
+      )).concat(fantasyX.map(a => (
+        { count2: (a.count2 || 0) + 2 }
+      ))).apply(CounterView)
 
       counterWrapper = mountx(<Counter />)
       counter = counterWrapper.find(Counter).getNode()
@@ -93,7 +96,11 @@ describe('actions', () => {
           actions.inc,
         ])
         .collect(counter)
-        .then(x => expect(x.count).toBe(14))
+        .then(x => {
+          /* -(count+1) (count1*2)-(count+1) (count1*2)-(count+1) (count1*2)-> */
+          /* -(count+1) (count2+2)-(count+1) (count2+2)-(count+1) (count2+2)-> */
+          expect(x).toEqual({ "count": 6, "count1": 8, "count2": 6 })
+        })
     })
   })
 

@@ -33,7 +33,7 @@ export class PlanX<E extends HKTS, I, A> {
         (S1, S2) =>
           S1.chain(s1 =>
             S2.chain(s2 =>
-              State.pure(f(s1, s2))
+              State.patch<A>(() => f(s1, s2))
             )
           )
         , machineA.update$, machineB.update$
@@ -57,7 +57,7 @@ export class PlanX<E extends HKTS, I, A> {
           S1.chain(s1 =>
             S2.chain(s2 =>
               S3.chain(s3 =>
-                State.pure(f(s1, s2, s3)))))
+                State.patch<A>(() => f(s1, s2, s3)))))
         , machineA.update$, machineB.update$, machineC.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions)
@@ -83,7 +83,7 @@ export class PlanX<E extends HKTS, I, A> {
             S2.chain(s2 =>
               S3.chain(s3 =>
                 S4.chain(s4 =>
-                  State.pure(f(s1, s2, s3, s4))))))
+                  State.patch<A>(() => f(s1, s2, s3, s4))))))
         , machineA.update$, machineB.update$, machineC.update$, machineD.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions, machineD.actions)
@@ -112,7 +112,7 @@ export class PlanX<E extends HKTS, I, A> {
               S3.chain(s3 =>
                 S4.chain(s4 =>
                   S5.chain(s5 =>
-                    State.pure(f(s1, s2, s3, s4, s5)))))))
+                    State.patch<A>(() => f(s1, s2, s3, s4, s5)))))))
         , machineA.update$, machineB.update$, machineC.update$, machineD.update$, machineE.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions, machineD.actions, machineE.actions)
@@ -138,7 +138,7 @@ export class PlanX<E extends HKTS, I, A> {
     return new PlanX<E, I, A>(intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, StateP<A>>(
-        state => state.chain(s => State.pure(f(s))),
+        state => state.chain(() => State.patch<A>(f)),
         machine.update$
       )
       return { update$, actions: machine.actions }
@@ -151,7 +151,7 @@ export class PlanX<E extends HKTS, I, A> {
     return new PlanX<E, I, A>(intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, StateP<A>>(
-        state => state.chain(s => State.pure(fb(s))),
+        state => state.chain(() => State.patch<A>(fb)),
         machine.update$
       )
       return { update$, actions: fa(machine.actions) }
@@ -162,7 +162,7 @@ export class PlanX<E extends HKTS, I, A> {
     return intent$ => {
       let machine = this.apply(intent$)
       let update$ = streamOps.map<StateP<A>, Update<A>>(
-        s => s.runA.bind(s),
+        s => s.runS.bind(s),
         machine.update$
       )
       return { update$, actions: machine.actions }
