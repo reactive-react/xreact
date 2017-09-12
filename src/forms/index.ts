@@ -24,7 +24,7 @@ export function xinput<
           e => (e.target as HTMLFormElement).value,
           streamOps.filter<I>(i => {
             let target = i.target as HTMLFormElement
-            if (target.type in ['submit', 'search', 'button', 'search', 'reset']) {
+            if (['submit', 'search', 'button', 'search', 'reset'].indexOf(target.type) >= 0) {
               return i.type == 'click' && (target as HTMLFormElement).name == name
             } else {
               return i.type == 'change' && (target as HTMLFormElement).name == name
