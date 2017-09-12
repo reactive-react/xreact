@@ -60,10 +60,18 @@ export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React
               console.log('UPDATE:', action)
             this.setState((prevState, props) => {
               let newState = action.call(this, prevState, props);
-              this.context[XREACT_ENGINE].history$.next(newState)
+              let newStateWithoutPromise = {}
+              for (let i in newState) {
+                if (isPromise(newState[i])) {
+                  newState[i].then(v => this.setState(v))
+                } else {
+                  newStateWithoutPromise[i] = newState[i]
+                }
+              }
+              this.context[XREACT_ENGINE].history$.next(newStateWithoutPromise)
               if (process.env.NODE_ENV == 'debug')
-                console.log('STATE:', newState)
-              return newState;
+                console.log('STATE:', newStateWithoutPromise)
+              return newStateWithoutPromise;
             });
           } else {
             /* istanbul ignore next */
@@ -139,4 +147,8 @@ function pick(names, obj) {
     if (obj[name]) result[name] = obj[name];
   }
   return result;
+}
+
+function isPromise(p) {
+  return p !== null && typeof p === 'object' && typeof p.then === 'function'
 }
