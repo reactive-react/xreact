@@ -45,5 +45,26 @@ xmount(<Eg2/>, document.getElementById('eg2') )
 
 #+HTML: <p><div id="eg2"></div></p>
 
+* Example 3: Semigroup
+#+BEGIN_SRC tsx :tangle test.tsx
+let Xeg3 = fromEvent('change', 'string1', 'Jichao')
+.concat(pure(' '))
+.concat(fromEvent('change', 'string2', 'Ouyang'))
+
+let ViewEg3 = props => <section>
+  <p><input type="text" name="string1" onChange={props.actions.fromEvent} /></p>
+  <p><input type="text" name="string2" onChange={props.actions.fromEvent} /></p>
+  <p>{props.semigroup}</p>
+</section>
+
+let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
+#+END_SRC
+
+#+BEGIN_SRC tsx :tangle test.tsx :exports none
+xmount(<Eg3/>, document.getElementById('eg3') )
+#+END_SRC
+
+
+#+HTML: <p><div id="eg3"></div></p>
 
 #+HTML: <script src="test.js"></script>

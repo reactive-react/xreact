@@ -19,3 +19,16 @@ let ViewEg2 = props => <section>
 let Eg2 = Xeg2.map(a=>({product: a})).apply(ViewEg2)
 
 xmount(<Eg2/>, document.getElementById('eg2') )
+
+let Xeg3 = fromEvent('change', 'string1', '5')
+.concat(pure(' '))
+.concat(fromEvent('change', 'string2', '6'))
+
+let ViewEg3 = props => <section>
+  <p><input type="text" name="string1" onChange={props.actions.fromEvent}/></p>
+  <p><input type="text" name="string2" onChange={props.actions.fromEvent} /></p>
+  <p>{props.semigroup}</p>
+</section>
+let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
+
+xmount(<Eg3/>, document.getElementById('eg3') )

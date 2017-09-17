@@ -16,6 +16,13 @@ import { Actions, Plan, Update } from '../interfaces'
 //   }
 // }
 
+interface Semigroup {
+  concat: <A>(a: A) => A
+}
+function isSemigroup(a: any): a is Semigroup {
+  return typeof a.concat == 'function'
+}
+
 export class PlanX<E extends HKTS, I, S, A> {
   apply: PlanS<E, I, S, A>
   constructor(plan: PlanS<E, I, S, A>) {
@@ -120,18 +127,16 @@ export class PlanX<E extends HKTS, I, S, A> {
     })
   }
 
+
   concat(
     fa: PlanX<E, I, S, A>
   ): PlanX<E, I, S, A> {
-    return new PlanX<E, I, S, A>(intent$ => {
-      let machineA = this.apply(intent$)
-      let machineB = fa.apply(intent$)
-      let update$ = streamOps.merge<State<S, A>>(
-        machineA.update$,
-        machineB.update$
-      )
-      return { update$, actions: Object.assign({}, machineA.actions, machineB.actions) }
-    })
+    return this.combine((a, b) => {
+      if (isSemigroup(a) && isSemigroup(b))
+        return a.concat(b)
+      else
+        return b
+    }, fa)
   }
 
   map<B>(f: (a: A) => B): PlanX<E, I, S, B> {
