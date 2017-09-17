@@ -4,8 +4,8 @@ export class State<S, A> {
   constructor(runState: (s: S) => pair<S, A>) {
     this.runState = runState
   }
-  static pure<A>(a: A) {
-    return new State((s: any) => ({ s: s, a: a }))
+  static pure<S, A>(a: A) {
+    return new State((s: S) => ({ s: s, a: a }))
   }
 
   chain<B>(f: (a: A) => State<S, B>): State<S, B> {
@@ -23,6 +23,13 @@ export class State<S, A> {
     return this.runState(state).s
   }
 
+  map<B>(f: (a: A) => B): State<S, B> {
+    return new State((state: S) => {
+      let { a, s } = this.runState(state)
+      return { a: f(a), s: s }
+    })
+  }
+
   static get<S>(): State<S, S> {
     return new State((s: S) => ({ s: s, a: s }))
   }
@@ -31,15 +38,15 @@ export class State<S, A> {
     return new State((_: S) => ({ a: undefined, s: s }))
   }
 
-  static modify<S>(f: (s: S) => S): State<S, void> {
-    return new State((s: S) => ({ a: undefined, s: f(s) }))
+  static modify<S>(f: (s: S) => Partial<S>): State<S, void> {
+    return new State((s: S) => ({ a: undefined, s: Object.assign({}, s, f(s)) }))
   }
 
-  static patch<S>(f: (s: S) => Partial<S>): State<S, Partial<S>> {
-    return new State((s: S) => {
-      let p = f(s)
+  patch(f: (a: A) => Partial<S>): State<S, void> {
+    return new State((state: S) => {
+      let { a, s } = this.runState(state)
       return {
-        a: p, s: Object.assign({}, s, p)
+        a: undefined, s: Object.assign({}, s, f(a))
       }
     })
   }

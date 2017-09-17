@@ -16,24 +16,24 @@ import { Actions, Plan, Update } from '../interfaces'
 //   }
 // }
 
-export class PlanX<E extends HKTS, I, A> {
-  apply: PlanS<E, I, A>
-  constructor(plan: PlanS<E, I, A>) {
+export class PlanX<E extends HKTS, I, S, A> {
+  apply: PlanS<E, I, S, A>
+  constructor(plan: PlanS<E, I, S, A>) {
     this.apply = plan
   }
 
-  combine(
-    f: (a: Partial<A>, b: Partial<A>) => Partial<A>,
-    planB: PlanX<E, I, A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  combine<C, B>(
+    f: (a: A, b: B) => C,
+    planB: PlanX<E, I, S, B>
+  ): PlanX<E, I, S, C> {
+    return new PlanX<E, I, S, C>(intent$ => {
       let machineB = planB.apply(intent$),
         machineA = this.apply(intent$)
-      let update$ = streamOps.combine<StateP<A>, StateP<A>, StateP<A>>(
+      let update$ = streamOps.combine<State<S, A>, State<S, B>, State<S, C>>(
         (S1, S2) =>
           S1.chain(s1 =>
             S2.chain(s2 =>
-              State.patch<A>(() => f(s1, s2))
+              State.pure<S, C>(f(s1, s2))
             )
           )
         , machineA.update$, machineB.update$
@@ -43,21 +43,21 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
-  combine3(
-    f: (a: Partial<A>, b: Partial<A>, c: Partial<A>) => Partial<A>,
-    planB: PlanX<E, I, A>,
-    planC: PlanX<E, I, A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  combine3<B, C, D>(
+    f: (a: A, b: B, c: C) => D,
+    planB: PlanX<E, I, S, B>,
+    planC: PlanX<E, I, S, C>
+  ): PlanX<E, I, S, D> {
+    return new PlanX<E, I, S, D>(intent$ => {
       let machineB = planB.apply(intent$),
         machineA = this.apply(intent$),
         machineC = planC.apply(intent$);
-      let update$ = streamOps.combine<StateP<A>, StateP<A>, StateP<A>, StateP<A>>(
+      let update$ = streamOps.combine<State<S, A>, State<S, B>, State<S, C>, State<S, D>>(
         (S1, S2, S3) =>
           S1.chain(s1 =>
             S2.chain(s2 =>
               S3.chain(s3 =>
-                State.patch<A>(() => f(s1, s2, s3)))))
+                State.pure<S, D>(f(s1, s2, s3)))))
         , machineA.update$, machineB.update$, machineC.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions)
@@ -65,25 +65,25 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
-  combine4(
-    f: (a: Partial<A>, b: Partial<A>, c: Partial<A>, d: Partial<A>) => Partial<A>,
-    planB: PlanX<E, I, A>,
-    planC: PlanX<E, I, A>,
-    planD: PlanX<E, I, A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  combine4<B, C, D, F>(
+    f: (a: A, b: B, c: C, d: D) => F,
+    planB: PlanX<E, I, S, B>,
+    planC: PlanX<E, I, S, C>,
+    planD: PlanX<E, I, S, D>
+  ): PlanX<E, I, S, F> {
+    return new PlanX<E, I, S, F>(intent$ => {
       let machineB = planB.apply(intent$),
         machineA = this.apply(intent$),
         machineC = planC.apply(intent$),
         machineD = planD.apply(intent$)
         ;
-      let update$ = streamOps.combine<StateP<A>, StateP<A>, StateP<A>, StateP<A>, StateP<A>>(
+      let update$ = streamOps.combine<State<S, A>, State<S, B>, State<S, C>, State<S, D>, State<S, F>>(
         (S1, S2, S3, S4) =>
           S1.chain(s1 =>
             S2.chain(s2 =>
               S3.chain(s3 =>
                 S4.chain(s4 =>
-                  State.patch<A>(() => f(s1, s2, s3, s4))))))
+                  State.pure<S, F>(f(s1, s2, s3, s4))))))
         , machineA.update$, machineB.update$, machineC.update$, machineD.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions, machineD.actions)
@@ -91,28 +91,28 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
-  combine5(
-    f: (a: Partial<A>, b: Partial<A>, c: Partial<A>, d: Partial<A>, e: Partial<A>) => Partial<A>,
-    planB: PlanX<E, I, A>,
-    planC: PlanX<E, I, A>,
-    planD: PlanX<E, I, A>,
-    planE: PlanX<E, I, A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  combine5<B, C, D, F, G>(
+    f: (a: A, b: B, c: C, d: D, e: F) => G,
+    planB: PlanX<E, I, S, B>,
+    planC: PlanX<E, I, S, C>,
+    planD: PlanX<E, I, S, D>,
+    planE: PlanX<E, I, S, F>
+  ): PlanX<E, I, S, G> {
+    return new PlanX<E, I, S, G>(intent$ => {
       let machineB = planB.apply(intent$),
         machineA = this.apply(intent$),
         machineC = planC.apply(intent$),
         machineD = planD.apply(intent$),
         machineE = planE.apply(intent$)
         ;
-      let update$ = streamOps.combine<StateP<A>, StateP<A>, StateP<A>, StateP<A>, StateP<A>, StateP<A>>(
+      let update$ = streamOps.combine<State<S, A>, State<S, B>, State<S, C>, State<S, D>, State<S, F>, State<S, G>>(
         (S1, S2, S3, S4, S5) =>
           S1.chain(s1 =>
             S2.chain(s2 =>
               S3.chain(s3 =>
                 S4.chain(s4 =>
                   S5.chain(s5 =>
-                    State.patch<A>(() => f(s1, s2, s3, s4, s5)))))))
+                    State.pure<S, G>(f(s1, s2, s3, s4, s5)))))))
         , machineA.update$, machineB.update$, machineC.update$, machineD.update$, machineE.update$
       )
       let actions = Object.assign({}, machineA.actions, machineB.actions, machineC.actions, machineD.actions, machineE.actions)
@@ -121,12 +121,12 @@ export class PlanX<E extends HKTS, I, A> {
   }
 
   concat(
-    fa: PlanX<E, I, A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+    fa: PlanX<E, I, S, A>
+  ): PlanX<E, I, S, A> {
+    return new PlanX<E, I, S, A>(intent$ => {
       let machineA = this.apply(intent$)
       let machineB = fa.apply(intent$)
-      let update$ = streamOps.merge<StateP<A>>(
+      let update$ = streamOps.merge<State<S, A>>(
         machineA.update$,
         machineB.update$
       )
@@ -134,34 +134,45 @@ export class PlanX<E extends HKTS, I, A> {
     })
   }
 
-  map(f: (a: Partial<A>) => Partial<A>): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  map<B>(f: (a: A) => B): PlanX<E, I, S, B> {
+    return new PlanX<E, I, S, B>(intent$ => {
       let machine = this.apply(intent$)
-      let update$ = streamOps.map<StateP<A>, StateP<A>>(
-        state => state.chain(() => State.patch<A>(f)),
+      let update$ = streamOps.map<State<S, A>, State<S, B>>(
+        state => state.map(f),
         machine.update$
       )
       return { update$, actions: machine.actions }
     })
   }
 
-  bimap(
-    fa: (b?: Actions<I>) => Actions<I>, fb: (a: Partial<A>) => Partial<A>
-  ): PlanX<E, I, A> {
-    return new PlanX<E, I, A>(intent$ => {
+  patch(f: (a: A) => Partial<S> = _ => _): PlanX<E, I, S, void> {
+    return new PlanX<E, I, S, void>(intent$ => {
       let machine = this.apply(intent$)
-      let update$ = streamOps.map<StateP<A>, StateP<A>>(
-        state => state.chain(() => State.patch<A>(fb)),
+      let update$ = streamOps.map<State<S, A>, State<S, void>>(
+        state => state.patch(f),
+        machine.update$
+      )
+      return { update$, actions: machine.actions }
+    })
+  }
+
+  bimap<B>(
+    fa: (b?: Actions<I>) => Actions<I>, fb: (a: A) => B
+  ): PlanX<E, I, S, B> {
+    return new PlanX<E, I, S, B>(intent$ => {
+      let machine = this.apply(intent$)
+      let update$ = streamOps.map<State<S, A>, State<S, B>>(
+        state => state.map(fb),
         machine.update$
       )
       return { update$, actions: fa(machine.actions) }
     })
   }
 
-  toPlan(): Plan<E, I, A> {
+  toPlan(): Plan<E, I, S> {
     return intent$ => {
       let machine = this.apply(intent$)
-      let update$ = streamOps.map<StateP<A>, Update<A>>(
+      let update$ = streamOps.map<State<S, A>, Update<S>>(
         s => s.runS.bind(s),
         machine.update$
       )

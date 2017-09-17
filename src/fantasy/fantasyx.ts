@@ -3,58 +3,58 @@ import { PlanX } from './planx'
 import { PlanS } from './interfaces'
 import { x } from '../x'
 import { Actions, XcomponentClass } from '../interfaces'
-export class FantasyX<E extends HKTS, I, S> {
-  plan: PlanX<E, I, S>
-  constructor(plan: PlanS<E, I, S>) {
+export class FantasyX<E extends HKTS, I, S, A> {
+  plan: PlanX<E, I, S, A>
+  constructor(plan: PlanS<E, I, S, A>) {
     this.plan = new PlanX(plan)
   }
   apply(WrappedComponent) {
-    return x(this.plan.toPlan())(WrappedComponent)
+    return x(this.plan.patch().toPlan())(WrappedComponent)
   }
-  map(f: (s: Partial<S>) => Partial<S>): FantasyX<E, I, S> {
+  map<B>(f: (a: A) => B): FantasyX<E, I, S, B> {
     return new FantasyX(this.plan.map(f).apply)
   }
 
-  combine(
-    f: (s1: Partial<S>, s2: Partial<S>) => Partial<S>,
-    fb: FantasyX<E, I, S>
-  ): FantasyX<E, I, S> {
+  combine<B, C>(
+    f: (s1: A, s2: B) => C,
+    fb: FantasyX<E, I, S, B>
+  ): FantasyX<E, I, S, C> {
     return new FantasyX(this.plan.combine(f, fb.plan).apply)
   }
 
-  combine3(
-    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>) => Partial<S>,
-    fb: FantasyX<E, I, S>,
-    fc: FantasyX<E, I, S>
-  ): FantasyX<E, I, S> {
+  combine3<B, C, D>(
+    f: (s1: A, s2: B, s3: C) => D,
+    fb: FantasyX<E, I, S, B>,
+    fc: FantasyX<E, I, S, C>
+  ): FantasyX<E, I, S, D> {
     return new FantasyX(this.plan.combine3(f, fb.plan, fc.plan).apply)
   }
 
-  combine4(
-    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>, s4: Partial<S>) => Partial<S>,
-    fb: FantasyX<E, I, S>,
-    fc: FantasyX<E, I, S>,
-    fd: FantasyX<E, I, S>
-  ): FantasyX<E, I, S> {
+  combine4<B, C, D, F>(
+    f: (s1: A, s2: B, s3: C, s4: D) => F,
+    fb: FantasyX<E, I, S, B>,
+    fc: FantasyX<E, I, S, C>,
+    fd: FantasyX<E, I, S, D>
+  ): FantasyX<E, I, S, F> {
     return new FantasyX(this.plan.combine4(f, fb.plan, fc.plan, fd.plan).apply)
   }
 
-  combine5(
-    f: (s1: Partial<S>, s2: Partial<S>, s3: Partial<S>, s4: Partial<S>, s5: Partial<S>) => Partial<S>,
-    fb: FantasyX<E, I, S>,
-    fc: FantasyX<E, I, S>,
-    fd: FantasyX<E, I, S>,
-    fe: FantasyX<E, I, S>
-  ): FantasyX<E, I, S> {
+  combine5<B, C, D, F, G>(
+    f: (s1: A, s2: B, s3: C, s4: D, s5: F) => G,
+    fb: FantasyX<E, I, S, B>,
+    fc: FantasyX<E, I, S, C>,
+    fd: FantasyX<E, I, S, D>,
+    fe: FantasyX<E, I, S, F>
+  ): FantasyX<E, I, S, G> {
     return new FantasyX(this.plan.combine5(f, fb.plan, fc.plan, fd.plan, fe.plan).apply)
   }
 
-  concat(fb: FantasyX<E, I, S>): FantasyX<E, I, S> {
+  concat(fb: FantasyX<E, I, S, A>): FantasyX<E, I, S, A> {
     return new FantasyX(this.plan.concat(fb.plan).apply)
   }
-  bimap(
-    fa: (b?: Actions<I>) => Actions<I>, fb: (a: Partial<S>) => Partial<S>
-  ): FantasyX<E, I, S> {
+  bimap<B>(
+    fa: (b?: Actions<I>) => Actions<I>, fb: (a: A) => B
+  ): FantasyX<E, I, S, B> {
     return new FantasyX(this.plan.bimap(fa, fb).apply)
   }
 }
