@@ -10,6 +10,10 @@ declare module './index' {
 
 StreamOps.prototype.empty = empty
 StreamOps.prototype.just = just
+
+StreamOps.prototype.scan = function(f, base, fa) {
+  return fa.scan(f, base)
+}
 StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }

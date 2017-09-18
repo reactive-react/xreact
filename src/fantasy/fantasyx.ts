@@ -15,6 +15,10 @@ export class FantasyX<E extends HKTS, I, S, A> {
     return new FantasyX(this.plan.map(f).apply)
   }
 
+  fold<B>(f: (acc: B, i: A) => B, base): FantasyX<E, I, S, B> {
+    return new FantasyX(this.plan.fold(f, base).apply)
+  }
+
   combine<B, C>(
     f: (s1: A, s2: B) => C,
     fb: FantasyX<E, I, S, B>

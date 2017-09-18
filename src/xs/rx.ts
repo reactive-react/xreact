@@ -3,10 +3,12 @@ import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
 import { Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
+import '@reactivex/rxjs/dist/cjs/add/operator/scan'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import '@reactivex/rxjs/dist/cjs/add/observable/empty'
 import '@reactivex/rxjs/dist/cjs/add/observable/of'
+
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
 
 declare module './index' {
@@ -19,6 +21,9 @@ StreamOps.prototype.empty = Observable.empty
 
 StreamOps.prototype.just = Observable.of
 
+StreamOps.prototype.scan = function(f, base, fa) {
+  return fa.scan(f, base)
+}
 StreamOps.prototype.combine = function(f, ...v) {
   return Observable.combineLatest(v, f)
 }

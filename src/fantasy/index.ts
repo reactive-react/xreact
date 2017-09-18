@@ -16,7 +16,7 @@ export function fromPlan<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E,
   })
 }
 
-export function fromEvent<E extends HKTS, I extends Event, S>(type: string, name: string, defaultVal: string): FantasyX<E, I, S, string> {
+export function fromEvent<E extends HKTS, I extends Event, S>(type: string, name: string, defaultVal: string = ''): FantasyX<E, I, S, string> {
   return new FantasyX<E, I, S, string>(intent$ => {
     return {
       update$: streamOps.merge<State<S, string>>(
@@ -46,10 +46,17 @@ export function map<E extends HKTS, I, S, A, B>(
   return fa.map(f)
 }
 
+
 export function traverse<E extends HKTS, I, S, A>(
   f: (a: A, index?: number) => FantasyX<E, I, S, A>, xs: A[]
 ): FantasyX<E, I, S, A[]> {
   return xs.reduce((acc, i, index) => acc.concat(f(i, index).map(x => [x])), pure<E, I, S, A[]>([]))
+}
+
+export function fold<E extends HKTS, I, S, A, B>(
+  f: (acc: B, i: A) => B, base: B, fa: FantasyX<E, I, S, A>
+): FantasyX<E, I, S, B> {
+  return fa.fold(f, base)
 }
 
 export function lift<E extends HKTS, I, S, A, B>(

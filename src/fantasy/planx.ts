@@ -150,6 +150,21 @@ export class PlanX<E extends HKTS, I, S, A> {
     })
   }
 
+  fold<B>(f: (acc: B, i: A) => B, base: B): PlanX<E, I, S, B> {
+    return new PlanX<E, I, S, B>(intent$ => {
+      let machine = this.apply(intent$)
+      let update$ = streamOps.scan<State<S, A>, State<S, B>>((accS, curS) => {
+        return accS.chain(acc =>
+          curS.chain(cur =>
+            State.pure<S, B>(f(acc, cur))
+          )
+        )
+      }, State.pure<S, B>(base), machine.update$
+      )
+      return { update$, actions: machine.actions }
+    })
+  }
+
   patch(f: (a: A) => Partial<S> = _ => _): PlanX<E, I, S, void> {
     return new PlanX<E, I, S, void>(intent$ => {
       let machine = this.apply(intent$)

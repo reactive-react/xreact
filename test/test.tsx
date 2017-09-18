@@ -1,4 +1,4 @@
-import {pure, lift2, X, xinput, fromEvent, traverse} from '../src'
+import {pure, lift2, X, xinput, fromEvent, traverse, fold} from '../src'
 import * as React from 'react';
 import { render } from 'react-dom';
 import * as RX from '../src/xs/rx'
@@ -82,3 +82,10 @@ let ViewEg5 = props => (
 let Eg5 = Xeg5.apply(ViewEg5)
 
 xmount(<Eg5/>, document.getElementById('eg5') )
+
+
+let Xeg6 = fold((acc:number,i: number) => acc+i, 0, fromEvent('click', 'increment').map(x=>1))
+let ViewEg6 = props => <p>{props.count} <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} /></p>
+let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
+
+xmount(<Eg6/>, document.getElementById('eg6') )
