@@ -174,4 +174,33 @@ xmount(<Eg7/>, document.getElementById('eg7') )
 #+HTML: <p><div id="eg7"></div></p>
 
 
+* Example 8: Fold multiple buttons
+
+
+#+BEGIN_SRC tsx :tangle test.tsx :exports none
+const actions = ['-1', '+1', 'reset']
+let Xeg8 = fold((acc, i) => {
+  switch(i) {
+    case '-1': return acc-1
+    case '+1': return acc+1
+    case 'reset': return 0
+    default: acc
+  }
+}, 0, actions.map((action)=>fromEvent('click', action))
+             .reduce((acc,a)=>acc.merge(a)))
+
+let ViewEg8 = props => <p>
+  {props.count}
+  {actions.map(action=>
+    <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
+</p>
+let Eg8 = Xeg8.map(a=>({count: a})).apply(ViewEg8)
+
+xmount(<Eg8/>, document.getElementById('eg8') )
+#+END_SRC
+
+#+HTML: <p><div id="eg8"></div></p>
+
 #+HTML: <script src="test.js"></script>
+
+* Example 13: Adding items to a list

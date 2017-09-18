@@ -1,4 +1,4 @@
-import {pure, lift2, X, xinput, fromEvent, traverse, fold} from '../src'
+import {pure, lift2, X, xinput, fromEvent, traverse, fold, empty} from '../src'
 import * as React from 'react';
 import { render } from 'react-dom';
 import * as RX from '../src/xs/rx'
@@ -92,15 +92,39 @@ let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
 xmount(<Eg6/>, document.getElementById('eg6') )
 
 let Xeg7 = fold(
-  (acc:number,i: number) => acc+i, 0,
-  fromEvent('click', 'increment').map(x=>1).merge(
-    fromEvent('click', 'decrement').map(x=>-1)))
+(acc:number,i: number) => acc+i, 0,
+fromEvent('click', 'increment').map(x=>1).merge(
+fromEvent('click', 'decrement').map(x=>-1)))
 
 let ViewEg7 = props => <p>
-  <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
-  {props.count}
-  <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
+    <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
+    {props.count}
+    <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
 </p>
 let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
 
 xmount(<Eg7/>, document.getElementById('eg7') )
+
+const actions = ['-1', '+1', 'reset']
+let Xeg8 = fold((acc, i) => {
+  switch(i) {
+    case '-1': return acc-1
+    case '+1': return acc+1
+    case 'reset': return 0
+    default: acc
+  }
+}, 0, actions.map((action)=>fromEvent('click', action))
+             .reduce((acc,a)=>acc.merge(a)))
+
+let ViewEg8 = props => <p>
+  {props.count}
+  {actions.map(action=>
+    <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
+</p>
+let Eg8 = Xeg8.map(a=>({count: a})).apply(ViewEg8)
+
+
+xmount(<Eg8/>, document.getElementById('eg8') )
+
+
+let Xeg9 = fromEvent('change', 'new-item', 'Orange').flatMap(item=>fromEvent('click', 'add-item').map(x=>item))

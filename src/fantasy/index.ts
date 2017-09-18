@@ -40,6 +40,14 @@ export function pure<E extends HKTS, I, S, A>(a: A) {
   })
 }
 
+export function empty<E extends HKTS, I, S, A>() {
+  return new FantasyX<E, I, S, A>(intent$ => {
+    return {
+      update$: streamOps.empty<State<S, A>>()
+    }
+  })
+}
+
 export function map<E extends HKTS, I, S, A, B>(
   f: (s: A) => B, fa: FantasyX<E, I, S, A>
 ): FantasyX<E, I, S, B> {
