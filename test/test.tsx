@@ -1,4 +1,4 @@
-import {pure, lift2, X, xinput, fromEvent} from '../src'
+import {pure, lift2, X, xinput, fromEvent, traverse} from '../src'
 import * as React from 'react';
 import { render } from 'react-dom';
 import * as RX from '../src/xs/rx'
@@ -20,15 +20,38 @@ let Eg2 = Xeg2.map(a=>({product: a})).apply(ViewEg2)
 
 xmount(<Eg2/>, document.getElementById('eg2') )
 
-let Xeg3 = fromEvent('change', 'string1', '5')
+let Xeg3 = fromEvent('change', 'string1', 'Jichao')
 .concat(pure(' '))
-.concat(fromEvent('change', 'string2', '6'))
+.concat(fromEvent('change', 'string2', 'Ouyang'))
 
 let ViewEg3 = props => <section>
-  <p><input type="text" name="string1" onChange={props.actions.fromEvent}/></p>
+  <p><input type="text" name="string1" onChange={props.actions.fromEvent} /></p>
   <p><input type="text" name="string2" onChange={props.actions.fromEvent} /></p>
   <p>{props.semigroup}</p>
 </section>
+
 let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
 
 xmount(<Eg3/>, document.getElementById('eg3') )
+
+function sum(list){
+  return list.reduce((acc,x)=> acc+x, 0)
+}
+let list = ['1', '2', '3', '4', '5', '6', '7']
+let Xeg4 = traverse(
+  (defaultVal, index)=>(fromEvent('change', 'traverse'+index, defaultVal)),
+  list)
+  .map(xs=>xs.map(x=>~~x))
+  .map(sum)
+
+let ViewEg4 = props => <section>
+{list.map((item, index) => (<p>
+<input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
+</p>))
+}
+  <p>{props.sum}</p>
+</section>
+
+let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
+
+xmount(<Eg4/>, document.getElementById('eg4') )

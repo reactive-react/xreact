@@ -46,6 +46,12 @@ export function map<E extends HKTS, I, S, A, B>(
   return fa.map(f)
 }
 
+export function traverse<E extends HKTS, I, S, A>(
+  f: (a: A, index?: number) => FantasyX<E, I, S, A>, xs: A[]
+): FantasyX<E, I, S, A[]> {
+  return xs.reduce((acc, i, index) => acc.concat(f(i, index).map(x => [x])), pure<E, I, S, A[]>([]))
+}
+
 export function lift<E extends HKTS, I, S, A, B>(
   f: (s: A) => B
 ): (fa: FantasyX<E, I, S, A>) => FantasyX<E, I, S, B> {
