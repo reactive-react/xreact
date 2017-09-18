@@ -1,9 +1,9 @@
-#+TITLE: xReact Fantasy
+#+TITLE: Examples of xReact Fantasy
 #+Date: <2017-09-09 Sat>
 #+AUTHOR: 欧阳继超
 #+PROPERTY: :exports source :tangle yes :eval no-export
 
-* imports
+* import xreact
 
 #+BEGIN_SRC tsx :tangle test.tsx
 import {pure, lift2, X, xinput, fromEvent, traverse, fold} from '../src'
@@ -12,7 +12,6 @@ import { render } from 'react-dom';
 import * as RX from '../src/xs/rx'
 function xmount(component, dom) {render(React.createFactory(X)({ x: RX }, component), dom)}
 #+END_SRC
-
 
 * Example 1: Two number multiply
 
@@ -29,7 +28,7 @@ xmount(<Eg1/>, document.getElementById('eg1') )
 #+HTML: <p><div id="eg1"></div></p>
 
 
-* Example 2: Two Number inputs
+* Example 2: Two Inputs
 #+BEGIN_SRC tsx :tangle test.tsx
 let Xeg2 = lift2((x:number,y: number) => x * y)(fromEvent('change', 'n1', '5').map(x=>~~x), fromEvent('change', 'n2', '6').map(x=>~~x))
 let ViewEg2 = props => <section>
@@ -150,5 +149,29 @@ xmount(<Eg6/>, document.getElementById('eg6') )
 #+END_SRC
 
 #+HTML: <p><div id="eg6"></div></p>
+
+
+
+* Example 7: Merge
+#+BEGIN_SRC tsx :tangle test.tsx
+  let Xeg7 = fold(
+  (acc:number,i: number) => acc+i, 0,
+  fromEvent('click', 'increment').map(x=>1).merge(
+  fromEvent('click', 'decrement').map(x=>-1)))
+
+  let ViewEg7 = props => <p>
+      <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
+      {props.count}
+      <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
+  </p>
+  let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
+#+END_SRC
+
+#+BEGIN_SRC tsx :tangle test.tsx :exports none
+xmount(<Eg7/>, document.getElementById('eg7') )
+#+END_SRC
+
+#+HTML: <p><div id="eg7"></div></p>
+
 
 #+HTML: <script src="test.js"></script>

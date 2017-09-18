@@ -56,6 +56,11 @@ export class FantasyX<E extends HKTS, I, S, A> {
   concat(fb: FantasyX<E, I, S, A>): FantasyX<E, I, S, A> {
     return new FantasyX(this.plan.concat(fb.plan).apply)
   }
+
+  merge<B>(fb: FantasyX<E, I, S, A | B>): FantasyX<E, I, S, A | B> {
+    return new FantasyX(this.plan.merge(fb.plan).apply)
+  }
+
   bimap<B>(
     fa: (b?: Actions<I>) => Actions<I>, fb: (a: A) => B
   ): FantasyX<E, I, S, B> {

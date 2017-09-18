@@ -45,10 +45,10 @@ let Xeg4 = traverse(
   .map(sum)
 
 let ViewEg4 = props => <section>
-  {list.map((item, index) => (<p key={index} >
-    <input type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
-  </p>))
-  }
+{list.map((item, index) => (<p>
+<input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
+</p>))
+}
   <p>{props.sum}</p>
 </section>
 
@@ -83,9 +83,24 @@ let Eg5 = Xeg5.apply(ViewEg5)
 
 xmount(<Eg5/>, document.getElementById('eg5') )
 
-
 let Xeg6 = fold((acc:number,i: number) => acc+i, 0, fromEvent('click', 'increment').map(x=>1))
-let ViewEg6 = props => <p>{props.count} <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} /></p>
+let ViewEg6 = props => <p>
+  {props.count} <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} />
+</p>
 let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
 
 xmount(<Eg6/>, document.getElementById('eg6') )
+
+let Xeg7 = fold(
+  (acc:number,i: number) => acc+i, 0,
+  fromEvent('click', 'increment').map(x=>1).merge(
+    fromEvent('click', 'decrement').map(x=>-1)))
+
+let ViewEg7 = props => <p>
+  <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
+  {props.count}
+  <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
+</p>
+let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
+
+xmount(<Eg7/>, document.getElementById('eg7') )

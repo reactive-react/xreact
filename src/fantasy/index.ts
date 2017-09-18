@@ -16,11 +16,11 @@ export function fromPlan<E extends HKTS, I, S>(plan: Plan<E, I, S>): FantasyX<E,
   })
 }
 
-export function fromEvent<E extends HKTS, I extends Event, S>(type: string, name: string, defaultVal: string = ''): FantasyX<E, I, S, string> {
+export function fromEvent<E extends HKTS, I extends Event, S>(type: string, name: string, defaultVal?: string): FantasyX<E, I, S, string> {
   return new FantasyX<E, I, S, string>(intent$ => {
     return {
       update$: streamOps.merge<State<S, string>>(
-        streamOps.just<State<S, string>>(State.pure<S, string>(defaultVal)),
+        typeof defaultVal != 'undefined' ? streamOps.just<State<S, string>>(State.pure<S, string>(defaultVal)) : streamOps.empty<State<S, string>>(),
         streamOps.map<Event, State<S, string>>(
           e => State.pure<S, string>((e.target as HTMLFormElement).value),
           streamOps.filter<I>(i => {
@@ -106,4 +106,11 @@ export function concat<E extends HKTS, I, S, A>(
   fb: FantasyX<E, I, S, A>
 ): FantasyX<E, I, S, A> {
   return fa.concat(fb)
+}
+
+export function merge<E extends HKTS, I, S, A, B>(
+  fa: FantasyX<E, I, S, A>,
+  fb: FantasyX<E, I, S, B>
+): FantasyX<E, I, S, A | B> {
+  return fa.merge(fb)
 }

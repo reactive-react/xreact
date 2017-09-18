@@ -17,7 +17,7 @@
     "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand",
-    "build-test": "watchify -p tsify test/test.tsx -dv -o test/test.js"
+    "build-test": "watchify -p tsify -t envify test/test.tsx -dv -o test/test.js"
   },
   "dependencies": {
     "prop-types": "^15.5.8"
@@ -35,6 +35,7 @@
     "@types/react": "^16.0.5",
     "browserify": "^14.4.0",
     "create-react-class": "^15.6.0",
+    "envify": "^4.1.0",
     "enzyme": "^2.8.2",
     "jest": "^20.0.0",
     "lodash": "^4.0.0",

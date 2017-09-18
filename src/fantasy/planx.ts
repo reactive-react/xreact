@@ -139,6 +139,20 @@ export class PlanX<E extends HKTS, I, S, A> {
     }, fa)
   }
 
+  merge<B>(
+    fa: PlanX<E, I, S, B>
+  ): PlanX<E, I, S, A | B> {
+    return new PlanX<E, I, S, A | B>(intent$ => {
+      let machineA = this.apply(intent$)
+      let machineB = fa.apply(intent$)
+      let update$ = streamOps.merge<State<S, A | B>>(
+        machineA.update$,
+        machineB.update$
+      )
+      return { update$, actions: Object.assign({}, machineA.actions, machineB.actions) }
+    })
+  }
+
   map<B>(f: (a: A) => B): PlanX<E, I, S, B> {
     return new PlanX<E, I, S, B>(intent$ => {
       let machine = this.apply(intent$)
@@ -153,13 +167,16 @@ export class PlanX<E extends HKTS, I, S, A> {
   fold<B>(f: (acc: B, i: A) => B, base: B): PlanX<E, I, S, B> {
     return new PlanX<E, I, S, B>(intent$ => {
       let machine = this.apply(intent$)
-      let update$ = streamOps.scan<State<S, A>, State<S, B>>((accS, curS) => {
-        return accS.chain(acc =>
-          curS.chain(cur =>
-            State.pure<S, B>(f(acc, cur))
+      let update$ = streamOps.merge(
+        streamOps.just(State.pure<S, B>(base)),
+        streamOps.scan<State<S, A>, State<S, B>>((accS, curS) => {
+          return accS.chain(acc =>
+            curS.chain(cur =>
+              State.pure<S, B>(f(acc, cur))
+            )
           )
+        }, State.pure<S, B>(base), machine.update$
         )
-      }, State.pure<S, B>(base), machine.update$
       )
       return { update$, actions: machine.actions }
     })
