@@ -20,7 +20,7 @@ interface Semigroup {
   concat: <A>(a: A) => A
 }
 function isSemigroup(a: any): a is Semigroup {
-  return typeof a.concat == 'function'
+  return a && typeof a.concat == 'function'
 }
 
 export class PlanX<E extends HKTS, I, S, A> {

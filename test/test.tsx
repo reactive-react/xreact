@@ -45,13 +45,40 @@ let Xeg4 = traverse(
   .map(sum)
 
 let ViewEg4 = props => <section>
-{list.map((item, index) => (<p>
-<input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
-</p>))
-}
+  {list.map((item, index) => (<p key={index} >
+    <input type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
+  </p>))
+  }
   <p>{props.sum}</p>
 </section>
 
 let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
 
 xmount(<Eg4/>, document.getElementById('eg4') )
+
+function bmiCalc(weight, height) {
+  return {
+    result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
+      .then(resp => resp.json())
+      .then(resp => resp.result)
+  }
+}
+
+let Xeg5 = lift2(bmiCalc)(fromEvent('change', 'weight', '70'), fromEvent('change', 'height', '175'))
+
+let ViewEg5 = props => (
+  <div>
+    <label>Height: {props.height} cm
+      <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
+    </label>
+    <label>Weight: {props.weight} kg
+      <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
+    </label>
+    <p>HEALTH: <span>{props.health}</span></p>
+    <p>BMI: <span>{props.bmi}</span></p>
+  </div>
+)
+
+let Eg5 = Xeg5.apply(ViewEg5)
+
+xmount(<Eg5/>, document.getElementById('eg5') )
