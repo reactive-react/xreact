@@ -57,6 +57,7 @@
     "transform": {
       "^.+\\.(tsx|ts)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
+    "collectCoverageFrom": ["src/x.ts", "src/xclass.ts"],
     "moduleFileExtensions": [
       "ts",
       "tsx",
