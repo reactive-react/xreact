@@ -1,7 +1,7 @@
 const Nightmare = require('nightmare')
 const {expect} = require('chai')
 
-const nightmare = Nightmare({ show: true });
+const nightmare = Nightmare({ show: false });
 
 describe('Load Example Page', function() {
   this.timeout('30s')
