@@ -15,11 +15,12 @@ position: 6
 * import xreact
 
 #+BEGIN_SRC tsx :tangle example.tsx
-import {pure, lift2, X, xinput, fromEvent, traverse, fold} from '../src'
+import { pure, lift2, X, xinput, fromEvent, traverse, fold } from '../../../../../src'
 import * as React from 'react';
 import { render } from 'react-dom';
-import * as RX from '../src/xs/rx'
-function xmount(component, dom) {render(React.createFactory(X)({ x: RX }, component), dom)}
+import * as RX from '../../../../../src/xs/rx'
+function xmount(component, dom) { render(React.createFactory(X)({ x: RX }, component), dom) }
+
 #+END_SRC
 
 * Example 1: Two number multiply
@@ -61,8 +62,8 @@ let Xeg3 = fromEvent('change', 'string1', 'Jichao')
 .concat(fromEvent('change', 'string2', 'Ouyang'))
 
 let ViewEg3 = props => <section>
-  <p><input type="text" name="string1" onChange={props.actions.fromEvent} /></p>
-  <p><input type="text" name="string2" onChange={props.actions.fromEvent} /></p>
+  <p><input type="text" name="string1" onChange={props.actions.fromEvent} defaultValue="Jichao" /></p>
+  <p><input type="text" name="string2" onChange={props.actions.fromEvent} defaultValue="Ouyang"/></p>
   <p><span className="result">{props.semigroup}</span></p>
 </section>
 
@@ -111,30 +112,32 @@ let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
 * Example 5: Asynchronous
 
 #+BEGIN_SRC tsx :tangle example.tsx
-function bmiCalc(weight, height) {
+  function bmiCalc(weight, height) {
   return {
-    result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
-      .then(resp => resp.json())
-      .then(resp => resp.result)
+    weight: weight,
+    height: height,
+ result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
+        .then(resp => resp.json())
+        .then(json => json.result)
+    }
   }
-}
 
-let Xeg5 = lift2(bmiCalc)(fromEvent('change', 'weight', '70'), fromEvent('change', 'height', '175'))
+  let Xeg5 = lift2(bmiCalc)(fromEvent('change', 'weight', '70'), fromEvent('change', 'height', '175'))
 
-let ViewEg5 = props => (
-  <div>
-    <label>Height: {props.height} cm
-      <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
-    </label>
-    <label>Weight: {props.weight} kg
-      <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
-    </label>
-    <p>HEALTH: <span>{props.health}</span></p>
-    <p>BMI: <span className="result">{props.bmi}</span></p>
-  </div>
-)
+  let ViewEg5 = props => (
+    <div>
+      <label>Height: {props.height} cm
+        <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
+      </label>
+      <label>Weight: {props.weight} kg
+        <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
+      </label>
+      <p>HEALTH: <span>{props.health}</span></p>
+      <p>BMI: <span className="result">{props.bmi}</span></p>
+    </div>
+  )
 
-let Eg5 = Xeg5.apply(ViewEg5)
+  let Eg5 = Xeg5.apply(ViewEg5)
 #+END_SRC
 
 #+BEGIN_SRC tsx :tangle example.tsx :exports none
@@ -212,5 +215,3 @@ xmount(<Eg8/>, document.getElementById('eg8') )
 #+HTML: <p><div id="eg8"></div></p>
 
 #+HTML: <script src="example.js"></script>
-
-* Example 13: Adding items to a list

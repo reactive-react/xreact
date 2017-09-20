@@ -17,7 +17,8 @@
     "test": "jest && mocha test/test.js",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand",
-    "build-test": "watchify -p tsify -t envify test/test.tsx -dv -o test/test.js"
+    "watch:examples": "watchify -p tsify -t envify docs/src/main/tut/examples/example.tsx -dv -o docs/src/main/tut/examples/example.js",
+    "build:examples": "browserify -p tsify -t envify docs/src/main/tut/examples/example.tsx -v -o docs/src/main/tut/examples/example.js"
   },
   "dependencies": {
     "prop-types": "^15.5.8"
