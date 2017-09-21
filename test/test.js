@@ -49,7 +49,7 @@ describe('Load Example Page', function() {
     it('reactive concatable', () => {
       return page
         .insert('input[name="firstName"]', 'Hehe')
-      .insert('input[name="lastName"]', 'Da')
+        .insert('input[name="lastName"]', 'Da')
         .wait('#eg3 .result')
         .evaluate(() => document.querySelector('#eg3 .result').textContent)
         .then(x=>expect(x).to.equal('JichaoHehe OuyangDa'))
