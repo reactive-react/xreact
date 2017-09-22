@@ -1,9 +1,9 @@
-import { HKTS } from '../xs'
+import { Stream } from '../xs'
 import { PlanX } from './planx'
 import { PlanS } from './interfaces'
 import { x } from '../x'
 import { Actions, XcomponentClass } from '../interfaces'
-export class FantasyX<E extends HKTS, I, S, A> {
+export class FantasyX<E extends Stream, I, S, A> {
   plan: PlanX<E, I, S, A>
   constructor(plan: PlanS<E, I, S, A>) {
     this.plan = new PlanX(plan)

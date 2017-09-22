@@ -1,4 +1,4 @@
-import { HKTS, streamOps } from '../xs'
+import { Stream, streamOps } from '../xs'
 import { State } from './state'
 import { StateP, PlanS } from './interfaces'
 import { Actions, Plan, Update } from '../interfaces'
@@ -23,7 +23,7 @@ function isSemigroup(a: any): a is Semigroup {
   return a && typeof a.concat == 'function'
 }
 
-export class PlanX<E extends HKTS, I, S, A> {
+export class PlanX<E extends Stream, I, S, A> {
   apply: PlanS<E, I, S, A>
   constructor(plan: PlanS<E, I, S, A>) {
     this.apply = plan

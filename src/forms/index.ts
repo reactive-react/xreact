@@ -1,4 +1,4 @@
-import { HKTS, streamOps, HKT } from '../xs'
+import { Stream, streamOps, M_ } from '../xs'
 import { Update, fromPlan } from '..'
 import { FantasyX } from '../fantasy/fantasyx'
 import { Partial } from '../fantasy/interfaces'
@@ -8,7 +8,7 @@ export type AnyProps = {
 }
 
 export function xinput<
-  E extends HKTS,
+  E extends Stream,
   I extends Event,
   S extends AnyProps>(name: keyof S) {
   return fromPlan<E, I, S>(intent$ => {
@@ -25,7 +25,7 @@ export function xinput<
           streamOps.filter<I>(i => {
             let target = i.target as HTMLFormElement
             return target.tagName == 'INPUT' && target.name == name
-          }, (intent$ as HKT<I>[E])))
+          }, (intent$ as M_<I>[E])))
       )
     }
   })

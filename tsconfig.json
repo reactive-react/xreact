@@ -7,13 +7,16 @@
   "exclude": [
     "src/__tests__/**/*"
   ],
-    "compilerOptions": {
+  "compilerOptions": {
+    "outDir": "lib",
+    "declarationDir": "lib",
+    "pretty": true,
     "module": "commonjs",                     /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'. */
     "lib": ["dom", "es2015"],                             /* Specify library files to be included in the compilation:  */
     "allowJs": true,                       /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
     "jsx": "react",                     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
-    // "declaration": true,                   /* Generates corresponding '.d.ts' file. */
+    "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     // "sourceMap": true,                     /* Generates corresponding '.map' file. */
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
     // "outDir": "./",                        /* Redirect output structure to the directory. */
@@ -55,6 +58,6 @@
     /* Experimental Options */
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
-        "target": "es5"
+    "target": "es5"
   }
 }
