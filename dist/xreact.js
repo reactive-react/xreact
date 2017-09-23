@@ -154,7 +154,7 @@ var FantasyX = /** @class */ (function () {
 }());
 exports.FantasyX = FantasyX;
 
-},{"../x":7,"../xs/index":"/lib/xs/index.js","./state":3}],2:[function(require,module,exports){
+},{"../x":7,"../xs/index":9,"./state":3}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var xs_1 = require("../xs");
@@ -582,7 +582,18 @@ function isPromise(p) {
 var _a;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./interfaces":6,"./xs":"/lib/xs","_process":12,"prop-types":16}],9:[function(require,module,exports){
+},{"./interfaces":6,"./xs":"/lib/xs","_process":13,"prop-types":17}],9:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var StreamOps = /** @class */ (function () {
+    function StreamOps() {
+    }
+    return StreamOps;
+}());
+exports.StreamOps = StreamOps;
+exports.streamOps = new StreamOps;
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -621,7 +632,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -679,7 +690,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":12}],11:[function(require,module,exports){
+},{"_process":13}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -748,7 +759,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":9,"_process":12}],12:[function(require,module,exports){
+},{"./emptyFunction":10,"_process":13}],13:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -934,7 +945,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -999,7 +1010,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":17,"_process":12,"fbjs/lib/invariant":10,"fbjs/lib/warning":11}],14:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":18,"_process":13,"fbjs/lib/invariant":11,"fbjs/lib/warning":12}],15:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1055,7 +1066,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"fbjs/lib/emptyFunction":9,"fbjs/lib/invariant":10}],15:[function(require,module,exports){
+},{"fbjs/lib/emptyFunction":10,"fbjs/lib/invariant":11}],16:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1571,7 +1582,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":13,"./lib/ReactPropTypesSecret":17,"_process":12,"fbjs/lib/emptyFunction":9,"fbjs/lib/invariant":10,"fbjs/lib/warning":11}],16:[function(require,module,exports){
+},{"./checkPropTypes":14,"./lib/ReactPropTypesSecret":18,"_process":13,"fbjs/lib/emptyFunction":10,"fbjs/lib/invariant":11,"fbjs/lib/warning":12}],17:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1605,7 +1616,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":14,"./factoryWithTypeCheckers":15,"_process":12}],17:[function(require,module,exports){
+},{"./factoryWithThrowingShims":15,"./factoryWithTypeCheckers":16,"_process":13}],18:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.

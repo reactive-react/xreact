@@ -38,7 +38,7 @@ _1.StreamOps.prototype.subscribe = function (fa, next, complete) {
 exports.URI = 'Stream';
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{".":"/lib/xs/index.js","most-subject":9}],2:[function(require,module,exports){
+},{".":"/lib/xs","most-subject":9}],2:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@most/prelude')) :
   typeof define === 'function' && define.amd ? define(['exports', '@most/prelude'], factory) :
@@ -6170,7 +6170,7 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
-},{}],"/lib/xs/index.js":[function(require,module,exports){
+},{}],"/lib/xs":[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var StreamOps = /** @class */ (function () {
