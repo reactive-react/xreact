@@ -1,7 +1,7 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.xreact = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("../xs/index");
+var xs_1 = require("../xs");
 var x_1 = require("../x");
 var state_1 = require("./state");
 function isSemigroup(a) {
@@ -18,7 +18,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return function (intent$) {
             var machine = _this.plan(intent$);
-            var update$ = index_1.streamOps.map(function (s) { return s.runS.bind(s); }, machine.update$);
+            var update$ = xs_1.streamOps.map(function (s) { return s.runS.bind(s); }, machine.update$);
             return { update$: update$, actions: machine.actions };
         };
     };
@@ -26,7 +26,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machine = _this.plan(intent$);
-            var update$ = index_1.streamOps.map(function (state) { return state.map(f); }, machine.update$);
+            var update$ = xs_1.streamOps.map(function (state) { return state.map(f); }, machine.update$);
             return { update$: update$, actions: machine.actions };
         });
     };
@@ -34,7 +34,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machine = _this.plan(intent$);
-            var update$ = index_1.streamOps.merge(index_1.streamOps.just(state_1.State.pure(base)), index_1.streamOps.scan(function (accS, curS) {
+            var update$ = xs_1.streamOps.merge(xs_1.streamOps.just(state_1.State.pure(base)), xs_1.streamOps.scan(function (accS, curS) {
                 return accS.chain(function (acc) {
                     return curS.chain(function (cur) {
                         return state_1.State.pure(f(acc, cur));
@@ -48,7 +48,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machineB = fB.plan(intent$), machineA = _this.plan(intent$);
-            var update$ = index_1.streamOps.combine(function (S1, S2) {
+            var update$ = xs_1.streamOps.combine(function (S1, S2) {
                 return S1.chain(function (s1) {
                     return S2.chain(function (s2) {
                         return state_1.State.pure(f(s1, s2));
@@ -64,7 +64,7 @@ var FantasyX = /** @class */ (function () {
         if (f === void 0) { f = function (_) { return _; }; }
         return new FantasyX(function (intent$) {
             var machine = _this.plan(intent$);
-            var update$ = index_1.streamOps.map(function (state) { return state.patch(f); }, machine.update$);
+            var update$ = xs_1.streamOps.map(function (state) { return state.patch(f); }, machine.update$);
             return { update$: update$, actions: machine.actions };
         });
     };
@@ -72,7 +72,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machine = _this.plan(intent$);
-            var update$ = index_1.streamOps.map(function (state) { return state.map(fb); }, machine.update$);
+            var update$ = xs_1.streamOps.map(function (state) { return state.map(fb); }, machine.update$);
             return { update$: update$, actions: fa(machine.actions) };
         });
     };
@@ -80,7 +80,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machineB = planB.plan(intent$), machineA = _this.plan(intent$), machineC = planC.plan(intent$);
-            var update$ = index_1.streamOps.combine(function (S1, S2, S3) {
+            var update$ = xs_1.streamOps.combine(function (S1, S2, S3) {
                 return S1.chain(function (s1) {
                     return S2.chain(function (s2) {
                         return S3.chain(function (s3) {
@@ -97,7 +97,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machineB = planB.plan(intent$), machineA = _this.plan(intent$), machineC = planC.plan(intent$), machineD = planD.plan(intent$);
-            var update$ = index_1.streamOps.combine(function (S1, S2, S3, S4) {
+            var update$ = xs_1.streamOps.combine(function (S1, S2, S3, S4) {
                 return S1.chain(function (s1) {
                     return S2.chain(function (s2) {
                         return S3.chain(function (s3) {
@@ -116,7 +116,7 @@ var FantasyX = /** @class */ (function () {
         var _this = this;
         return new FantasyX(function (intent$) {
             var machineB = planB.plan(intent$), machineA = _this.plan(intent$), machineC = planC.plan(intent$), machineD = planD.plan(intent$), machineE = planE.plan(intent$);
-            var update$ = index_1.streamOps.combine(function (S1, S2, S3, S4, S5) {
+            var update$ = xs_1.streamOps.combine(function (S1, S2, S3, S4, S5) {
                 return S1.chain(function (s1) {
                     return S2.chain(function (s2) {
                         return S3.chain(function (s3) {
@@ -146,7 +146,7 @@ var FantasyX = /** @class */ (function () {
         return new FantasyX(function (intent$) {
             var machineA = _this.plan(intent$);
             var machineB = fa.plan(intent$);
-            var update$ = index_1.streamOps.merge(machineA.update$, machineB.update$);
+            var update$ = xs_1.streamOps.merge(machineA.update$, machineB.update$);
             return { update$: update$, actions: Object.assign({}, machineA.actions, machineB.actions) };
         });
     };
@@ -154,7 +154,7 @@ var FantasyX = /** @class */ (function () {
 }());
 exports.FantasyX = FantasyX;
 
-},{"../x":7,"../xs/index":9,"./state":3}],2:[function(require,module,exports){
+},{"../x":7,"../xs":"/lib/xs","./state":3}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var xs_1 = require("../xs");
