@@ -54,9 +54,6 @@ export interface Engine<E extends Stream, I, S> {
   history$: Subject<E, S>
 }
 
-export interface XProps<A extends Stream> {
-  x: XStream<A>
-}
 export interface ContextEngine<E extends Stream, I, H> {
   [name: string]: Engine<E, I, H>
 }

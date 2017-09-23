@@ -1,4 +1,4 @@
-import { Stream, streamOps } from '../xs/index'
+import { Stream, streamOps } from '../xs'
 import { PlanS } from './interfaces'
 import { x } from '../x'
 import { State } from './state'

@@ -16,12 +16,7 @@
     "build": "tsc",
     "test": "jest && mocha test/test.js",
     "prepublish": "npm run build",
-    "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand",
-    "watch:examples": "watchify -p tsify -t envify docs/src/main/tut/examples/example.tsx -dv -o docs/src/main/tut/examples/example.js",
-    "build:examples": "browserify lib/docs/src/main/tut/examples/example.js -o docs/src/main/tut/examples/example.js",
-    "build:browser": "browserify -t browserify-shim -x ./lib/xs -x ./lib/xs/index.js lib/index.js -s xreact -o docs/src/main/tut/dist/xreact.js",
-    "build:browser-most": "browserify -t browserify-shim -r ./lib/xs lib/xs/most.js -o docs/src/main/tut/dist/xreact-most.js",
-    "build:browser-rx": "browserify -t browserify-shim -r ./lib/xs lib/xs/rx.js -o docs/src/main/tut/dist/xreact-rx.js"
+    "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
   "browserify-shim": {
     "react": "global:React",

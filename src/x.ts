@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { extendXComponentClass, genXComponentClass, CONTEXT_TYPE } from './xclass'
 import { streamOps, Stream, Subject } from './xs'
-import { Plan, Xcomponent, XcomponentClass, Engine, XProps, ContextEngine, XREACT_ENGINE } from './interfaces'
+import { Plan, Xcomponent, XcomponentClass, Engine, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
 
 export function isXcomponentClass<E extends Stream, I, S>(ComponentClass: XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is XcomponentClass<E, I, S> {
@@ -19,10 +19,9 @@ export function x<E extends Stream, I, S>(main: Plan<E, I, S>, opts = {}): (Wrap
   };
 }
 
-export class X<E extends Stream> extends React.PureComponent<XProps<E>, {}> {
+export class X<E extends Stream> extends React.PureComponent<{}, {}> {
   static childContextTypes = CONTEXT_TYPE
   getChildContext<I, H>(): ContextEngine<E, I, H> {
-    let XClass = this.props.x
     return {
       [XREACT_ENGINE]: {
         intent$: streamOps.subject() as Subject<E, I>,
