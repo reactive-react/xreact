@@ -391,7 +391,6 @@ var X = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     X.prototype.getChildContext = function () {
-        var XClass = this.props.x;
         return _a = {},
             _a[interfaces_1.XREACT_ENGINE] = {
                 intent$: xs_1.streamOps.subject(),
