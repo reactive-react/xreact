@@ -1,8 +1,8 @@
 import { Stream as MostStream, empty, just, combineArray } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
-import { Subscription, StreamOps } from './index'
+import { Subscription, StreamOps } from '.'
 
-declare module './index' {
+declare module '.' {
   interface M_<A> {
     'most': MostStream<A>
   }
