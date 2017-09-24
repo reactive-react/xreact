@@ -4,7 +4,7 @@ general:
       - gh-pages
 machine:
   node:
-    version: 6.11.3
+    version: 8.5.0
   environment:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
 dependencies:

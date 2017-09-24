@@ -8,7 +8,8 @@ lib/%.js: src/%.ts
 
 all: docs/src/main/tut/examples/example.js browser
 
-test: lib/**/*.js test/**/*.js
+.PHONY: test
+test: lib/**/*.js test/*.js docs/src/main/tut/examples/example.js
 	yarn test
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
