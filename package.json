@@ -10,7 +10,8 @@
   "typings": "lib/index.d.ts",
   "files": [
     "src",
-    "lib"
+    "lib",
+    "dist"
   ],
   "scripts": {
     "build": "tsc",
@@ -21,7 +22,7 @@
   "browserify-shim": {
     "react": "global:React",
     "@reactivex/rxjs": "global:Rx",
-    "most":"global:most"
+    "most": "global:most"
   },
   "dependencies": {
     "prop-types": "^15.5.8"
@@ -56,6 +57,7 @@
     "ts-jest": "^20.0.2",
     "tsify": "^3.0.3",
     "typescript": "^2.5.2",
+    "uglify-js": "^3.1.1",
     "watchify": "^3.9.0"
   },
   "jest": {
