@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createElement as h } from 'react'
 import { PropTypes } from 'prop-types';
 import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
-import { streamOps, HKTS, HKT } from './xs'
+import { streamOps, Stream, M_ } from './xs'
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.shape({
     intent$: PropTypes.object,
@@ -13,7 +13,7 @@ function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component
   return (typeof Component == 'function')
 }
 
-export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: XcomponentClass<E, I, S>, main: Plan<E, I, S>): XcomponentClass<E, I, S> {
+export function extendXComponentClass<E extends Stream, I, S>(WrappedComponent: XcomponentClass<E, I, S>, main: Plan<E, I, S>): XcomponentClass<E, I, S> {
   return class XNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`
@@ -28,7 +28,7 @@ export function extendXComponentClass<E extends HKTS, I, S>(WrappedComponent: Xc
     }
   }
 }
-export function genXComponentClass<E extends HKTS, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): XcomponentClass<E, I, S> {
+export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): XcomponentClass<E, I, S> {
   return class XLeaf extends Xcomponent<E, I, S> {
     static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`

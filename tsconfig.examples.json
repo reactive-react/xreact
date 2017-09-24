@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.common.json",
+  "include": [
+    "docs/src/main/tut/examples/*.tsx"
+  ],
+  "compilerOptions": {
+  }
+}

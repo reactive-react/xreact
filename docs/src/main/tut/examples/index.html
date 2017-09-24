@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2017-09-24 Sun 10:46 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Examples of xReact Fantasy</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="欧阳继超" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<style>pre.src {background-color: #282a36;color: #f8f8f2;}</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2017 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Examples of xReact Fantasy</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgee228cc">Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#orgfa4aa38">Example 1: Two number multiply</a></li>
+<li><a href="#org6509fe5">Example 2: Two Inputs</a></li>
+<li><a href="#org976ba3b">Example 3: Semigroup</a></li>
+<li><a href="#orgdf5f43f">Example 4: Traverse</a></li>
+<li><a href="#orgdeaddc2">Example 5: Asynchronous</a></li>
+<li><a href="#org3294fe0">Example 6: Fold</a></li>
+<li><a href="#orgd15399d">Example 7: Merge</a></li>
+<li><a href="#orgaa94b31">Example 8: Fold multiple buttons</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgee228cc" class="outline-2">
+<h2 id="orgee228cc">Example 0: How to use xReact Fantasy</h2>
+<div class="outline-text-2" id="text-orgee228cc">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
+<span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
+<span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { pure, lift2, X, xinput, fromEvent, traverse, fold } from <span style="color: #f1fa8c;">'../../../../../src'</span>
+<span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfa4aa38" class="outline-2">
+<h2 id="orgfa4aa38">Example 1: Two number multiply</h2>
+<div class="outline-text-2" id="text-orgfa4aa38">
+<p>
+A multiply function can be simply lifted to be a function that works with xReact FantasyX
+</p>
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">mult</span> = (x:number,y: number) =&gt; x * y
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg1</span> = lift2(mult)(pure(6), pure(5))
+</pre>
+</div>
+
+<p>
+A very basic Stateless Component to display it.
+</p>
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg1</span> = props =&gt; &lt;p className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/p&gt;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg1</span> = Xeg1.map(a=&gt;({product: a})).apply(ViewEg1)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-js">xmount(&lt;Eg1/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg1'</span>) )
+</pre>
+</div>
+
+<p><div id="eg1"></div></p>
+</div>
+</div>
+
+
+<div id="outline-container-org6509fe5" class="outline-2">
+<h2 id="org6509fe5">Example 2: Two Inputs</h2>
+<div class="outline-text-2" id="text-org6509fe5">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg2</span> = lift2(mult)(
+  fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n1'</span>, <span style="color: #f1fa8c;">'5'</span>).map(strToInt),
+  fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n2'</span>, <span style="color: #f1fa8c;">'6'</span>).map(strToInt)
+)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg2</span> = props =&gt; &lt;section&gt;
+  &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n1"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"5"</span>/&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n2"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"6"</span>/&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/span&gt;&lt;/p&gt;
+&lt;/section&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg2</span> = Xeg2.map(a=&gt;({product: a})).apply(ViewEg2)
+</pre>
+</div>
+
+<p><div id="eg2"></div></p>
+</div>
+</div>
+
+<div id="outline-container-org976ba3b" class="outline-2">
+<h2 id="org976ba3b">Example 3: Semigroup</h2>
+<div class="outline-text-2" id="text-org976ba3b">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>)
+    .concat(pure(<span style="color: #f1fa8c;">' '</span>))
+    .concat(fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>))
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
+  &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
+&lt;/section&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
+</pre>
+</div>
+
+<p><div id="eg3"></div></p>
+</div>
+</div>
+
+<div id="outline-container-orgdf5f43f" class="outline-2">
+<h2 id="orgdf5f43f">Example 4: Traverse</h2>
+<div class="outline-text-2" id="text-orgdf5f43f">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
+  <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
+}
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">list</span> = [<span style="color: #f1fa8c;">'1'</span>, <span style="color: #f1fa8c;">'2'</span>, <span style="color: #f1fa8c;">'3'</span>, <span style="color: #f1fa8c;">'4'</span>, <span style="color: #f1fa8c;">'5'</span>, <span style="color: #f1fa8c;">'6'</span>, <span style="color: #f1fa8c;">'7'</span>]
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> = traverse(
+  (defaultVal, index)=&gt;(fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span>+index, defaultVal)),
+  list
+).map(xs=&gt;xs.map(strToInt))
+    .map(sum)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg4</span> = props =&gt; &lt;section&gt;
+{list.map((item, index) =&gt; (&lt;p&gt;
+&lt;input key={index} type=<span style="color: #f1fa8c;">"number"</span> name={<span style="color: #f1fa8c;">"traverse"</span> + index} onChange={props.actions.fromEvent} defaultValue={item} /&gt;
+&lt;/p&gt;))
+}
+  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.sum}&lt;/span&gt;&lt;/p&gt;
+&lt;/section&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg4</span> = Xeg4.map(a=&gt;({sum: a})).apply(ViewEg4)
+</pre>
+</div>
+
+<p><div id="eg4"></div></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgdeaddc2" class="outline-2">
+<h2 id="orgdeaddc2">Example 5: Asynchronous</h2>
+<div class="outline-text-2" id="text-orgdeaddc2">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
+  <span style="color: #ff79c6; font-weight: bold;">return</span> {
+    weight: weight,
+    height: height,
+    result:fetch(<span style="color: #f1fa8c;">`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&amp;weight=${weight}`</span>)
+      .then(resp =&gt; resp.json())
+      .then(json =&gt; json.result)
+  }
+}
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg5</span> = lift2(bmiCalc)(
+  fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'weight'</span>, <span style="color: #f1fa8c;">'70'</span>),
+  fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'height'</span>, <span style="color: #f1fa8c;">'175'</span>)
+)
+
+ <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg5</span> = props =&gt; (
+   &lt;div&gt;
+     &lt;label&gt;Height: {props.height} cm
+       &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"height"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"150"</span> max=<span style="color: #f1fa8c;">"200"</span> defaultValue={props.height} /&gt;
+     &lt;/label&gt;
+     &lt;label&gt;Weight: {props.weight} kg
+       &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"weight"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"40"</span> max=<span style="color: #f1fa8c;">"100"</span> defaultValue={props.weight} /&gt;
+     &lt;/label&gt;
+     &lt;p&gt;HEALTH: &lt;span&gt;{props.health}&lt;/span&gt;&lt;/p&gt;
+     &lt;p&gt;BMI: &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.bmi}&lt;/span&gt;&lt;/p&gt;
+   &lt;/div&gt;
+ )
+
+ <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg5</span> = Xeg5.apply(ViewEg5)
+</pre>
+</div>
+
+<p><div id="eg5"></div></p>
+</div>
+</div>
+
+<div id="outline-container-org3294fe0" class="outline-2">
+<h2 id="org3294fe0">Example 6: Fold</h2>
+<div class="outline-text-2" id="text-org3294fe0">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg6</span> = fold(
+  (acc:number,i: number) =&gt; acc+i,
+  0,
+  fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'increment'</span>).map(x=&gt;1)
+)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg6</span> = props =&gt; &lt;p&gt;
+  &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+  &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"increment"</span> value=<span style="color: #f1fa8c;">"+1"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
+&lt;/p&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg6</span> = Xeg6.map(a=&gt;({count: a})).apply(ViewEg6)
+</pre>
+</div>
+
+<p><div id="eg6"></div></p>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgd15399d" class="outline-2">
+<h2 id="orgd15399d">Example 7: Merge</h2>
+<div class="outline-text-2" id="text-orgd15399d">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg7</span> = fold(
+  (acc:number,i: number) =&gt; acc+i,
+  0,
+  fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'increment'</span>).map(x=&gt;1)
+    .merge(
+      fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'decrement'</span>).map(x=&gt;-1)
+    )
+)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg7</span> = props =&gt; &lt;p&gt;
+    &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"decrement"</span> value=<span style="color: #f1fa8c;">"-"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
+    &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+    &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"increment"</span> value=<span style="color: #f1fa8c;">"+"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
+&lt;/p&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg7</span> = Xeg7.map(a=&gt;({count: a})).apply(ViewEg7)
+</pre>
+</div>
+
+<p><div id="eg7"></div></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgaa94b31" class="outline-2">
+<h2 id="orgaa94b31">Example 8: Fold multiple buttons</h2>
+<div class="outline-text-2" id="text-orgaa94b31">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">actions</span> = [<span style="color: #f1fa8c;">'-1'</span>, <span style="color: #f1fa8c;">'+1'</span>, <span style="color: #f1fa8c;">'reset'</span>]
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg8</span> = fold(
+  (acc, i) =&gt; {
+    <span style="color: #ff79c6; font-weight: bold;">switch</span>(i) {
+    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'-1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> acc-1
+    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'+1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> acc+1
+    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'reset'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> 0
+    <span style="color: #ff79c6; font-weight: bold;">default</span>: acc
+    }
+  },
+  0,
+  actions.map((action)=&gt;fromEvent(<span style="color: #f1fa8c;">'click'</span>, action))
+    .reduce((acc,a)=&gt;acc.merge(a)))
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg8</span> = props =&gt; &lt;p&gt;
+  &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+  {actions.map(action=&gt;
+    &lt;input type=<span style="color: #f1fa8c;">"button"</span> name={action} value={action} onClick={e=&gt;props.actions.fromEvent(e)} /&gt;)}
+&lt;/p&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg8</span> = Xeg8.map(a=&gt;({count: a})).apply(ViewEg8)
+
+xmount(&lt;Eg8/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg8'</span>) )
+</pre>
+</div>
+
+<p><div id="eg8"></div></p>
+
+<script src="example.js"></script>
+
+<a href="https://github.com/reactive-react/xreact" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2017-09-09 Sat 00:00</p>
+<p class="author">Author: 欧阳继超</p>
+<p class="date">Created: 2017-09-24 Sun 10:46</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

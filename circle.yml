@@ -14,7 +14,8 @@ dependencies:
     - ~/.cache/yarn
 test:
   override:
-    - yarn test
+    - make test
+    - make all
   post:
     - bash <(curl -s https://codecov.io/bash)
 deployment:
