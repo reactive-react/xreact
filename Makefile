@@ -29,7 +29,7 @@ dist/xreact-rx.js: lib/xs/rx.js
 	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -r ./lib/xs lib/xs/rx.js -o $@
 
 dist/%.min.js: dist/%.js
-	env NODE_ENV=production $(uglify) $(basename $(basename $@)).js -o $@
+	env NODE_ENV=production $(uglify) -c dead_code $(basename $(basename $@)).js -o $@
 
 docs: $(docs)
 	sbt makeMicrosite
