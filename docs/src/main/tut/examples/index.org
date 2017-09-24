@@ -7,11 +7,12 @@
 * Example 0: How to use xReact Fantasy
 
 #+BEGIN_SRC js :tangle example.tsx
-import { pure, lift2, X, xinput, fromEvent, traverse, fold } from '../../../../../src'
+
 import * as React from 'react';
 import { render } from 'react-dom';
-import * as RX from '../../../../../src/xs/rx'
-function xmount(component, dom) { render(React.createFactory(X)({ x: RX }, component), dom) }
+import '../../../../../src/xs/rx'
+import { pure, lift2, X, xinput, fromEvent, traverse, fold } from '../../../../../src'
+function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
 #+END_SRC
 
 * Example 1: Two number multiply

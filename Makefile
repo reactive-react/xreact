@@ -8,7 +8,8 @@ lib/%.js: src/%.ts
 
 all: docs/src/main/tut/examples/example.js browser
 
-test: yarn test
+test: lib/**/*.js test/**/*.js
+	yarn test
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
 	$(browserify) -p [tsify -p tsconfig.examples.json] docs/src/main/tut/examples/example.tsx -o docs/src/main/tut/examples/example.js

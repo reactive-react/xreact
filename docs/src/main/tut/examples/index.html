@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-09-21 Thu 22:48 -->
+<!-- 2017-09-24 Sun 10:46 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Examples of xReact Fantasy</title>
@@ -234,36 +234,36 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge53f2db">Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#org012eac7">Example 1: Two number multiply</a></li>
-<li><a href="#org678ac19">Example 2: Two Inputs</a></li>
-<li><a href="#org91b41e0">Example 3: Semigroup</a></li>
-<li><a href="#orgf21012c">Example 4: Traverse</a></li>
-<li><a href="#orgf9d5c4c">Example 5: Asynchronous</a></li>
-<li><a href="#orgd2f0939">Example 6: Fold</a></li>
-<li><a href="#org257c16b">Example 7: Merge</a></li>
-<li><a href="#org3f9f08a">Example 8: Fold multiple buttons</a></li>
+<li><a href="#orgee228cc">Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#orgfa4aa38">Example 1: Two number multiply</a></li>
+<li><a href="#org6509fe5">Example 2: Two Inputs</a></li>
+<li><a href="#org976ba3b">Example 3: Semigroup</a></li>
+<li><a href="#orgdf5f43f">Example 4: Traverse</a></li>
+<li><a href="#orgdeaddc2">Example 5: Asynchronous</a></li>
+<li><a href="#org3294fe0">Example 6: Fold</a></li>
+<li><a href="#orgd15399d">Example 7: Merge</a></li>
+<li><a href="#orgaa94b31">Example 8: Fold multiple buttons</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge53f2db" class="outline-2">
-<h2 id="orge53f2db">Example 0: How to use xReact Fantasy</h2>
-<div class="outline-text-2" id="text-orge53f2db">
+<div id="outline-container-orgee228cc" class="outline-2">
+<h2 id="orgee228cc">Example 0: How to use xReact Fantasy</h2>
+<div class="outline-text-2" id="text-orgee228cc">
 <div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> { pure, lift2, X, xinput, fromEvent, traverse, fold } from <span style="color: #f1fa8c;">'../../../../../src'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
-<span style="color: #ff79c6; font-weight: bold;">import</span> * as RX from <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
-<span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({ x: RX }, component), dom) }
+<span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { pure, lift2, X, xinput, fromEvent, traverse, fold } from <span style="color: #f1fa8c;">'../../../../../src'</span>
+<span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org012eac7" class="outline-2">
-<h2 id="org012eac7">Example 1: Two number multiply</h2>
-<div class="outline-text-2" id="text-org012eac7">
+<div id="outline-container-orgfa4aa38" class="outline-2">
+<h2 id="orgfa4aa38">Example 1: Two number multiply</h2>
+<div class="outline-text-2" id="text-orgfa4aa38">
 <p>
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
 </p>
@@ -296,9 +296,9 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-org678ac19" class="outline-2">
-<h2 id="org678ac19">Example 2: Two Inputs</h2>
-<div class="outline-text-2" id="text-org678ac19">
+<div id="outline-container-org6509fe5" class="outline-2">
+<h2 id="org6509fe5">Example 2: Two Inputs</h2>
+<div class="outline-text-2" id="text-org6509fe5">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
 
@@ -321,9 +321,9 @@ A very basic Stateless Component to display it.
 </div>
 </div>
 
-<div id="outline-container-org91b41e0" class="outline-2">
-<h2 id="org91b41e0">Example 3: Semigroup</h2>
-<div class="outline-text-2" id="text-org91b41e0">
+<div id="outline-container-org976ba3b" class="outline-2">
+<h2 id="org976ba3b">Example 3: Semigroup</h2>
+<div class="outline-text-2" id="text-org976ba3b">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>)
     .concat(pure(<span style="color: #f1fa8c;">' '</span>))
@@ -343,9 +343,9 @@ A very basic Stateless Component to display it.
 </div>
 </div>
 
-<div id="outline-container-orgf21012c" class="outline-2">
-<h2 id="orgf21012c">Example 4: Traverse</h2>
-<div class="outline-text-2" id="text-orgf21012c">
+<div id="outline-container-orgdf5f43f" class="outline-2">
+<h2 id="orgdf5f43f">Example 4: Traverse</h2>
+<div class="outline-text-2" id="text-orgdf5f43f">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
   <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
@@ -374,9 +374,9 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-orgf9d5c4c" class="outline-2">
-<h2 id="orgf9d5c4c">Example 5: Asynchronous</h2>
-<div class="outline-text-2" id="text-orgf9d5c4c">
+<div id="outline-container-orgdeaddc2" class="outline-2">
+<h2 id="orgdeaddc2">Example 5: Asynchronous</h2>
+<div class="outline-text-2" id="text-orgdeaddc2">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
   <span style="color: #ff79c6; font-weight: bold;">return</span> {
@@ -414,9 +414,9 @@ A very basic Stateless Component to display it.
 </div>
 </div>
 
-<div id="outline-container-orgd2f0939" class="outline-2">
-<h2 id="orgd2f0939">Example 6: Fold</h2>
-<div class="outline-text-2" id="text-orgd2f0939">
+<div id="outline-container-org3294fe0" class="outline-2">
+<h2 id="org3294fe0">Example 6: Fold</h2>
+<div class="outline-text-2" id="text-org3294fe0">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg6</span> = fold(
   (acc:number,i: number) =&gt; acc+i,
@@ -439,9 +439,9 @@ A very basic Stateless Component to display it.
 
 
 
-<div id="outline-container-org257c16b" class="outline-2">
-<h2 id="org257c16b">Example 7: Merge</h2>
-<div class="outline-text-2" id="text-org257c16b">
+<div id="outline-container-orgd15399d" class="outline-2">
+<h2 id="orgd15399d">Example 7: Merge</h2>
+<div class="outline-text-2" id="text-orgd15399d">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg7</span> = fold(
   (acc:number,i: number) =&gt; acc+i,
@@ -467,9 +467,9 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-org3f9f08a" class="outline-2">
-<h2 id="org3f9f08a">Example 8: Fold multiple buttons</h2>
-<div class="outline-text-2" id="text-org3f9f08a">
+<div id="outline-container-orgaa94b31" class="outline-2">
+<h2 id="orgaa94b31">Example 8: Fold multiple buttons</h2>
+<div class="outline-text-2" id="text-orgaa94b31">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">actions</span> = [<span style="color: #f1fa8c;">'-1'</span>, <span style="color: #f1fa8c;">'+1'</span>, <span style="color: #f1fa8c;">'reset'</span>]
 <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg8</span> = fold(
@@ -508,7 +508,7 @@ xmount(&lt;Eg8/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg8'
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
 <p class="author">Author: 欧阳继超</p>
-<p class="date">Created: 2017-09-21 Thu 22:48</p>
+<p class="date">Created: 2017-09-24 Sun 10:46</p>
 <p class="validation"></p>
 </div>
 </body>
