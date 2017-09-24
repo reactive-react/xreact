@@ -15,6 +15,7 @@ dependencies:
 test:
   override:
     - make test
+    - make all
   post:
     - bash <(curl -s https://codecov.io/bash)
 deployment:
