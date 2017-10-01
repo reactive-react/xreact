@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types'
+
 import { extendXComponentClass, genXComponentClass, CONTEXT_TYPE } from './xclass'
 import { streamOps, Stream, Subject } from './xs'
 import { Plan, Xcomponent, XcomponentClass, Engine, ContextEngine, XREACT_ENGINE } from './interfaces'

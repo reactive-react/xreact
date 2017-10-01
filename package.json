@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "make all",
-    "test": "jest && mocha test/test.js",
+    "test": "jest",
     "prepublish": "npm run build",
     "testWDebugger": "node --harmony $(which bugger) ./node_modules/jest-cli/bin/jest.js --runInBand"
   },
@@ -37,6 +37,7 @@
     "@reactivex/rxjs": "^5.4.3",
     "@types/jest": "^20.0.2",
     "@types/node": "^8.0.0",
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.5",
     "browserify": "^14.4.0",
     "browserify-shim": "^3.8.14",

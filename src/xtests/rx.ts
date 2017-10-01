@@ -2,7 +2,7 @@ import { XREACT_ENGINE } from '../interfaces'
 
 import { doSequence, Test } from './util'
 export default class extends Test {
-  collect(component) {
+  collect(component: any) {
     let latestState
     if (this.plans != 0) {
       latestState = component.context[XREACT_ENGINE].history$.take(this.plans).toPromise()

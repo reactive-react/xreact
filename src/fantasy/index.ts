@@ -1,11 +1,11 @@
-import { Stream, streamOps, M_ } from '../xs'
+import { Stream, streamOps, M_, Subject } from '../xs'
 import { FantasyX } from './fantasyx'
 import { Plan, Update } from '../interfaces'
 import { StateP, Partial } from './interfaces'
 import { State } from './state'
 
 export function fromPlan<E extends Stream, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S, void> {
-  return new FantasyX<E, I, S, void>(intent$ => {
+  return new FantasyX<E, I, S, void>((intent$: Subject<E, I>) => {
     let { update$, actions } = plan(intent$)
     return {
       actions,
@@ -16,7 +16,9 @@ export function fromPlan<E extends Stream, I, S>(plan: Plan<E, I, S>): FantasyX<
   })
 }
 
-export function fromEvent<E extends Stream, I extends Event, S>(type: string, name: string, defaultVal?: string): FantasyX<E, I, S, string> {
+export function fromEvent<E extends Stream, I extends Event, S>(
+  type: string, name: string, defaultVal?: string
+): FantasyX<E, I, S, string> {
   return new FantasyX<E, I, S, string>(intent$ => {
     return {
       update$: streamOps.merge<State<S, string>>(
@@ -38,6 +40,13 @@ export function pure<E extends Stream, I, S, A>(a: A) {
       update$: streamOps.just<State<S, A>>(State.pure<S, A>(a))
     }
   })
+}
+
+export function ap<E extends Stream, I, S, A, B>(
+  ff: FantasyX<E, I, S, (a: A) => B>,
+  fa: FantasyX<E, I, S, A>
+): FantasyX<E, I, S, B> {
+  return ff.combine((f, a) => f(a), fa)
 }
 
 export function empty<E extends Stream, I, S, A>() {

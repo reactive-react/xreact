@@ -3,14 +3,24 @@ browserify = ./node_modules/.bin/browserify
 watchify = ./node_modules/.bin/watchify
 uglify = ./node_modules/.bin/uglifyjs
 
+test: unit integrate
+
+build: lib/**/*.js
+
+lib/**/*.js: src/**/*.ts
+
 lib/%.js: src/%.ts
 	tsc
 
-all: docs/src/main/tut/examples/example.js browser
+all: test browser
 
-.PHONY: test
-test: lib/**/*.js test/*.js docs/src/main/tut/examples/example.js
+.PHONY: test build unit integrate browser
+
+unit: build
 	yarn test
+
+integrate: test/*.js docs/src/main/tut/examples/example.js
+	mocha test/test.js
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
 	$(browserify) -p [tsify -p tsconfig.examples.json] docs/src/main/tut/examples/example.tsx -o docs/src/main/tut/examples/example.js

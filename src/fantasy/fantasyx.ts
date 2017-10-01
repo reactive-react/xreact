@@ -16,7 +16,7 @@ export class FantasyX<E extends Stream, I, S, A> {
   constructor(plan: PlanS<E, I, S, A>) {
     this.plan = plan
   }
-  apply(WrappedComponent) {
+  apply(WrappedComponent: XcomponentClass<E, I, S>) {
     return x(this.patch().runS())(WrappedComponent)
   }
 

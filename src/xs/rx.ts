@@ -3,6 +3,7 @@ import { Subject } from '@reactivex/rxjs/dist/cjs/Subject'
 import { Subscription, StreamOps } from './index'
 import '@reactivex/rxjs/dist/cjs/add/operator/map'
 import '@reactivex/rxjs/dist/cjs/add/operator/merge'
+import '@reactivex/rxjs/dist/cjs/add/operator/mergeMap'
 import '@reactivex/rxjs/dist/cjs/add/operator/scan'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
@@ -27,7 +28,10 @@ StreamOps.prototype.just = RxStream.of
 StreamOps.prototype.scan = function(f, base, fa) {
   return fa.scan(f, base)
 }
-StreamOps.prototype.combine = function(f, ...v) {
+StreamOps.prototype.combine = function <A, C>(
+  f: (...a: any[]) => C,
+  ...v: RxStream<any>[]
+): RxStream<C> {
   return RxStream.combineLatest(v, f)
 }
 StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: RxStream<A>): RxStream<A> {
@@ -35,6 +39,9 @@ StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: RxStream<A>)
 }
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: RxStream<A>): RxStream<B> {
   return fa.map(f)
+}
+StreamOps.prototype.flatMap = function <A, B>(f: (a: A) => RxStream<B>, fa: RxStream<A>): RxStream<B> {
+  return fa.mergeMap(f)
 }
 StreamOps.prototype.subject = function <A>() {
   return new Subject()

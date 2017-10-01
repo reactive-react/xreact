@@ -27,9 +27,10 @@ export interface StreamOps<F extends Stream> {
     f: (acc: B, cur: A) => B,
     base: B,
     fa: M_<A>[F]
-  )
+  ): M_<B>[F]
   map<A, B>(f: (a: A) => B, fa: M_<A>[F]): M_<B>[F]
   filter<A>(f: (a: A) => boolean, fa: M_<A>[F]): M_<A>[F]
+  flatMap<A, B>(f: (a: A) => M_<B>[F], fa: M_<A>[F]): M_<B>[F]
   subject<A>(): Subject<F, A>
   combine<A, B, C>(
     f: (a: A, b: B) => C,
@@ -66,7 +67,7 @@ export interface StreamOps<F extends Stream> {
     fe: M_<E>[F],
     fg: M_<G>[F]
   ): M_<H>[F]
-  subscribe<A>(fa: M_<A>[F], next: (v: A) => void, complete?: () => void)
+  subscribe<A>(fa: M_<A>[F], next: (v: A) => void, complete?: () => void): Subscription
 }
 
 export const streamOps: StreamOps<Stream> = new StreamOps

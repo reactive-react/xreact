@@ -17,12 +17,22 @@ StreamOps.prototype.scan = function(f, base, fa) {
 StreamOps.prototype.merge = function(a, b) {
   return a.merge(b)
 }
+
+StreamOps.prototype.flatMap = function(f, fa) {
+  return fa.flatMap(f)
+}
+
 StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: MostStream<A>): MostStream<A> {
   return fa.filter(f)
 }
-StreamOps.prototype.combine = function(f, ...v) {
+
+StreamOps.prototype.combine = function <A, C>(
+  f: (...a: any[]) => C,
+  ...v: MostStream<any>[]
+): MostStream<C> {
   return combineArray(f, v)
 }
+
 StreamOps.prototype.map = function <A, B>(f: (a: A) => B, fa: MostStream<A>): MostStream<B> {
   return fa.map(f)
 }
