@@ -10,6 +10,7 @@ export interface Subscription {
 }
 
 export type Subject<F extends Stream, A> = M_<A>[F] & FantasySubject<A>
+export type $<F extends Stream, A> = M_<A>[F]
 
 export interface XStream<F extends Stream> {
   readonly URI: F
