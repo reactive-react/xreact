@@ -7,6 +7,11 @@ declare module '.' {
     'most': MostStream<A>
   }
 }
+declare module '../fantasy/typeclasses' {
+  interface _<A> {
+    'most': MostStream<A>
+  }
+}
 
 StreamOps.prototype.empty = empty
 StreamOps.prototype.just = just

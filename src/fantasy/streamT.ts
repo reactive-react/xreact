@@ -1,19 +1,17 @@
-// import { Stream, streamOps } from '../xs'
-// import { M_ } from '../xs'
+import { Stream, streamOps } from '../xs'
+import { M_ } from '../xs'
+import { $ } from './typeclasses'
+import { FunctorInstances, map } from './typeclasses/functor'
 
-// class StreamT<E extends Stream, F extends Applicative<M_<A>[E]>, A> {
-//   stream: M_<A>[E]
-//   constructor(v) {
-//     this.stream = streamOps.just(v)
-//   }
-//   static pure<F, A>(value: A) {
-//     return new StreamT(value)
-//   }
 
-//   map<B>(f: (a: A) => B> {
-//     this.stream = streamOps.map(f, this.stream)
-//   }
-//   value() {
-//       return F.pure(this.stream)
-//     }
-// }
+class StreamT<F extends FunctorInstances, A> {
+  value: $<F, $<Stream, A>>
+  constructor(v: $<F, $<Stream, A>>) {
+    this.value = v
+  }
+  map<B>(f: (a: A) => B): StreamT<F, B> {
+    return new StreamT(
+      map((s: $<Stream, A>) => streamOps.map(f, s), this.value)
+    )
+  }
+}

@@ -18,6 +18,12 @@ declare module './index' {
   }
 }
 
+declare module '../fantasy/typeclasses' {
+  interface _<A> {
+    '@reactivex/rxjs': RxStream<A>
+  }
+}
+
 export const URI = '@reactivex/rxjs'
 export type URI = typeof URI
 
