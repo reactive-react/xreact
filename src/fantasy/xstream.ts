@@ -29,15 +29,15 @@ export class Xstream<S extends Stream, I, A> {
 
   toFantasyX() {
     type itentStream = Subject<S, I>
-    type updateStream = $<S, State<A,A>>
+    type updateStream = $<S, State<A, A>>
     return new FantasyX<S, I, A, A>(
-      new State<itentStream,updateStream>(intent$ => {
-      let state$ = this.streamS.runA(intent$)
-      return {
-        s:intent$,
-        a: map<S,A,State<A,A>>((a: A) => Applicative.State.pure<A, A>(a), state$)
-      }
-    }))
+      new State<itentStream, updateStream>(intent$ => {
+        let state$ = this.streamS.runA(intent$)
+        return {
+          s: intent$,
+          a: map<S, A, State<A, A>>((a: A) => Applicative.State.pure<A, A>(a), state$)
+        }
+      }))
   }
 }
 
@@ -57,7 +57,7 @@ Functor.State.map
 
 export class XstreamFunctor implements Functor<"Xstream">{
   map<A, B>(f: (a: A) => B, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
-    return new Xstream(Monad.State.map(sa => map<Stream,A,B>(f, sa), fa.streamS))
+    return new Xstream(Monad.State.map(sa => map<Stream, A, B>(f, sa), fa.streamS))
   }
 }
 
@@ -109,12 +109,12 @@ declare module './typeclasses/apply' {
 export class XstreamFlatMap extends XstreamApply {
   flatMap<A, B>(f: (a: A) => Xstream<Stream, any, B>, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
     return new Xstream(
-      FlatMap.State.flatMap((a$:$<Stream,A>) => (
-        map<"State",$<Stream, A>,$<Stream, B>>(i$ => {
-          let sdf = (a:A) => f(a).streamS.runA(i$)
-          return flatMap<Stream,A,B>(sdf, a$)
+      FlatMap.State.flatMap((a$: $<Stream, A>) => (
+        map<"State", $<Stream, A>, $<Stream, B>>(i$ => {
+          let sdf = (a: A) => f(a).streamS.runA(i$)
+          return flatMap<Stream, A, B>(sdf, a$)
         }, State.get<$<Stream, A>>())
-      ),fa.streamS)
+      ), fa.streamS)
     )
   }
 }

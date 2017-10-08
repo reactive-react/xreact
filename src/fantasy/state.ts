@@ -50,11 +50,12 @@ export class State<S, A> {
     return new State((s: S) => ({ a: undefined, s: Object.assign({}, s, f(s)) }))
   }
 
-  patch(f: (a: A, s?: S) => Partial<S>): State<S, void> {
+  patch(f: (a: A, s?: S) => Partial<S>): State<S, Partial<S>> {
     return new State((state: S) => {
       let { a, s } = this.runState(state)
+      let p = f(a, s)
       return {
-        a: undefined, s: Object.assign({}, s, f(a, s))
+        a: p, s: Object.assign({}, s, p)
       }
     })
   }

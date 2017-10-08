@@ -36,6 +36,7 @@ declare module '../fantasy/typeclasses' {
 }
 
 datatype("RxStream")(RxStream)
+datatype("RxStream")(Subject)
 
 export class RxFunctor implements Functor<kind>{
   map<A, B>(f: (a: A) => B, fa: RxStream<A>): RxStream<B> {

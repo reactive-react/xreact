@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Stream, Subject, Subscription } from './xs'
-import {$} from './fantasy/typeclasses'
+import { $ } from './fantasy/typeclasses'
 import * as PropTypes from 'prop-types';
 
 export const XREACT_ENGINE = '@reactive-react/xreact.engine';
@@ -14,7 +14,7 @@ export interface Plan<E extends Stream, I, S> {
 }
 
 export interface Update<S> {
-  (current?: S): Partial<S>
+  (current: S): Partial<S>
 }
 
 export interface Machine<E extends Stream, I, S> {
@@ -48,7 +48,7 @@ export interface XcomponentClass<E extends Stream, I, S> {
 
 export interface History<E extends Stream, S> {
   path: Subject<E, (n: number) => number>
-  history: $<E,S>
+  history: $<E, S>
 }
 
 export interface Stamp<S> {

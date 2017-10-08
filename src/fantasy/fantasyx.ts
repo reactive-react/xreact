@@ -1,12 +1,12 @@
-import { Stream, streamOps,Subject } from '../xs'
+import { Stream, streamOps, Subject } from '../xs'
 import { PlanS } from './interfaces'
 import { x } from '../x'
 import { State } from './state'
 import { Actions, Plan, XcomponentClass, Update } from '../interfaces'
-import {$} from './typeclasses'
-import {map, Functor} from './typeclasses/functor'
+import { $ } from './typeclasses'
+import { map, Functor } from './typeclasses/functor'
 
-import {Monad} from './typeclasses/monad'
+import { Monad } from './typeclasses/monad'
 interface Semigroup {
   concat: <A>(a: A) => A
 }
@@ -15,24 +15,37 @@ function isSemigroup(a: any): a is Semigroup {
 }
 
 export class FantasyX<F extends Stream, I, S, A> {
-  plan: State<Subject<F,I>, $<F,State<S,A>>>
-  constructor(plan: State<Subject<F,I>, $<F,State<S,A>>>) {
+  plan: State<Subject<F, I>, $<F, State<S, A>>>
+  constructor(plan: State<Subject<F, I>, $<F, State<S, A>>>) {
     this.plan = plan
   }
   apply(WrappedComponent: XcomponentClass<F, I, S>) {
-    return x((intent$:Subject<F,I>)=> {
-      let update$ = map<Stream, State<S,A>, Update<S>>(
-        s => s.runS.bind(s),
-        this.plan.runA(intent$))
-      return {update$}
+    return x((intent$: Subject<F, I>) => {
+      return { update$: this.toStream(intent$) }
     })(WrappedComponent)
+  }
+
+  toStream(intent$: Subject<F, I>): $<F, Update<S>> {
+    return map<Stream, State<S, A>, Update<S>>(
+      s => (state => s.patch(a => a).runS(state)),
+      this.plan.runA(intent$))
   }
 
   map<B>(f: (a: A) => B): FantasyX<F, I, S, B> {
     return new FantasyX<F, I, S, B>(
-      Functor.State.map(update$=>(
-        map<Stream, State<S,A>, State<S,B>>(state=>(
+      Functor.State.map(update$ => (
+        map<Stream, State<S, A>, State<S, B>>(state => (
           Functor.State.map(f, state)
+        ), update$)
+      ), this.plan)
+    )
+  }
+
+  fold<B>(f: (s: S, a: A) => S): FantasyX<F, I, S, Partial<S>> {
+    return new FantasyX<F, I, S, Partial<S>>(
+      Functor.State.map(update$ => (
+        map<Stream, State<S, A>, State<S, Partial<S>>>(state => (
+          state.patch((a: A, s: S) => f(s, a))
         ), update$)
       ), this.plan)
     )

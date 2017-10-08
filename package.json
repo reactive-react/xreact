@@ -25,7 +25,8 @@
     "most": "global:most"
   },
   "dependencies": {
-    "prop-types": "^15.5.8"
+    "prop-types": "^15.5.8",
+    "reflect-metadata": "^0.1.10"
   },
   "peerDependencies": {
     "@reactivex/rxjs": "^5.4.0",
@@ -55,7 +56,6 @@
     "react-dom": "^15.5.4",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.0.4",
-    "reflect-metadata": "^0.1.10",
     "ts-jest": "^20.0.2",
     "tsify": "^3.0.3",
     "typescript": "^2.5.2",
