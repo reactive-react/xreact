@@ -1,15 +1,15 @@
-import { Functor } from './typeclasses/functor'
-import { Cartesian } from './typeclasses/cartesian'
+import { Functor, map } from './typeclasses/functor'
+import { Cartesian, product } from './typeclasses/cartesian'
 import { Apply } from './typeclasses/apply'
-import { FlatMap } from './typeclasses/flatmap'
+import { FlatMap, flatMap } from './typeclasses/flatmap'
 import { Applicative } from './typeclasses/applicative'
 import { Semigroup, concat } from './typeclasses/semigroup'
 import { Monad } from './typeclasses/monad'
-import { Stream, streamOps, $, Subject } from '../xs'
+import { streamOps, Subject, Stream } from '../xs'
 import { Plan, Update } from '../interfaces'
 import { FantasyX } from './fantasyx'
 import { State } from './state'
-import { datatype } from './typeclasses'
+import { datatype, $, HKT } from './typeclasses'
 
 @datatype('Xstream')
 export class Xstream<S extends Stream, I, A> {
@@ -28,53 +28,49 @@ export class Xstream<S extends Stream, I, A> {
   }
 
   toFantasyX() {
-    return new FantasyX<S, I, A, A>((intent$: Subject<S, I>) => {
+    type itentStream = Subject<S, I>
+    type updateStream = $<S, State<A,A>>
+    return new FantasyX<S, I, A, A>(
+      new State<itentStream,updateStream>(intent$ => {
       let state$ = this.streamS.runA(intent$)
       return {
-        update$: streamOps.map((a: A) => State.pure<A, A>(a), state$)
+        s:intent$,
+        a: map<S,A,State<A,A>>((a: A) => Applicative.State.pure<A, A>(a), state$)
       }
-    })
-  }
-
-  map<B>(f: (a: A) => B): Xstream<S, I, B> {
-    return new Xstream(this.streamS.map(sa => streamOps.map(f, sa)))
-  }
-
-  product<B>(fa: Xstream<Stream, I, A>, fb: Xstream<Stream, I, B>): Xstream<Stream, I, [A, B]> {
-    return new Xstream(fa.streamS.chain(s1 => (
-      fb.streamS.map(s2 => (
-        streamOps.combine((a, b) => (<[A, B]>[a, b]), s1, s2)
-      ))
-    )))
+    }))
   }
 }
 
 declare module './typeclasses' {
   export interface _<A> {
-    "Xstream": Xstream<Stream, any, A>
+    "Xstream": Xstream<any, any, A>
   }
 }
 
+declare module './typeclasses/functor' {
+  export namespace Functor {
+    export let Xstream: XstreamFunctor
+  }
+}
+
+Functor.State.map
+
 export class XstreamFunctor implements Functor<"Xstream">{
-  map<A, B>(f: (a: A) => B, fa: Xstream<Stream, any, A>): Xstream<typeof fa._S, typeof fa._I, B> {
-    return new Xstream(fa.streamS.map(sa => streamOps.map(f, sa)))
+  map<A, B>(f: (a: A) => B, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
+    return new Xstream(Monad.State.map(sa => map<Stream,A,B>(f, sa), fa.streamS))
   }
 }
 
 Functor.Xstream = new XstreamFunctor
 
-declare module './typeclasses/functor' {
-  namespace Functor {
-    export let Xstream: XstreamFunctor
-  }
-}
-
 export class XstreamCartesian implements Cartesian<"Xstream">{
-  product<A, B>(fa: Xstream<Stream, any, A>, fb: Xstream<Stream, any, B>): Xstream<Stream, typeof fa._I, [A, B]> {
+  product<A, B>(fa: Xstream<any, any, A>, fb: Xstream<any, any, B>): Xstream<any, typeof fa._I, [A, B]> {
     return new Xstream(
-      fa.streamS.chain(
-        s1 => fb.streamS.map(
-          s2 => streamOps.combine((a, b) => (<[A, B]>[a, b]), s1, s2))))
+      FlatMap.State.flatMap(s1 => (
+        Functor.State.map(s2 => (
+          product(s1, s2)
+        ), fb.streamS)
+      ), fa.streamS))
   }
 }
 
@@ -88,14 +84,15 @@ declare module './typeclasses/cartesian' {
 
 export class XstreamApply implements Apply<"Xstream"> {
   ap<A, B>(
-    fab: Xstream<Stream, any, (a: A) => B>,
-    fa: Xstream<Stream, any, A>
-  ): Xstream<typeof fa._S, typeof fa._I, B> {
+    fab: Xstream<any, any, (a: A) => B>,
+    fa: Xstream<any, any, A>
+  ): Xstream<any, any, B> {
     return new Xstream(
-      fab.streamS.chain(s1 => (
-        fa.streamS.map(s2 => (
-          streamOps.combine((a, b) => a(b), s1, s2))
-        ))))
+      FlatMap.State.flatMap(s1 => (
+        Functor.State.map(s2 => (
+          map((([a, b]) => a(b)), product(s1, s2))
+        ), fa.streamS)
+      ), fab.streamS))
   }
   map = Functor.Xstream.map
   product = Cartesian.Xstream.product
@@ -110,13 +107,14 @@ declare module './typeclasses/apply' {
 }
 
 export class XstreamFlatMap extends XstreamApply {
-  flatMap<A, B>(f: (a: A) => Xstream<Stream, any, B>, fa: Xstream<Stream, any, A>): Xstream<typeof fa._S, typeof fa._I, B> {
+  flatMap<A, B>(f: (a: A) => Xstream<Stream, any, B>, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
     return new Xstream(
-      fa.streamS.chain(a$ => (
-        State.get<typeof fa._I>().map(i$ => (
-          streamOps.flatMap(a => f(a).streamS.runA(i$), a$)
-        ))
-      ))
+      FlatMap.State.flatMap((a$:$<Stream,A>) => (
+        map<"State",$<Stream, A>,$<Stream, B>>(i$ => {
+          let sdf = (a:A) => f(a).streamS.runA(i$)
+          return flatMap<Stream,A,B>(sdf, a$)
+        }, State.get<$<Stream, A>>())
+      ),fa.streamS)
     )
   }
 }
@@ -130,9 +128,9 @@ declare module './typeclasses/flatmap' {
 }
 
 export class XstreamApplicative extends XstreamApply {
-  pure<I, A>(v: A): Xstream<Stream, I, A> {
+  pure<I, A>(v: A): Xstream<any, I, A> {
     return new Xstream(
-      State.pure<$<Stream, I>, $<Stream, A>>(streamOps.just(v))
+      Applicative.State.pure(streamOps.just(v))
     )
   }
 }
@@ -145,12 +143,8 @@ declare module './typeclasses/applicative' {
   }
 }
 
-export class XstreamMonad implements Applicative<"Xstream">, FlatMap<"Xstream"> {
+export class XstreamMonad extends XstreamApplicative implements FlatMap<"Xstream"> {
   flatMap = FlatMap.Xstream.flatMap
-  map = Applicative.Xstream.map
-  ap = Applicative.Xstream.ap
-  pure = Applicative.Xstream.pure
-  product = Applicative.Xstream.product
 }
 
 Monad.Xstream = new XstreamMonad
@@ -162,21 +156,21 @@ declare module './typeclasses/monad' {
 }
 
 
-export class XstreamSemigroup implements Semigroup<Xstream<Stream, any, any>> {
-  _T: Xstream<Stream, any, any>
-  concat(fa: Xstream<Stream, any, any>, fb: Xstream<Stream, any, any>): Xstream<Stream, any, any> {
-    return new Xstream(
-      fa.streamS.chain(a$ => (
-        fb.streamS.map(b$ => (
-          streamOps.combine((a: any, b: any) => {
-            return concat(a, b)
-          }, a$, b$)
-        )))))
-  }
-}
+// export class XstreamSemigroup implements Semigroup<Xstream<any, any, any>> {
+//   _T: Xstream<any, any, any>
+//   concat(fa: Xstream<any, any, any>, fb: Xstream<any, any, any>): Xstream<any, any, any> {
+//     return new Xstream(
+//       fa.streamS.chain(a$ => (
+//         fb.streamS.map(b$ => (
+//           streamOps.combine((a: any, b: any) => {
+//             return concat(a, b)
+//           }, a$, b$)
+//         )))))
+//   }
+// }
 
-declare module './typeclasses/semigroup' {
-  export namespace Semigroup {
-    export let Xstream: XstreamSemigroup
-  }
-}
+// declare module './typeclasses/semigroup' {
+//   export namespace Semigroup {
+//     export let Xstream: XstreamSemigroup
+//   }
+// }

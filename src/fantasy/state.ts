@@ -34,6 +34,9 @@ export class State<S, A> {
     return this.runState(state).s
   }
 
+  static pure<S, A>(a: A): State<S, A> {
+    return new State((s: S) => ({ a, s }))
+  }
 
   static get<S>(): State<S, S> {
     return new State((s: S) => ({ s: s, a: s }))
@@ -112,9 +115,7 @@ declare module './typeclasses/apply' {
 Apply.State = new StateApply
 
 export class StateApplicative extends StateApply implements Applicative<kind> {
-  pure<S, A>(a: A): State<S, A> {
-    return new State((s: S) => ({ a, s }))
-  }
+  pure = State.pure
 }
 
 declare module './typeclasses/applicative' {

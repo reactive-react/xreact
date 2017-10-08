@@ -18,6 +18,11 @@ export function kind(target: any) {
 }
 
 datatype('Array')(Array)
+declare module '.' {
+  export interface _<A> {
+    "Array": Array<A>
+  }
+}
 
 function isPrimitive(a: any): boolean {
   return ['string', 'number', 'symbol', 'boolean'].indexOf(typeof a) >= 0

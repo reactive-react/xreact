@@ -1,6 +1,6 @@
 import { Actions } from '../interfaces'
 import { State } from './state'
-import { Subject, Stream, M_ } from '../xs'
+import { Subject, Stream, $ } from '../xs'
 export type Partial<T> = {
   [P in keyof T]?: T[P];
 }
@@ -14,7 +14,7 @@ export type StateP<S> = State<S, Partial<S>>
 
 export interface Machine<E extends Stream, I, S, A> {
   actions?: Actions<I>
-  update$: M_<State<S, A>>[E]
+  update$: $<E, State<S, A>>
 }
 
 export type PlanS<E extends Stream, I, S, A> = (i: Subject<E, I>) => Machine<E, I, S, A>

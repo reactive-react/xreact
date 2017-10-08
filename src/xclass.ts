@@ -2,7 +2,8 @@ import * as React from 'react';
 import { createElement as h } from 'react'
 import * as PropTypes from 'prop-types';
 import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update, Actions } from './interfaces'
-import { streamOps, Stream, M_, Subject } from './xs'
+import { streamOps, Stream, Subject } from './xs'
+
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.shape({
     intent$: PropTypes.object,

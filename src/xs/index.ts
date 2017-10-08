@@ -1,5 +1,6 @@
-export interface M_<A> { }
-export type Stream = keyof M_<any>
+import { _, $} from '../fantasy/typeclasses'
+export interface S_<A> { }
+export type Stream = keyof S_<any>
 
 export interface FantasySubject<A> {
   next<A>(a: A): void
@@ -9,66 +10,62 @@ export interface Subscription {
   unsubscribe(): void;
 }
 
-export type Subject<F extends Stream, A> = M_<A>[F] & FantasySubject<A>
-export type $<F extends Stream, A> = M_<A>[F]
-
-export interface XStream<F extends Stream> {
-  readonly URI: F
-}
+export type Subject<F extends Stream, A> = $<F, A> & FantasySubject<A>
+export type $<F extends Stream, A> = $<F, A>
 
 export class StreamOps<F extends Stream> { }
 export interface StreamOps<F extends Stream> {
-  empty<A>(): M_<A>[F]
-  just<A>(a: A): M_<A>[F]
+  empty<A>(): $<F, A>
+  just<A>(a: A): $<F, A>
   merge<A>(
-    a: M_<A>[F],
-    b: M_<A>[F]
-  ): M_<A>[F]
+    a: $<F, A>,
+    b: $<F, A>
+  ): $<F, A>
   scan<A, B>(
     f: (acc: B, cur: A) => B,
     base: B,
-    fa: M_<A>[F]
-  ): M_<B>[F]
-  map<A, B>(f: (a: A) => B, fa: M_<A>[F]): M_<B>[F]
-  filter<A>(f: (a: A) => boolean, fa: M_<A>[F]): M_<A>[F]
-  flatMap<A, B>(f: (a: A) => M_<B>[F], fa: M_<A>[F]): M_<B>[F]
+    fa: $<F, A>
+  ): $<F, B>
+  map<A, B>(f: (a: A) => B, fa: $<F, A>): $<F, B>
+  filter<A>(f: (a: A) => boolean, fa: $<F, A>): $<F, A>
+  flatMap<A, B>(f: (a: A) => $<F, B>, fa: $<F, A>): $<F, B>
   subject<A>(): Subject<F, A>
   combine<A, B, C>(
     f: (a: A, b: B) => C,
-    fa: M_<A>[F],
-    fb: M_<B>[F]
-  ): M_<C>[F]
+    fa: $<F, A>,
+    fb: $<F, B>
+  ): $<F, C>
   combine<A, B, C, D>(
     f: (a: A, b: B, c: C) => D,
-    fa: M_<A>[F],
-    fb: M_<B>[F],
-    fc: M_<C>[F]
-  ): M_<D>[F]
+    fa: $<F, A>,
+    fb: $<F, B>,
+    fc: $<F, C>
+  ): $<F, D>
   combine<A, B, C, D, E>(
     f: (a: A, b: B, c: C, d: D) => E,
-    fa: M_<A>[F],
-    fb: M_<B>[F],
-    fc: M_<C>[F],
-    fd: M_<D>[F]
-  ): M_<E>[F]
+    fa: $<F, A>,
+    fb: $<F, B>,
+    fc: $<F, C>,
+    fd: $<F, D>
+  ): $<F, E>
   combine<A, B, C, D, E, G>(
     f: (a: A, b: B, c: C, d: D, e: E) => G,
-    fa: M_<A>[F],
-    fb: M_<B>[F],
-    fc: M_<C>[F],
-    fd: M_<D>[F],
-    fe: M_<E>[F]
-  ): M_<G>[F]
+    fa: $<F, A>,
+    fb: $<F, B>,
+    fc: $<F, C>,
+    fd: $<F, D>,
+    fe: $<F, E>
+  ): $<F, G>
   combine<A, B, C, D, E, G, H>(
     f: (a: A, b: B, c: C, d: D, e: E, g: G) => H,
-    fa: M_<A>[F],
-    fb: M_<B>[F],
-    fc: M_<C>[F],
-    fd: M_<D>[F],
-    fe: M_<E>[F],
-    fg: M_<G>[F]
-  ): M_<H>[F]
-  subscribe<A>(fa: M_<A>[F], next: (v: A) => void, complete?: () => void): Subscription
+    fa: $<F, A>,
+    fb: $<F, B>,
+    fc: $<F, C>,
+    fd: $<F, D>,
+    fe: $<F, E>,
+    fg: $<F, G>
+  ): $<F, H>
+  subscribe<A>(fa: $<F, A>, next: (v: A) => void, complete?: () => void): Subscription
 }
 
 export const streamOps: StreamOps<Stream> = new StreamOps

@@ -5,7 +5,7 @@ import { X, x } from '../index';
 import * as createClass from 'create-react-class'
 import * as rx from '../xs/rx'
 const compose = (f, g) => x => f(g(x));
-
+import {Stream} from '../xs'
 
 const CounterView: React.SFC<any> = props => (
   <div className="counter-view">
@@ -19,7 +19,7 @@ interface Intent {
   value?: any
 }
 
-const xcountable = x<rx.URI, Intent, any>((intent$) => {
+const xcountable = x<Stream, Intent, any>((intent$) => {
   return {
     update$: intent$.map((intent) => {
       switch (intent.type) {
@@ -62,7 +62,7 @@ for (let name of Xs) {
     beforeEach(() => {
       engine = require(`../xs/${name}`)
       Xtest = require(`../xtests/${name}`).default
-      mountx = compose(mount, y => React.createFactory(X)({ x: engine }, y))
+      mountx = compose(mount, y => React.createFactory(X)({}, y))
     })
     describe('actions', () => {
       let counterWrapper, counter, t, counterView, actions
@@ -149,7 +149,7 @@ for (let name of Xs) {
 
     describe('composable', () => {
       let counterWrapper, counter, t, counterView, actions
-      const xxcountable = x<rx.URI, Intent, any>((intent$) => {
+      const xxcountable = x<Stream, Intent, any>((intent$) => {
         return {
           update$: intent$.map(intent => {
             switch (intent.type) {
@@ -217,7 +217,7 @@ for (let name of Xs) {
 
     describe('unsubscribe when component unmounted', () => {
       it('unsubscribe', (done) => {
-        const Counter = x<rx.URI, Intent, any>((intent$) => {
+        const Counter = x<Stream, Intent, any>((intent$) => {
           return {
             update$: intent$.map(intent => {
               switch (intent.type) {

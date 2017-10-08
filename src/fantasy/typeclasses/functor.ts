@@ -5,12 +5,6 @@ export interface Functor<F extends HKT> {
 
 export type FunctorInstances = keyof typeof Functor
 
-declare module '.' {
-  export interface _<A> {
-    "Array": Array<A>
-  }
-}
-
 export namespace Functor {
   export let Array = {
     map: <A, B>(f: (a: A) => B, fb: A[]) => fb.map(f)
