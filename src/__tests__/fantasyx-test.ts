@@ -3,9 +3,13 @@ import '../xs/rx'
 import { FantasyX } from '../fantasy/fantasyx'
 import { Update } from '../interfaces'
 import { Xstream } from '../fantasy/xstream'
+import { flatMap, FlatMap } from '../fantasy/typeclasses/flatmap'
 describe('FantasyX', () => {
-  it('map', (done) => {
-    let intent = new Subject()
+  let intent;
+  beforeEach(() => {
+    intent = new Subject()
+  })
+  it('map and fold', (done) => {
     Xstream
       .fromIntent()
       .toFantasyX()
@@ -28,7 +32,18 @@ describe('FantasyX', () => {
     intent.next(1)
     intent.next(2)
     intent.complete()
-    // .toPromise()
-    // .then(x=>expect(x).toBe(''))
+  })
+
+  it('flatMap Xstream', (done) => {
+    FlatMap.Xstream.flatMap(
+      (x: number) => Xstream.fromPromise<"RxStream", number, number>(Promise.resolve({ count: x + 1 }))
+      , Xstream.fromIntent<"RxStream", number>())
+      .toFantasyX()
+      .toStream(intent)
+      .reduce((acc, f: any) => f(acc), { count: 10 })
+      .toPromise().then(a => expect(a).toEqual({ count: 3 })).then(done)
+    intent.next(1)
+    intent.next(2)
+    intent.complete()
   })
 })

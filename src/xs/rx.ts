@@ -9,6 +9,7 @@ import '@reactivex/rxjs/dist/cjs/add/operator/catch'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import '@reactivex/rxjs/dist/cjs/add/observable/empty'
 import '@reactivex/rxjs/dist/cjs/add/observable/of'
+import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
 import { Functor } from '../fantasy/typeclasses/functor'
@@ -165,3 +166,5 @@ StreamOps.prototype.subscribe = function <A>(fa: RxStream<A>, next: (v: A) => vo
 StreamOps.prototype.merge = function <A>(a: RxStream<A>, b: RxStream<A>): RxStream<A> {
   return a.merge(b)
 }
+
+StreamOps.prototype.fromPromise = RxStream.fromPromise

@@ -27,6 +27,13 @@ export class Xstream<S extends Stream, I, A> {
     })))
   }
 
+  static fromPromise<F extends Stream, I, A>(p: Promise<A>) {
+    return new Xstream<F, I, A>(new State((intent$: Subject<F, I>) => ({
+      s: intent$,
+      a: streamOps.fromPromise(p)
+    })))
+  }
+
   toFantasyX() {
     type itentStream = Subject<S, I>
     type updateStream = $<S, State<A, A>>
@@ -108,7 +115,7 @@ declare module './typeclasses/apply' {
 
 export class XstreamFlatMap extends XstreamApply {
   flatMap<A, B>(f: (a: A) => Xstream<Stream, any, B>, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
-    return new Xstream(
+    return new Xstream<Stream, any, B>(
       FlatMap.State.flatMap((a$: $<Stream, A>) => (
         map<"State", $<Stream, A>, $<Stream, B>>(i$ => {
           let sdf = (a: A) => f(a).streamS.runA(i$)

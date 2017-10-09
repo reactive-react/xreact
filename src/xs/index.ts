@@ -1,4 +1,4 @@
-import { _, $} from '../fantasy/typeclasses'
+import { _, $ } from '../fantasy/typeclasses'
 export interface S_<A> { }
 export type Stream = keyof S_<any>
 
@@ -16,6 +16,7 @@ export type $<F extends Stream, A> = $<F, A>
 export class StreamOps<F extends Stream> { }
 export interface StreamOps<F extends Stream> {
   empty<A>(): $<F, A>
+  fromPromise<A>(p: Promise<A>): $<F, A>
   just<A>(a: A): $<F, A>
   merge<A>(
     a: $<F, A>,
