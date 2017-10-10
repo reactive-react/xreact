@@ -22,6 +22,10 @@
   version "20.0.8"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.8.tgz#7f8c97f73d20d3bf5448fbe33661a342002b5954"
 
+"@types/node@*":
+  version "8.0.33"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.33.tgz#1126e94374014e54478092830704f6ea89df04cd"
+
 "@types/node@^7.0.18":
   version "7.0.43"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.43.tgz#a187e08495a075f200ca946079c914e1a5fe962c"
@@ -33,6 +37,17 @@
 "@types/prop-types@^15.5.2":
   version "15.5.2"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.2.tgz#3c6b8dceb2906cc87fe4358e809f9d20c8d59be1"
+
+"@types/react-dom@^16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.1.tgz#de159d00dd70050000f462e8bcff0c08ef803dee"
+  dependencies:
+    "@types/node" "*"
+    "@types/react" "*"
+
+"@types/react@*":
+  version "16.0.10"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.10.tgz#a24b630f5f1f170866a148a147d4fc8636ea88e0"
 
 "@types/react@^16.0.5":
   version "16.0.5"
