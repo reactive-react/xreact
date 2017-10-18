@@ -40,8 +40,7 @@ export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: Rea
       this.machine = {
         update$: update$
       }
-      if (actions)
-        this.machine.actions = bindActions(actions, engine.intent$, this)
+      this.machine.actions = bindActions(actions || {}, engine.intent$, this)
 
       this.defaultKeys = WrappedComponent.defaultProps ? (<(keyof S)[]>Object.keys(WrappedComponent.defaultProps)) : [];
       this.state = Object.assign(

@@ -1,9 +1,12 @@
-import { Stream, streamOps, Subject } from '../xs'
-import { FantasyX } from './fantasyx'
-import { Plan, Update } from '../interfaces'
-import { StateP, Partial } from './interfaces'
-import { State } from './state'
-
+import './xstream'
+import './fantasyx'
+export * from './typeclasses/applicative'
+export * from './typeclasses/functor'
+export * from './typeclasses/apply'
+export * from './typeclasses/monad'
+export * from './typeclasses/flatmap'
+export * from './typeclasses/cartesian'
+export * from './typeclasses/semigroup'
 // export function fromPlan<E extends Stream, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S, void> {
 //   return new FantasyX<E, I, S, void>((intent$: Subject<E, I>) => {
 //     let { update$, actions } = plan(intent$)

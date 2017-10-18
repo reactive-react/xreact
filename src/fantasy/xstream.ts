@@ -20,10 +20,30 @@ export class Xstream<S extends Stream, I, A> {
   constructor(streamS: State<$<S, I>, $<S, A>>) {
     this.streamS = streamS
   }
+
+  filter(f: (a: A) => boolean): Xstream<S, I, A> {
+    return new Xstream(Monad.State.map(sa => streamOps.filter(f, sa), this.streamS))
+  }
+
   static fromIntent<F extends Stream, I>() {
     return new Xstream<F, I, I>(new State((intent$: Subject<F, I>) => ({
       s: intent$,
       a: intent$
+    })))
+  }
+
+  static fromEvent<F extends Stream>(type: string, name: string, defaultValue?: string) {
+    return new Xstream<F, Event, string>(new State((intent$: Subject<F, Event>) => ({
+      s: intent$,
+      a: streamOps.merge(
+        streamOps.just(defaultValue),
+        streamOps.map((e: Event) => (e.target as HTMLFormElement).value
+          , streamOps.filter((e: Event) => {
+            let target = e.target as HTMLFormElement
+            return target.tagName == 'INPUT' && e.type == type && target.name == name
+          }, (intent$ as $<F, Event>)))
+
+      )
     })))
   }
 

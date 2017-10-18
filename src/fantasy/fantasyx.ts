@@ -11,6 +11,8 @@ import { Cartesian, product } from './typeclasses/cartesian'
 import { Apply } from './typeclasses/apply'
 import { Applicative } from './typeclasses/applicative'
 import { datatype } from './typeclasses'
+import { Xstream } from './xstream'
+import * as React from 'react'
 
 @datatype('FantasyX')
 export class FantasyX<F extends Stream, I, S, A> {
@@ -19,7 +21,7 @@ export class FantasyX<F extends Stream, I, S, A> {
     this.plan = plan
   }
 
-  apply(WrappedComponent: XcomponentClass<F, I, S>, actions?: Actions<I>) {
+  apply(WrappedComponent: XcomponentClass<F, I, S> | React.ComponentClass<any> | React.SFC<any>, actions?: Actions<I>) {
     return x((intent$: Subject<F, I>) => {
       return { update$: this.toStream(intent$), actions }
     })(WrappedComponent)
@@ -255,11 +257,11 @@ export class FantasyXApply implements Apply<"FantasyX"> {
 
 declare module './typeclasses/apply' {
   export namespace Apply {
-    export let FantasyX: FantasyXFunctor
+    export let FantasyX: FantasyXApply
   }
 }
 
-Apply.FantasyX = new FantasyXFunctor
+Apply.FantasyX = new FantasyXApply
 
 export class FantasyXApplicative extends FantasyXApply {
   pure<I, A>(v: A): FantasyX<Stream, I, A, A> {

@@ -4,5 +4,7 @@
     "docs/src/main/tut/examples/*.tsx"
   ],
   "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false
   }
 }

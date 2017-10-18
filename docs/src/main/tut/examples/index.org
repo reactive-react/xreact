@@ -1,25 +1,26 @@
-#+TITLE: Examples of xReact Fantasy
+# #+TITLE: Examples of xReact Fantasy
 #+Date: <2017-09-09 Sat>
-#+AUTHOR: 欧阳继超
+# #+AUTHOR: 欧阳继超
 #+HTML_HEAD: <style>pre.src {background-color: #282a36;color: #f8f8f2;}</style>
-#+OPTIONS: exports:source tangle:yes eval:no-export num:0
+#+OPTIONS: exports:source tangle:yes eval:no-export num:1
 
 * Example 0: How to use xReact Fantasy
 
 #+BEGIN_SRC js :tangle example.tsx
 
-import * as React from 'react';
-import { render } from 'react-dom';
-import '../../../../../src/xs/rx'
-import { pure, lift2, X, xinput, fromEvent, traverse, fold } from '../../../../../src'
-function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
+  import * as React from 'react';
+  import { render } from 'react-dom';
+  import '../../../../../src/xs/rx'
+  import { Applicative, lift2, Functor, map } from '../../../../../src/fantasy'
+  import {X} from '../../../../../src'
+  function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
 #+END_SRC
 
 * Example 1: Two number multiply
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
 #+BEGIN_SRC js :tangle example.tsx
 let mult = (x:number,y: number) => x * y
-let Xeg1 = lift2(mult)(pure(6), pure(5))
+let Xeg1 = lift2<"FantasyX",number, number, number>(mult)(Applicative.FantasyX.pure(6), Applicative.FantasyX.pure(5))
 #+END_SRC
 
 A very basic Stateless Component to display it.
@@ -28,7 +29,7 @@ let ViewEg1 = props => <p className="result">{props.product}</p>
 #+END_SRC
 
 #+BEGIN_SRC js :tangle example.tsx
-let Eg1 = Xeg1.map(a=>({product: a})).apply(ViewEg1)
+let Eg1 = Functor.FantasyX.map(a=>({product: a}), Xeg1).apply(ViewEg1)
 #+END_SRC
 
 #+BEGIN_SRC js :tangle example.tsx
@@ -40,20 +41,26 @@ xmount(<Eg1/>, document.getElementById('eg1') )
 
 * Example 2: Two Inputs
 #+BEGIN_SRC js :tangle example.tsx
-  function strToInt(x) {return ~~x}
+  import {Xstream} from '../../../../../src/fantasy/xstream';
 
-  let Xeg2 = lift2(mult)(
-    fromEvent('change', 'n1', '5').map(strToInt),
-    fromEvent('change', 'n2', '6').map(strToInt)
-  )
+  function strToInt(x) {return ~~x}
+  type Intent = {type:string, value:number}
+  let XSinput1 = Xstream.fromEvent('change', 'n1', '5')
+  let XSinput2 = Xstream.fromEvent('change', 'n2', '6')
+
+  let Xeg2 = lift2<"Xstream", number, number, number>(mult)(
+    Functor.Xstream.map(strToInt, XSinput1),
+    Functor.Xstream.map(strToInt, XSinput2)
+  ).toFantasyX()
+      .map(x=>({product: x}))
 
   let ViewEg2 = props => <section>
-    <p><input type="number" name="n1" onChange={props.actions.fromEvent} defaultValue="5"/></p>
-    <p><input type="number" name="n2" onChange={props.actions.fromEvent} defaultValue="6"/></p>
-    <p><span className="result">{props.product}</span></p>
-  </section>
+      <p><input type="number" name="n1" onChange={props.actions.fromEvent} defaultValue="5"/></p>
+      <p><input type="number" name="n2" onChange={props.actions.fromEvent} defaultValue="6"/></p>
+      <p><span className="result">{props.product}</span></p>
+      </section>
 
-  let Eg2 = Xeg2.map(a=>({product: a})).apply(ViewEg2)
+  let Eg2 = Xeg2.apply(ViewEg2)
 #+END_SRC
 
 #+BEGIN_SRC js :tangle example.tsx :exports none
@@ -62,183 +69,183 @@ xmount(<Eg2/>, document.getElementById('eg2') )
 
 #+HTML: <p><div id="eg2"></div></p>
 
-* Example 3: Semigroup
-#+BEGIN_SRC js :tangle example.tsx
-  let Xeg3 = fromEvent('change', 'firstName', 'Jichao')
-      .concat(pure(' '))
-      .concat(fromEvent('change', 'lastName', 'Ouyang'))
+# * Example 3: Semigroup
+# #+BEGIN_SRC js :tangle example.tsx
+#   let Xeg3 = fromEvent('change', 'firstName', 'Jichao')
+#       .concat(pure(' '))
+#       .concat(fromEvent('change', 'lastName', 'Ouyang'))
 
-  let ViewEg3 = props => <section>
-    <p><input type="text" name="firstName" onChange={props.actions.fromEvent} defaultValue="Jichao" /></p>
-    <p><input type="text" name="lastName" onChange={props.actions.fromEvent} defaultValue="Ouyang"/></p>
-    <p><span className="result">{props.semigroup}</span></p>
-  </section>
+#   let ViewEg3 = props => <section>
+#     <p><input type="text" name="firstName" onChange={props.actions.fromEvent} defaultValue="Jichao" /></p>
+#     <p><input type="text" name="lastName" onChange={props.actions.fromEvent} defaultValue="Ouyang"/></p>
+#     <p><span className="result">{props.semigroup}</span></p>
+#   </section>
 
-  let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
-#+END_SRC
+#   let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
+# #+END_SRC
 
-#+BEGIN_SRC js :tangle example.tsx :exports none
-xmount(<Eg3/>, document.getElementById('eg3') )
-#+END_SRC
+# #+BEGIN_SRC js :tangle example.tsx :exports none
+# xmount(<Eg3/>, document.getElementById('eg3') )
+# #+END_SRC
 
-#+HTML: <p><div id="eg3"></div></p>
+# #+HTML: <p><div id="eg3"></div></p>
 
-* Example 4: Traverse
-
-
-
-#+BEGIN_SRC js :tangle example.tsx
-  function sum(list){
-    return list.reduce((acc,x)=> acc+x, 0)
-  }
-  let list = ['1', '2', '3', '4', '5', '6', '7']
-  let Xeg4 = traverse(
-    (defaultVal, index)=>(fromEvent('change', 'traverse'+index, defaultVal)),
-    list
-  ).map(xs=>xs.map(strToInt))
-      .map(sum)
-
-  let ViewEg4 = props => <section>
-  {list.map((item, index) => (<p>
-  <input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
-  </p>))
-  }
-    <p><span className="result">{props.sum}</span></p>
-  </section>
-
-  let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
-#+END_SRC
-
-#+BEGIN_SRC js :tangle example.tsx :exports none
-  xmount(<Eg4/>, document.getElementById('eg4') )
-#+END_SRC
-
-#+HTML: <p><div id="eg4"></div></p>
-
-
-* Example 5: Asynchronous
-
-#+BEGIN_SRC js :tangle example.tsx
-  function bmiCalc(weight, height) {
-    return {
-      weight: weight,
-      height: height,
-      result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
-        .then(resp => resp.json())
-        .then(json => json.result)
-    }
-  }
-
-  let Xeg5 = lift2(bmiCalc)(
-    fromEvent('change', 'weight', '70'),
-    fromEvent('change', 'height', '175')
-  )
-
-   let ViewEg5 = props => (
-     <div>
-       <label>Height: {props.height} cm
-         <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
-       </label>
-       <label>Weight: {props.weight} kg
-         <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
-       </label>
-       <p>HEALTH: <span>{props.health}</span></p>
-       <p>BMI: <span className="result">{props.bmi}</span></p>
-     </div>
-   )
-
-   let Eg5 = Xeg5.apply(ViewEg5)
-#+END_SRC
-
-#+BEGIN_SRC js :tangle example.tsx :exports none
-  xmount(<Eg5/>, document.getElementById('eg5') )
-#+END_SRC
-
-#+HTML: <p><div id="eg5"></div></p>
-
-* Example 6: Fold
-
-#+BEGIN_SRC js :tangle example.tsx
-  let Xeg6 = fold(
-    (acc:number,i: number) => acc+i,
-    0,
-    fromEvent('click', 'increment').map(x=>1)
-  )
-
-  let ViewEg6 = props => <p>
-    <span className="result">{props.count}</span>
-    <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} />
-  </p>
-
-  let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
-#+END_SRC
-
-#+BEGIN_SRC js :tangle example.tsx :exports none
-xmount(<Eg6/>, document.getElementById('eg6') )
-#+END_SRC
-
-#+HTML: <p><div id="eg6"></div></p>
+# * Example 4: Traverse
 
 
 
-* Example 7: Merge
-#+BEGIN_SRC js :tangle example.tsx
-  let Xeg7 = fold(
-    (acc:number,i: number) => acc+i,
-    0,
-    fromEvent('click', 'increment').map(x=>1)
-      .merge(
-        fromEvent('click', 'decrement').map(x=>-1)
-      )
-  )
+# #+BEGIN_SRC js :tangle example.tsx
+#   function sum(list){
+#     return list.reduce((acc,x)=> acc+x, 0)
+#   }
+#   let list = ['1', '2', '3', '4', '5', '6', '7']
+#   let Xeg4 = traverse(
+#     (defaultVal, index)=>(fromEvent('change', 'traverse'+index, defaultVal)),
+#     list
+#   ).map(xs=>xs.map(strToInt))
+#       .map(sum)
 
-  let ViewEg7 = props => <p>
-      <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
-      <span className="result">{props.count}</span>
-      <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
-  </p>
+#   let ViewEg4 = props => <section>
+#   {list.map((item, index) => (<p>
+#   <input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
+#   </p>))
+#   }
+#     <p><span className="result">{props.sum}</span></p>
+#   </section>
 
-  let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
-#+END_SRC
+#   let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
+# #+END_SRC
 
-#+BEGIN_SRC js :tangle example.tsx :exports none
-xmount(<Eg7/>, document.getElementById('eg7') )
-#+END_SRC
+# #+BEGIN_SRC js :tangle example.tsx :exports none
+#   xmount(<Eg4/>, document.getElementById('eg4') )
+# #+END_SRC
 
-#+HTML: <p><div id="eg7"></div></p>
-
-
-* Example 8: Fold multiple buttons
+# #+HTML: <p><div id="eg4"></div></p>
 
 
-#+BEGIN_SRC js :tangle example.tsx
-  const actions = ['-1', '+1', 'reset']
-  let Xeg8 = fold(
-    (acc, i) => {
-      switch(i) {
-      case '-1': return acc-1
-      case '+1': return acc+1
-      case 'reset': return 0
-      default: acc
-      }
-    },
-    0,
-    actions.map((action)=>fromEvent('click', action))
-      .reduce((acc,a)=>acc.merge(a)))
+# * Example 5: Asynchronous
 
-  let ViewEg8 = props => <p>
-    <span className="result">{props.count}</span>
-    {actions.map(action=>
-      <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
-  </p>
+# #+BEGIN_SRC js :tangle example.tsx
+#   function bmiCalc(weight, height) {
+#     return {
+#       weight: weight,
+#       height: height,
+#       result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
+#         .then(resp => resp.json())
+#         .then(json => json.result)
+#     }
+#   }
 
-  let Eg8 = Xeg8.map(a=>({count: a})).apply(ViewEg8)
+#   let Xeg5 = lift2(bmiCalc)(
+#     fromEvent('change', 'weight', '70'),
+#     fromEvent('change', 'height', '175')
+#   )
 
-  xmount(<Eg8/>, document.getElementById('eg8') )
-#+END_SRC
+#    let ViewEg5 = props => (
+#      <div>
+#        <label>Height: {props.height} cm
+#          <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
+#        </label>
+#        <label>Weight: {props.weight} kg
+#          <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
+#        </label>
+#        <p>HEALTH: <span>{props.health}</span></p>
+#        <p>BMI: <span className="result">{props.bmi}</span></p>
+#      </div>
+#    )
 
-#+HTML: <p><div id="eg8"></div></p>
+#    let Eg5 = Xeg5.apply(ViewEg5)
+# #+END_SRC
+
+# #+BEGIN_SRC js :tangle example.tsx :exports none
+#   xmount(<Eg5/>, document.getElementById('eg5') )
+# #+END_SRC
+
+# #+HTML: <p><div id="eg5"></div></p>
+
+# * Example 6: Fold
+
+# #+BEGIN_SRC js :tangle example.tsx
+#   let Xeg6 = fold(
+#     (acc:number,i: number) => acc+i,
+#     0,
+#     fromEvent('click', 'increment').map(x=>1)
+#   )
+
+#   let ViewEg6 = props => <p>
+#     <span className="result">{props.count}</span>
+#     <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} />
+#   </p>
+
+#   let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
+# #+END_SRC
+
+# #+BEGIN_SRC js :tangle example.tsx :exports none
+# xmount(<Eg6/>, document.getElementById('eg6') )
+# #+END_SRC
+
+# #+HTML: <p><div id="eg6"></div></p>
+
+
+
+# * Example 7: Merge
+# #+BEGIN_SRC js :tangle example.tsx
+#   let Xeg7 = fold(
+#     (acc:number,i: number) => acc+i,
+#     0,
+#     fromEvent('click', 'increment').map(x=>1)
+#       .merge(
+#         fromEvent('click', 'decrement').map(x=>-1)
+#       )
+#   )
+
+#   let ViewEg7 = props => <p>
+#       <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
+#       <span className="result">{props.count}</span>
+#       <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
+#   </p>
+
+#   let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
+# #+END_SRC
+
+# #+BEGIN_SRC js :tangle example.tsx :exports none
+# xmount(<Eg7/>, document.getElementById('eg7') )
+# #+END_SRC
+
+# #+HTML: <p><div id="eg7"></div></p>
+
+
+# * Example 8: Fold multiple buttons
+
+
+# #+BEGIN_SRC js :tangle example.tsx
+#   const actions = ['-1', '+1', 'reset']
+#   let Xeg8 = fold(
+#     (acc, i) => {
+#       switch(i) {
+#       case '-1': return acc-1
+#       case '+1': return acc+1
+#       case 'reset': return 0
+#       default: acc
+#       }
+#     },
+#     0,
+#     actions.map((action)=>fromEvent('click', action))
+#       .reduce((acc,a)=>acc.merge(a)))
+
+#   let ViewEg8 = props => <p>
+#     <span className="result">{props.count}</span>
+#     {actions.map(action=>
+#       <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
+#   </p>
+
+#   let Eg8 = Xeg8.map(a=>({count: a})).apply(ViewEg8)
+
+#   xmount(<Eg8/>, document.getElementById('eg8') )
+# #+END_SRC
+
+# #+HTML: <p><div id="eg8"></div></p>
 
 #+HTML: <script src="example.js"></script>
 
-#+HTML: <a href="https://github.com/reactive-react/xreact" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+# #+HTML: <a href="https://github.com/reactive-react/xreact" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
