@@ -3,7 +3,7 @@ import { Cartesian, product } from './typeclasses/cartesian'
 import { Apply } from './typeclasses/apply'
 import { FlatMap, flatMap } from './typeclasses/flatmap'
 import { Applicative } from './typeclasses/applicative'
-import { Semigroup, concat } from './typeclasses/semigroup'
+import { Semigroup, concat, SemigroupInstanceType } from './typeclasses/semigroup'
 import { Monad } from './typeclasses/monad'
 import { streamOps, Subject, Stream } from '../xs'
 import { Plan, Update } from '../interfaces'
@@ -59,8 +59,6 @@ declare module './typeclasses/functor' {
     export let Xstream: XstreamFunctor
   }
 }
-
-Functor.State.map
 
 export class XstreamFunctor implements Functor<"Xstream">{
   map<A, B>(f: (a: A) => B, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
@@ -135,7 +133,7 @@ declare module './typeclasses/flatmap' {
 }
 
 export class XstreamApplicative extends XstreamApply {
-  pure<I, A>(v: A): Xstream<any, I, A> {
+  pure<I, A>(v: A): Xstream<Stream, I, A> {
     return new Xstream(
       Applicative.State.pure(streamOps.just(v))
     )
@@ -162,22 +160,19 @@ declare module './typeclasses/monad' {
   }
 }
 
+export class XstreamSemigroup implements Semigroup<Xstream<any, any, any>> {
+  _T: Xstream<any, any, any>
+  concat<A extends SemigroupInstanceType>(fa: Xstream<any, any, A>, fb: Xstream<any, any, A>): Xstream<any, any, A> {
+    return Functor.Xstream.map(
+      ([a, b]) => concat(a, b)
+      , Cartesian.Xstream.product(fa, fb))
+  }
+}
 
-// export class XstreamSemigroup implements Semigroup<Xstream<any, any, any>> {
-//   _T: Xstream<any, any, any>
-//   concat(fa: Xstream<any, any, any>, fb: Xstream<any, any, any>): Xstream<any, any, any> {
-//     return new Xstream(
-//       fa.streamS.chain(a$ => (
-//         fb.streamS.map(b$ => (
-//           streamOps.combine((a: any, b: any) => {
-//             return concat(a, b)
-//           }, a$, b$)
-//         )))))
-//   }
-// }
+Semigroup.Xstream = new XstreamSemigroup
 
-// declare module './typeclasses/semigroup' {
-//   export namespace Semigroup {
-//     export let Xstream: XstreamSemigroup
-//   }
-// }
+declare module './typeclasses/semigroup' {
+  export namespace Semigroup {
+    export let Xstream: XstreamSemigroup
+  }
+}

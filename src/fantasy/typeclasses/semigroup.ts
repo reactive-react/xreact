@@ -15,6 +15,19 @@ export class NumberSemigroup implements Semigroup<number> {
   }
 }
 
+export class ObjectSemigroup implements Semigroup<object> {
+  _T: object
+  concat(a: any, b: any): object {
+    return Object.assign({}, a, b)
+  }
+}
+
+export class PromiseSemigroup implements Semigroup<Promise<SemigroupInstanceType>> {
+  _T: Promise<any>
+  concat(a: any, b: any): Promise<SemigroupInstanceType> {
+    return Promise.all([a, b]).then(([a, b]) => concat(a, b))
+  }
+}
 export class StringSemigroup implements Semigroup<string> {
   _T: string
   concat(a: any, b: any): string {
@@ -33,6 +46,8 @@ export namespace Semigroup {
   export let Number = new NumberSemigroup
   export let String = new StringSemigroup
   export let Array = new ArraySemigroup<any>()
+  export let Object = new ObjectSemigroup
+  export let Promise = new PromiseSemigroup
 }
 
 export function concat<A extends SemigroupInstanceType>(a: A, b: A): A {

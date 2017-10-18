@@ -18,6 +18,9 @@ export function kind(target: any) {
 }
 
 datatype('Array')(Array)
+datatype('Object')(Object)
+datatype('Promise')(Promise)
+
 declare module '.' {
   export interface _<A> {
     "Array": Array<A>
