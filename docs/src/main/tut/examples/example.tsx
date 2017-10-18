@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 import '../../../../../src/xs/rx'
-import { Applicative, lift2, Functor, map } from '../../../../../src/fantasy'
+import { Applicative, lift2,Semigroup, Functor, map } from '../../../../../src/fantasy'
 import {X} from '../../../../../src'
 function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
 
@@ -36,3 +36,20 @@ let ViewEg2 = props => <section>
 let Eg2 = Xeg2.apply(ViewEg2)
 
 xmount(<Eg2/>, document.getElementById('eg2') )
+
+let Xeg3 = Semigroup.Xstream.concat(
+    Semigroup.Xstream.concat(
+      Xstream.fromEvent('change', 'firstName', 'Jichao'),
+      Applicative.Xstream.pure(' ')
+    ),
+    Xstream.fromEvent('change', 'lastName', 'Ouyang')
+).toFantasyX()
+  let ViewEg3 = props => <section>
+      <p><input type="text" name="firstName" onChange={props.actions.fromEvent} defaultValue="Jichao" /></p>
+      <p><input type="text" name="lastName" onChange={props.actions.fromEvent} defaultValue="Ouyang"/></p>
+      <p><span className="result">{props.semigroup}</span></p>
+      </section>
+
+  let Eg3 = Xeg3.map(a=>({semigroup: a})).apply(ViewEg3)
+
+xmount(<Eg3/>, document.getElementById('eg3') )

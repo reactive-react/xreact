@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-10-18 Wed 15:46 -->
+<!-- 2017-10-18 Wed 17:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -234,22 +234,22 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org828075c">1. Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#orgc19380f">2. Example 1: pure value to FantasyX</a></li>
-<li><a href="#org3c16c14">3. Example 1: Two number multiply</a></li>
-<li><a href="#orga3e1c20">4. Example 2: Two Inputs</a></li>
+<li><a href="#orgd55b9c0">1. Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#org7b9255f">2. Example 1: Two number multiply</a></li>
+<li><a href="#orgf2e79d4">3. Example 2: Two Inputs</a></li>
+<li><a href="#orgf048e4f">4. Example 3: Semigroup</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org828075c" class="outline-2">
-<h2 id="org828075c"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
+<div id="outline-container-orgd55b9c0" class="outline-2">
+<h2 id="orgd55b9c0"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2, Functor, map } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
 <span style="color: #ff79c6; font-weight: bold;">import</span> {X} from <span style="color: #f1fa8c;">'../../../../../src'</span>
 <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
 </pre>
@@ -257,29 +257,9 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgc19380f" class="outline-2">
-<h2 id="orgc19380f"><span class="section-number-2">2</span> Example 1: pure value to FantasyX</h2>
+<div id="outline-container-org7b9255f" class="outline-2">
+<h2 id="org7b9255f"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
 <div class="outline-text-2" id="text-2">
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg0</span> = Applicative.FantasyX.pure({value: <span style="color: #f1fa8c;">"I'am a value"</span>})
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg0</span> = props =&gt; &lt;p className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.value}&lt;/p&gt;
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg0</span> = Xeg0.apply(ViewEg0)
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-js">xmount(&lt;Eg0/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg0'</span>) )
-</pre>
-</div>
-
-<p><div id="eg0"></div></p>
-</div>
-</div>
-
-
-<div id="outline-container-org3c16c14" class="outline-2">
-<h2 id="org3c16c14"><span class="section-number-2">3</span> Example 1: Two number multiply</h2>
-<div class="outline-text-2" id="text-3">
 <p>
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
 </p>
@@ -312,45 +292,59 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-orga3e1c20" class="outline-2">
-<h2 id="orga3e1c20"><span class="section-number-2">4</span> Example 2: Two Inputs</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgf2e79d4" class="outline-2">
+<h2 id="orgf2e79d4"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
+<div class="outline-text-2" id="text-3">
 <div class="org-src-container">
-<pre class="src src-js">      <span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
 
-          <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
-  type Intent = {type:string, value:number}
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg2</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>,<span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)(
-  Functor.Xstream.map(
-    a=&gt;a.value
-    ,Xstream.fromIntent&lt;<span style="color: #f1fa8c;">"RxStream"</span>, Intent&gt;().filter(a=&gt;{
-      <span style="color: #ff79c6; font-weight: bold;">return</span> a.type == <span style="color: #f1fa8c;">'change1'</span>
-    })),
-  Functor.Xstream.map(
-    a=&gt;a.value
-    ,Xstream.fromIntent&lt;<span style="color: #f1fa8c;">"RxStream"</span>, Intent&gt;().filter(a=&gt;{
-      <span style="color: #ff79c6; font-weight: bold;">return</span> a.type == <span style="color: #f1fa8c;">'change2'</span>
-    })),
+<span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
+type Intent = {type:string, value:number}
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput1</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n1'</span>, <span style="color: #f1fa8c;">'5'</span>)
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput2</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n2'</span>, <span style="color: #f1fa8c;">'6'</span>)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg2</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)(
+  Functor.Xstream.map(strToInt, XSinput1),
+  Functor.Xstream.map(strToInt, XSinput2)
 ).toFantasyX()
-    .map(x=&gt;{
-      console.log(x,<span style="color: #f1fa8c;">'..........'</span>)
-      <span style="color: #ff79c6; font-weight: bold;">return</span> {product: x}
-    })
+    .map(x=&gt;({product: x}))
 
-          <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg2</span> = props =&gt; &lt;section&gt;
-            &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n1"</span> onChange={props.actions.change1} defaultValue=<span style="color: #f1fa8c;">"5"</span>/&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n2"</span> onChange={props.actions.change2} defaultValue=<span style="color: #f1fa8c;">"6"</span>/&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/span&gt;&lt;/p&gt;
-          &lt;/section&gt;
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg2</span> = props =&gt; &lt;section&gt;
+    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n1"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"5"</span>/&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n2"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"6"</span>/&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/span&gt;&lt;/p&gt;
+    &lt;/section&gt;
 
-          <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg2</span> = Xeg2.apply(ViewEg2, {
-    change1: ()=&gt; ({type:<span style="color: #f1fa8c;">'change1'</span>, value: 1}),
-    change2: ()=&gt; ({type:<span style="color: #f1fa8c;">'change2'</span>, value: 2})
-    })
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg2</span> = Xeg2.apply(ViewEg2)
 </pre>
 </div>
 
 <p><div id="eg2"></div></p>
+</div>
+</div>
+
+<div id="outline-container-orgf048e4f" class="outline-2">
+<h2 id="orgf048e4f"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-js">  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
+    Semigroup.Xstream.concat(
+      Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>),
+      Applicative.Xstream.pure(<span style="color: #f1fa8c;">' '</span>)
+    ),
+    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>)
+).toFantasyX()
+  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
+      &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
+      &lt;/section&gt;
+
+  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
+</pre>
+</div>
+
+<p><div id="eg3"></div></p>
 
 
 
@@ -361,7 +355,7 @@ A very basic Stateless Component to display it.
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
 <p class="author">Author: Jichao Ouyang</p>
-<p class="date">Created: 2017-10-18 Wed 15:46</p>
+<p class="date">Created: 2017-10-18 Wed 17:34</p>
 <p class="validation"></p>
 </div>
 </body>
