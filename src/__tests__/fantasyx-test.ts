@@ -4,6 +4,7 @@ import { FantasyX } from '../fantasy/fantasyx'
 import { Update } from '../interfaces'
 import { Xstream } from '../fantasy/xstream'
 import { flatMap, FlatMap } from '../fantasy/typeclasses/flatmap'
+import { concat, Semigroup } from '../fantasy/typeclasses/semigroup'
 describe('FantasyX', () => {
   let intent;
   beforeEach(() => {
@@ -45,5 +46,36 @@ describe('FantasyX', () => {
     intent.next(1)
     intent.next(2)
     intent.complete()
+  })
+
+  it('concat object', (done) => {
+    Semigroup.Xstream.concat(
+      Xstream.fromIntent()
+      , Xstream.fromIntent())
+      .toFantasyX()
+      .toStream(intent)
+      .reduce((acc, f: any) => f(acc), { count: 0 })
+      .toPromise()
+      .then(a => expect(a).toEqual(
+        { "count": 0, "count1": 1, "count2": 2 }
+      ))
+      .then(done)
+    intent.next({ count1: 1 })
+    intent.next({ count2: 2 })
+    intent.complete()
+  })
+
+  it('concat promise', (done) => {
+    Semigroup.Xstream.concat(
+      Xstream.fromPromise(Promise.resolve({ count1: 1 }))
+      , Xstream.fromPromise(Promise.resolve({ count2: 2 })))
+      .toFantasyX()
+      .toStream(intent)
+      .reduce((acc, f: any) => f(acc), { count: 0 })
+      .toPromise()
+      .then(a => expect(a).toEqual(
+        { "count": 0, "count1": 1, "count2": 2 }
+      ))
+      .then(done)
   })
 })
