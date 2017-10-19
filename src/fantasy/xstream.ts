@@ -36,7 +36,8 @@ export class Xstream<S extends Stream, I, A> {
     return new Xstream<F, Event, string>(new State((intent$: Subject<F, Event>) => ({
       s: intent$,
       a: streamOps.merge(
-        streamOps.just(defaultValue),
+        typeof defaultValue != 'undefined' ? streamOps.just(defaultValue) : streamOps.empty()
+        ,
         streamOps.map((e: Event) => (e.target as HTMLFormElement).value
           , streamOps.filter((e: Event) => {
             let target = e.target as HTMLFormElement
@@ -54,15 +55,15 @@ export class Xstream<S extends Stream, I, A> {
     })))
   }
 
-  toFantasyX() {
+  toFantasyX<St>() {
     type itentStream = Subject<S, I>
-    type updateStream = $<S, State<A, A>>
-    return new FantasyX<S, I, A, A>(
+    type updateStream = $<S, State<St, A>>
+    return new FantasyX<S, I, St, A>(
       new State<itentStream, updateStream>(intent$ => {
         let state$ = this.streamS.runA(intent$)
         return {
           s: intent$,
-          a: map<S, A, State<A, A>>((a: A) => Applicative.State.pure<A, A>(a), state$)
+          a: map<S, A, State<St, A>>((a: A) => Applicative.State.pure<St, A>(a), state$)
         }
       }))
   }

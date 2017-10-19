@@ -21,7 +21,7 @@ describe('FantasyX', () => {
           return { count: 7 }
         }
       })
-      .fold((s, a) => ({ count: a.count + s.count }))
+      .foldS((s, a) => ({ count: a.count + s.count }))
       .toStream(intent)
       .reduce((acc, f: any) => {
         return f(acc)

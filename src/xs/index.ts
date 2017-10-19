@@ -18,10 +18,10 @@ export interface StreamOps<F extends Stream> {
   empty<A>(): $<F, A>
   fromPromise<A>(p: Promise<A>): $<F, A>
   just<A>(a: A): $<F, A>
-  merge<A>(
+  merge<A, B>(
     a: $<F, A>,
-    b: $<F, A>
-  ): $<F, A>
+    b: $<F, B>
+  ): $<F, A | B>
   scan<A, B>(
     f: (acc: B, cur: A) => B,
     base: B,

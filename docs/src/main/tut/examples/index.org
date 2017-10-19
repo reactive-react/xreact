@@ -167,60 +167,54 @@ xmount(<Eg3/>, document.getElementById('eg3') )
 
 #+HTML: <p><div id="eg5"></div></p>
 
-# * Example 6: Fold
+* Example 6: Fold
 
-# #+BEGIN_SRC js :tangle example.tsx
-#   let Xeg6 = fold(
-#     (acc:number,i: number) => acc+i,
-#     0,
-#     fromEvent('click', 'increment').map(x=>1)
-#   )
+#+BEGIN_SRC js :tangle example.tsx
+  let Xeg6 = Xstream.fromEvent('click', 'increment')
+      .toFantasyX<{count:number}>()
+      .map(x => 1)
+      .foldS((acc, a) => {
+        return { count: (acc.count||0) + a }})
 
-#   let ViewEg6 = props => <p>
-#     <span className="result">{props.count}</span>
-#     <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} />
-#   </p>
+  let ViewEg6 = props => <p>
+      <span className="result">{props.count || 0}</span>
+      <input type="button" name="increment" value="+1" onClick={e=>props.actions.fromEvent(e)} />
+      </p>
+  
+  let Eg6 = Xeg6.apply(ViewEg6)
+#+END_SRC
 
-#   let Eg6 = Xeg6.map(a=>({count: a})).apply(ViewEg6)
-# #+END_SRC
+#+BEGIN_SRC js :tangle example.tsx :exports none
+xmount(<Eg6/>, document.getElementById('eg6') )
+#+END_SRC
 
-# #+BEGIN_SRC js :tangle example.tsx :exports none
-# xmount(<Eg6/>, document.getElementById('eg6') )
-# #+END_SRC
+#+HTML: <p><div id="eg6"></div></p>
 
-# #+HTML: <p><div id="eg6"></div></p>
+* Example 7: Merge
+#+BEGIN_SRC js :tangle example.tsx
+let Xeg7 = Xstream.fromEvent('click', 'decrement')
+      .toFantasyX<{count:number}>()
+      .map(x => -1)
+      .foldS((acc, a) => {
+        return { count: (acc.count||0) + a }})
 
+  let ViewEg7 = props => <p>
+      <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
+      <span className="result">{props.count || 0}</span>
+      <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
+  </p>
 
+  let Eg7 = Xeg7.merge(Xeg6).apply(ViewEg7)
+#+END_SRC
 
-# * Example 7: Merge
-# #+BEGIN_SRC js :tangle example.tsx
-#   let Xeg7 = fold(
-#     (acc:number,i: number) => acc+i,
-#     0,
-#     fromEvent('click', 'increment').map(x=>1)
-#       .merge(
-#         fromEvent('click', 'decrement').map(x=>-1)
-#       )
-#   )
+#+BEGIN_SRC js :tangle example.tsx :exports none
+xmount(<Eg7/>, document.getElementById('eg7') )
+#+END_SRC
 
-#   let ViewEg7 = props => <p>
-#       <input type="button" name="decrement" value="-" onClick={e=>props.actions.fromEvent(e)} />
-#       <span className="result">{props.count}</span>
-#       <input type="button" name="increment" value="+" onClick={e=>props.actions.fromEvent(e)} />
-#   </p>
-
-#   let Eg7 = Xeg7.map(a=>({count: a})).apply(ViewEg7)
-# #+END_SRC
-
-# #+BEGIN_SRC js :tangle example.tsx :exports none
-# xmount(<Eg7/>, document.getElementById('eg7') )
-# #+END_SRC
-
-# #+HTML: <p><div id="eg7"></div></p>
+#+HTML: <p><div id="eg7"></div></p>
 
 
 # * Example 8: Fold multiple buttons
-
 
 # #+BEGIN_SRC js :tangle example.tsx
 #   const actions = ['-1', '+1', 'reset']

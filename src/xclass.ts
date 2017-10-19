@@ -22,7 +22,7 @@ export function extendXComponentClass<E extends Stream, I, S>(WrappedComponent: 
       super(props, context);
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
-      this.machine.update$ = streamOps.merge<Update<S>>(this.machine.update$, update$)
+      this.machine.update$ = streamOps.merge<Update<S>, Update<S>>(this.machine.update$, update$)
       if (actions)
         this.machine.actions = Object.assign({}, bindActions(actions, engine.intent$, this), this.machine.actions)
     }

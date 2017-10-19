@@ -45,7 +45,7 @@ export class FantasyX<F extends Stream, I, S, A> {
     )
   }
 
-  fold<B>(f: (s: S, a: A) => S): FantasyX<F, I, S, Partial<S>> {
+  foldS<B>(f: (s: S, a: A) => S): FantasyX<F, I, S, Partial<S>> {
     return new FantasyX<F, I, S, Partial<S>>(
       Functor.State.map(update$ => (
         map<Stream, State<S, A>, State<S, Partial<S>>>(state => (
@@ -73,6 +73,16 @@ export class FantasyX<F extends Stream, I, S, A> {
       ), this.plan))
   }
 
+  merge<C, B>(
+    fB: FantasyX<F, I, S, B>
+  ): FantasyX<F, I, S, A | B> {
+    return new FantasyX<F, I, S, A | B>(
+      Monad.State.flatMap(updateA$ => (
+        Functor.State.map(updateB$ => (
+          streamOps.merge<State<S, A>, State<S, B>>(updateA$, updateB$)
+        ), fB.plan)
+      ), this.plan))
+  }
   // patch(f: (a: A) => Partial<S> = _ => _): FantasyX<E, I, S, void> {
   //   return new FantasyX<E, I, S, void>(intent$ => {
   //     let machine = this.plan(intent$)
