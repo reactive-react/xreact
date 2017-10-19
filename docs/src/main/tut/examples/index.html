@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-10-19 Thu 16:04 -->
+<!-- 2017-10-19 Thu 16:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Examples of xReact Fantasy</title>
@@ -235,23 +235,24 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org42cf36a">1. Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#orgeb3bb95">2. Example 1: Two number multiply</a></li>
-<li><a href="#orga03ec68">3. Example 2: Two Inputs</a></li>
-<li><a href="#org319dc0b">4. Example 3: Semigroup</a></li>
-<li><a href="#org6c6e1fa">5. Example 4: Traverse</a></li>
+<li><a href="#org7e0bf25">1. Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#org1276076">2. Example 1: Two number multiply</a></li>
+<li><a href="#org3b06ba6">3. Example 2: Two Inputs</a></li>
+<li><a href="#org45af1d6">4. Example 3: Semigroup</a></li>
+<li><a href="#orga75fcd2">5. Example 4: Traverse</a></li>
+<li><a href="#org9aada60">6. Example 5: Asynchronous</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org42cf36a" class="outline-2">
-<h2 id="org42cf36a"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
+<div id="outline-container-org7e0bf25" class="outline-2">
+<h2 id="org7e0bf25"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map, Traversable } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map, Traversable, FlatMap } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
 <span style="color: #ff79c6; font-weight: bold;">import</span> {X} from <span style="color: #f1fa8c;">'../../../../../src'</span>
 <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
 </pre>
@@ -259,8 +260,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orgeb3bb95" class="outline-2">
-<h2 id="orgeb3bb95"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
+<div id="outline-container-org1276076" class="outline-2">
+<h2 id="org1276076"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
@@ -294,8 +295,8 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-orga03ec68" class="outline-2">
-<h2 id="orga03ec68"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
+<div id="outline-container-org3b06ba6" class="outline-2">
+<h2 id="org3b06ba6"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
@@ -325,8 +326,8 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org319dc0b" class="outline-2">
-<h2 id="org319dc0b"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
+<div id="outline-container-org45af1d6" class="outline-2">
+<h2 id="org45af1d6"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
@@ -350,19 +351,20 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org6c6e1fa" class="outline-2">
-<h2 id="org6c6e1fa"><span class="section-number-2">5</span> Example 4: Traverse</h2>
+<div id="outline-container-orga75fcd2" class="outline-2">
+<h2 id="orga75fcd2"><span class="section-number-2">5</span> Example 4: Traverse</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
   <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
 }
 <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">list</span> = [<span style="color: #f1fa8c;">'1'</span>, <span style="color: #f1fa8c;">'2'</span>, <span style="color: #f1fa8c;">'3'</span>, <span style="color: #f1fa8c;">'4'</span>, <span style="color: #f1fa8c;">'5'</span>, <span style="color: #f1fa8c;">'6'</span>, <span style="color: #f1fa8c;">'7'</span>]
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> =  Traversable.Array.traverse(<span style="color: #f1fa8c;">'FantasyX'</span>)(
-  (defaultVal, index)=&gt;(Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span>+index, defaultVal)),
-  list
-).map(xs=&gt;xs.map(strToInt))
-    .map(sum).toFantasyX()
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> = Traversable.Array.traverse&lt;<span style="color: #f1fa8c;">'Xstream'</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>&gt;(<span style="color: #f1fa8c;">'Xstream'</span>)(
+    (defaultVal, index) =&gt; (Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span> + index, defaultVal)),
+    list
+).toFantasyX()
+    .map(xs =&gt; xs.map(strToInt))
+    .map(sum)
 
 <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg4</span> = props =&gt; &lt;section&gt;
 {list.map((item, index) =&gt; (&lt;p&gt;
@@ -377,6 +379,49 @@ type Intent = {type:string, value:number}
 </div>
 
 <p><div id="eg4"></div></p>
+</div>
+</div>
+
+
+<div id="outline-container-org9aada60" class="outline-2">
+<h2 id="org9aada60"><span class="section-number-2">6</span> Example 5: Asynchronous</h2>
+<div class="outline-text-2" id="text-6">
+<div class="org-src-container">
+<pre class="src src-js">  <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
+    <span style="color: #ff79c6; font-weight: bold;">return</span> fetch(<span style="color: #f1fa8c;">`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&amp;weight=${weight}`</span>)
+        .then(resp =&gt; resp.json())
+        .then(json =&gt; json.result)
+  }
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xweigth</span> =     Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'weight'</span>, <span style="color: #f1fa8c;">'70'</span>)
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xheight</span> =    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'height'</span>, <span style="color: #f1fa8c;">'175'</span>)
+
+  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">promiseXstream</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">Promise</span>&lt;any&gt;&gt;(bmiCalc)(
+xweigth,
+xheight
+  )
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg5</span> = FlatMap.Xstream.flatMap(Xstream.fromPromise, promiseXstream)
+.toFantasyX()
+
+   <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg5</span> = props =&gt; (
+     &lt;div&gt;
+       &lt;label&gt;Height: {props.height} cm
+         &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"height"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"150"</span> max=<span style="color: #f1fa8c;">"200"</span> defaultValue={props.height} /&gt;
+       &lt;/label&gt;
+       &lt;label&gt;Weight: {props.weight} kg
+         &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"weight"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"40"</span> max=<span style="color: #f1fa8c;">"100"</span> defaultValue={props.weight} /&gt;
+       &lt;/label&gt;
+       &lt;p&gt;HEALTH: &lt;span&gt;{props.health}&lt;/span&gt;&lt;/p&gt;
+       &lt;p&gt;BMI: &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.bmi}&lt;/span&gt;&lt;/p&gt;
+     &lt;/div&gt;
+   )
+
+   <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg5</span> = Xeg5.apply(ViewEg5)
+</pre>
+</div>
+
+<p><div id="eg5"></div></p>
 
 
 
@@ -387,7 +432,7 @@ type Intent = {type:string, value:number}
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
 <p class="author">Author: Jichao Ouyang</p>
-<p class="date">Created: 2017-10-19 Thu 16:04</p>
+<p class="date">Created: 2017-10-19 Thu 16:19</p>
 <p class="validation"></p>
 </div>
 </body>

@@ -11,7 +11,7 @@
   import * as React from 'react';
   import { render } from 'react-dom';
   import '../../../../../src/xs/rx'
-  import { Applicative, lift2,Semigroup, Functor, map, Traversable } from '../../../../../src/fantasy'
+  import { Applicative, lift2,Semigroup, Functor, map, Traversable, FlatMap } from '../../../../../src/fantasy'
   import {X} from '../../../../../src'
   function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
 #+END_SRC
@@ -125,45 +125,47 @@ xmount(<Eg3/>, document.getElementById('eg3') )
 #+HTML: <p><div id="eg4"></div></p>
 
 
-# * Example 5: Asynchronous
+* Example 5: Asynchronous
 
-# #+BEGIN_SRC js :tangle example.tsx
-#   function bmiCalc(weight, height) {
-#     return {
-#       weight: weight,
-#       height: height,
-#       result:fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
-#         .then(resp => resp.json())
-#         .then(json => json.result)
-#     }
-#   }
+#+BEGIN_SRC js :tangle example.tsx
+  function bmiCalc(weight, height) {
+    return fetch(`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&weight=${weight}`)
+      .then(resp => resp.json())
+      .then(json => json.result)
+  }
 
-#   let Xeg5 = lift2(bmiCalc)(
-#     fromEvent('change', 'weight', '70'),
-#     fromEvent('change', 'height', '175')
-#   )
+  let xweigth = Xstream.fromEvent('change', 'weight', '70')
+  let xheight = Xstream.fromEvent('change', 'height', '175')
 
-#    let ViewEg5 = props => (
-#      <div>
-#        <label>Height: {props.height} cm
-#          <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
-#        </label>
-#        <label>Weight: {props.weight} kg
-#          <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
-#        </label>
-#        <p>HEALTH: <span>{props.health}</span></p>
-#        <p>BMI: <span className="result">{props.bmi}</span></p>
-#      </div>
-#    )
+  let promiseXstream = lift2<"Xstream", string, string, Promise<any>>(bmiCalc)(
+    xweigth,
+    xheight
+  )
 
-#    let Eg5 = Xeg5.apply(ViewEg5)
-# #+END_SRC
+  let Xeg5 = FlatMap.Xstream.flatMap(Xstream.fromPromise, promiseXstream)
+      .toFantasyX()
 
-# #+BEGIN_SRC js :tangle example.tsx :exports none
-#   xmount(<Eg5/>, document.getElementById('eg5') )
-# #+END_SRC
+  let ViewEg5 = props => (
+      <div>
+      <label>Height: {props.height} cm
+      <input type="range" name="height" onChange={props.actions.fromEvent} min="150" max="200" defaultValue={props.height} />
+      </label>
+      <label>Weight: {props.weight} kg
+      <input type="range" name="weight" onChange={props.actions.fromEvent} min="40" max="100" defaultValue={props.weight} />
+      </label>
+      <p>HEALTH: <span>{props.health}</span></p>
+      <p>BMI: <span className="result">{props.bmi}</span></p>
+      </div>
+  )
 
-# #+HTML: <p><div id="eg5"></div></p>
+  let Eg5 = Xeg5.apply(ViewEg5)
+#+END_SRC
+
+#+BEGIN_SRC js :tangle example.tsx :exports none
+  xmount(<Eg5/>, document.getElementById('eg5') )
+#+END_SRC
+
+#+HTML: <p><div id="eg5"></div></p>
 
 # * Example 6: Fold
 
