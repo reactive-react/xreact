@@ -214,35 +214,36 @@ xmount(<Eg7/>, document.getElementById('eg7') )
 #+HTML: <p><div id="eg7"></div></p>
 
 
-# * Example 8: Fold multiple buttons
+* Example 8: Fold multiple buttons
 
-# #+BEGIN_SRC js :tangle example.tsx
-#   const actions = ['-1', '+1', 'reset']
-#   let Xeg8 = fold(
-#     (acc, i) => {
-#       switch(i) {
-#       case '-1': return acc-1
-#       case '+1': return acc+1
-#       case 'reset': return 0
-#       default: acc
-#       }
-#     },
-#     0,
-#     actions.map((action)=>fromEvent('click', action))
-#       .reduce((acc,a)=>acc.merge(a)))
+#+BEGIN_SRC js :tangle example.tsx
+  const actions = ['-1', '+1', 'reset']
+  let Xeg8 =
+    actions.map((action)=>Xstream.fromEvent('click', action).toFantasyX<{count:number}>())
+      .reduce((acc,a)=>acc.merge(a))
+      .foldS((acc, i) => {
+      acc.count = acc.count || 0
+        switch(i) {
+        case '-1': return {count: acc.count -1}
+        case '+1': return {count: acc.count +1}
+        case 'reset': return {count: 0}
+        default: acc
+        }
+      }
+  )
 
-#   let ViewEg8 = props => <p>
-#     <span className="result">{props.count}</span>
-#     {actions.map(action=>
-#       <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
-#   </p>
+  let ViewEg8 = props => <p>
+    <span className="result">{props.count}</span>
+    {actions.map(action=>
+      <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
+  </p>
 
-#   let Eg8 = Xeg8.map(a=>({count: a})).apply(ViewEg8)
+  let Eg8 = Xeg8.apply(ViewEg8)
 
-#   xmount(<Eg8/>, document.getElementById('eg8') )
-# #+END_SRC
+  xmount(<Eg8/>, document.getElementById('eg8') )
+#+END_SRC
 
-# #+HTML: <p><div id="eg8"></div></p>
+#+HTML: <p><div id="eg8"></div></p>
 
 #+HTML: <script src="example.js"></script>
 

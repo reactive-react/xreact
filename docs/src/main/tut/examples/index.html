@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-10-19 Thu 17:14 -->
+<!-- 2017-10-19 Thu 17:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Examples of xReact Fantasy</title>
@@ -235,20 +235,21 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org04c813f">1. Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#orge0a315c">2. Example 1: Two number multiply</a></li>
-<li><a href="#orgff72109">3. Example 2: Two Inputs</a></li>
-<li><a href="#org3289f55">4. Example 3: Semigroup</a></li>
-<li><a href="#org2aa8432">5. Example 4: Traverse</a></li>
-<li><a href="#org5ef6f7c">6. Example 5: Asynchronous</a></li>
-<li><a href="#orgd7a6247">7. Example 6: Fold</a></li>
-<li><a href="#org80eeaa9">8. Example 7: Merge</a></li>
+<li><a href="#orgbc53ea8">1. Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#org643a687">2. Example 1: Two number multiply</a></li>
+<li><a href="#org0d6b570">3. Example 2: Two Inputs</a></li>
+<li><a href="#org19114f1">4. Example 3: Semigroup</a></li>
+<li><a href="#org6bb5f50">5. Example 4: Traverse</a></li>
+<li><a href="#org21ccd92">6. Example 5: Asynchronous</a></li>
+<li><a href="#org853cad2">7. Example 6: Fold</a></li>
+<li><a href="#org9e29c5c">8. Example 7: Merge</a></li>
+<li><a href="#org8617f7a">9. Example 8: Fold multiple buttons</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org04c813f" class="outline-2">
-<h2 id="org04c813f"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
+<div id="outline-container-orgbc53ea8" class="outline-2">
+<h2 id="orgbc53ea8"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
@@ -262,8 +263,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-orge0a315c" class="outline-2">
-<h2 id="orge0a315c"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
+<div id="outline-container-org643a687" class="outline-2">
+<h2 id="org643a687"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
@@ -297,8 +298,8 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-orgff72109" class="outline-2">
-<h2 id="orgff72109"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
+<div id="outline-container-org0d6b570" class="outline-2">
+<h2 id="org0d6b570"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
@@ -328,8 +329,8 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org3289f55" class="outline-2">
-<h2 id="org3289f55"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
+<div id="outline-container-org19114f1" class="outline-2">
+<h2 id="org19114f1"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
@@ -353,8 +354,8 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org2aa8432" class="outline-2">
-<h2 id="org2aa8432"><span class="section-number-2">5</span> Example 4: Traverse</h2>
+<div id="outline-container-org6bb5f50" class="outline-2">
+<h2 id="org6bb5f50"><span class="section-number-2">5</span> Example 4: Traverse</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
@@ -385,8 +386,8 @@ type Intent = {type:string, value:number}
 </div>
 
 
-<div id="outline-container-org5ef6f7c" class="outline-2">
-<h2 id="org5ef6f7c"><span class="section-number-2">6</span> Example 5: Asynchronous</h2>
+<div id="outline-container-org21ccd92" class="outline-2">
+<h2 id="org21ccd92"><span class="section-number-2">6</span> Example 5: Asynchronous</h2>
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
@@ -427,8 +428,8 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-orgd7a6247" class="outline-2">
-<h2 id="orgd7a6247"><span class="section-number-2">7</span> Example 6: Fold</h2>
+<div id="outline-container-org853cad2" class="outline-2">
+<h2 id="org853cad2"><span class="section-number-2">7</span> Example 6: Fold</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg6</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'increment'</span>)
@@ -438,7 +439,7 @@ type Intent = {type:string, value:number}
       <span style="color: #ff79c6; font-weight: bold;">return</span> { count: (acc.count||0) + a }})
 
 <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg6</span> = props =&gt; &lt;p&gt;
-    &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+    &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count || 0}&lt;/span&gt;
     &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"increment"</span> value=<span style="color: #f1fa8c;">"+1"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
     &lt;/p&gt;
 
@@ -450,8 +451,8 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org80eeaa9" class="outline-2">
-<h2 id="org80eeaa9"><span class="section-number-2">8</span> Example 7: Merge</h2>
+<div id="outline-container-org9e29c5c" class="outline-2">
+<h2 id="org9e29c5c"><span class="section-number-2">8</span> Example 7: Merge</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg7</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'decrement'</span>)
@@ -462,16 +463,50 @@ type Intent = {type:string, value:number}
 
   <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg7</span> = props =&gt; &lt;p&gt;
       &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"decrement"</span> value=<span style="color: #f1fa8c;">"-"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
-      &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+      &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count || 0}&lt;/span&gt;
       &lt;input type=<span style="color: #f1fa8c;">"button"</span> name=<span style="color: #f1fa8c;">"increment"</span> value=<span style="color: #f1fa8c;">"+"</span> onClick={e=&gt;props.actions.fromEvent(e)} /&gt;
   &lt;/p&gt;
 
-  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg7</span> = Xeg7.merge(Xeg6).map(a=&gt;({count: a})).apply(ViewEg7)
+  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg7</span> = Xeg7.merge(Xeg6).apply(ViewEg7)
 </pre>
 </div>
 
 <p><div id="eg7"></div></p>
+</div>
+</div>
 
+
+<div id="outline-container-org8617f7a" class="outline-2">
+<h2 id="org8617f7a"><span class="section-number-2">9</span> Example 8: Fold multiple buttons</h2>
+<div class="outline-text-2" id="text-9">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">actions</span> = [<span style="color: #f1fa8c;">'-1'</span>, <span style="color: #f1fa8c;">'+1'</span>, <span style="color: #f1fa8c;">'reset'</span>]
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg8</span> =
+  actions.map((action)=&gt;Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, action).toFantasyX&lt;{count:number}&gt;())
+    .reduce((acc,a)=&gt;acc.merge(a))
+    .foldS((acc, i) =&gt; {
+      <span style="color: #ff79c6; font-weight: bold;">switch</span>(i) {
+      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'-1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> {count: acc.count -1}
+      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'+1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> {count: acc.count +1}
+      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'reset'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> {count: 0}
+      <span style="color: #ff79c6; font-weight: bold;">default</span>: acc
+      }
+    }
+)
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg8</span> = props =&gt; &lt;p&gt;
+  &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.count}&lt;/span&gt;
+  {actions.map(action=&gt;
+    &lt;input type=<span style="color: #f1fa8c;">"button"</span> name={action} value={action} onClick={e=&gt;props.actions.fromEvent(e)} /&gt;)}
+&lt;/p&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg8</span> = Xeg8.apply(ViewEg8)
+
+xmount(&lt;Eg8/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg8'</span>) )
+</pre>
+</div>
+
+<p><div id="eg8"></div></p>
 
 <script src="example.js"></script>
 </div>
@@ -480,7 +515,7 @@ type Intent = {type:string, value:number}
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
 <p class="author">Author: Jichao Ouyang</p>
-<p class="date">Created: 2017-10-19 Thu 17:14</p>
+<p class="date">Created: 2017-10-19 Thu 17:35</p>
 <p class="validation"></p>
 </div>
 </body>

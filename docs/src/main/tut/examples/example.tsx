@@ -141,3 +141,28 @@ let Xeg7 = Xstream.fromEvent('click', 'decrement')
   let Eg7 = Xeg7.merge(Xeg6).apply(ViewEg7)
 
 xmount(<Eg7/>, document.getElementById('eg7') )
+
+const actions = ['-1', '+1', 'reset']
+let Xeg8 =
+  actions.map((action)=>Xstream.fromEvent('click', action).toFantasyX<{count:number}>())
+    .reduce((acc,a)=>acc.merge(a))
+    .foldS((acc, i) => {
+    acc.count = acc.count || 0
+      switch(i) {
+      case '-1': return {count: acc.count -1}
+      case '+1': return {count: acc.count +1}
+      case 'reset': return {count: 0}
+      default: acc
+      }
+    }
+)
+
+let ViewEg8 = props => <p>
+  <span className="result">{props.count}</span>
+  {actions.map(action=>
+    <input type="button" name={action} value={action} onClick={e=>props.actions.fromEvent(e)} />)}
+</p>
+
+let Eg8 = Xeg8.apply(ViewEg8)
+
+xmount(<Eg8/>, document.getElementById('eg8') )

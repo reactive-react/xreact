@@ -109,20 +109,20 @@ describe('Load Example Page', function() {
     })
   })
 
-  // describe('#Example 8', () => {
-  //   it('increase 3 and decrease 4', () => {
-  //     return page
-  //       .click('#eg8 input[name="+1"]')
-  //       .click('#eg8 input[name="reset"]')
-  //       .click('#eg8 input[name="+1"]')
-  //       .click('#eg8 input[name="+1"]')
-  //       .click('#eg8 input[name="+1"]')
-  //       .click('#eg8 input[name="-1"]')
-  //       .click('#eg8 input[name="-1"]')
-  //       .click('#eg8 input[name="-1"]')
-  //       .click('#eg8 input[name="-1"]')
-  //       .evaluate(() => document.querySelector('#eg8 .result').textContent)
-  //       .then(x=>expect(x).to.equal('-1'))
-  //   })
-  // })
+  describe('#Example 8', () => {
+    it('increase 3 and decrease 4', () => {
+      return page
+        .click('#eg8 input[name="+1"]')
+        .click('#eg8 input[name="reset"]')
+        .click('#eg8 input[name="+1"]')
+        .click('#eg8 input[name="+1"]')
+        .click('#eg8 input[name="+1"]')
+        .click('#eg8 input[name="-1"]')
+        .click('#eg8 input[name="-1"]')
+        .click('#eg8 input[name="-1"]')
+        .click('#eg8 input[name="-1"]')
+        .evaluate(() => document.querySelector('#eg8 .result').textContent)
+        .then(x=>expect(x).to.equal('-1'))
+    })
+  })
 })
