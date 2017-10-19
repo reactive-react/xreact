@@ -1,4 +1,4 @@
-# #+TITLE: Examples of xReact Fantasy
+#+TITLE: Examples of xReact Fantasy
 #+Date: <2017-09-09 Sat>
 # #+AUTHOR: 欧阳继超
 #+HTML_HEAD: <style>pre.src {background-color: #282a36;color: #f8f8f2;}</style>
@@ -11,7 +11,7 @@
   import * as React from 'react';
   import { render } from 'react-dom';
   import '../../../../../src/xs/rx'
-  import { Applicative, lift2,Semigroup, Functor, map } from '../../../../../src/fantasy'
+  import { Applicative, lift2,Semigroup, Functor, map, Traversable } from '../../../../../src/fantasy'
   import {X} from '../../../../../src'
   function xmount(component, dom) { render(React.createFactory(X)({}, component), dom) }
 #+END_SRC
@@ -93,37 +93,36 @@ xmount(<Eg3/>, document.getElementById('eg3') )
 
 #+HTML: <p><div id="eg3"></div></p>
 
-# * Example 4: Traverse
+* Example 4: Traverse
 
+#+BEGIN_SRC js :tangle example.tsx
+  function sum(list){
+    return list.reduce((acc,x)=> acc+x, 0)
+  }
+  let list = ['1', '2', '3', '4', '5', '6', '7']
+  let Xeg4 = Traversable.Array.traverse<'Xstream', string, string>('Xstream')(
+      (defaultVal, index) => (Xstream.fromEvent('change', 'traverse' + index, defaultVal)),
+      list
+  ).toFantasyX()
+      .map(xs => xs.map(strToInt))
+      .map(sum)
 
+  let ViewEg4 = props => <section>
+  {list.map((item, index) => (<p>
+  <input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
+  </p>))
+  }
+    <p><span className="result">{props.sum}</span></p>
+  </section>
 
-# #+BEGIN_SRC js :tangle example.tsx
-#   function sum(list){
-#     return list.reduce((acc,x)=> acc+x, 0)
-#   }
-#   let list = ['1', '2', '3', '4', '5', '6', '7']
-#   let Xeg4 = traverse(
-#     (defaultVal, index)=>(fromEvent('change', 'traverse'+index, defaultVal)),
-#     list
-#   ).map(xs=>xs.map(strToInt))
-#       .map(sum)
+  let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
+#+END_SRC
 
-#   let ViewEg4 = props => <section>
-#   {list.map((item, index) => (<p>
-#   <input key={index} type="number" name={"traverse" + index} onChange={props.actions.fromEvent} defaultValue={item} />
-#   </p>))
-#   }
-#     <p><span className="result">{props.sum}</span></p>
-#   </section>
+#+BEGIN_SRC js :tangle example.tsx :exports none
+  xmount(<Eg4/>, document.getElementById('eg4') )
+#+END_SRC
 
-#   let Eg4 = Xeg4.map(a=>({sum: a})).apply(ViewEg4)
-# #+END_SRC
-
-# #+BEGIN_SRC js :tangle example.tsx :exports none
-#   xmount(<Eg4/>, document.getElementById('eg4') )
-# #+END_SRC
-
-# #+HTML: <p><div id="eg4"></div></p>
+#+HTML: <p><div id="eg4"></div></p>
 
 
 # * Example 5: Asynchronous

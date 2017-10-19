@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-10-18 Wed 17:34 -->
+<!-- 2017-10-19 Thu 16:04 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
+<title>Examples of xReact Fantasy</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Jichao Ouyang" />
 <style type="text/css">
@@ -230,26 +230,28 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
+<h1 class="title">Examples of xReact Fantasy</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd55b9c0">1. Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#org7b9255f">2. Example 1: Two number multiply</a></li>
-<li><a href="#orgf2e79d4">3. Example 2: Two Inputs</a></li>
-<li><a href="#orgf048e4f">4. Example 3: Semigroup</a></li>
+<li><a href="#org42cf36a">1. Example 0: How to use xReact Fantasy</a></li>
+<li><a href="#orgeb3bb95">2. Example 1: Two number multiply</a></li>
+<li><a href="#orga03ec68">3. Example 2: Two Inputs</a></li>
+<li><a href="#org319dc0b">4. Example 3: Semigroup</a></li>
+<li><a href="#org6c6e1fa">5. Example 4: Traverse</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgd55b9c0" class="outline-2">
-<h2 id="orgd55b9c0"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
+<div id="outline-container-org42cf36a" class="outline-2">
+<h2 id="org42cf36a"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map, Traversable } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
 <span style="color: #ff79c6; font-weight: bold;">import</span> {X} from <span style="color: #f1fa8c;">'../../../../../src'</span>
 <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
 </pre>
@@ -257,8 +259,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org7b9255f" class="outline-2">
-<h2 id="org7b9255f"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
+<div id="outline-container-orgeb3bb95" class="outline-2">
+<h2 id="orgeb3bb95"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 A multiply function can be simply lifted to be a function that works with xReact FantasyX
@@ -292,8 +294,8 @@ A very basic Stateless Component to display it.
 </div>
 
 
-<div id="outline-container-orgf2e79d4" class="outline-2">
-<h2 id="orgf2e79d4"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
+<div id="outline-container-orga03ec68" class="outline-2">
+<h2 id="orga03ec68"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
@@ -323,28 +325,58 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-orgf048e4f" class="outline-2">
-<h2 id="orgf048e4f"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
+<div id="outline-container-org319dc0b" class="outline-2">
+<h2 id="org319dc0b"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
-<pre class="src src-js">  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
-    Semigroup.Xstream.concat(
-      Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>),
-      Applicative.Xstream.pure(<span style="color: #f1fa8c;">' '</span>)
-    ),
-    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>)
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
+  Semigroup.Xstream.concat(
+    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>),
+    Applicative.Xstream.pure(<span style="color: #f1fa8c;">' '</span>)
+  ),
+  Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>)
 ).toFantasyX()
-  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
-      &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
-      &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
-      &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
-      &lt;/section&gt;
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
+    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
+    &lt;/section&gt;
 
-  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
 </pre>
 </div>
 
 <p><div id="eg3"></div></p>
+</div>
+</div>
+
+<div id="outline-container-org6c6e1fa" class="outline-2">
+<h2 id="org6c6e1fa"><span class="section-number-2">5</span> Example 4: Traverse</h2>
+<div class="outline-text-2" id="text-5">
+<div class="org-src-container">
+<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
+  <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
+}
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">list</span> = [<span style="color: #f1fa8c;">'1'</span>, <span style="color: #f1fa8c;">'2'</span>, <span style="color: #f1fa8c;">'3'</span>, <span style="color: #f1fa8c;">'4'</span>, <span style="color: #f1fa8c;">'5'</span>, <span style="color: #f1fa8c;">'6'</span>, <span style="color: #f1fa8c;">'7'</span>]
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> =  Traversable.Array.traverse(<span style="color: #f1fa8c;">'FantasyX'</span>)(
+  (defaultVal, index)=&gt;(Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span>+index, defaultVal)),
+  list
+).map(xs=&gt;xs.map(strToInt))
+    .map(sum).toFantasyX()
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg4</span> = props =&gt; &lt;section&gt;
+{list.map((item, index) =&gt; (&lt;p&gt;
+&lt;input key={index} type=<span style="color: #f1fa8c;">"number"</span> name={<span style="color: #f1fa8c;">"traverse"</span> + index} onChange={props.actions.fromEvent} defaultValue={item} /&gt;
+&lt;/p&gt;))
+}
+  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.sum}&lt;/span&gt;&lt;/p&gt;
+&lt;/section&gt;
+
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg4</span> = Xeg4.map(a=&gt;({sum: a})).apply(ViewEg4)
+</pre>
+</div>
+
+<p><div id="eg4"></div></p>
 
 
 
@@ -355,7 +387,7 @@ type Intent = {type:string, value:number}
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
 <p class="author">Author: Jichao Ouyang</p>
-<p class="date">Created: 2017-10-18 Wed 17:34</p>
+<p class="date">Created: 2017-10-19 Thu 16:04</p>
 <p class="validation"></p>
 </div>
 </body>

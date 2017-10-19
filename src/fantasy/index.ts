@@ -7,6 +7,7 @@ export * from './typeclasses/monad'
 export * from './typeclasses/flatmap'
 export * from './typeclasses/cartesian'
 export * from './typeclasses/semigroup'
+export * from './typeclasses/traversable'
 // export function fromPlan<E extends Stream, I, S>(plan: Plan<E, I, S>): FantasyX<E, I, S, void> {
 //   return new FantasyX<E, I, S, void>((intent$: Subject<E, I>) => {
 //     let { update$, actions } = plan(intent$)

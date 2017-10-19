@@ -10,8 +10,10 @@ import { Monad } from './typeclasses/monad'
 import { Cartesian, product } from './typeclasses/cartesian'
 import { Apply } from './typeclasses/apply'
 import { Applicative } from './typeclasses/applicative'
+import { Traversable } from './typeclasses/traversable'
 import { datatype } from './typeclasses'
 import { Xstream } from './xstream'
+
 import * as React from 'react'
 
 @datatype('FantasyX')

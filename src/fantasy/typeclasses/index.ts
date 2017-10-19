@@ -1,4 +1,6 @@
-export interface _<A> { }
+export interface _<A> {
+  "Array": Array<A>
+}
 
 export type HKT = keyof _<any>
 
@@ -21,11 +23,6 @@ datatype('Array')(Array)
 datatype('Object')(Object)
 datatype('Promise')(Promise)
 
-declare module '.' {
-  export interface _<A> {
-    "Array": Array<A>
-  }
-}
 
 function isPrimitive(a: any): boolean {
   return ['string', 'number', 'symbol', 'boolean'].indexOf(typeof a) >= 0
