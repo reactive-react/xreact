@@ -1,4 +1,4 @@
-docs = ./docs/**/*
+docsdir = ./docs/**/*
 browserify = ./node_modules/.bin/browserify
 watchify = ./node_modules/.bin/watchify
 uglify = ./node_modules/.bin/uglifyjs
@@ -14,12 +14,12 @@ lib/%.js: src/%.ts
 
 all: test browser
 
-.PHONY: test build unit integrate browser
+.PHONY: test build unit integrate browser docs docs/publish
 
 unit: build
 	yarn test
 
-integrate: test/*.js docs/src/main/tut/examples/example.js
+integrate: build test/*.js docs/src/main/tut/examples/example.js
 	mocha test/test.js
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
@@ -39,10 +39,10 @@ dist/xreact-%.js:  lib/xs/%.js
 dist/%.min.js: dist/%.js
 	env NODE_ENV=production $(uglify) -c dead_code $(basename $(basename $@)).js -o $@
 
-docs: $(docs)
-	sbt makeMicrosite
+docs: $(docsdir)
+	sbt "project docs" makeMicrosite
 
-docs/publish: $(docs)
+docs/publish: $(docsdir)
 	sbt "project docs" publishMicrosite
 
 clean:

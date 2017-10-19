@@ -1,5 +1,5 @@
-import './xstream'
-import './fantasyx'
+export { Xstream } from './xstream'
+export { FantasyX } from './fantasyx'
 export * from './typeclasses/applicative'
 export * from './typeclasses/functor'
 export * from './typeclasses/apply'

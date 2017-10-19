@@ -20,7 +20,8 @@ position: 1
 Sorry we don't have a **book** to document how to use xreact, and I don't really need to,
 there's only 3 things you should notice when using xreact, I'll explain by a simple counter app.
 
-<iframe src="https://www.webpackbin.com/bins/-KsSVkmGpVrLlwylSrkE" frameborder="0" width="100%" height="500"></iframe>
+<p data-height="265" data-theme-id="0" data-slug-hash="gGqvBW" data-default-tab="js,result" data-user="jcouyang" data-embed-version="2" data-pen-title="XREACT" class="codepen">See the Pen <a href="https://codepen.io/jcouyang/pen/gGqvBW/">XREACT</a> by Jichao Ouyang (<a href="https://codepen.io/jcouyang">@jcouyang</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 ### 1. Define a simple stateless View component
 
@@ -101,4 +102,6 @@ render(
 
 If you are TypeScript user and want to enjoy a type safe counter app, it's simple to do so since xReact is written 100% in TypeScript.
 
-<iframe src="https://www.webpackbin.com/bins/-KsSYQVTkFjd_MQon3b9" frameborder="0" width="100%" height="500"></iframe>
+<p data-height="265" data-theme-id="0" data-slug-hash="jGdzYR" data-default-tab="js,result" data-user="jcouyang" data-embed-version="2" data-pen-title="XREACT Counter in TypeScript" class="codepen">See the Pen <a href="https://codepen.io/jcouyang/pen/jGdzYR/">XREACT Counter in TypeScript</a> by Jichao Ouyang (<a href="https://codepen.io/jcouyang">@jcouyang</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+

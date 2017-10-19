@@ -61,19 +61,10 @@ export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: Rea
               console.log('UPDATE:', action)
             this.setState((prevState, props) => {
               let newState: S = action.call(this, prevState, props);
-              let newStateWithoutPromise = <S>{}
-              for (let i in newState) {
-                let val = newState[i]
-                if (isPromise(val)) {
-                  val.then((v: S) => this.setState(v))
-                } else {
-                  newStateWithoutPromise[i] = newState[i]
-                }
-              }
-              this.context[XREACT_ENGINE].history$.next(newStateWithoutPromise)
+              this.context[XREACT_ENGINE].history$.next(newState)
               if (process.env.NODE_ENV == 'debug')
-                console.log('STATE:', newStateWithoutPromise)
-              return newStateWithoutPromise;
+                console.log('STATE:', newState)
+              return newState;
             });
           } else {
             /* istanbul ignore next */
