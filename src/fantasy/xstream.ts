@@ -109,14 +109,14 @@ declare module './typeclasses/cartesian' {
 }
 
 export class XstreamApply implements Apply<"Xstream"> {
-  ap<A, B>(
-    fab: Xstream<any, any, (a: A) => B>,
-    fa: Xstream<any, any, A>
-  ): Xstream<any, any, B> {
+  ap<A, B, F extends Stream>(
+    fab: Xstream<F, any, (a: A) => B>,
+    fa: Xstream<F, any, A>
+  ): Xstream<F, any, B> {
     return new Xstream(
       FlatMap.State.flatMap(s1 => (
         Functor.State.map(s2 => (
-          map((([a, b]) => a(b)), product(s1, s2))
+          streamOps.combine<(a: A) => B, A, B>((a, b) => a(b), s1, s2)
         ), fa.streamS)
       ), fab.streamS))
   }

@@ -20,7 +20,7 @@ export function kind(target: any) {
   else {
     let tag = Reflect.getMetadata('design:type', target.constructor);
     if (tag) return tag
-    throw `target ${target.constructor} is not a datatype, please decorate it with @datatype!`
+    throw new Error(`target ${target.constructor} is not a datatype, please decorate it with @datatype!`)
   }
 
 }
