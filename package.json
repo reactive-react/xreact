@@ -1,6 +1,6 @@
 {
   "name": "xreact",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Functional Reactive State Container for React",
   "repository": {
     "type": "git",
