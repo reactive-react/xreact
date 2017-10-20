@@ -30,7 +30,7 @@ export class FantasyX<F extends Stream, I, S, A> {
   }
 
   toStream(intent$: Subject<F, I>): $<F, Update<S>> {
-    return map<Stream, State<S, A>, Update<S>>(
+    return streamOps.map<State<S, A>, Update<S>>(
       s => (state => s.patch(a => a).runS(state)),
       this.plan.runA(intent$))
   }
@@ -38,7 +38,7 @@ export class FantasyX<F extends Stream, I, S, A> {
   map<B>(f: (a: A) => B): FantasyX<F, I, S, B> {
     return new FantasyX<F, I, S, B>(
       Functor.State.map(update$ => (
-        map<Stream, State<S, A>, State<S, B>>(state => (
+        streamOps.map<State<S, A>, State<S, B>>(state => (
           Functor.State.map(f, state)
         ), update$)
       ), this.plan)
@@ -48,7 +48,7 @@ export class FantasyX<F extends Stream, I, S, A> {
   foldS<B>(f: (s: S, a: A) => S): FantasyX<F, I, S, Partial<S>> {
     return new FantasyX<F, I, S, Partial<S>>(
       Functor.State.map(update$ => (
-        map<Stream, State<S, A>, State<S, Partial<S>>>(state => (
+        streamOps.map<State<S, A>, State<S, Partial<S>>>(state => (
           state.patch((a: A, s: S) => f(s, a))
         ), update$)
       ), this.plan)

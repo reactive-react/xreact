@@ -63,7 +63,7 @@ export class Xstream<S extends Stream, I, A> {
         let state$ = this.streamS.runA(intent$)
         return {
           s: intent$,
-          a: map<S, A, State<St, A>>((a: A) => Applicative.State.pure<St, A>(a), state$)
+          a: streamOps.map<A, State<St, A>>((a: A) => Applicative.State.pure<St, A>(a), state$)
         }
       }))
   }
@@ -83,7 +83,7 @@ declare module './typeclasses/functor' {
 
 export class XstreamFunctor implements Functor<"Xstream">{
   map<A, B>(f: (a: A) => B, fa: Xstream<Stream, any, A>): Xstream<Stream, any, B> {
-    return new Xstream(Monad.State.map(sa => map<Stream, A, B>(f, sa), fa.streamS))
+    return new Xstream(Monad.State.map(sa => streamOps.map<A, B>(f, sa), fa.streamS))
   }
 }
 
@@ -94,7 +94,7 @@ export class XstreamCartesian implements Cartesian<"Xstream">{
     return new Xstream(
       FlatMap.State.flatMap(s1 => (
         Functor.State.map(s2 => (
-          product(s1, s2)
+          streamOps.combine((a, b) => [a, b], s1, s2)
         ), fb.streamS)
       ), fa.streamS))
   }
@@ -138,7 +138,7 @@ export class XstreamFlatMap extends XstreamApply {
       FlatMap.State.flatMap((a$: $<Stream, A>) => (
         map<"State", $<Stream, A>, $<Stream, B>>(i$ => {
           let sdf = (a: A) => f(a).streamS.runA(i$)
-          return flatMap<Stream, A, B>(sdf, a$)
+          return streamOps.flatMap<A, B>(sdf, a$)
         }, State.get<$<Stream, A>>())
       ), fa.streamS)
     )

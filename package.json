@@ -21,6 +21,7 @@
   },
   "browserify-shim": {
     "react": "global:React",
+    "reflect-metadata": "global:Reflect",
     "@reactivex/rxjs": "global:Rx",
     "most": "global:most"
   },

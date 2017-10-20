@@ -14,9 +14,15 @@ export function datatype(name: string) {
 }
 
 export function kind(target: any) {
-  if (isPrimitive(target))
+  if (isPrimitive(target)) {
     return target.constructor.name
-  return Reflect.getMetadata('design:type', target.constructor);
+  }
+  else {
+    let tag = Reflect.getMetadata('design:type', target.constructor);
+    if (tag) return tag
+    throw `target ${target.constructor} is not a datatype, please decorate it with @datatype!`
+  }
+
 }
 
 datatype('Array')(Array)
