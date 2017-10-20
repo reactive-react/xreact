@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-10-19 Thu 17:35 -->
+<!-- 2017-10-20 Fri 16:42 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Examples of xReact Fantasy</title>
+<title>Examples of XREACT FANTASY</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Jichao Ouyang" />
+<meta name="author" content="欧阳继超" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -180,7 +180,6 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<style>pre.src {background-color: #282a36;color: #f8f8f2;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -230,197 +229,313 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Examples of xReact Fantasy</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#orgbc53ea8">1. Example 0: How to use xReact Fantasy</a></li>
-<li><a href="#org643a687">2. Example 1: Two number multiply</a></li>
-<li><a href="#org0d6b570">3. Example 2: Two Inputs</a></li>
-<li><a href="#org19114f1">4. Example 3: Semigroup</a></li>
-<li><a href="#org6bb5f50">5. Example 4: Traverse</a></li>
-<li><a href="#org21ccd92">6. Example 5: Asynchronous</a></li>
-<li><a href="#org853cad2">7. Example 6: Fold</a></li>
-<li><a href="#org9e29c5c">8. Example 7: Merge</a></li>
-<li><a href="#org8617f7a">9. Example 8: Fold multiple buttons</a></li>
-</ul>
-</div>
-</div>
+<h1 class="title">Examples of XREACT FANTASY</h1>
+---
+layout: docs
+title:  Fantasy Examples
+section: en
+position: 6
+---
 
-<div id="outline-container-orgbc53ea8" class="outline-2">
-<h2 id="orgbc53ea8"><span class="section-number-2">1</span> Example 0: How to use xReact Fantasy</h2>
-<div class="outline-text-2" id="text-1">
+<p>
+FantasyX aims to reduce all verbose code when you create and compose React Component in functional pattern. The idea is to define the logic of the program and then apply to a React Stateless Component at the last minute. 
+</p>
+
+<blockquote>
+<p>
+The idea of FantasyX is highly inspired by [flare](<a href="http://sharkdp.github.io/purescript-flare/">http://sharkdp.github.io/purescript-flare/</a>) by purescript
+</p>
+</blockquote>
+
+<div id="outline-container-orgf25348d" class="outline-2">
+<h2 id="orgf25348d">Example 0: How to use xReact Fantasy</h2>
+<div class="outline-text-2" id="text-orgf25348d">
+<p>
+To get start with FantasyX, simply import Typeclasses you need, apart from simple Typeclasses, there're two data type you should notice: <code>FantasyX</code> and <code>Xstream</code>.
+</p>
+
+<p>
+<code>FantasyX</code> is a Applicative while <code>Xstream</code> is a Monad
+</p>
+
+<p>
+which means <code>Xstream</code> can be <code>flatMap</code> and convert to <code>FantasyX</code> at any time.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> * as React from <span style="color: #f1fa8c;">'react'</span>;
 <span style="color: #ff79c6; font-weight: bold;">import</span> { render } from <span style="color: #f1fa8c;">'react-dom'</span>;
-<span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'../../../../../src/xs/rx'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> { Applicative, lift2,Semigroup, Functor, map, Traversable, FlatMap } from <span style="color: #f1fa8c;">'../../../../../src/fantasy'</span>
-<span style="color: #ff79c6; font-weight: bold;">import</span> {X} from <span style="color: #f1fa8c;">'../../../../../src'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> <span style="color: #f1fa8c;">'xreact/lib/rx'</span>
+<span style="color: #ff79c6; font-weight: bold;">import</span> { X, Applicative, lift2,Semigroup, Functor, map, Traversable, FlatMap } from <span style="color: #f1fa8c;">'xreact'</span>
 <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">xmount</span>(<span style="color: #f8f8f2;">component</span>, <span style="color: #f8f8f2;">dom</span>) { render(React.createFactory(X)({}, component), dom) }
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org643a687" class="outline-2">
-<h2 id="org643a687"><span class="section-number-2">2</span> Example 1: Two number multiply</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org001e426" class="outline-2">
+<h2 id="org001e426">Example 1: Two number multiply</h2>
+<div class="outline-text-2" id="text-org001e426">
 <p>
-A multiply function can be simply lifted to be a function that works with xReact FantasyX
+Now let's see what FantasyX is with a simple example.
 </p>
+
+<p>
+Since <code>FantasyX</code> is a Applicative.
+</p>
+
+<p>
+A multiply function can be simply lifted to be a function that works with FantasyX
+</p>
+
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">mult</span> = (x:number,y: number) =&gt; x * y
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg1</span> = lift2&lt;<span style="color: #f1fa8c;">"FantasyX"</span>,<span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)(Applicative.FantasyX.pure(6), Applicative.FantasyX.pure(5))
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xmult</span> = lift2&lt;<span style="color: #f1fa8c;">"FantasyX"</span>,<span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)
+<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg1</span> = xmult(Applicative.FantasyX.pure(6), Applicative.FantasyX.pure(5))
 </pre>
 </div>
 
 <p>
-A very basic Stateless Component to display it.
+Now we need a A very basic Stateless Component to display the result of multiply.
 </p>
+
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg1</span> = props =&gt; &lt;p className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/p&gt;
 </pre>
 </div>
 
+<p>
+Map the result to the form View the recognize, and apply to it. Now we have a React Component to mount
+</p>
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg1</span> = Functor.FantasyX.map(a=&gt;({product: a}), Xeg1).apply(ViewEg1)
 </pre>
 </div>
 
+<p>
+using <code>xmount</code> to mount it to the DOM
+</p>
 <div class="org-src-container">
 <pre class="src src-js">xmount(&lt;Eg1/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg1'</span>) )
 </pre>
 </div>
 
 <p><div id="eg1"></div></p>
+
+<p>
+It's too simple and no interacting anywhere, but you may get some idea of FantasyX Applicative
+</p>
 </div>
 </div>
 
+<div id="outline-container-org9aa5f21" class="outline-2">
+<h2 id="org9aa5f21">Example 2: Two Inputs</h2>
+<div class="outline-text-2" id="text-org9aa5f21">
+<p>
+Now let's make an interacting example.
+</p>
 
-<div id="outline-container-org0d6b570" class="outline-2">
-<h2 id="org0d6b570"><span class="section-number-2">3</span> Example 2: Two Inputs</h2>
-<div class="outline-text-2" id="text-3">
+<p>
+<code>Xstream</code> can be viewed as a bridge that connect Component and FantasyX, you can make a <code>Xstream</code> from <code>Event</code>, which trigger by <code>{props.actions.fromEvent}</code> be called by input component.
+</p>
+
 <div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
-
-<span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
-type Intent = {type:string, value:number}
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput1</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n1'</span>, <span style="color: #f1fa8c;">'5'</span>)
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput2</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n2'</span>, <span style="color: #f1fa8c;">'6'</span>)
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg2</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)(
-  Functor.Xstream.map(strToInt, XSinput1),
-  Functor.Xstream.map(strToInt, XSinput2)
-).toFantasyX()
-    .map(x=&gt;({product: x}))
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg2</span> = props =&gt; &lt;section&gt;
-    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n1"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"5"</span>/&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n2"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"6"</span>/&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/span&gt;&lt;/p&gt;
-    &lt;/section&gt;
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg2</span> = Xeg2.apply(ViewEg2)
+<pre class="src src-js"><span class="linenr"> 1: </span><span style="color: #ff79c6; font-weight: bold;">import</span> {Xstream} from <span style="color: #f1fa8c;">'../../../../../src/fantasy/xstream'</span>;
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">strToInt</span>(<span style="color: #f8f8f2;">x</span>) {<span style="color: #ff79c6; font-weight: bold;">return</span> ~~x}
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span>
+<span id="coderef-create-events" class="coderef-off"><span class="linenr"> 6: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput1</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n1'</span>, <span style="color: #f1fa8c;">'5'</span>) <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;- 1</span></span>
+<span class="linenr"> 7: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">XSinput2</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'n2'</span>, <span style="color: #f1fa8c;">'6'</span>)
+<span class="linenr"> 8: </span>
+<span id="coderef-lift-xstream" class="coderef-off"><span class="linenr"> 9: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg2</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>, <span style="color: #f8f8f2;">number</span>&gt;(mult)( <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;- 2</span></span>
+<span class="linenr">10: </span>  Functor.Xstream.map(strToInt, XSinput1),
+<span class="linenr">11: </span>  Functor.Xstream.map(strToInt, XSinput2)
+<span id="coderef-tofantasy" class="coderef-off"><span class="linenr">12: </span>).toFantasyX() <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;- 3</span></span>
+<span class="linenr">13: </span>    .map(x=&gt;({product: x}))
+<span class="linenr">14: </span>
+<span class="linenr">15: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg2</span> = props =&gt; &lt;section&gt;
+<span class="linenr">16: </span>    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n1"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"5"</span>/&gt;&lt;/p&gt;
+<span class="linenr">17: </span>    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"number"</span> name=<span style="color: #f1fa8c;">"n2"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"6"</span>/&gt;&lt;/p&gt;
+<span class="linenr">18: </span>    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.product}&lt;/span&gt;&lt;/p&gt;
+<span class="linenr">19: </span>    &lt;/section&gt;
+<span class="linenr">20: </span>
+<span class="linenr">21: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg2</span> = Xeg2.apply(ViewEg2)
 </pre>
 </div>
+
+<ol class="org-ol">
+<li><a href="#coderef-create-events" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-create-events');" onmouseout="CodeHighlightOff(this, 'coderef-create-events');">line 6:</a> create 2 streams from event</li>
+<li><a href="#coderef-lift-xstream" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-lift-xstream');" onmouseout="CodeHighlightOff(this, 'coderef-lift-xstream');">line 9:</a> lift <code>mult</code> to function that can apply to <code>Xstream</code></li>
+<li><a href="#coderef-tofantasy" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-tofantasy');" onmouseout="CodeHighlightOff(this, 'coderef-tofantasy');">line 12:</a> from <code>Xstream</code> to <code>FantasyX</code></li>
+</ol>
 
 <p><div id="eg2"></div></p>
 </div>
 </div>
 
-<div id="outline-container-org19114f1" class="outline-2">
-<h2 id="org19114f1"><span class="section-number-2">4</span> Example 3: Semigroup</h2>
-<div class="outline-text-2" id="text-4">
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat(
-  Semigroup.Xstream.concat(
-    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>),
-    Applicative.Xstream.pure(<span style="color: #f1fa8c;">' '</span>)
-  ),
-  Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>)
-).toFantasyX()
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
-    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
-    &lt;/section&gt;
+<div id="outline-container-org6f8a202" class="outline-2">
+<h2 id="org6f8a202">Example 3: Semigroup</h2>
+<div class="outline-text-2" id="text-org6f8a202">
+<p>
+<code>Xstream</code> and <code>FantasyX</code> are also Semigroup, which means they are concatable.
+</p>
 
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
+<div class="org-src-container">
+<pre class="src src-js"><span id="coderef-xstream-semigroup" class="coderef-off"><span class="linenr"> 1: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg3</span> = Semigroup.Xstream.concat( <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;- 1</span></span>
+<span class="linenr"> 2: </span>  Semigroup.Xstream.concat(
+<span id="coderef-xstream-concat" class="coderef-off"><span class="linenr"> 3: </span>    Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'firstName'</span>, <span style="color: #f1fa8c;">'Jichao'</span>), <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;- 2</span></span>
+<span class="linenr"> 4: </span>    Applicative.Xstream.pure(<span style="color: #f1fa8c;">' '</span>)
+<span class="linenr"> 5: </span>  ),
+<span class="linenr"> 6: </span>  Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'lastName'</span>, <span style="color: #f1fa8c;">'Ouyang'</span>)
+<span class="linenr"> 7: </span>).toFantasyX()
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg3</span> = props =&gt; &lt;section&gt;
+<span class="linenr">11: </span>    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"firstName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Jichao"</span> /&gt;&lt;/p&gt;
+<span class="linenr">12: </span>    &lt;p&gt;&lt;input type=<span style="color: #f1fa8c;">"text"</span> name=<span style="color: #f1fa8c;">"lastName"</span> onChange={props.actions.fromEvent} defaultValue=<span style="color: #f1fa8c;">"Ouyang"</span>/&gt;&lt;/p&gt;
+<span class="linenr">13: </span>    &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.semigroup}&lt;/span&gt;&lt;/p&gt;
+<span class="linenr">14: </span>    &lt;/section&gt;
+<span class="linenr">15: </span>
+<span class="linenr">16: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg3</span> = Xeg3.map(a=&gt;({semigroup: a})).apply(ViewEg3)
 </pre>
 </div>
+
+<ol class="org-ol">
+<li><a href="#coderef-xstream-semigroup" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-xstream-semigroup');" onmouseout="CodeHighlightOff(this, 'coderef-xstream-semigroup');">line 1:</a> JS don't have custom operator, otherwise it should be same as
+<code>Xstream.fromEvent('change', 'firstName', 'Jichao') + Applicative.Xstream.pure(' ') + Xstream.fromEvent('change', 'lastName', 'Ouyang')</code></li>
+<li><a href="#coderef-xstream-concat" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-xstream-concat');" onmouseout="CodeHighlightOff(this, 'coderef-xstream-concat');">line 3:</a> since string is Semigroup as well, so the result will be <code>'Jichao' + ' ' + 'Ouyang'</code></li>
+</ol>
 
 <p><div id="eg3"></div></p>
 </div>
 </div>
 
-<div id="outline-container-org6bb5f50" class="outline-2">
-<h2 id="org6bb5f50"><span class="section-number-2">5</span> Example 4: Traverse</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orga67d512" class="outline-2">
+<h2 id="orga67d512">Example 4: Traverse</h2>
+<div class="outline-text-2" id="text-orga67d512">
+
+<div class="figure">
+<p><img src="http://adit.io/imgs/lenses/traverse.png" alt="traverse.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>traverse in pics <a href="http://adit.io/posts/2013-07-22-lenses-in-pictures.html">http://adit.io/posts/2013-07-22-lenses-in-pictures.html</a></p>
+</div>
+
+<p>
+Traverse basically traverse a function to functor into a traversable, and then wrap the result of traversable into the functor.
+</p>
+
+<p>
+For example we have a list of numbers, we can simply sum them into one number.
+</p>
+
+<p>
+But what if I have a function can turn number into a Functor number, which in our case is a <code>Xstream</code> of number value. How can we sum the value of Functors.
+</p>
+
+<p>
+In our case, the function from <code>number -&gt; Xstream number</code> is in line <a href="#coderef-a-fa" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-a-fa');" onmouseout="CodeHighlightOff(this, 'coderef-a-fa');">6</a>
+</p>
+
+<p>
+we traverse the function to a list of numbers in line <a href="#coderef-traverse" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-traverse');" onmouseout="CodeHighlightOff(this, 'coderef-traverse');">5</a>
+</p>
 <div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
-  <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
-}
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">list</span> = [<span style="color: #f1fa8c;">'1'</span>, <span style="color: #f1fa8c;">'2'</span>, <span style="color: #f1fa8c;">'3'</span>, <span style="color: #f1fa8c;">'4'</span>, <span style="color: #f1fa8c;">'5'</span>, <span style="color: #f1fa8c;">'6'</span>, <span style="color: #f1fa8c;">'7'</span>]
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> = Traversable.Array.traverse&lt;<span style="color: #f1fa8c;">'Xstream'</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>&gt;(<span style="color: #f1fa8c;">'Xstream'</span>)(
-    (defaultVal, index) =&gt; (Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span> + index, defaultVal)),
-    list
-).toFantasyX()
-    .map(xs =&gt; xs.map(strToInt))
-    .map(sum)
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg4</span> = props =&gt; &lt;section&gt;
-{list.map((item, index) =&gt; (&lt;p&gt;
-&lt;input key={index} type=<span style="color: #f1fa8c;">"number"</span> name={<span style="color: #f1fa8c;">"traverse"</span> + index} onChange={props.actions.fromEvent} defaultValue={item} /&gt;
-&lt;/p&gt;))
-}
-  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.sum}&lt;/span&gt;&lt;/p&gt;
-&lt;/section&gt;
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg4</span> = Xeg4.map(a=&gt;({sum: a})).apply(ViewEg4)
+<pre class="src src-js"><span class="linenr"> 1: </span><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">sum</span>(<span style="color: #f8f8f2;">list</span>){
+<span class="linenr"> 2: </span>  <span style="color: #ff79c6; font-weight: bold;">return</span> list.reduce((acc,x)=&gt; acc+x, 0)
+<span class="linenr"> 3: </span>}
+<span class="linenr"> 4: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">list</span> = [<span style="color: #f1fa8c;">'1'</span>, <span style="color: #f1fa8c;">'2'</span>, <span style="color: #f1fa8c;">'3'</span>, <span style="color: #f1fa8c;">'4'</span>, <span style="color: #f1fa8c;">'5'</span>, <span style="color: #f1fa8c;">'6'</span>, <span style="color: #f1fa8c;">'7'</span>]
+<span id="coderef-traverse" class="coderef-off"><span class="linenr"> 5: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg4</span> = Traversable.Array.traverse&lt;<span style="color: #f1fa8c;">'Xstream'</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>&gt;(<span style="color: #f1fa8c;">'Xstream'</span>)( <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span id="coderef-a-fa" class="coderef-off"><span class="linenr"> 6: </span>    (defaultVal, index) =&gt; (Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'traverse'</span> + index, defaultVal)), <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span class="linenr"> 7: </span>    list
+<span class="linenr"> 8: </span>).toFantasyX()
+<span class="linenr"> 9: </span>    .map(xs =&gt; xs.map(strToInt))
+<span class="linenr">10: </span>    .map(sum)
+<span class="linenr">11: </span>
+<span class="linenr">12: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg4</span> = props =&gt; &lt;section&gt;
+<span class="linenr">13: </span>{list.map((item, index) =&gt; (&lt;p&gt;
+<span class="linenr">14: </span>&lt;input key={index} type=<span style="color: #f1fa8c;">"number"</span> name={<span style="color: #f1fa8c;">"traverse"</span> + index} onChange={props.actions.fromEvent} defaultValue={item} /&gt;
+<span class="linenr">15: </span>&lt;/p&gt;))
+<span class="linenr">16: </span>}
+<span class="linenr">17: </span>  &lt;p&gt;&lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.sum}&lt;/span&gt;&lt;/p&gt;
+<span class="linenr">18: </span>&lt;/section&gt;
+<span class="linenr">19: </span>
+<span class="linenr">20: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg4</span> = Xeg4.map(a=&gt;({sum: a})).apply(ViewEg4)
 </pre>
 </div>
+
+<p>
+Then we will get a Function of numbers, <code>Xstream&lt;Array&lt;number&gt;&gt;</code>
+</p>
+
+<p>
+You'll know what to do next, just map the <code>sum</code> function to the functor, yay.
+</p>
 
 <p><div id="eg4"></div></p>
 </div>
 </div>
 
 
-<div id="outline-container-org21ccd92" class="outline-2">
-<h2 id="org21ccd92"><span class="section-number-2">6</span> Example 5: Asynchronous</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-orgbe1b981" class="outline-2">
+<h2 id="orgbe1b981">Example 5: Asynchronous</h2>
+<div class="outline-text-2" id="text-orgbe1b981">
+<p>
+You know how complicated handling Async Action for react if you come from redux/saga or so, it's too verbose to be reason about. But since we have Monad instance of <code>Xstream</code>, async is now just as easy as a <code>flatMap</code>
+</p>
+
+<p>
+To give you a brief idea of how it works, I'll implement a BMI Calculator, in just 30 lines of code. Imagine how many lines of code will it be if you involve redux and saga to handle async action.
+</p>
+
+<ul class="org-ul">
+<li><code>bmiCalc</code> function is a regular function that returns a Promise. It just send request to an API and fulfill the result to Promise</li>
+<li><a href="#coderef-xweight" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-xweight');" onmouseout="CodeHighlightOff(this, 'coderef-xweight');">xweight</a> and <a href="#coderef-xheight" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-xheight');" onmouseout="CodeHighlightOff(this, 'coderef-xheight');">xheight</a> will turn events into Xstream</li>
+<li><a href="#coderef-promisexstream" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-promisexstream');" onmouseout="CodeHighlightOff(this, 'coderef-promisexstream');">promiseXstream</a> will lift <code>bmiCalc</code> to Xstream and apply to xweight and xheight, then it will return a <code>Xstream&lt;Promise&lt;object&gt;&gt;</code></li>
+</ul>
+
+<p>
+What should we do with the promise?
+</p>
+
+<p>
+since you can simply create a <code>Xstream</code> from Promise with <code>fromPromise</code> method, <a href="#coderef-flatmap" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-flatmap');" onmouseout="CodeHighlightOff(this, 'coderef-flatmap');">flatMap</a> it to <code>promiseXstream</code> will give us a regular <code>Xstream&lt;object&gt;</code> type. 
+</p>
+
 <div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
-  <span style="color: #ff79c6; font-weight: bold;">return</span> fetch(<span style="color: #f1fa8c;">`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&amp;weight=${weight}`</span>)
-    .then(resp =&gt; resp.json())
-    .then(json =&gt; json.result)
-}
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xweigth</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'weight'</span>, <span style="color: #f1fa8c;">'70'</span>)
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xheight</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'height'</span>, <span style="color: #f1fa8c;">'175'</span>)
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">promiseXstream</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">Promise</span>&lt;any&gt;&gt;(bmiCalc)(
-  xweigth,
-  xheight
-)
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg5</span> = FlatMap.Xstream.flatMap(Xstream.fromPromise, promiseXstream)
-    .toFantasyX()
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg5</span> = props =&gt; (
-    &lt;div&gt;
-    &lt;label&gt;Height: {props.height} cm
-    &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"height"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"150"</span> max=<span style="color: #f1fa8c;">"200"</span> defaultValue={props.height} /&gt;
-    &lt;/label&gt;
-    &lt;label&gt;Weight: {props.weight} kg
-    &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"weight"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"40"</span> max=<span style="color: #f1fa8c;">"100"</span> defaultValue={props.weight} /&gt;
-    &lt;/label&gt;
-    &lt;p&gt;HEALTH: &lt;span&gt;{props.health}&lt;/span&gt;&lt;/p&gt;
-    &lt;p&gt;BMI: &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.bmi}&lt;/span&gt;&lt;/p&gt;
-    &lt;/div&gt;
-)
-
-<span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg5</span> = Xeg5.apply(ViewEg5)
+<pre class="src src-js"><span class="linenr"> 1: </span>  <span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">bmiCalc</span>(<span style="color: #f8f8f2;">weight</span>, <span style="color: #f8f8f2;">height</span>) {
+<span class="linenr"> 2: </span>    <span style="color: #ff79c6; font-weight: bold;">return</span> fetch(<span style="color: #f1fa8c;">`https://gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&amp;weight=${weight}`</span>)
+<span class="linenr"> 3: </span>      .then(resp =&gt; resp.json())
+<span class="linenr"> 4: </span>      .then(json =&gt; json.result)
+<span class="linenr"> 5: </span>  }
+<span class="linenr"> 6: </span>
+<span id="coderef-xweight" class="coderef-off"><span class="linenr"> 7: </span>  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xweigth</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'weight'</span>, <span style="color: #f1fa8c;">'70'</span>) <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span id="coderef-xheight" class="coderef-off"><span class="linenr"> 8: </span>  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">xheight</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'change'</span>, <span style="color: #f1fa8c;">'height'</span>, <span style="color: #f1fa8c;">'175'</span>) <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span class="linenr"> 9: </span>
+<span id="coderef-promisexstream" class="coderef-off"><span class="linenr">10: </span>  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">promiseXstream</span> = lift2&lt;<span style="color: #f1fa8c;">"Xstream"</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">string</span>, <span style="color: #f8f8f2;">Promise</span>&lt;any&gt;&gt;(bmiCalc)( <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span class="linenr">11: </span>    xweigth,
+<span class="linenr">12: </span>    xheight
+<span class="linenr">13: </span>  )
+<span class="linenr">14: </span>
+<span id="coderef-flatmap" class="coderef-off"><span class="linenr">15: </span>  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg5</span> = FlatMap.Xstream.flatMap(Xstream.fromPromise, promiseXstream) <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #6272a4; font-style: italic;">&lt;-</span></span>
+<span class="linenr">16: </span>      .toFantasyX()
+<span class="linenr">17: </span>
+<span class="linenr">18: </span>  <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">ViewEg5</span> = props =&gt; (
+<span class="linenr">19: </span>      &lt;div&gt;
+<span class="linenr">20: </span>      &lt;label&gt;Height: {props.height} cm
+<span class="linenr">21: </span>      &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"height"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"150"</span> max=<span style="color: #f1fa8c;">"200"</span> defaultValue={props.height} /&gt;
+<span class="linenr">22: </span>      &lt;/label&gt;
+<span class="linenr">23: </span>      &lt;label&gt;Weight: {props.weight} kg
+<span class="linenr">24: </span>      &lt;input type=<span style="color: #f1fa8c;">"range"</span> name=<span style="color: #f1fa8c;">"weight"</span> onChange={props.actions.fromEvent} min=<span style="color: #f1fa8c;">"40"</span> max=<span style="color: #f1fa8c;">"100"</span> defaultValue={props.weight} /&gt;
+<span class="linenr">25: </span>      &lt;/label&gt;
+<span class="linenr">26: </span>      &lt;p&gt;HEALTH: &lt;span&gt;{props.health}&lt;/span&gt;&lt;/p&gt;
+<span class="linenr">27: </span>      &lt;p&gt;BMI: &lt;span className=<span style="color: #f1fa8c;">"result"</span>&gt;{props.bmi}&lt;/span&gt;&lt;/p&gt;
+<span class="linenr">28: </span>      &lt;/div&gt;
+<span class="linenr">29: </span>  )
+<span class="linenr">30: </span>
+<span class="linenr">31: </span><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Eg5</span> = Xeg5.merge(xweigth.toFantasyX().map(w=&gt;({weight:w})))
+<span class="linenr">32: </span>    .merge(xheight.toFantasyX().map(h=&gt;({height:h})))
+<span class="linenr">33: </span>    .apply(ViewEg5)
 </pre>
 </div>
 
@@ -428,9 +543,13 @@ type Intent = {type:string, value:number}
 </div>
 </div>
 
-<div id="outline-container-org853cad2" class="outline-2">
-<h2 id="org853cad2"><span class="section-number-2">7</span> Example 6: Fold</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-orgb1d1964" class="outline-2">
+<h2 id="orgb1d1964">Example 6: Fold</h2>
+<div class="outline-text-2" id="text-orgb1d1964">
+<p>
+FantasyX is also "Foldable", not official Typeclass Foldable, it fold on react state, so it's named <code>foldS</code>.
+</p>
+
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg6</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'increment'</span>)
     .toFantasyX&lt;{count:number}&gt;()
@@ -447,13 +566,20 @@ type Intent = {type:string, value:number}
 </pre>
 </div>
 
+<p>
+With <code>foldS</code> and <code>toStream</code>, it's very easy to unit test <code>FantasyX</code>
+</p>
+
 <p><div id="eg6"></div></p>
 </div>
 </div>
 
-<div id="outline-container-org9e29c5c" class="outline-2">
-<h2 id="org9e29c5c"><span class="section-number-2">8</span> Example 7: Merge</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-orgfc098d2" class="outline-2">
+<h2 id="orgfc098d2">Example 7: Merge</h2>
+<div class="outline-text-2" id="text-orgfc098d2">
+<p>
+Two FantasyX can be merged into one, with both behavior of those two.
+</p>
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg7</span> = Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, <span style="color: #f1fa8c;">'decrement'</span>)
       .toFantasyX&lt;{count:number}&gt;()
@@ -476,15 +602,19 @@ type Intent = {type:string, value:number}
 </div>
 
 
-<div id="outline-container-org8617f7a" class="outline-2">
-<h2 id="org8617f7a"><span class="section-number-2">9</span> Example 8: Fold multiple buttons</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-orgce303ba" class="outline-2">
+<h2 id="orgce303ba">Example 8: Fold multiple buttons</h2>
+<div class="outline-text-2" id="text-orgce303ba">
+<p>
+Simply switch on different action and fold.
+</p>
 <div class="org-src-container">
 <pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">actions</span> = [<span style="color: #f1fa8c;">'-1'</span>, <span style="color: #f1fa8c;">'+1'</span>, <span style="color: #f1fa8c;">'reset'</span>]
 <span style="color: #ff79c6; font-weight: bold;">let</span> <span style="color: #f8f8f2;">Xeg8</span> =
   actions.map((action)=&gt;Xstream.fromEvent(<span style="color: #f1fa8c;">'click'</span>, action).toFantasyX&lt;{count:number}&gt;())
     .reduce((acc,a)=&gt;acc.merge(a))
     .foldS((acc, i) =&gt; {
+    acc.count = acc.count || 0
       <span style="color: #ff79c6; font-weight: bold;">switch</span>(i) {
       <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'-1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> {count: acc.count -1}
       <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #f1fa8c;">'+1'</span>: <span style="color: #ff79c6; font-weight: bold;">return</span> {count: acc.count +1}
@@ -509,13 +639,15 @@ xmount(&lt;Eg8/&gt;, document.getElementById(<span style="color: #f1fa8c;">'eg8'
 <p><div id="eg8"></div></p>
 
 <script src="example.js"></script>
+
+<a href="https://github.com/reactive-react/xreact" class="github-corner"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="date">Date: 2017-09-09 Sat 00:00</p>
-<p class="author">Author: Jichao Ouyang</p>
-<p class="date">Created: 2017-10-19 Thu 17:35</p>
+<p class="author">Author: 欧阳继超</p>
+<p class="date">Created: 2017-10-20 Fri 16:42</p>
 <p class="validation"></p>
 </div>
 </body>

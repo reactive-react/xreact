@@ -1,0 +1,313 @@
+<html><head><title>xReact</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jichao Ouyang" /><meta name="description" content="Reactive x React = xReact" /><meta name="og:image" content="/img/poster.png" /><meta name="og:title" content="xReact" /><meta name="og:site_name" content="xReact" /><meta name="og:url" content="https://xreact.oyanglul.us/" /><meta name="og:type" content="website" /><meta name="og:description" content="Reactive x React = xReact" /><link rel="icon" type="image/png" href="/img/favicon.png" /><meta name="twitter:title" content="xReact" /><meta name="twitter:image" content="https://xreact.oyanglul.us/img/poster.png" /><meta name="twitter:description" content="Reactive x React = xReact" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@oyanglulu" /><link rel="icon" type="image/png" sizes="16x16" href="/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/highlight/styles/default.css" /><link rel="stylesheet" href="/css/style.css" /><link rel="stylesheet" href="/css/palette.css" /><link rel="stylesheet" href="/css/codemirror.css" /><link rel="stylesheet" href="/css/kazari-style.css" /><link rel="stylesheet" href="/css/monokai.css" /><link rel="stylesheet" href="/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/" class="brand"><div class="brand-wrapper"><span>xReact</span></div></a></li><li><a href="/FRP-Best-Practice.html" class="">Functional Best Practice</a></li><li><a href="/Get-Started.html" class="">Quick Start</a></li><li><a href="/examples/fantasy.html" class=" active ">Fantasy</a></li><li><a href="/FAQ.html" class="">FAQ</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('xReact Reactive x React = xReact');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('xReact Reactive x React = xReact');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="reactive-react" data-github-repo="xreact"><div class="content-wrapper"><section><p>FantasyX aims to reduce all verbose code when you create and compose React Component in functional pattern. The idea is to define the logic of the program and then apply to a React Stateless Component at the last minute.</p>
+
+<blockquote>
+  <p>The idea of FantasyX is highly inspired by <a href="http://sharkdp.github.io/purescript-flare/">flare</a> by purescript</p>
+</blockquote>
+
+<h1 id="example-0-how-to-use-xreact-fantasy">Example 0: How to use xReact Fantasy</h1>
+
+<p>To get start with FantasyX, simply import Typeclasses you need, apart from simple Typeclasses, there’re two data type you should notice: <code class="highlighter-rouge">FantasyX</code> and <code class="highlighter-rouge">Xstream</code>.</p>
+
+<p><code class="highlighter-rouge">FantasyX</code> is a Applicative while <code class="highlighter-rouge">Xstream</code> is a Monad</p>
+
+<p>which means <code class="highlighter-rouge">Xstream</code> can be <code class="highlighter-rouge">flatMap</code> and convert to <code class="highlighter-rouge">FantasyX</code> at any time.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">render</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'react-dom'</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s1">'xreact/lib/rx'</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">X</span><span class="p">,</span> <span class="nx">Applicative</span><span class="p">,</span> <span class="nx">lift2</span><span class="p">,</span><span class="nx">Semigroup</span><span class="p">,</span> <span class="nx">Functor</span><span class="p">,</span> <span class="nx">map</span><span class="p">,</span> <span class="nx">Traversable</span><span class="p">,</span> <span class="nx">FlatMap</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'xreact'</span>
+<span class="kd">function</span> <span class="nx">xmount</span><span class="p">(</span><span class="nx">component</span><span class="p">,</span> <span class="nx">dom</span><span class="p">)</span> <span class="p">{</span> <span class="nx">render</span><span class="p">(</span><span class="nx">React</span><span class="p">.</span><span class="nx">createFactory</span><span class="p">(</span><span class="nx">X</span><span class="p">)({},</span> <span class="nx">component</span><span class="p">),</span> <span class="nx">dom</span><span class="p">)</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<h1 id="example-1-two-number-multiply">Example 1: Two number multiply</h1>
+
+<p>Now let’s see what FantasyX is with a simple example.</p>
+
+<p>Since <code class="highlighter-rouge">FantasyX</code> is a Applicative.</p>
+
+<p>A multiply function can be simply lifted to be a function that works with FantasyX</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">mult</span> <span class="o">=</span> <span class="p">(</span><span class="nx">x</span><span class="err">:</span><span class="nx">number</span><span class="p">,</span><span class="nx">y</span><span class="err">:</span> <span class="nx">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">y</span>
+<span class="kd">let</span> <span class="nx">xmult</span> <span class="o">=</span> <span class="nx">lift2</span><span class="o">&lt;</span><span class="s2">"FantasyX"</span><span class="p">,</span><span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">mult</span><span class="p">)</span>
+<span class="kd">let</span> <span class="nx">Xeg1</span> <span class="o">=</span> <span class="nx">xmult</span><span class="p">(</span><span class="nx">Applicative</span><span class="p">.</span><span class="nx">FantasyX</span><span class="p">.</span><span class="nx">pure</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="nx">Applicative</span><span class="p">.</span><span class="nx">FantasyX</span><span class="p">.</span><span class="nx">pure</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>Now we need a A very basic Stateless Component to display the result of multiply.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">ViewEg1</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">p</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">product</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span></code></pre>
+</div>
+
+<p>Map the result to the form View the recognize, and apply to it. Now we have a React Component to mount</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">Eg1</span> <span class="o">=</span> <span class="nx">Functor</span><span class="p">.</span><span class="nx">FantasyX</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">product</span><span class="p">:</span> <span class="nx">a</span><span class="p">}),</span> <span class="nx">Xeg1</span><span class="p">).</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg1</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>using <code class="highlighter-rouge">xmount</code> to mount it to the DOM</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">xmount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">Eg1</span><span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'eg1'</span><span class="p">)</span> <span class="p">)</span>
+</code></pre>
+</div>
+
+<p><div id="eg1"></div></p>
+
+<p>It’s too simple and no interacting anywhere, but you may get some idea of FantasyX Applicative</p>
+
+<h1 id="example-2-two-inputs">Example 2: Two Inputs</h1>
+
+<p>Now let’s make an interacting example.</p>
+
+<p><code class="highlighter-rouge">Xstream</code> can be viewed as a bridge that connect Component and FantasyX, you can make a <code class="highlighter-rouge">Xstream</code> from <code class="highlighter-rouge">Event</code>, which trigger by <code class="highlighter-rouge"><span class="p">{</span><span class="err">props.actions.fromEvent</span><span class="p">}</span></code> be called by input component.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code> <span class="mi">1</span>  <span class="kr">import</span> <span class="p">{</span><span class="nx">Xstream</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'../../../../../src/fantasy/xstream'</span><span class="p">;</span>
+ <span class="mi">2</span>  
+ <span class="mi">3</span>  <span class="kd">function</span> <span class="nx">strToInt</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="o">~~</span><span class="nx">x</span><span class="p">}</span>
+ <span class="mi">4</span>  
+ <span class="mi">5</span>  
+ <span class="mi">6</span>  <span class="kd">let</span> <span class="nx">XSinput1</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'n1'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">)</span> <span class="c1">// &lt;- 1</span>
+ <span class="mi">7</span>  <span class="kd">let</span> <span class="nx">XSinput2</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'n2'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">)</span>
+ <span class="mi">8</span>  
+ <span class="mi">9</span>  <span class="kd">let</span> <span class="nx">Xeg2</span> <span class="o">=</span> <span class="nx">lift2</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">mult</span><span class="p">)(</span> <span class="c1">// &lt;- 2</span>
+<span class="mi">10</span>    <span class="nx">Functor</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">strToInt</span><span class="p">,</span> <span class="nx">XSinput1</span><span class="p">),</span>
+<span class="mi">11</span>    <span class="nx">Functor</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">strToInt</span><span class="p">,</span> <span class="nx">XSinput2</span><span class="p">)</span>
+<span class="mi">12</span>  <span class="p">).</span><span class="nx">toFantasyX</span><span class="p">()</span> <span class="c1">// &lt;- 3</span>
+<span class="mi">13</span>      <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">product</span><span class="p">:</span> <span class="nx">x</span><span class="p">}))</span>
+<span class="mi">14</span>  
+<span class="mi">15</span>  <span class="kd">let</span> <span class="nx">ViewEg2</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">section</span><span class="o">&gt;</span>
+<span class="mi">16</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"n1"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"5"</span><span class="o">/&gt;&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="mi">17</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"n2"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"6"</span><span class="o">/&gt;&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="mi">18</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">product</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">19</span>      <span class="o">&lt;</span><span class="sr">/section</span><span class="err">&gt;
+</span><span class="mi">20</span>  
+<span class="mi">21</span>  <span class="kd">let</span> <span class="nx">Eg2</span> <span class="o">=</span> <span class="nx">Xeg2</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg2</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<ol>
+  <li>line 6: create 2 streams from event</li>
+  <li>line 9: lift <code class="highlighter-rouge">mult</code> to function that can apply to <code class="highlighter-rouge">Xstream</code></li>
+  <li>line 12: from <code class="highlighter-rouge">Xstream</code> to <code class="highlighter-rouge">FantasyX</code></li>
+</ol>
+
+<p><div id="eg2"></div></p>
+
+<h1 id="example-3-semigroup">Example 3: Semigroup</h1>
+
+<p><code class="highlighter-rouge">Xstream</code> and <code class="highlighter-rouge">FantasyX</code> are also Semigroup, which means they are concatable.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code> <span class="mi">1</span>  <span class="kd">let</span> <span class="nx">Xeg3</span> <span class="o">=</span> <span class="nx">Semigroup</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span> <span class="c1">// &lt;- 1</span>
+ <span class="mi">2</span>    <span class="nx">Semigroup</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span>
+ <span class="mi">3</span>      <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'firstName'</span><span class="p">,</span> <span class="s1">'Jichao'</span><span class="p">),</span> <span class="c1">// &lt;- 2</span>
+ <span class="mi">4</span>      <span class="nx">Applicative</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">pure</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
+ <span class="mi">5</span>    <span class="p">),</span>
+ <span class="mi">6</span>    <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'lastName'</span><span class="p">,</span> <span class="s1">'Ouyang'</span><span class="p">)</span>
+ <span class="mi">7</span>  <span class="p">).</span><span class="nx">toFantasyX</span><span class="p">()</span>
+ <span class="mi">8</span>  
+ <span class="mi">9</span>  
+<span class="mi">10</span>  <span class="kd">let</span> <span class="nx">ViewEg3</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">section</span><span class="o">&gt;</span>
+<span class="mi">11</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"firstName"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"Jichao"</span> <span class="o">/&gt;&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="mi">12</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"lastName"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="s2">"Ouyang"</span><span class="o">/&gt;&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="mi">13</span>      <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">semigroup</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">14</span>      <span class="o">&lt;</span><span class="sr">/section</span><span class="err">&gt;
+</span><span class="mi">15</span>  
+<span class="mi">16</span>  <span class="kd">let</span> <span class="nx">Eg3</span> <span class="o">=</span> <span class="nx">Xeg3</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">semigroup</span><span class="p">:</span> <span class="nx">a</span><span class="p">})).</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg3</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<ol>
+  <li>line 1: JS don’t have custom operator, otherwise it should be same as <code class="highlighter-rouge">Xstream.fromEvent('change', 'firstName', 'Jichao') + Applicative.Xstream.pure(' ') + Xstream.fromEvent('change', 'lastName', 'Ouyang')</code></li>
+  <li>line 3: since string is Semigroup as well, so the result will be <code class="highlighter-rouge">'Jichao' + ' ' + 'Ouyang'</code></li>
+</ol>
+
+<p><div id="eg3"></div></p>
+
+<h1 id="example-4-traverse">Example 4: Traverse</h1>
+
+<p><img src="http://adit.io/imgs/lenses/traverse.png" alt="img" title="traverse in pics &lt;http://adit.io/posts/2013-07-22-lenses-in-pictures.html&gt;" /></p>
+
+<p>Traverse basically traverse a function to functor into a traversable, and then wrap the result of traversable into the functor.</p>
+
+<p>For example we have a list of numbers, we can simply sum them into one number.</p>
+
+<p>But what if I have a function can turn number into a Functor number, which in our case is a <code class="highlighter-rouge">Xstream</code> of number value. How can we sum the value of Functors.</p>
+
+<p>In our case, the function from <code class="highlighter-rouge">number -&gt; Xstream number</code> is in line 6</p>
+
+<p>we traverse the function to a list of numbers in line 5</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code> <span class="mi">1</span>  <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+ <span class="mi">2</span>    <span class="k">return</span> <span class="nx">list</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span><span class="nx">x</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">acc</span><span class="o">+</span><span class="nx">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+ <span class="mi">3</span>  <span class="p">}</span>
+ <span class="mi">4</span>  <span class="kd">let</span> <span class="nx">list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">]</span>
+ <span class="mi">5</span>  <span class="kd">let</span> <span class="nx">Xeg4</span> <span class="o">=</span> <span class="nx">Traversable</span><span class="p">.</span><span class="nb">Array</span><span class="p">.</span><span class="nx">traverse</span><span class="o">&lt;</span><span class="s1">'Xstream'</span><span class="p">,</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s1">'Xstream'</span><span class="p">)(</span> <span class="c1">// &lt;-</span>
+ <span class="mi">6</span>      <span class="p">(</span><span class="nx">defaultVal</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'traverse'</span> <span class="o">+</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">defaultVal</span><span class="p">)),</span> <span class="c1">// &lt;-</span>
+ <span class="mi">7</span>      <span class="nx">list</span>
+ <span class="mi">8</span>  <span class="p">).</span><span class="nx">toFantasyX</span><span class="p">()</span>
+ <span class="mi">9</span>      <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">xs</span> <span class="o">=&gt;</span> <span class="nx">xs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">strToInt</span><span class="p">))</span>
+<span class="mi">10</span>      <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">sum</span><span class="p">)</span>
+<span class="mi">11</span>  
+<span class="mi">12</span>  <span class="kd">let</span> <span class="nx">ViewEg4</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">section</span><span class="o">&gt;</span>
+<span class="mi">13</span>  <span class="p">{</span><span class="nx">list</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">14</span>  <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"number"</span> <span class="nx">name</span><span class="o">=</span><span class="p">{</span><span class="s2">"traverse"</span> <span class="o">+</span> <span class="nx">index</span><span class="p">}</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">item</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span><span class="mi">15</span>  <span class="o">&lt;</span><span class="sr">/p&gt;</span><span class="se">)</span><span class="err">)
+</span><span class="mi">16</span>  <span class="p">}</span>
+<span class="mi">17</span>    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">sum</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">18</span>  <span class="o">&lt;</span><span class="sr">/section</span><span class="err">&gt;
+</span><span class="mi">19</span>  
+<span class="mi">20</span>  <span class="kd">let</span> <span class="nx">Eg4</span> <span class="o">=</span> <span class="nx">Xeg4</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">sum</span><span class="p">:</span> <span class="nx">a</span><span class="p">})).</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg4</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Then we will get a Function of numbers, <code class="highlighter-rouge">Xstream&lt;Array&lt;number&gt;&gt;</code></p>
+
+<p>You’ll know what to do next, just map the <code class="highlighter-rouge">sum</code> function to the functor, yay.</p>
+
+<p><div id="eg4"></div></p>
+
+<h1 id="example-5-asynchronous">Example 5: Asynchronous</h1>
+
+<p>You know how complicated handling Async Action for react if you come from redux/saga or so, it’s too verbose to be reason about. But since we have Monad instance of <code class="highlighter-rouge">Xstream</code>, async is now just as easy as a <code class="highlighter-rouge">flatMap</code></p>
+
+<p>To give you a brief idea of how it works, I’ll implement a BMI Calculator, in just 30 lines of code. Imagine how many lines of code will it be if you involve redux and saga to handle async action.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">bmiCalc</code> function is a regular function that returns a Promise. It just send request to an API and fulfill the result to Promise</li>
+  <li>xweight and xheight will turn events into Xstream</li>
+  <li>promiseXstream will lift <code class="highlighter-rouge">bmiCalc</code> to Xstream and apply to xweight and xheight, then it will return a <code class="highlighter-rouge">Xstream&lt;Promise&lt;object&gt;&gt;</code></li>
+</ul>
+
+<p>What should we do with the promise?</p>
+
+<p>since you can simply create a <code class="highlighter-rouge">Xstream</code> from Promise with <code class="highlighter-rouge">fromPromise</code> method, flatMap it to <code class="highlighter-rouge">promiseXstream</code> will give us a regular <code class="highlighter-rouge">Xstream&lt;object&gt;</code> type.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code> <span class="mi">1</span>    <span class="kd">function</span> <span class="nx">bmiCalc</span><span class="p">(</span><span class="nx">weight</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+ <span class="mi">2</span>      <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="err">`</span><span class="nx">https</span><span class="err">:</span><span class="c1">//gist.github.com.ru/jcouyang/edc3d175769e893b39e6c5be12a8526f?height=${height}&amp;weight=${weight}`)</span>
+ <span class="mi">3</span>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">resp</span> <span class="o">=&gt;</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+ <span class="mi">4</span>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">json</span> <span class="o">=&gt;</span> <span class="nx">json</span><span class="p">.</span><span class="nx">result</span><span class="p">)</span>
+ <span class="mi">5</span>    <span class="p">}</span>
+ <span class="mi">6</span>  
+ <span class="mi">7</span>    <span class="kd">let</span> <span class="nx">xweigth</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">,</span> <span class="s1">'70'</span><span class="p">)</span> <span class="c1">// &lt;-</span>
+ <span class="mi">8</span>    <span class="kd">let</span> <span class="nx">xheight</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="s1">'height'</span><span class="p">,</span> <span class="s1">'175'</span><span class="p">)</span> <span class="c1">// &lt;-</span>
+ <span class="mi">9</span>  
+<span class="mi">10</span>    <span class="kd">let</span> <span class="nx">promiseXstream</span> <span class="o">=</span> <span class="nx">lift2</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="p">,</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">Promise</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="nx">bmiCalc</span><span class="p">)(</span> <span class="c1">// &lt;-</span>
+<span class="mi">11</span>      <span class="nx">xweigth</span><span class="p">,</span>
+<span class="mi">12</span>      <span class="nx">xheight</span>
+<span class="mi">13</span>    <span class="p">)</span>
+<span class="mi">14</span>  
+<span class="mi">15</span>    <span class="kd">let</span> <span class="nx">Xeg5</span> <span class="o">=</span> <span class="nx">FlatMap</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">,</span> <span class="nx">promiseXstream</span><span class="p">)</span> <span class="c1">// &lt;-</span>
+<span class="mi">16</span>        <span class="p">.</span><span class="nx">toFantasyX</span><span class="p">()</span>
+<span class="mi">17</span>  
+<span class="mi">18</span>    <span class="kd">let</span> <span class="nx">ViewEg5</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="p">(</span>
+<span class="mi">19</span>        <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+<span class="mi">20</span>        <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Height</span><span class="err">:</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">height</span><span class="p">}</span> <span class="nx">cm</span>
+<span class="mi">21</span>        <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"range"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"height"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">min</span><span class="o">=</span><span class="s2">"150"</span> <span class="nx">max</span><span class="o">=</span><span class="s2">"200"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">height</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span><span class="mi">22</span>        <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span><span class="mi">23</span>        <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Weight</span><span class="err">:</span> <span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">weight</span><span class="p">}</span> <span class="nx">kg</span>
+<span class="mi">24</span>        <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"range"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"weight"</span> <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="nx">min</span><span class="o">=</span><span class="s2">"40"</span> <span class="nx">max</span><span class="o">=</span><span class="s2">"100"</span> <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">weight</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span><span class="mi">25</span>        <span class="o">&lt;</span><span class="sr">/label</span><span class="err">&gt;
+</span><span class="mi">26</span>        <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">HEALTH</span><span class="err">:</span> <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">health</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">27</span>        <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">BMI</span><span class="err">:</span> <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">bmi</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span&gt;&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+<span class="mi">28</span>        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="mi">29</span>    <span class="p">)</span>
+<span class="mi">30</span>  
+<span class="mi">31</span>  <span class="kd">let</span> <span class="nx">Eg5</span> <span class="o">=</span> <span class="nx">Xeg5</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">xweigth</span><span class="p">.</span><span class="nx">toFantasyX</span><span class="p">().</span><span class="nx">map</span><span class="p">(</span><span class="nx">w</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">weight</span><span class="p">:</span><span class="nx">w</span><span class="p">})))</span>
+<span class="mi">32</span>      <span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">xheight</span><span class="p">.</span><span class="nx">toFantasyX</span><span class="p">().</span><span class="nx">map</span><span class="p">(</span><span class="nx">h</span><span class="o">=&gt;</span><span class="p">({</span><span class="na">height</span><span class="p">:</span><span class="nx">h</span><span class="p">})))</span>
+<span class="mi">33</span>      <span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg5</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><div id="eg5"></div></p>
+
+<h1 id="example-6-fold">Example 6: Fold</h1>
+
+<p>FantasyX is also “Foldable”, not official Typeclass Foldable, it fold on react state, so it’s named <code class="highlighter-rouge">foldS</code>.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">Xeg6</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="s1">'increment'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">toFantasyX</span><span class="o">&lt;</span><span class="p">{</span><span class="na">count</span><span class="p">:</span><span class="nx">number</span><span class="p">}</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">foldS</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="na">count</span><span class="p">:</span> <span class="p">(</span><span class="nx">acc</span><span class="p">.</span><span class="nx">count</span><span class="o">||</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nx">a</span> <span class="p">}})</span>
+
+<span class="kd">let</span> <span class="nx">ViewEg6</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">count</span> <span class="o">||</span> <span class="mi">0</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"increment"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"+1"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">e</span><span class="o">=&gt;</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)}</span> <span class="sr">/</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>
+<span class="kd">let</span> <span class="nx">Eg6</span> <span class="o">=</span> <span class="nx">Xeg6</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg6</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>With <code class="highlighter-rouge">foldS</code> and <code class="highlighter-rouge">toStream</code>, it’s very easy to unit test <code class="highlighter-rouge">FantasyX</code></p>
+
+<p><div id="eg6"></div></p>
+
+<h1 id="example-7-merge">Example 7: Merge</h1>
+
+<p>Two FantasyX can be merged into one, with both behavior of those two.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">Xeg7</span> <span class="o">=</span> <span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="s1">'decrement'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">toFantasyX</span><span class="o">&lt;</span><span class="p">{</span><span class="na">count</span><span class="p">:</span><span class="nx">number</span><span class="p">}</span><span class="o">&gt;</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">foldS</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="na">count</span><span class="p">:</span> <span class="p">(</span><span class="nx">acc</span><span class="p">.</span><span class="nx">count</span><span class="o">||</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nx">a</span> <span class="p">}})</span>
+
+  <span class="kd">let</span> <span class="nx">ViewEg7</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"decrement"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"-"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">count</span> <span class="o">||</span> <span class="mi">0</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">name</span><span class="o">=</span><span class="s2">"increment"</span> <span class="nx">value</span><span class="o">=</span><span class="s2">"+"</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>
+  <span class="kd">let</span> <span class="nx">Eg7</span> <span class="o">=</span> <span class="nx">Xeg7</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">Xeg6</span><span class="p">).</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg7</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><div id="eg7"></div></p>
+
+<h1 id="example-8-fold-multiple-buttons">Example 8: Fold multiple buttons</h1>
+
+<p>Simply switch on different actions and fold.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">actions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'-1'</span><span class="p">,</span> <span class="s1">'+1'</span><span class="p">,</span> <span class="s1">'reset'</span><span class="p">]</span>
+<span class="kd">let</span> <span class="nx">Xeg8</span> <span class="o">=</span>
+  <span class="nx">actions</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">action</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="nx">action</span><span class="p">).</span><span class="nx">toFantasyX</span><span class="o">&lt;</span><span class="p">{</span><span class="na">count</span><span class="p">:</span><span class="nx">number</span><span class="p">}</span><span class="o">&gt;</span><span class="p">())</span>
+    <span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">acc</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">foldS</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">acc</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="nx">acc</span><span class="p">.</span><span class="nx">count</span> <span class="o">||</span> <span class="mi">0</span>
+      <span class="k">switch</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="s1">'-1'</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="na">count</span><span class="p">:</span> <span class="nx">acc</span><span class="p">.</span><span class="nx">count</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+      <span class="k">case</span> <span class="s1">'+1'</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="na">count</span><span class="p">:</span> <span class="nx">acc</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span><span class="mi">1</span><span class="p">}</span>
+      <span class="k">case</span> <span class="s1">'reset'</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="na">count</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+      <span class="nl">default</span><span class="p">:</span> <span class="nx">acc</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="kd">let</span> <span class="nx">ViewEg8</span> <span class="o">=</span> <span class="nx">props</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"result"</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/span</span><span class="err">&gt;
+</span>  <span class="p">{</span><span class="nx">actions</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">action</span><span class="o">=&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"button"</span> <span class="nx">name</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">}</span> <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">}</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">actions</span><span class="p">.</span><span class="nx">fromEvent</span><span class="p">}</span> <span class="sr">/&gt;</span><span class="se">)</span><span class="err">}
+</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>
+<span class="kd">let</span> <span class="nx">Eg8</span> <span class="o">=</span> <span class="nx">Xeg8</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ViewEg8</span><span class="p">)</span>
+
+<span class="nx">xmount</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">Eg8</span><span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'eg8'</span><span class="p">)</span> <span class="p">)</span>
+</code></pre>
+</div>
+
+<p><div id="eg8"></div></p>
+
+<script src="example.js"></script>
+
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'jcouyang/react-most'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/js/main.js"></script><script src="/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
