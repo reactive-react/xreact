@@ -1,575 +1,407 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<!-- 2017-10-20 Fri 21:29 -->
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Typeclass in TypeScript</title>
-<meta name="generator" content="Org mode" />
-<meta name="author" content="欧阳继超" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
-    padding: 3px;
-    border: 1px solid black;
-  }
-  pre.src:hover:before { display: inline;}
-  /* Languages per Org manual */
-  pre.src-asymptote:before { content: 'Asymptote'; }
-  pre.src-awk:before { content: 'Awk'; }
-  pre.src-C:before { content: 'C'; }
-  /* pre.src-C++ doesn't work in CSS */
-  pre.src-clojure:before { content: 'Clojure'; }
-  pre.src-css:before { content: 'CSS'; }
-  pre.src-D:before { content: 'D'; }
-  pre.src-ditaa:before { content: 'ditaa'; }
-  pre.src-dot:before { content: 'Graphviz'; }
-  pre.src-calc:before { content: 'Emacs Calc'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-fortran:before { content: 'Fortran'; }
-  pre.src-gnuplot:before { content: 'gnuplot'; }
-  pre.src-haskell:before { content: 'Haskell'; }
-  pre.src-hledger:before { content: 'hledger'; }
-  pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
-  pre.src-latex:before { content: 'LaTeX'; }
-  pre.src-ledger:before { content: 'Ledger'; }
-  pre.src-lisp:before { content: 'Lisp'; }
-  pre.src-lilypond:before { content: 'Lilypond'; }
-  pre.src-lua:before { content: 'Lua'; }
-  pre.src-matlab:before { content: 'MATLAB'; }
-  pre.src-mscgen:before { content: 'Mscgen'; }
-  pre.src-ocaml:before { content: 'Objective Caml'; }
-  pre.src-octave:before { content: 'Octave'; }
-  pre.src-org:before { content: 'Org mode'; }
-  pre.src-oz:before { content: 'OZ'; }
-  pre.src-plantuml:before { content: 'Plantuml'; }
-  pre.src-processing:before { content: 'Processing.js'; }
-  pre.src-python:before { content: 'Python'; }
-  pre.src-R:before { content: 'R'; }
-  pre.src-ruby:before { content: 'Ruby'; }
-  pre.src-sass:before { content: 'Sass'; }
-  pre.src-scheme:before { content: 'Scheme'; }
-  pre.src-screen:before { content: 'Gnu Screen'; }
-  pre.src-sed:before { content: 'Sed'; }
-  pre.src-sh:before { content: 'shell'; }
-  pre.src-sql:before { content: 'SQL'; }
-  pre.src-sqlite:before { content: 'SQLite'; }
-  /* additional languages in org.el's org-babel-load-languages alist */
-  pre.src-forth:before { content: 'Forth'; }
-  pre.src-io:before { content: 'IO'; }
-  pre.src-J:before { content: 'J'; }
-  pre.src-makefile:before { content: 'Makefile'; }
-  pre.src-maxima:before { content: 'Maxima'; }
-  pre.src-perl:before { content: 'Perl'; }
-  pre.src-picolisp:before { content: 'Pico Lisp'; }
-  pre.src-scala:before { content: 'Scala'; }
-  pre.src-shell:before { content: 'Shell Script'; }
-  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
-  /* additional language identifiers per "defun org-babel-execute"
-       in ob-*.el */
-  pre.src-cpp:before  { content: 'C++'; }
-  pre.src-abc:before  { content: 'ABC'; }
-  pre.src-coq:before  { content: 'Coq'; }
-  pre.src-groovy:before  { content: 'Groovy'; }
-  /* additional language identifiers from org-babel-shell-names in
-     ob-shell.el: ob-shell is the only babel language using a lambda to put
-     the execution function name together. */
-  pre.src-bash:before  { content: 'bash'; }
-  pre.src-csh:before  { content: 'csh'; }
-  pre.src-ash:before  { content: 'ash'; }
-  pre.src-dash:before  { content: 'dash'; }
-  pre.src-ksh:before  { content: 'ksh'; }
-  pre.src-mksh:before  { content: 'mksh'; }
-  pre.src-posh:before  { content: 'posh'; }
-  /* Additional Emacs modes also supported by the LaTeX listings package */
-  pre.src-ada:before { content: 'Ada'; }
-  pre.src-asm:before { content: 'Assembler'; }
-  pre.src-caml:before { content: 'Caml'; }
-  pre.src-delphi:before { content: 'Delphi'; }
-  pre.src-html:before { content: 'HTML'; }
-  pre.src-idl:before { content: 'IDL'; }
-  pre.src-mercury:before { content: 'Mercury'; }
-  pre.src-metapost:before { content: 'MetaPost'; }
-  pre.src-modula-2:before { content: 'Modula-2'; }
-  pre.src-pascal:before { content: 'Pascal'; }
-  pre.src-ps:before { content: 'PostScript'; }
-  pre.src-prolog:before { content: 'Prolog'; }
-  pre.src-simula:before { content: 'Simula'; }
-  pre.src-tcl:before { content: 'tcl'; }
-  pre.src-tex:before { content: 'TeX'; }
-  pre.src-plain-tex:before { content: 'Plain TeX'; }
-  pre.src-verilog:before { content: 'Verilog'; }
-  pre.src-vhdl:before { content: 'VHDL'; }
-  pre.src-xml:before { content: 'XML'; }
-  pre.src-nxml:before { content: 'XML'; }
-  /* add a generic configuration mode; LaTeX export needs an additional
-     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
-  pre.src-conf:before { content: 'Configuration File'; }
+<html><head><title>xReact</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jichao Ouyang" /><meta name="description" content="Reactive x React = xReact" /><meta name="og:image" content="/img/poster.png" /><meta name="og:title" content="xReact" /><meta name="og:site_name" content="xReact" /><meta name="og:url" content="https://xreact.oyanglul.us/" /><meta name="og:type" content="website" /><meta name="og:description" content="Reactive x React = xReact" /><link rel="icon" type="image/png" href="/img/favicon.png" /><meta name="twitter:title" content="xReact" /><meta name="twitter:image" content="https://xreact.oyanglul.us/img/poster.png" /><meta name="twitter:description" content="Reactive x React = xReact" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@oyanglulu" /><link rel="icon" type="image/png" sizes="16x16" href="/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/highlight/styles/default.css" /><link rel="stylesheet" href="/css/style.css" /><link rel="stylesheet" href="/css/palette.css" /><link rel="stylesheet" href="/css/codemirror.css" /><link rel="stylesheet" href="/css/kazari-style.css" /><link rel="stylesheet" href="/css/monokai.css" /><link rel="stylesheet" href="/css/override.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/" class="brand"><div class="brand-wrapper"><span>xReact</span></div></a></li><li><a href="/FRP-Best-Practice.html" class="">Functional Best Practice</a></li><li><a href="/Get-Started.html" class="">Quick Start</a></li><li><a href="/examples/fantasy.html" class="">Fantasy</a></li><li><a href="/typeclass.html" class=" active ">Typeclass</a></li><li><a href="/FAQ.html" class="">FAQ</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/reactive-react/xreact"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('xReact Reactive x React = xReact');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('xReact Reactive x React = xReact');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="reactive-react" data-github-repo="xreact"><div class="content-wrapper"><section><p>Typeclass is kind of FP design pattern, you may have seen lot of typeclass in Haskell.</p>
 
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara { display: inline; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
-  /*]]>*/-->
-</style>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
+<p>In OO, you may usually create a class for a data, and define some methods in the class to operate on data inside.</p>
 
-Copyright (C) 2012-2017 Free Software Foundation, Inc.
+<p>But in FP we would more likely to separate definition of data and definition of operation.</p>
 
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+<p>For Example if we have a data type <code class="highlighter-rouge">Xstream</code>, we just create the data type</p>
 
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
-</head>
-<body>
-<div id="content">
-<h1 class="title">Typeclass in TypeScript</h1>
----
-layout: docs
-title:  Typeclass
-section: en
-position: 6
----
-
-<p>
-Typeclass is kind of FP design pattern, you may see lot of typeclass in Haskell.
-</p>
-
-<p>
-In OO, you may usually create a class for a data, and define some methods in the class to operate on data inside.
-</p>
-
-<p>
-But in FP we would more likely to separate definition of data and definition of operation.
-</p>
-
-<p>
-For Example if we have a data type <code>Xstream</code>, we just create the data type
-</p>
-
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> Xstream&lt;T&gt; {
-  value: T
-  constructor(v: T) {
-    <span style="color: #8be9fd;">this</span>.value = v
-  }
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">T</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="na">v</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">v</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-In OO, if we need Xstream can be map, we probably need it to implement a interface e.g. <code>Mapable</code>
-</p>
+<p>In OO, if we need Xstream can be map, we probably need it to implement a interface e.g. <code class="highlighter-rouge">Mapable</code></p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> Mapable&lt;A&gt; {
-  map&lt;B&gt;(f: (v:A)=&gt;B): Mapable&lt;B&gt;
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">v</span><span class="p">:</span><span class="nx">A</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">B</span><span class="p">):</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-Now we need to <b>Open</b> class <code>Xstream</code> to implement Mapable, add a new method in.
-</p>
+<p>Now we need to <strong>Open</strong> class <code class="highlighter-rouge">Xstream</code> to implement Mapable, add a new method in.</p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> Xstream&lt;T&gt; <span style="color: #ff79c6; font-weight: bold;">implements</span> Mapable&lt;T&gt; {
-  value: T
-  constructor(v: T) {
-    <span style="color: #8be9fd;">this</span>.value = v
-  }
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="kr">implements</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">T</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="na">v</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">v</span>
+  <span class="p">}</span>
 
-  map&lt;B&gt;(f: (v: T) =&gt; B): Mapable&lt;B&gt; {
-    <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(f(<span style="color: #8be9fd;">this</span>.value))
-  }
-}
-</pre>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">v</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">):</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="nx">f</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-What if we need to implement another interface, says Foldable, we need to open it again
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> Xstream&lt;T&gt; <span style="color: #ff79c6; font-weight: bold;">implements</span> Mapable&lt;T&gt;, Foldable&lt;T&gt; {
-   ...
-  fold&lt;B&gt;(f:(acc:B,v:T)=&gt;B, base:B):B {
-    <span style="color: #ff79c6; font-weight: bold;">return</span> f(<span style="color: #8be9fd;">this</span>.value, base)
-  }
-}
-</pre>
+<p>What if we need to implement another interface, says Foldable, we need to open it again</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="kr">implements</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">Foldable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+   <span class="p">...</span>
+  <span class="nx">fold</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:(</span><span class="na">acc</span><span class="p">:</span><span class="nx">B</span><span class="p">,</span><span class="na">v</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">B</span><span class="p">,</span> <span class="na">base</span><span class="p">:</span><span class="nx">B</span><span class="p">):</span><span class="nx">B</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">base</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-Now you may see the problem, OO class is not open for adding new behavior, while FP typeclass reverse this situation.
-</p>
-<div id="outline-container-org4417893" class="outline-2">
-<h2 id="org4417893">Functor</h2>
-<div class="outline-text-2" id="text-org4417893">
-<p>
-A Mapable interface in FP is called Functor typeclass, but in FP the relation is reverse, interface should define on datatype
-</p>
+<p>Now you may see the problem, OO class is not open for adding new behavior, while FP typeclass reverse this situation.</p>
 
-<p>
-instead of
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> Xstream&lt;T&gt; <span style="color: #ff79c6; font-weight: bold;">implements</span> Mapable&lt;T&gt; {...}
-</pre>
+<h1 id="functor">Functor</h1>
+
+<p>A Mapable interface in FP is called Functor typeclass, but in FP the relation is reverse, interface should define on datatype</p>
+
+<p>instead of</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="kr">implements</span> <span class="nx">Mapable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{...}</span>
+</code></pre>
 </div>
 
-<p>
-typeclass reverse the order of class and interface, so we have a new class that just implement the Functor instance of Xstream
-</p>
+<p>typeclass reverse the order of class and interface, so we have a new class that just implement the Functor instance of Xstream</p>
 
-<p>
-here's the Functor typeclass
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> Functor&lt;F&gt; {
-  map&lt;A, B&gt;(f: (a: A) =&gt; B, fa: F&lt;A&gt;): F&lt;B&gt;
-}
-</pre>
+<p>here’s the Functor typeclass</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">F</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">F</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">F</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> XstreamFunctor implement Functor&lt;Xstream&lt;any&gt;&gt; {
-  map&lt;A, B&gt;(f: (v: A) =&gt; B, fa: Xstream&lt;A&gt;): Xstream&lt;B&gt; {
-    <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(f(<span style="color: #8be9fd;">this</span>.value))
-  }
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">XstreamFunctor</span> <span class="nx">implement</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">v</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="nx">f</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-And we can use the map function from Functor, instead of from Xstream itself
-</p>
+<p>And we can use the map function from Functor, instead of from Xstream itself</p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">XstreamFunctor.map</span>((a)=&gt;a+1, <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(1))
-</pre>
-</div>
-</div>
-<div id="outline-container-org3c738eb" class="outline-3">
-<h3 id="org3c738eb">Higher Kind Type</h3>
-<div class="outline-text-3" id="text-org3c738eb">
-<p>
-The above code won't compile in typescript, because there's no Higher Kind Type(HKT) in Typescript, so in
-</p>
-
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> Functor&lt;F&gt; {
-  map&lt;A, B&gt;(f: (a: A) =&gt; B, fa: F&lt;A&gt;): F&lt;B&gt;
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="nx">XstreamFunctor</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">a</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre>
 </div>
 
-<p>
-<code>F</code> is a HKT, because <code>F</code> is not a specify type, <code>F&lt;number&gt;</code> is a type, <code>F</code> is something higher than type <code>F&lt;number&gt;</code>
-</p>
+<h2 id="higher-kind-type">Higher Kind Type</h2>
 
-<p>
-similar to Higher Order Function
-</p>
+<p>The above code won’t compile in typescript, because there’s no Higher Kind Type(HKT) in Typescript, so in</p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">a</span>(<span style="color: #f8f8f2;">b</span>){
-  <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ff79c6; font-weight: bold;">function</span>(){
-     b + 1
-  }
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">F</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">F</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">F</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-<code>a</code> is a higher order function, <code>a(1)</code> is a normal function.
-</p>
+<p><code class="highlighter-rouge">F</code> is a HKT, because <code class="highlighter-rouge">F</code> is not a specify type, <code class="highlighter-rouge">F&lt;number&gt;</code> is a type, <code class="highlighter-rouge">F</code> is something higher than type <code class="highlighter-rouge">F&lt;number&gt;</code></p>
 
-<p>
-Fortunately we can mimic HKT in Typescript with literal type, inspired by <a href="https://github.com/gcanti/fp-ts">https://github.com/gcanti/fp-ts</a>
-</p>
+<p>similar to Higher Order Function</p>
 
-<p>
-We'll need a interface <code>_&lt;A&gt;</code> to store all the HKT as a Type Dictionary
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> _&lt;A&gt; { }
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">a</span><span class="p">(</span><span class="nx">b</span><span class="p">){</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
+     <span class="nx">b</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-And <code>HKT</code> of all HKT type keys
-</p>
-<div class="org-src-container">
-<pre class="src src-js">type HKT = keyof _&lt;any&gt;
-</pre>
+<p><code class="highlighter-rouge">a</code> is a higher order function, <code class="highlighter-rouge">a(1)</code> is a normal function.</p>
+
+<p>Fortunately we can mimic HKT in Typescript with literal type, inspired by <a href="https://github.com/gcanti/fp-ts">https://github.com/gcanti/fp-ts</a></p>
+
+<p>We’ll need a interface <code class="highlighter-rouge">_&lt;A&gt;</code> to store all the HKT as a Type Dictionary</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">_</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span> <span class="p">{</span> <span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-and <code>$&lt;F,A&gt;</code> type to find the HKT in dictionary
-</p>
-<div class="org-src-container">
-<pre class="src src-js">type $&lt;F <span style="color: #ff79c6; font-weight: bold;">extends</span> HKT, A&gt; = _&lt;A&gt;[F]
-</pre>
+<p>And <code class="highlighter-rouge">HKT</code> of all HKT type keys</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">HKT</span> <span class="o">=</span> <span class="nx">keyof</span> <span class="nx">_</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span>
+</code></pre>
 </div>
 
-<p>
-Welcome to <b>Type Level Programming</b>, all above is at type level, which will never compile to js and effect runtime
-</p>
+<p>and <code class="highlighter-rouge">$&lt;F,A&gt;</code> type to find the HKT in dictionary</p>
 
-<p>
-Let's try implement Functor typeclass again
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> Functor&lt;F <span style="color: #ff79c6; font-weight: bold;">extends</span> HKT&gt; {
-  map&lt;A, B&gt;(f: (a: A) =&gt; B, fa: $&lt;F, A&gt;): $&lt;F, B&gt;
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">HKT</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nx">_</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">[</span><span class="nx">F</span><span class="p">]</span>
+</code></pre>
 </div>
 
-<p>
-We can implement Xstream's Functor instance right now
-</p>
+<p>Welcome to <strong>Type Level Programming</strong>, all above is at type level, which will never compile to js and effect runtime</p>
 
-<ol class="org-ol">
-<li>Declare <code>Xstream</code> as HKT, with key <code>"Xstream"</code></li>
+<p>Let’s try implement Functor typeclass again</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">HKT</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>We can implement Xstream’s Functor instance right now</p>
+
+<ol>
+  <li>Declare <code class="highlighter-rouge">Xstream</code> as HKT, with key <code class="highlighter-rouge">"Xstream"</code></li>
 </ol>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">interface</span> _&lt;A&gt; {
-  <span style="color: #f1fa8c;">"Xstream"</span>: Xstream&lt;A&gt;
-}
-</pre>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">_</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="s2">"Xstream"</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<ol class="org-ol">
-<li>implements <code>Functor&lt;"Xstream"&gt;</code>, notice that although <code>"Xstream"</code> looks like</li>
+<ol>
+  <li>implements <code class="highlighter-rouge">Functor&lt;"Xstream"&gt;</code>, notice that although <code class="highlighter-rouge">"Xstream"</code> looks like</li>
 </ol>
-<p>
-a string, but actually it's literal string type. So it's still type safe, any other string
-place here will cause compiler error.
-</p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">class</span> XstreamFunctor <span style="color: #ff79c6; font-weight: bold;">implements</span> Functor&lt;<span style="color: #f1fa8c;">"Xstream"</span>&gt; {
-  map&lt;A, B&gt;(f: (v: A) =&gt; B, fa: Xstream&lt;A&gt;): Xstream&lt;B&gt; {
-    <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(f(fa.value))
-  }
-}
-</pre>
-</div>
-</div>
+<p>a string, but actually it’s literal string type. So it’s still type safe, any other string place here will cause compiler error.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">XstreamFunctor</span> <span class="kr">implements</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">map</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">v</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="nx">f</span><span class="p">(</span><span class="nx">fa</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<div id="outline-container-org944e43d" class="outline-3">
-<h3 id="org944e43d">Polymorphism</h3>
-<div class="outline-text-3" id="text-org944e43d">
-<p>
-But, what's the point, we move <code>map</code> function from <code>Xstream</code> to another class, every time we have to
-create <code>XstreamFunctor</code> 's instance to use <code>map</code>
-</p>
+<h2 id="polymorphism">Polymorphism</h2>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">XstreamFunctor.map</span>(a=&gt;a+1, <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(1))
-</pre>
+<p>But, what’s the point, we move <code class="highlighter-rouge">map</code> function from <code class="highlighter-rouge">Xstream</code> to another class, every time we have to create <code class="highlighter-rouge">XstreamFunctor</code> ‘s instance to use <code class="highlighter-rouge">map</code></p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="nx">XstreamFunctor</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre>
 </div>
 
-<p>
-what about polymorphism, what if there's another functor instance <code>Ystream</code>.
-</p>
+<p>what about polymorphism, what if there’s another functor instance <code class="highlighter-rouge">Ystream</code>.</p>
 
-<p>
-How can we use just one <code>map</code> that can apply to any instance of Functor?
-</p>
+<p>How can we use just one <code class="highlighter-rouge">map</code> that can apply to any instance of Functor?</p>
 
-<p>
-Ideally we should have a <code>map</code> function such as:
-</p>
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">map</span>&lt;F <span style="color: #ff79c6; font-weight: bold;">extends</span> FunctorInstance, A, B&gt;(f: (v: A) =&gt; B, fa: $&lt;F, A&gt;): $&lt;F, B&gt; {
-  <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Functor</span>&lt;F&gt;().map(f, fa)
-}
-</pre>
+<p>Ideally we should have a <code class="highlighter-rouge">map</code> function such as:</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">map</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">FunctorInstance</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="err">:</span> <span class="p">(</span><span class="nx">v</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">F</span><span class="o">&gt;</span><span class="p">().</span><span class="nx">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-But Typeclass type system is not good enough to figure out <code>new Functor&lt;F&gt;</code>, Typescript can't find class
-<code>XstreamFunctor</code> class from <code>Functor&lt;"Xstream"&gt;</code>. it break the gap between type and value. In Scala, <code>implicit</code> will
-help you find a value from a type. but how can we find a value from a type?
-</p>
+<p>But Typeclass type system is not good enough to figure out <code class="highlighter-rouge">new Functor&lt;F&gt;</code>, Typescript can’t find class <code class="highlighter-rouge">XstreamFunctor</code> class from <code class="highlighter-rouge">Functor&lt;"Xstream"&gt;</code>. it break the gap between type and value. In Scala, <code class="highlighter-rouge">implicit</code> will help you find a value from a type. but how can we find a value from a type?</p>
 
-<p>
-similar to <code>_</code> type, we need a dictionary
-</p>
-<div class="org-src-container">
-<pre class="src src-js">namespace Functor {
-  <span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">Xstream</span> = <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">XstreamFunctor</span>
-  <span style="color: #ff79c6; font-weight: bold;">const</span> <span style="color: #f8f8f2;">Ystream</span> = <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">YstreamFunctor</span>
-}
-</pre>
+<p>similar to <code class="highlighter-rouge">_</code> type, we need a dictionary</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">namespace</span> <span class="nx">Functor</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">Xstream</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XstreamFunctor</span>
+  <span class="kr">const</span> <span class="nx">Ystream</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YstreamFunctor</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-then we can invoke different type of stream by
-</p>
-<div class="org-src-container">
-<pre class="src src-js">Functor[<span style="color: #f1fa8c;">'Xstream'</span>].map(a=&gt;a+1, <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Xstream</span>(1))
-Functor[<span style="color: #f1fa8c;">'Ystream'</span>].map(a=&gt;a+1, <span style="color: #ff79c6; font-weight: bold;">new</span> <span style="color: #bd93f9;">Ystream</span>(1))
-</pre>
+<p>then we can invoke different type of stream by</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">Functor</span><span class="p">[</span><span class="s1">'Xstream'</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nx">Functor</span><span class="p">[</span><span class="s1">'Ystream'</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Ystream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre>
 </div>
 
-<p>
-but 'Xstream' is string value here, not type. how can we convert a string type to a value?
-</p>
+<p>but ‘Xstream’ is string value here, not type. how can we convert a string type to a value?</p>
 
-<p>
-before that, let's continue implement <code>map</code> and see what's missing
-</p>
+<p>before that, let’s continue implement <code class="highlighter-rouge">map</code> and see what’s missing</p>
 
-<div class="org-src-container">
-<pre class="src src-js">type FunctorInstance = keyof <span style="color: #ff79c6; font-weight: bold;">typeof</span> Functor
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">FunctorInstance</span> <span class="o">=</span> <span class="nx">keyof</span> <span class="k">typeof</span> <span class="nx">Functor</span>
+</code></pre>
 </div>
 
-<p>
-In this case <code>FunctorInstance</code> is type <code>'Xstream' | 'Ystream'</code>
-</p>
+<p>In this case <code class="highlighter-rouge">FunctorInstance</code> is type <code class="highlighter-rouge">'Xstream' | 'Ystream'</code></p>
 
-<div class="org-src-container">
-<pre class="src src-js"><span style="color: #ff79c6; font-weight: bold;">function</span> <span style="color: #50fa7b; font-weight: bold;">map</span>&lt;F <span style="color: #ff79c6; font-weight: bold;">extends</span> FunctorInstance, A, B&gt;(f: (v: A) =&gt; B, fa: $&lt;F, A&gt;): $&lt;F, B&gt; {
-  <span style="color: #ff79c6; font-weight: bold;">return</span> Functor[F].map(f, fa)
-}
-</pre>
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">map</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">FunctorInstance</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="err">:</span> <span class="p">(</span><span class="nx">v</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">Functor</span><span class="p">[</span><span class="nx">F</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>
-It still won't compile. <code>Functor[F]</code> won't work, as we can't convert string literal type <code>F</code> to a string value in TypeScript.
-</p>
+<p>It still won’t compile. <code class="highlighter-rouge">Functor[F]</code> won’t work, as we can’t convert string literal type <code class="highlighter-rouge">F</code> to a string value in TypeScript.</p>
 
-<p>
-It turn out to be impossible in TypeScript if we think about it. All Type will be wipe out while compile to JS.
-</p>
+<p>It turn out to be impossible in TypeScript if we think about it. All Type will be wipe out while compile to JS.</p>
 
-<p>
-There's no way you can get the information of type <code>F</code> in JS.
-</p>
+<p>There’s no way you can get the information of type <code class="highlighter-rouge">F</code> in JS.</p>
 
-<p>
-If we think in another way, it is possible to get a type metadata from instance <code>fa</code> though.
-</p>
+<p>If we think in another way, it is possible to get a type metadata from instance <code class="highlighter-rouge">fa</code> though.</p>
+
+<p>For example it’s easy to get the name of class of <code class="highlighter-rouge">fa</code>, the constructor name should be <code class="highlighter-rouge">'Xstream'</code></p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">map</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">FunctorInstance</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="err">:</span> <span class="p">(</span><span class="nx">v</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">Functor</span><span class="p">[</span><span class="nx">fa</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="nx">as</span> <span class="nx">F</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
 </div>
+
+<p>Sadly TypeScript can’t compile this either. <code class="highlighter-rouge">Functor[fa.constructor.name as F]</code> could be <code class="highlighter-rouge">XstreamFunctor</code> or <code class="highlighter-rouge">YstreamFunctor</code>, <code class="highlighter-rouge">fa</code> could be <code class="highlighter-rouge">Xstream</code> or <code class="highlighter-rouge">Ystream</code>, the compiler though it could be possible that <code class="highlighter-rouge">Functor[fa.constructor.name as F]</code> is <code class="highlighter-rouge">XstreamFunctor</code> and <code class="highlighter-rouge">fa</code> is <code class="highlighter-rouge">Ystream</code></p>
+
+<p>since we are sure that fa is one of <code class="highlighter-rouge">Xstream</code> and <code class="highlighter-rouge">Ystream</code>, the dictionary should definitely find the right map for the right type. We could very hacky just turn it to JS and skip stupid TypeScript check.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">map</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">FunctorInstance</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="err">:</span> <span class="p">(</span><span class="nx">v</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="nx">Functor</span><span class="p">[</span><span class="nx">fa</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="nx">as</span> <span class="nx">F</span><span class="p">]).</span><span class="nx">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
+
+<p>Now let us try the polymorphic map on any functor</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">map</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nx">map</span><span class="o">&lt;</span><span class="s2">"Ystream"</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span><span class="nx">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Ystream</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre>
 </div>
+
+<p>Everything works fine.</p>
+
+<p>But the code won’t work if we minify it. you should already guess that when the code is minify, constructor name will not necessary be <code class="highlighter-rouge">Xstream</code>, it could be any simple letters.</p>
+
+<h2 id="reflect-metadata">Reflect Metadata</h2>
+
+<p>One of the proper solution would be tag the data type some meta information using <a href="https://github.com/rbuckton/reflect-metadata">Reflect Metadata</a>, a ECMA proposal not sure what stage it currently is, but anyway it’s easy to shim.</p>
+
+<p>I just create two functions</p>
+
+<ul>
+  <li><code class="highlighter-rouge">datatype</code> for tagging constructor as some kind of data type.</li>
+  <li><code class="highlighter-rouge">kind</code> to fetch the tag from a instance</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">datatype</span><span class="p">(</span><span class="nx">name</span><span class="err">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">constructor</span><span class="err">:</span> <span class="nb">Function</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">Reflect</span><span class="p">.</span><span class="nx">defineMetadata</span><span class="p">(</span><span class="s1">'design:type'</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">constructor</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">kind</span><span class="p">(</span><span class="na">target</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">Reflect</span><span class="p">.</span><span class="nx">getMetadata</span><span class="p">(</span><span class="s1">'design:type'</span><span class="p">,</span> <span class="nx">target</span><span class="p">.</span><span class="nx">constructor</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
 </div>
-<div id="postamble" class="status">
-<p class="date">Date: 2017-09-09 Sat 00:00</p>
-<p class="author">Author: 欧阳继超</p>
-<p class="date">Created: 2017-10-20 Fri 21:29</p>
-<p class="validation"></p>
+
+<p>Tagging Xstream</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">datatype</span><span class="p">(</span><span class="s1">'Xstream'</span><span class="p">)(</span><span class="nx">Xstream</span><span class="p">)</span>
+</code></pre>
 </div>
-</body>
-</html>
+
+<p>or using decorator syntax when declare class</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="err">@</span><span class="nx">datatype</span><span class="p">(</span><span class="s1">'Xstream'</span><span class="p">)</span>
+<span class="kr">class</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span> <span class="p">{...}</span>
+</code></pre>
+</div>
+
+<p>Finally, we have a proper polymorphic <code class="highlighter-rouge">map</code> for any functor instance</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">map</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">FunctorInstance</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="err">:</span> <span class="p">(</span><span class="nx">v</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="nx">Functor</span><span class="p">[</span><span class="nx">kind</span><span class="p">(</span><span class="nx">fa</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">F</span><span class="p">]).</span><span class="nx">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h1 id="cartesian">Cartesian</h1>
+
+<p>With typeclass, now we can simply add another operation for <code class="highlighter-rouge">Xstream</code>, without changing any existing code.</p>
+
+<p>The following code add a new Cartesian typeclass, which enable Xstream to be able to product.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">CartesianInstances</span> <span class="o">=</span> <span class="nx">keyof</span> <span class="k">typeof</span> <span class="nx">Cartesian</span>
+
+<span class="kr">interface</span> <span class="nx">Cartesian</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">HKT</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">product</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">fa</span><span class="p">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">,</span> <span class="na">fb</span><span class="p">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="nx">namespace</span> <span class="nx">Cartesian</span> <span class="p">{</span>
+  <span class="kr">export</span> <span class="kd">let</span> <span class="nx">Xstream</span><span class="err">:</span> <span class="nx">Cartesian</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">product</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">CartesianInstances</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">fb</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">instance</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="nx">Cartesian</span><span class="p">)[</span><span class="nx">kind</span><span class="p">(</span><span class="nx">fa</span><span class="p">)]</span>
+  <span class="k">return</span> <span class="nx">instance</span><span class="p">.</span><span class="nx">product</span><span class="p">(</span><span class="nx">fa</span><span class="p">,</span> <span class="nx">fb</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="c1">// Cartesian Xstream instance</span>
+<span class="kr">class</span> <span class="nx">XstreamCartesian</span> <span class="kr">implements</span> <span class="nx">Cartesian</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">product</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">fa</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">,</span> <span class="na">fb</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">([</span><span class="nx">fa</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">fb</span><span class="p">.</span><span class="nx">value</span><span class="p">]</span> <span class="nx">as</span> <span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">])</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">Cartesian</span><span class="p">.</span><span class="nx">Xstream</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XstreamCartesian</span>
+
+<span class="c1">// product of two Xstream</span>
+<span class="nx">product</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="c1">// =&gt; Xstream([1,2])</span>
+</code></pre>
+</div>
+
+<h1 id="apply">Apply</h1>
+
+<p>If your typeclass extends another, just simply do it, for instance Apply will need to extends Cartesian and Functor.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Apply</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">HKT</span><span class="o">&gt;</span> <span class="kr">extends</span> <span class="nx">Cartesian</span><span class="o">&lt;</span><span class="nx">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">Functor</span><span class="o">&lt;</span><span class="nx">F</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">ap</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">fab</span><span class="p">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="nx">type</span> <span class="nx">ApplyInstances</span> <span class="o">=</span> <span class="nx">keyof</span> <span class="k">typeof</span> <span class="nx">Apply</span>
+
+<span class="nx">namespace</span> <span class="nx">Apply</span> <span class="p">{</span>
+  <span class="kr">export</span> <span class="kd">let</span> <span class="nx">Xstream</span><span class="err">:</span> <span class="nx">Apply</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">ap</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">ApplyInstances</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">fab</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">(</span><span class="nx">a</span><span class="err">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">instance</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="nx">Functor</span><span class="p">)[</span><span class="nx">kind</span><span class="p">(</span><span class="nx">fab</span><span class="p">)]</span>
+  <span class="k">return</span> <span class="nx">instance</span><span class="p">.</span><span class="nx">ap</span><span class="p">(</span><span class="nx">fab</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>But don’t forget to redirect it’s function, map from Functor and product from Cartesian.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">class</span> <span class="nx">XstreamApply</span> <span class="kr">implements</span> <span class="nx">Apply</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">ap</span><span class="o">&lt;</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">(</span><span class="na">fab</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">,</span> <span class="na">fa</span><span class="p">:</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Xstream</span><span class="o">&lt;</span><span class="nx">B</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="nx">fab</span><span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="nx">fa</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span>
+  <span class="p">}</span>
+  <span class="nx">map</span> <span class="o">=</span> <span class="nx">Functor</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">map</span>
+  <span class="nx">product</span> <span class="o">=</span> <span class="nx">Cartesian</span><span class="p">.</span><span class="nx">Xstream</span><span class="p">.</span><span class="nx">product</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>One of the most best part of typeclass is, again, unlike OO class, it’s very easy to add a new function to a datatype, without change any of existing code.</p>
+
+<p>For instance we need a <code class="highlighter-rouge">ap2</code> function, you don’t need to bother changing any existing Apply or it’s instances. Just add <code class="highlighter-rouge">ap2</code> then all Apply instance will instantly work.</p>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="kr">export</span> <span class="kd">function</span> <span class="nx">ap2</span><span class="o">&lt;</span><span class="nx">F</span> <span class="kr">extends</span> <span class="nx">ApplyInstances</span><span class="p">,</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">C</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">fabc</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="p">(</span><span class="nx">a</span><span class="err">:</span> <span class="nx">A</span><span class="p">,</span> <span class="nx">b</span><span class="err">:</span> <span class="nx">B</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">C</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">fa</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">fb</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">B</span><span class="o">&gt;</span><span class="p">)</span><span class="err">:</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">C</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="na">instance</span><span class="p">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="nx">Apply</span><span class="p">[</span><span class="nx">kind</span><span class="p">(</span><span class="nx">fabc</span><span class="p">)</span> <span class="nx">as</span> <span class="nx">F</span><span class="p">]</span>
+  <span class="k">return</span> <span class="nx">instance</span><span class="p">.</span><span class="nx">ap</span><span class="p">(</span>
+    <span class="nx">instance</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span>
+      <span class="p">(</span><span class="na">f</span><span class="p">:</span> <span class="p">(</span><span class="na">a</span><span class="p">:</span> <span class="nx">A</span><span class="p">,</span> <span class="na">b</span><span class="p">:</span> <span class="nx">B</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">C</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(([</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">]:</span> <span class="p">[</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">])</span> <span class="o">=&gt;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">))</span>
+      <span class="p">,</span> <span class="nx">fabc</span><span class="p">)</span>
+    <span class="p">,</span> <span class="nx">instance</span><span class="p">.</span><span class="nx">product</span><span class="p">(</span><span class="nx">fa</span><span class="p">,</span> <span class="nx">fb</span><span class="p">)</span>
+  <span class="p">)</span> <span class="nx">as</span> <span class="nx">$</span><span class="o">&lt;</span><span class="nx">F</span><span class="p">,</span> <span class="nx">C</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<div class="language-js highlighter-rouge"><pre class="highlight"><code><span class="nx">ap2</span><span class="o">&lt;</span><span class="s2">"Xstream"</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">number</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="k">new</span> <span class="nx">Xstream</span><span class="p">((</span><span class="nx">a</span><span class="err">:</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">b</span><span class="err">:</span> <span class="nx">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">),</span>
+  <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+  <span class="k">new</span> <span class="nx">Xstream</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">// =&gt; Xstream(5)</span>
+</code></pre>
+</div>
+
+<p>More about Typeclass in TypeScript, <a href="https://github.com/reactive-react/xreact/tree/6ac7c192cfb5186a74e36593c121901cddd2225d/src/fantasy/typeclasses">check out the source code in xreact…</a></p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'jcouyang/react-most'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/js/main.js"></script><script src="/js/kazari.js"></script><script>
+$(document).ready(function() {
+	kazari.KazariPlugin().decorateCode('https://scala-evaluator-212.herokuapp.com/eval', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.S2F6YXJp.Jl2eqMfw8IakJF93PjxTbrf-8YUJgX5OoOfy5JHE8Yw', '', 'monokai')
+})
+    </script></body></html>
