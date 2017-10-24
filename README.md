@@ -25,10 +25,7 @@ yarn add xreact
 
 
 - Come from redux? :point_right: <https://xreact.oyanglul.us/Get-Started.html>
-- Come from fantasy land? :rainbow: <https://xreact.oyanglul.us/Fantasy.html>
-- Examples :point_down:
-  - <https://github.com/reactive-react/xreact/tree/master/examples>
-  - <https://xreact.oyanglul.us/Examples.html>
+- Come from fantasy land? :rainbow: <https://xreact.oyanglul.us/examples/fantasy.html>
 
 ## Documentation
 
