@@ -1,16 +1,27 @@
-docs = ./docs/**/*
+docsdir = ./docs/**/*
 browserify = ./node_modules/.bin/browserify
 watchify = ./node_modules/.bin/watchify
 uglify = ./node_modules/.bin/uglifyjs
 
+test: unit integrate
+
+build: lib/**/*.js
+
+lib/**/*.js: src/**/*.ts
+	tsc
+
 lib/%.js: src/%.ts
 	tsc
 
-all: docs/src/main/tut/examples/example.js browser
+all: test dist
 
-.PHONY: test
-test: lib/**/*.js test/*.js docs/src/main/tut/examples/example.js
+.PHONY: test build unit integrate dist docs docs/publish
+
+unit: build
 	yarn test
+
+integrate: build test/*.js docs/src/main/tut/examples/example.js
+	mocha test/test.js
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
 	$(browserify) -p [tsify -p tsconfig.examples.json] docs/src/main/tut/examples/example.tsx -o docs/src/main/tut/examples/example.js
@@ -18,24 +29,21 @@ docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
 watch/example: docs/src/main/tut/examples/example.tsx
 	$(watchify) -p [tsify -p tsconfig.examples.json] -t envify docs/src/main/tut/examples/example.tsx -dv -o docs/src/main/tut/examples/example.js
 
-browser: dist/xreact.min.js dist/xreact-most.min.js dist/xreact-rx.min.js
+dist: dist/xreact.min.js dist/xreact-most.min.js dist/xreact-rx.min.js
 
-dist/xreact.js: lib/index.js
-	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -x ./lib/xs lib/index.js -s xreact -o $@
+dist/xreact.js: lib/index.js dist/xreact-most.js dist/xreact-rx.js
+	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -x ./lib/xs $< -s xreact -o $@
 
-dist/xreact-most.js: lib/xs/most.js
-	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -r ./lib/xs lib/xs/most.js -o $@
-
-dist/xreact-rx.js: lib/xs/rx.js
-	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -r ./lib/xs lib/xs/rx.js -o $@
+dist/xreact-%.js:  lib/xs/%.js
+	env NODE_ENV=production $(browserify) -t browserify-shim -t envify -r ./lib/xs $< -o $@
 
 dist/%.min.js: dist/%.js
 	env NODE_ENV=production $(uglify) -c dead_code $(basename $(basename $@)).js -o $@
 
-docs: $(docs)
-	sbt makeMicrosite
+docs: $(docsdir)
+	sbt "project docs" makeMicrosite
 
-docs/publish: $(docs)
+docs/publish: $(docsdir)
 	sbt "project docs" publishMicrosite
 
 clean:

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { createElement as h } from 'react'
-import { PropTypes } from 'prop-types';
-import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update } from './interfaces'
-import { streamOps, Stream, M_ } from './xs'
+import * as PropTypes from 'prop-types';
+import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update, Actions } from './interfaces'
+import { streamOps, Stream, Subject } from './xs'
+
 export const CONTEXT_TYPE = {
   [XREACT_ENGINE]: PropTypes.shape({
     intent$: PropTypes.object,
-    operators: PropTypes.object
+    history$: PropTypes.object
   })
 };
 function isSFC(Component: React.ComponentClass<any> | React.SFC<any>): Component is React.SFC<any> {
@@ -17,61 +18,53 @@ export function extendXComponentClass<E extends Stream, I, S>(WrappedComponent: 
   return class XNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`
-    constructor(props, context: ContextEngine<E, I, S>) {
+    constructor(props: S, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
-      this.machine = {
-        update$: streamOps.merge<Update<S>>(this.machine.update$, update$),
-        actions: Object.assign({}, bindActions(actions, context[XREACT_ENGINE].intent$, this), this.machine.actions)
-      }
+      this.machine.update$ = streamOps.merge<Update<S>, Update<S>>(this.machine.update$, update$)
+      if (actions)
+        this.machine.actions = Object.assign({}, bindActions(actions, engine.intent$, this), this.machine.actions)
     }
   }
 }
-export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: React.SFC<any> | React.ComponentClass<any>, main: Plan<E, I, S>, opts?): XcomponentClass<E, I, S> {
+export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: React.SFC<S> | React.ComponentClass<S>, main: Plan<E, I, S>, opts?: any): XcomponentClass<E, I, S> {
   return class XLeaf extends Xcomponent<E, I, S> {
-    static contextTypes: ContextEngine<E, I, S> = CONTEXT_TYPE
+    static contextTypes = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`
-    defaultKeys: string[]
-    constructor(props, context: ContextEngine<E, I, S>) {
+    defaultKeys: (keyof S)[]
+    constructor(props: any, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
       this.machine = {
-        actions: bindActions(actions, engine.intent$, this),
         update$: update$
       }
-      this.defaultKeys = WrappedComponent.defaultProps ? Object.keys(WrappedComponent.defaultProps) : [];
+      this.machine.actions = bindActions(actions || {}, engine.intent$, this)
+
+      this.defaultKeys = WrappedComponent.defaultProps ? (<(keyof S)[]>Object.keys(WrappedComponent.defaultProps)) : [];
       this.state = Object.assign(
         {},
         WrappedComponent.defaultProps,
         pick(this.defaultKeys, props)
       );
     }
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: I) {
       this.setState(state => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
     }
     componentDidMount() {
       this.subscription = streamOps.subscribe(
         this.machine.update$,
-        action => {
+        (action: Update<S>) => {
           if (action instanceof Function) {
             if (process.env.NODE_ENV == 'debug')
               console.log('UPDATE:', action)
             this.setState((prevState, props) => {
-              let newState = action.call(this, prevState, props);
-              let newStateWithoutPromise = {}
-              for (let i in newState) {
-                if (isPromise(newState[i])) {
-                  newState[i].then(v => this.setState(v))
-                } else {
-                  newStateWithoutPromise[i] = newState[i]
-                }
-              }
-              this.context[XREACT_ENGINE].history$.next(newStateWithoutPromise)
+              let newState: S = action.call(this, prevState, props);
+              this.context[XREACT_ENGINE].history$.next(newState)
               if (process.env.NODE_ENV == 'debug')
-                console.log('STATE:', newStateWithoutPromise)
-              return newStateWithoutPromise;
+                console.log('STATE:', newState)
+              return newState;
             });
           } else {
             /* istanbul ignore next */
@@ -116,18 +109,20 @@ export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: Rea
   }
 }
 
-function getDisplayName(WrappedComponent) {
+function getDisplayName<E extends Stream, I, S>(WrappedComponent: XcomponentClass<E, I, S> | React.SFC<S> | React.ComponentClass<S>) {
   return WrappedComponent.displayName || WrappedComponent.name || 'X';
 }
-function bindActions(actions, intent$, self) {
-  let _actions = {
-    fromEvent(e, f = x => x) {
-      return intent$.next(f(e));
+
+
+function bindActions<E extends Stream, I, S>(actions: Actions<void>, intent$: Subject<E, I>, self: XcomponentClass<E, I, S> | Xcomponent<E, I, S>) {
+  let _actions: Actions<void> = {
+    fromEvent(e: Event) {
+      return intent$.next(e);
     },
-    fromPromise(p) {
+    fromPromise(p: Promise<I>) {
       return p.then(x => intent$.next(x));
     },
-    terminate(a) {
+    terminate(a: I) {
       if (process.env.NODE_ENV == 'debug')
         console.error('INTENT TERMINATED')
       return intent$.complete(a)
@@ -135,20 +130,20 @@ function bindActions(actions, intent$, self) {
   };
 
   for (let a in actions) {
-    _actions[a] = (...args) => {
+    _actions[a] = (...args: any[]) => {
       return intent$.next(actions[a].apply(self, args));
     };
   }
   return _actions;
 }
-function pick(names, obj) {
-  let result = {};
+function pick<A>(names: Array<keyof A>, obj: A) {
+  let result = <Partial<A>>{};
   for (let name of names) {
     if (obj[name]) result[name] = obj[name];
   }
   return result;
 }
 
-function isPromise(p) {
+function isPromise(p: any): p is Promise<any> {
   return p !== null && typeof p === 'object' && typeof p.then === 'function'
 }
