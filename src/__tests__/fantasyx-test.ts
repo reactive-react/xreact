@@ -1,6 +1,7 @@
-import { Observable, Subject } from '@reactivex/rxjs'
-import '../xs/rx'
+import { streamOps } from '../xs'
+import '../xs/array'
 import { FantasyX } from '../fantasy/fantasyx'
+import { Id } from '../fantasy/typeclasses/id'
 import { Update } from '../interfaces'
 import { Xstream } from '../fantasy/xstream'
 import { flatMap, FlatMap } from '../fantasy/typeclasses/flatmap'
@@ -8,10 +9,12 @@ import { concat, Semigroup } from '../fantasy/typeclasses/semigroup'
 describe('FantasyX', () => {
   let intent;
   beforeEach(() => {
-    intent = new Subject()
+    intent = streamOps.subject()
   })
-  it('map and fold', (done) => {
-    Xstream
+  it('map and fold', () => {
+    intent.next(1)
+    intent.next(2)
+    let res = Xstream
       .fromIntent()
       .toFantasyX()
       .map(a => {
@@ -23,59 +26,44 @@ describe('FantasyX', () => {
       })
       .foldS((s, a) => ({ count: a.count + s.count }))
       .toStream(intent)
-      .reduce((acc, f: any) => {
-        return f(acc)
-      }, { count: 10 })
-      .subscribe(a => {
-        expect(a.count).toBe(22)// 5 + 10 + 7
-        done()
-      });
-    intent.next(1)
-    intent.next(2)
-    intent.complete()
+      .reduce((acc, f) => f(acc), { count: 10 })
+    expect(res).toEqual({ count: 10 + 5 + 7 })
   })
 
-  it('flatMap Xstream', (done) => {
-    FlatMap.Xstream.flatMap(
-      (x: number) => Xstream.fromPromise<"RxStream", number, number>(Promise.resolve({ count: x + 1 }))
-      , Xstream.fromIntent<"RxStream", number>())
+  it('flatMap Xstream', () => {
+    intent.next(1)
+    intent.next(2)
+
+    let res = FlatMap.Xstream.flatMap(
+      (x: number) => Xstream.fromPromise<"ArrayStream", number, number>(new Id({ count: x + 1 }))
+      , Xstream.fromIntent<"ArrayStream", number>())
       .toFantasyX()
       .toStream(intent)
       .reduce((acc, f: any) => f(acc), { count: 10 })
-      .toPromise().then(a => expect(a).toEqual({ count: 3 })).then(done)
-    intent.next(1)
-    intent.next(2)
-    intent.complete()
+    expect(res).toEqual({ count: 3 })
   })
 
-  it('concat object', (done) => {
-    Semigroup.Xstream.concat(
+  it('concat object', () => {
+    intent.next({ count1: 1 })
+    intent.next({ count2: 2 })
+
+    let res = Semigroup.Xstream.concat(
       Xstream.fromIntent()
       , Xstream.fromIntent())
       .toFantasyX()
       .toStream(intent)
       .reduce((acc, f: any) => f(acc), { count: 0 })
-      .toPromise()
-      .then(a => expect(a).toEqual(
-        { "count": 0, "count1": 1, "count2": 2 }
-      ))
-      .then(done)
-    intent.next({ count1: 1 })
-    intent.next({ count2: 2 })
-    intent.complete()
+    expect(res).toEqual({ "count": 0, "count1": 1, "count2": 2 })
   })
 
-  it('concat promise', (done) => {
-    Semigroup.Xstream.concat(
-      Xstream.fromPromise(Promise.resolve({ count1: 1 }))
-      , Xstream.fromPromise(Promise.resolve({ count2: 2 })))
+  it('concat promise', () => {
+
+    let res = Semigroup.Xstream.concat(
+      Xstream.fromPromise(new Id({ count1: 1 }))
+      , Xstream.fromPromise(new Id({ count2: 2 })))
       .toFantasyX()
       .toStream(intent)
       .reduce((acc, f: any) => f(acc), { count: 0 })
-      .toPromise()
-      .then(a => expect(a).toEqual(
-        { "count": 0, "count1": 1, "count2": 2 }
-      ))
-      .then(done)
+    expect(res).toEqual({ "count": 0, "count1": 1, "count2": 2 })
   })
 })

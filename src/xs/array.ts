@@ -28,7 +28,7 @@ StreamOps.prototype.combine = function <A, C>(
   f: (...a: any[]) => C,
   ...v: any[]
 ): Array<C> {
-  return f.call(null, v)
+  return f.apply(null, v)
 }
 
 StreamOps.prototype.filter = function <A>(f: (a: A) => boolean, fa: Array<A>): Array<A> {
@@ -41,16 +41,19 @@ StreamOps.prototype.flatMap = function <A, B>(f: (a: A) => Array<B>, fa: Array<A
   return fa.reduce((acc, a) => acc.concat(f(a)), [] as B[])
 }
 
-class Subject<T> extends Array<T> {
-  next(a: T) {
-    this.push(a)
-  }
-  complete() {
-  }
+function Subject() {
+}
+Subject.prototype = Array.prototype
+
+Subject.prototype.next = function(a: any) {
+  this.push(a)
+}
+
+Subject.prototype.complete = function() {
 }
 
 StreamOps.prototype.subject = function <A>() {
-  return new Subject()
+  return new (<any>Subject)()
 }
 
 StreamOps.prototype.subscribe = function <A>(fa: Array<A>, next: (v: A) => void, complete?: () => void) {

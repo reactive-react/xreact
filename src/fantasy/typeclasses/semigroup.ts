@@ -38,6 +38,8 @@ export class StringSemigroup implements Semigroup<string> {
 export class ArraySemigroup<A> implements Semigroup<Array<A>> {
   _T: Array<A>
   concat(a: Array<A>, b: Array<A>): Array<A> {
+    console.log(a, b, '----------------------')
+
     return a.concat(b)
   }
 }
