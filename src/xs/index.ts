@@ -1,4 +1,5 @@
 import { _, $ } from '../fantasy/typeclasses'
+import { FunctorInstances } from '../fantasy/typeclasses/functor'
 export interface S_<A> { }
 export type Stream = keyof S_<any>
 
@@ -17,6 +18,7 @@ export class StreamOps<F extends Stream> { }
 export interface StreamOps<F extends Stream> {
   empty<A>(): $<F, A>
   fromPromise<A>(p: Promise<A>): $<F, A>
+  from<G extends FunctorInstances, A>(fa: $<G, A>): $<F, A>
   just<A>(a: A): $<F, A>
   merge<A, B>(
     a: $<F, A>,

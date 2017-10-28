@@ -1,4 +1,4 @@
-import { Stream as MostStream, empty, just, combineArray, combine, flatMap, fromPromise } from 'most'
+import { Stream as MostStream, empty, just, combineArray, combine, flatMap, fromPromise, from } from 'most'
 import { sync, SyncSubject, Subject } from 'most-subject'
 import { Subscription, StreamOps } from '.'
 
@@ -51,7 +51,10 @@ StreamOps.prototype.subscribe = function <A>(fa: MostStream<A>, next: (v: A) => 
   }).subscribe({ next, error: x => console.error(x), complete }) as Subscription
 }
 
-StreamOps.prototype.fromPromise = fromPromise
+StreamOps.prototype.fromPromise = fromPromise;
+
+
+(<any>StreamOps.prototype.from) = from
 
 export const URI = 'Stream'
 export type URI = typeof URI

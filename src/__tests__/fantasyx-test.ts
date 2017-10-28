@@ -35,7 +35,7 @@ describe('FantasyX', () => {
     intent.next(2)
 
     let res = FlatMap.Xstream.flatMap(
-      (x: number) => Xstream.fromPromise<"ArrayStream", number, number>(new Id({ count: x + 1 }))
+      (x: number) => Xstream.from(new Id({ count: x + 1 }))
       , Xstream.fromIntent<"ArrayStream", number>())
       .toFantasyX()
       .toStream(intent)
@@ -59,8 +59,8 @@ describe('FantasyX', () => {
   it('concat promise', () => {
 
     let res = Semigroup.Xstream.concat(
-      Xstream.fromPromise(new Id({ count1: 1 }))
-      , Xstream.fromPromise(new Id({ count2: 2 })))
+      Xstream.from(new Id({ count1: 1 }))
+      , Xstream.from(new Id({ count2: 2 })))
       .toFantasyX()
       .toStream(intent)
       .reduce((acc, f: any) => f(acc), { count: 0 })

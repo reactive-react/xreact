@@ -1,4 +1,4 @@
-import { Functor, map } from './typeclasses/functor'
+import { Functor, FunctorInstances, map } from './typeclasses/functor'
 import { Cartesian, product } from './typeclasses/cartesian'
 import { Apply } from './typeclasses/apply'
 import { FlatMap, flatMap } from './typeclasses/flatmap'
@@ -52,6 +52,13 @@ export class Xstream<S extends Stream, I, A> {
     return new Xstream<F, I, A>(new State((intent$: Subject<F, I>) => ({
       s: intent$,
       a: streamOps.fromPromise(p)
+    })))
+  }
+
+  static from<F extends Stream, I, A, G extends FunctorInstances>(p: $<G, A>) {
+    return new Xstream<F, I, A>(new State((intent$: Subject<F, I>) => ({
+      s: intent$,
+      a: streamOps.from(p) as $<F, A>
     })))
   }
 

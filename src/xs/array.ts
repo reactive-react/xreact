@@ -70,3 +70,7 @@ StreamOps.prototype.fromPromise = function(p) {
   }
   return [p.valueOf()]
 }
+
+StreamOps.prototype.from = function(fa) {
+  return [fa.valueOf()]
+}

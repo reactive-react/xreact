@@ -8,6 +8,7 @@ import '@reactivex/rxjs/dist/cjs/add/operator/scan'
 import '@reactivex/rxjs/dist/cjs/add/operator/catch'
 import '@reactivex/rxjs/dist/cjs/add/operator/filter'
 import '@reactivex/rxjs/dist/cjs/add/observable/empty'
+import '@reactivex/rxjs/dist/cjs/add/observable/from'
 import '@reactivex/rxjs/dist/cjs/add/observable/of'
 import '@reactivex/rxjs/dist/cjs/add/observable/fromPromise'
 import '@reactivex/rxjs/dist/cjs/add/observable/combineLatest'
@@ -61,4 +62,6 @@ StreamOps.prototype.merge = function <A, B>(a: RxStream<A>, b: RxStream<B>): RxS
   return a.merge<A, B>(b)
 }
 
-StreamOps.prototype.fromPromise = RxStream.fromPromise
+StreamOps.prototype.fromPromise = RxStream.fromPromise;
+
+(<any>StreamOps.prototype.from) = RxStream.from
