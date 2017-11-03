@@ -11,7 +11,7 @@ export namespace Applicative {
 
 export function lift2<F extends ApplicativeInstances, A, B, C>(fabc: (a: A, b: B) => C): (fa: $<F, A>, fb: $<F, B>) => $<F, C> {
   return function(fa: $<F, A>, fb: $<F, B>): $<F, C> {
-    let instance: any = Applicative[kind(fa) as F]
+    let instance = Applicative[kind<F>(fa)] as Applicative<F>
     return ap2<F, A, B, C>(instance.pure(fabc), fa, fb)
   }
 }

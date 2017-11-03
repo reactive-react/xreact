@@ -1,6 +1,6 @@
 export type instanceKey = keyof S
 export type S = typeof Semigroup
-import { datatype, kind } from '.'
+import { datatype, datatypeOf } from '.'
 export type SemigroupInstance = keyof typeof Semigroup
 export type SemigroupInstanceType = typeof Semigroup[SemigroupInstance]['_T']
 export interface Semigroup<A> {
@@ -38,8 +38,6 @@ export class StringSemigroup implements Semigroup<string> {
 export class ArraySemigroup<A> implements Semigroup<Array<A>> {
   _T: Array<A>
   concat(a: Array<A>, b: Array<A>): Array<A> {
-    console.log(a, b, '----------------------')
-
     return a.concat(b)
   }
 }
@@ -53,6 +51,6 @@ export namespace Semigroup {
 }
 
 export function concat<A extends SemigroupInstanceType>(a: A, b: A): A {
-  let instance = (<any>Semigroup)[kind(a)]
+  let instance = (<any>Semigroup)[datatypeOf(a)]
   return instance.concat(a, b)
 }

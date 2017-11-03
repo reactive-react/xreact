@@ -5,6 +5,7 @@ export interface _<A> {
 export type HKT = keyof _<any>
 
 export type $<F extends HKT, A> = _<A>[F]
+
 import 'reflect-metadata'
 
 export function datatype(name: string) {
@@ -13,7 +14,7 @@ export function datatype(name: string) {
   }
 }
 
-export function kind(target: any) {
+export function datatypeOf(target: any): string {
   if (isPrimitive(target)) {
     return target.constructor.name
   }
@@ -22,7 +23,10 @@ export function kind(target: any) {
     if (tag) return tag
     throw new Error(`target ${target.constructor} is not a datatype, please decorate it with @datatype!`)
   }
+}
 
+export function kind<F extends HKT>(target: $<F, any>): F {
+  return datatypeOf(target) as F
 }
 
 datatype('Array')(Array)
