@@ -56,7 +56,7 @@
     "react-dom": "^15.5.4",
     "react-test-renderer": "^15.5.4",
     "redux": "^3.0.4",
-    "ts-jest": "^20.0.2",
+    "ts-jest": "^21.2.3",
     "tsify": "^3.0.3",
     "typescript": "^2.5.2",
     "uglify-js": "^3.1.1",
