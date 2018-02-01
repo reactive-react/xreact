@@ -237,7 +237,7 @@ export class FantasyXCartesian implements Cartesian<"FantasyX"> {
     return new FantasyX(
       FlatMap.State.flatMap(s1$ => (
         Functor.State.map(s2$ => (
-          streamOps.combine((a, b) => Cartesian.State.product(a, b), s1$, s2$)
+          streamOps.combine((a: any, b: any) => Cartesian.State.product(a, b), s1$, s2$)
         ), fb.plan)
       ), fa.plan))
   }
@@ -259,7 +259,7 @@ export class FantasyXApply implements Apply<"FantasyX"> {
     return new FantasyX(
       FlatMap.State.flatMap(s1$ => (
         Functor.State.map(s2$ => (
-          streamOps.combine((s1, s2) => Apply.State.ap(s1, s2), s1$, s2$)
+          streamOps.combine((s1: any, s2: any) => Apply.State.ap(s1, s2), s1$, s2$)
         ), fa.plan)
       ), fab.plan))
   }

@@ -4,8 +4,6 @@ import { FunctorInstances, map } from './typeclasses/functor'
 
 
 class StreamT<F extends FunctorInstances, A> {
-  _F: F
-  _A: A
   value: $<F, $<Stream, A>>
   constructor(v: $<F, $<Stream, A>>) {
     this.value = v

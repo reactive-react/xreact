@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createElement as h } from 'react'
 import * as PropTypes from 'prop-types';
-import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update, Actions } from './interfaces'
+import { Plan, Xcomponent, XcomponentClass, ContextEngine, XREACT_ENGINE, Update, Actions, Xprops } from './interfaces'
 import { streamOps, Stream, Subject } from './xs'
 
 export const CONTEXT_TYPE = {
@@ -18,7 +18,7 @@ export function extendXComponentClass<E extends Stream, I, S>(WrappedComponent: 
   return class XNode extends WrappedComponent {
     static contextTypes = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`
-    constructor(props: S, context: ContextEngine<E, I, S>) {
+    constructor(props: Xprops<I>, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
@@ -28,12 +28,12 @@ export function extendXComponentClass<E extends Stream, I, S>(WrappedComponent: 
     }
   }
 }
-export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: React.SFC<S> | React.ComponentClass<S>, main: Plan<E, I, S>, opts?: any): XcomponentClass<E, I, S> {
+export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: React.ComponentType<S>, main: Plan<E, I, S>, opts?: any): XcomponentClass<E, I, S> {
   return class XLeaf extends Xcomponent<E, I, S> {
     static contextTypes = CONTEXT_TYPE
     static displayName = `X(${getDisplayName(WrappedComponent)})`
     defaultKeys: (keyof S)[]
-    constructor(props: any, context: ContextEngine<E, I, S>) {
+    constructor(props: Xprops<I>, context: ContextEngine<E, I, S>) {
       super(props, context);
       let engine = context[XREACT_ENGINE]
       let { actions, update$ } = main(engine.intent$, props)
@@ -43,14 +43,14 @@ export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: Rea
       this.machine.actions = bindActions(actions || {}, engine.intent$, this)
 
       this.defaultKeys = WrappedComponent.defaultProps ? (<(keyof S)[]>Object.keys(WrappedComponent.defaultProps)) : [];
-      this.state = Object.assign(
+      this.setState(Object.assign(
         {},
         WrappedComponent.defaultProps,
-        pick(this.defaultKeys, props)
-      );
+        <Pick<S, keyof S>>pick(this.defaultKeys, props)
+      ));
     }
     componentWillReceiveProps(nextProps: I) {
-      this.setState(state => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
+      this.setState((state, props) => Object.assign({}, nextProps, pick(this.defaultKeys, state)));
     }
     componentDidMount() {
       this.subscription = streamOps.subscribe(
@@ -109,7 +109,7 @@ export function genXComponentClass<E extends Stream, I, S>(WrappedComponent: Rea
   }
 }
 
-function getDisplayName<E extends Stream, I, S>(WrappedComponent: XcomponentClass<E, I, S> | React.SFC<S> | React.ComponentClass<S>) {
+function getDisplayName<E extends Stream, I, S>(WrappedComponent: React.ComponentType<S>) {
   return WrappedComponent.displayName || WrappedComponent.name || 'X';
 }
 
@@ -137,7 +137,7 @@ function bindActions<E extends Stream, I, S>(actions: Actions<void>, intent$: Su
   return _actions;
 }
 function pick<A>(names: Array<keyof A>, obj: A) {
-  let result = <Partial<A>>{};
+  let result = <Pick<A, keyof A>>{};
   for (let name of names) {
     if (obj[name]) result[name] = obj[name];
   }

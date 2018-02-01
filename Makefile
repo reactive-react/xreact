@@ -2,16 +2,13 @@ docsdir = ./docs/**/*
 browserify = ./node_modules/.bin/browserify
 watchify = ./node_modules/.bin/watchify
 uglify = ./node_modules/.bin/uglifyjs
+mocha = ./node_modules/.bin/mocha
+tsc = ./node_modules/.bin/tsc
 
 test: unit integrate
 
-build: lib/**/*.js
-
-lib/**/*.js: src/**/*.ts
-	tsc
-
-lib/%.js: src/%.ts
-	tsc
+build:
+	${tsc}
 
 all: test dist
 
@@ -21,7 +18,7 @@ unit: build
 	yarn test
 
 integrate: build test/*.js docs/src/main/tut/examples/example.js
-	mocha test/test.js
+	${mocha} test/test.js
 
 docs/src/main/tut/examples/example.js: docs/src/main/tut/examples/example.tsx
 	$(browserify) -p [tsify -p tsconfig.examples.json] docs/src/main/tut/examples/example.tsx -o docs/src/main/tut/examples/example.js

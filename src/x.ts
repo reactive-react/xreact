@@ -6,17 +6,18 @@ import { streamOps, Stream, Subject } from './xs'
 import { Plan, Xcomponent, XcomponentClass, Engine, ContextEngine, XREACT_ENGINE } from './interfaces'
 export { XREACT_ENGINE }
 
-export function isXcomponentClass<E extends Stream, I, S>(ComponentClass: XcomponentClass<E, I, S> | React.ComponentClass<any> | React.SFC<any>): ComponentClass is XcomponentClass<E, I, S> {
-  return (<XcomponentClass<E, I, S>>ComponentClass).contextTypes == CONTEXT_TYPE;
+export function isXcomponentClass<E extends Stream, I, S>(
+  ComponentClass: any): ComponentClass is XcomponentClass<E, I, S> {
+  return (ComponentClass).contextTypes == CONTEXT_TYPE;
 }
 export type XOrReactComponent<E extends Stream, I, S> = XcomponentClass<E, I, S> | React.ComponentClass<S> | React.SFC<S>
 
-export function x<E extends Stream, I, S>(main: Plan<E, I, S>, opts = {}): (WrappedComponent: XOrReactComponent<E, I, S>) => XcomponentClass<E, I, S> {
-  return function(WrappedComponent: XOrReactComponent<E, I, S>) {
-    if (isXcomponentClass(WrappedComponent)) {
-      return extendXComponentClass(WrappedComponent, main)
+export function x<E extends Stream, I, S>(main: Plan<E, I, S>, opts = {}): (WrappedComponent: React.ComponentType<S> | XcomponentClass<E, I, S>) => XcomponentClass<E, I, S> {
+  return function(WrappedComponent: React.ComponentType<S> | XcomponentClass<E, I, S>) {
+    if (isXcomponentClass<E, I, S>(WrappedComponent)) {
+      return extendXComponentClass<E, I, S>(WrappedComponent, main)
     } else {
-      return genXComponentClass(WrappedComponent, main, opts)
+      return genXComponentClass<E, I, S>(WrappedComponent, main, opts)
     }
   };
 }

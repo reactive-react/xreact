@@ -10,7 +10,7 @@ export interface Actions<T> {
 }
 
 export interface Plan<E extends Stream, I, S> {
-  (intent: Subject<E, I>, props?: {}): Machine<E, I, S>
+  (intent: Subject<E, I>, props?: Xprops<I>): Machine<E, I, S>
 }
 
 export interface Update<S> {
@@ -43,7 +43,7 @@ export interface XcomponentClass<E extends Stream, I, S> {
   displayName: string
   contextTypes?: ContextType<E, I, S>
   defaultProps?: any
-  new(props?: Xprops<I>, context?: ContextEngine<E, I, S>): Xcomponent<E, I, S>;
+  new(props: Xprops<I>, context: ContextEngine<E, I, S>): Xcomponent<E, I, S>;
 }
 
 export interface History<E extends Stream, S> {

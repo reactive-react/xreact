@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
 import '@reactivex/rxjs'
 import { X, x } from '../index';
 import * as createClass from 'create-react-class'
 import * as rx from '../xs/rx'
 const compose = (f, g) => x => f(g(x));
-import {Stream} from '../xs'
+import { Stream } from '../xs'
+import * as Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 
 const CounterView: React.SFC<any> = props => (
   <div className="counter-view">
@@ -61,19 +64,19 @@ for (let name of Xs) {
     let engine, Xtest, mountx
     beforeEach(() => {
       engine = require(`../xs/${name}`)
-      Xtest = require(`../xtests/${name}`).default
+      Xtest = require(`../xtests/`)[name]
       mountx = compose(mount, y => React.createFactory(X)({}, y))
     })
     describe('actions', () => {
       let counterWrapper, counter, t, counterView, actions
       beforeEach(() => {
         counterWrapper = mountx(<Counter />)
-        counter = counterWrapper.find(Counter).getNode()
+        counter = counterWrapper.find(Counter).instance()
         counterView = counterWrapper.find(CounterView)
         actions = counterView.prop('actions')
         t = new Xtest(counterView.props());
       })
-      it('add intent to intent$ and go through sink$', () => {
+      it.only('add intent to intent$ and go through sink$', () => {
         return t
           .do([
             actions.inc,

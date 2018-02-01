@@ -13,9 +13,6 @@ import { datatype, $, HKT } from './typeclasses'
 
 @datatype('Xstream')
 export class Xstream<S extends Stream, I, A> {
-  _S: S
-  _V: A
-  _I: I
   streamS: State<$<S, I>, $<S, A>>
   constructor(streamS: State<$<S, I>, $<S, A>>) {
     this.streamS = streamS
@@ -26,14 +23,14 @@ export class Xstream<S extends Stream, I, A> {
   }
 
   static fromIntent<F extends Stream, I>() {
-    return new Xstream<F, I, I>(new State((intent$: Subject<F, I>) => ({
+    return new Xstream<F, I, I>(new State((intent$: $<F, I>) => ({
       s: intent$,
       a: intent$
     })))
   }
 
   static fromEvent<F extends Stream>(type: string, name: string, defaultValue?: string) {
-    return new Xstream<F, Event, string>(new State((intent$: Subject<F, Event>) => ({
+    return new Xstream<F, Event, string>(new State((intent$: $<F, Event>) => ({
       s: intent$,
       a: streamOps.merge(
         typeof defaultValue != 'undefined' ? streamOps.just(defaultValue) : streamOps.empty()
@@ -49,14 +46,14 @@ export class Xstream<S extends Stream, I, A> {
   }
 
   static fromPromise<F extends Stream, I, A>(p: Promise<A>) {
-    return new Xstream<F, I, A>(new State((intent$: Subject<F, I>) => ({
+    return new Xstream<F, I, A>(new State((intent$: $<F, I>) => ({
       s: intent$,
       a: streamOps.fromPromise(p)
     })))
   }
 
   static from<F extends Stream, I, A, G extends FunctorInstances>(p: $<G, A>) {
-    return new Xstream<F, I, A>(new State((intent$: Subject<F, I>) => ({
+    return new Xstream<F, I, A>(new State((intent$: $<F, I>) => ({
       s: intent$,
       a: streamOps.from(p) as $<F, A>
     })))
@@ -97,11 +94,11 @@ export class XstreamFunctor implements Functor<"Xstream">{
 Functor.Xstream = new XstreamFunctor
 
 export class XstreamCartesian implements Cartesian<"Xstream">{
-  product<A, B>(fa: Xstream<any, any, A>, fb: Xstream<any, any, B>): Xstream<any, typeof fa._I, [A, B]> {
+  product<A, B, C extends Stream, D>(fa: Xstream<C, D, A>, fb: Xstream<C, D, B>): Xstream<C, D, [A, B]> {
     return new Xstream(
       FlatMap.State.flatMap(s1 => (
         Functor.State.map(s2 => (
-          streamOps.combine((a, b) => [a, b], s1, s2)
+          streamOps.combine<A, B, [A, B]>((a, b) => [a, b], s1, s2)
         ), fb.streamS)
       ), fa.streamS))
   }

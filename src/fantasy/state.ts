@@ -19,8 +19,6 @@ declare module './typeclasses' {
 
 @datatype(kind)
 export class State<S, A> {
-  _S: S
-  _A: A
   runState: (s: S) => pair<S, A>
   constructor(runState: (s: S) => pair<S, A>) {
     this.runState = runState
@@ -50,7 +48,7 @@ export class State<S, A> {
     return new State((s: S) => ({ a: undefined, s: Object.assign({}, s, f(s)) }))
   }
 
-  patch(f: (a: A, s?: S) => Partial<S>): State<S, Partial<S>> {
+  patch(f: (a: A, s: S) => Partial<S>): State<S, Partial<S>> {
     return new State((state: S) => {
       let { a, s } = this.runState(state)
       let p = f(a, s)
